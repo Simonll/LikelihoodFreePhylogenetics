@@ -467,6 +467,12 @@ void LocalParameters::readLocalInstructions(){
                     this->fixlambda_TBL = 1;
                     cerr << "fix TBL X" << this->lambda_TBL << "\n";
 
+                } else if (s =="-lambdaOmega"){
+                    iss >> s;
+                    this->lambda_omega = atof(s.c_str());
+                    this->fixlambda_omega = 1;
+                    cerr << "fix omega X" << this->lambda_omega << "\n";
+
                 } else if (s == "-freelambdaTBL") {
                     this->fixlambda_TBL = 0;
                     cerr << "free TBL\n";
