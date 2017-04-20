@@ -13,7 +13,12 @@
 \#NRUN 10 10000 <br>
 \#NTHREADS 1 <br>
 \#OUTPUT /ppred/ANKRD28-M0GTRW-A-HSGTRWCpG <br>
-\#OLDPARAMS -d ANKRD28.puz -chain ANKRD28-M0GTRW-A -iscodon -code Universal -start 600 -every 4 -until 1000 -fixroot Echinops Procavia 0.9 -lambdaCpG 1.0 -lambdaTBL 1.0 <br>
+\#OLDPARAMS -d ANKRD28.puz -chain ANKRD28-M0GTRW-A -iscodon -code Universal -start 600 -every 4 -until 1000 -fixroot Echinops Procavia 0.9 -lambdaCpG 1.0 -lambdaTBL 1.0 -lambdaOmega 1.0<br>
+
+
+Where lambdaCpG is the mutation rate of transitions related to CpG context (i.e., C->T, G->A) <br>
+Where lambdaTBL modulate treelength or global mutation rate (i.e., TotalTreeLength X lambdaTBL or mutationrate X lambdaTBL) <br>
+Where lambdaOmega modulate Omega and Omega* (i.e., Omega X lambdaOmega or Omega* X lambdaOmega) <br>
 
 
 
