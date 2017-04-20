@@ -608,7 +608,7 @@ void LocalParameters::readLocalInstructions(){
                     iss >> s;
                     this->optTpA = atoi(s.c_str());
 
-                } else if (s =="-tofasta"){
+                } else if (s =="-tofasta" || s =="-tophylip"){
                     this->tofasta = 1;
 
                 } else if (s == "-randomfix") {
