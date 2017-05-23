@@ -97,7 +97,7 @@ void SequenceAlignment::ToStream(ostream& os)	{
 			max = l;
 		}
 	}
-	
+
 	for (int i=0; i<Ntaxa; i++)	{
 		os << taxset->GetTaxon(i);
 		for (unsigned int j=0; j< 5 + max - taxset->GetTaxon(i).length(); j++)	{
@@ -138,7 +138,7 @@ void SequenceAlignment::ToStream(ostream& os)	{
 		}
 		*/
 	}
-	
+
 	for (int i=0; i<Ntaxa; i++)	{
 		os << taxset->GetTaxon(i);
 		/*
@@ -171,6 +171,64 @@ void SequenceAlignment::ToStream(ostream& os)	{
 	os << '\n';
 }
 
+FileSequenceAlignment::FileSequenceAlignment(int ntaxa,int nsite_nuc, string * listspecies){
+    int verbose = 0;
+
+    this->SpeciesNames = 0;
+    if (verbose) {cerr << "FileSequenceAlignment1\n";}
+
+
+    this->Ntaxa = ntaxa;
+    this->Nsite = nsite_nuc;
+    if(verbose){cerr << this->Ntaxa << " " << this->Nsite  << "\n";}
+
+    this->SpeciesNames = new string[this->Ntaxa];
+    for (int i= 0 ; i < this->Ntaxa;i++){
+        this->SpeciesNames[i] = listspecies[i];
+    }
+
+    if (verbose) {cerr << "FileSequenceAlignment2\n";}
+    this->Data = new int *[this->Ntaxa];
+    for (int i=0; i<this->Ntaxa; i++)	{
+        this->Data[i] = new int[this->Nsite];
+    }
+
+    if (verbose) {cerr << "FileSequenceAlignment3\n";}
+    for (int i=0; i<this->Ntaxa; i++)	{
+        for (int j=0; j<this->Nsite; j++){
+            Data[i][j] = 0;
+        }
+    }
+
+    int AAcomp = 0;
+    int DNAcomp = 1;
+    int RNAcomp = 0;
+
+    if (DNAcomp)	{
+			statespace = new DNAStateSpace;
+			// cerr << "dna sequences\n";
+    }
+	else if (RNAcomp)	{
+		statespace = new DNAStateSpace;
+			// cerr << "rna sequences\n";
+	}
+	else if (AAcomp)	{
+		statespace = new ProteinStateSpace;
+			// cerr << "protein sequences\n";
+	}
+
+
+    if (verbose) {cerr << "FileSequenceAlignment4\n";}
+	taxset = new TaxonSet(SpeciesNames,Ntaxa);
+    cerr << "number of taxa  : " << GetNtaxa() << '\n';
+    cerr << "number of sites : " << GetNsite() << '\n';
+    cerr << "number of states: " << GetNstate() << '\n';
+
+	delete[] SpeciesNames;
+
+}
+
+
 FileSequenceAlignment::FileSequenceAlignment(string filename,int fullline,int myid)	{
 
 	SpeciesNames = 0;
@@ -186,7 +244,7 @@ FileSequenceAlignment::FileSequenceAlignment(string filename,int fullline,int my
 }
 
 int FileSequenceAlignment::ReadDataFromFile (string filespec, int forceinterleaved)	{
-	
+
 	string tmp;
 	ifstream is((Path + filespec).c_str());
 	if (!is)	{
@@ -246,7 +304,7 @@ int FileSequenceAlignment::ReadNexus(string filespec)	{
 		GoPastNext(theStream, '=');
 		string type;
 		theStream >> type;
-		
+
 
 
 		if (EquivalentStrings(type,"protein"))	{
@@ -283,7 +341,7 @@ int FileSequenceAlignment::ReadNexus(string filespec)	{
 		while (l<Nsite)	{
 			int m = 0;
 			for (int i=0; i<Ntaxa; i++)	{
-				
+
 				string temp;
 				theStream >> temp;
 				while (temp == "[")	{
@@ -377,7 +435,7 @@ int FileSequenceAlignment::TestPhylipSequential (string filespec)	{
 
 		// cerr << "beware: phylip data sets only for amino acids for the moment\n";
 		// cerr.flush();
-	
+
 		string temp;
 		theStream >> temp;
 		if (!IsInt(temp))	{
@@ -459,7 +517,7 @@ int FileSequenceAlignment::TestPhylipSequential (string filespec)	{
 			while ((!theStream.eof()) && (nsite < Nsite));
 			if (theStream.eof())	{
 				if (nsite < Nsite)	{
-					// cerr << "taxon : " << ntaxa << " : " << SpeciesNames[ntaxa]  << "contain only " << nsite << " sites\n"; 
+					// cerr << "taxon : " << ntaxa << " : " << SpeciesNames[ntaxa]  << "contain only " << nsite << " sites\n";
 					return 0;
 				}
 			}
@@ -502,7 +560,7 @@ void FileSequenceAlignment::ReadPhylipSequential (string filespec)	{
 
 		// cerr << "beware: phylip data sets only for amino acids for the moment\n";
 		// cerr.flush();
-	
+
 		string temp;
 		theStream >> temp;
 		if (!IsInt(temp))	{
@@ -619,7 +677,7 @@ int FileSequenceAlignment::TestPhylip (string filespec, int repeattaxa)	{
 			block++;
 			int m = 0;
 			for (int i=0; i<Ntaxa; i++)	{
-				
+
 				if ((!l) || repeattaxa)	{
 					string temp;
 					theStream >> temp;
@@ -731,8 +789,9 @@ int FileSequenceAlignment::TestPhylip (string filespec, int repeattaxa)	{
 	return 1;
 }
 
-void
-FileSequenceAlignment::ReadPhylip (string filespec, int repeattaxa)	{
+
+
+void FileSequenceAlignment::ReadPhylip (string filespec, int repeattaxa)	{
 
 	ifstream theStream((Path + filespec).c_str());
 	try	{
@@ -776,7 +835,7 @@ FileSequenceAlignment::ReadPhylip (string filespec, int repeattaxa)	{
 			block++;
 			int m = 0;
 			for (int i=0; i<Ntaxa; i++)	{
-				
+
 				if ((!l) || repeattaxa)	{
 					string temp;
 					theStream >> temp;
@@ -829,7 +888,7 @@ FileSequenceAlignment::ReadPhylip (string filespec, int repeattaxa)	{
 					c = theStream.get();
 					c = theStream.peek();
 				}
-				
+
 				if (!m)	{
 					m = k;
 				}
@@ -867,9 +926,9 @@ FileSequenceAlignment::ReadPhylip (string filespec, int repeattaxa)	{
 
 /*
 void FileSequenceAlignment::EliminateUnknownColumns()	{
-		
+
 		cerr << "eliminate unknown columns\n";
-	
+
 		// delete all the sites that are '-' for every species
 
 		int i=0;
@@ -1153,7 +1212,7 @@ void FileSequenceAlignment::ComputeZipArrays()	{
 			if (! Orbit[i][j])	{
 				ZipIndices[i][j] = OrbitSize[i];
 			}
-		}	
+		}
 
 		if (OrbitSize[i] == 0)	{
 			cerr << "PhyloParameters::RegisterWithData : missing column";
@@ -1192,7 +1251,7 @@ void FileSequenceAlignment::ComputeZipArrays()	{
 				cerr << "PhyloParameters::RegisterWithData : error in zip data making\n";
 			}
 		}
-		
+
 		int observed[Nstate];
 		int orbitsize= OrbitSize[i];
 		for (int k=0; k<Nstate; k++)	{

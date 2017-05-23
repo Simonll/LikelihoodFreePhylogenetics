@@ -21,8 +21,6 @@ SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam)
              }
         }
 
-
-
         TotalSubRate = new double[lparam->refTree->GetNnode()];
         TotalMutRate = new double[lparam->refTree->GetNnode()];
 

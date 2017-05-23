@@ -1019,6 +1019,104 @@ void CGNAGR(double* stat_container) {
 
 }
 
+void CodonUsagePerAAwonR(double* stat_container) {
+        int tot = GetCodonStateSpace()->GetNstate();
+        for ( int codon  = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon ++ ) {
+            stat_container[codon] = 1.0 ;
+        }
+
+
+        int CCT = GetCodonStateSpace()->GetState("CCT"); // P
+        int CCC = GetCodonStateSpace()->GetState("CCC"); // P
+        int CCA = GetCodonStateSpace()->GetState("CCA"); // P
+        int CCG = GetCodonStateSpace()->GetState("CCG"); // P
+
+        int CTT = GetCodonStateSpace()->GetState("CTT"); // L
+        int CTC = GetCodonStateSpace()->GetState("CTC"); // L
+        int CTA = GetCodonStateSpace()->GetState("CTA"); // L
+        int CTG = GetCodonStateSpace()->GetState("CTG"); // L
+
+        int TGG = GetCodonStateSpace()->GetState("TGG"); // W
+
+        int TCT = GetCodonStateSpace()->GetState("TCT"); // C
+        int TGC = GetCodonStateSpace()->GetState("TGC"); // C
+
+        int CAT = GetCodonStateSpace()->GetState("CAT"); // H
+        int CAC = GetCodonStateSpace()->GetState("CAC"); // H
+
+        int CAA = GetCodonStateSpace()->GetState("CAA"); // Q
+        int CAG = GetCodonStateSpace()->GetState("CAG"); // Q
+
+        int AGT = GetCodonStateSpace()->GetState("AGT"); // S
+        int AGC = GetCodonStateSpace()->GetState("AGC"); // S
+
+        int CGT = GetCodonStateSpace()->GetState("CGT"); // R
+        int CGC = GetCodonStateSpace()->GetState("CGC"); // R
+        int CGA = GetCodonStateSpace()->GetState("CGA"); // R
+        int CGG = GetCodonStateSpace()->GetState("CGG"); // R
+
+        int AGA = GetCodonStateSpace()->GetState("AGA"); // R
+        int AGG = GetCodonStateSpace()->GetState("AGG"); // R
+
+        for (int site_codon = 0 ; site_codon < Nsite; site_codon ++ ) {
+            bool test = true;
+            int* cur = new int[GetCodonStateSpace()->GetNstate()];
+            for (int codon = 0; codon <GetCodonStateSpace()->GetNstate(); codon++) {
+                cur[codon] = 1;
+            }
+            for(int taxa = 0; taxa < Ntaxa; taxa++) {
+
+                int state = Data[taxa][site_codon]; //GetState(taxa, site_codon);
+
+
+                if (state != unknown) {
+
+                    if (
+                        //state != CCT && state != CCC && state != CCA && state != CCG &&
+                        //state != CTT && state != CTC && state != CTA && state != CAT &&
+                        state != TGG &&
+                        state != TCT && state != TGC &&
+                        state != CTG && state != CAC &&
+                        state != CAA && state != CAG &&
+                        //state != AGT && state != AGC
+                        state != CGT && state != CGC && state != CGA && state != CGG && state != AGA && state != AGG
+                        ) {
+                        cur[state]++;
+
+                    } else {
+                        test = false;
+                    }
+                }
+            }
+            if (test) {
+
+                for (int codon = 0; codon <Naa; codon++) {
+                     stat_container[codon] += cur[codon];
+                }
+            }
+            delete [] cur;
+        }
+
+
+
+
+        for (int aa = 0 ; aa < Naa ; aa++) {
+            int aa_tot = 0;
+            for (int codon = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon++) {
+                if (aa == GetCodonStateSpace()->Translation(codon)) {
+                    aa_tot += stat_container[codon];
+                }
+            }
+            for (int codon = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon++) {
+                if (aa == GetCodonStateSpace()->Translation(codon)) {
+                    stat_container[codon]/=aa_tot;
+                }
+            }
+
+        }
+
+ }
+
 
  void CodonUsagePerAA(double* stat_container) {
         int tot = GetCodonStateSpace()->GetNstate();
@@ -1083,6 +1181,39 @@ void CGNAGR(double* stat_container) {
 
 
 void   aa_meandiff_wonr(double* stat_container) {
+	int CCT = GetCodonStateSpace()->GetState("CCT"); // P
+    int CCC = GetCodonStateSpace()->GetState("CCC"); // P
+    int CCA = GetCodonStateSpace()->GetState("CCA"); // P
+    int CCG = GetCodonStateSpace()->GetState("CCG"); // P
+
+    int CTT = GetCodonStateSpace()->GetState("CTT"); // L
+    int CTC = GetCodonStateSpace()->GetState("CTC"); // L
+    int CTA = GetCodonStateSpace()->GetState("CTA"); // L
+    int CTG = GetCodonStateSpace()->GetState("CTG"); // L
+
+    int TGG = GetCodonStateSpace()->GetState("TGG"); // W
+
+    int TCT = GetCodonStateSpace()->GetState("TCT"); // C
+    int TGC = GetCodonStateSpace()->GetState("TGC"); // C
+
+    int CAT = GetCodonStateSpace()->GetState("CAT"); // H
+    int CAC = GetCodonStateSpace()->GetState("CAC"); // H
+
+    int CAA = GetCodonStateSpace()->GetState("CAA"); // Q
+    int CAG = GetCodonStateSpace()->GetState("CAG"); // Q
+
+    int AGT = GetCodonStateSpace()->GetState("AGT"); // S
+    int AGC = GetCodonStateSpace()->GetState("AGC"); // S
+
+    int CGT = GetCodonStateSpace()->GetState("CGT"); // R
+    int CGC = GetCodonStateSpace()->GetState("CGC"); // R
+    int CGA = GetCodonStateSpace()->GetState("CGA"); // R
+    int CGG = GetCodonStateSpace()->GetState("CGG"); // R
+
+    int AGA = GetCodonStateSpace()->GetState("AGA"); // R
+    int AGG = GetCodonStateSpace()->GetState("AGG"); // R
+
+
 	stat_container[0] = 0.0;
 	stat_container[1] = 0.0;
     int ** in = new int* [Nsite];
@@ -1100,18 +1231,28 @@ void   aa_meandiff_wonr(double* stat_container) {
     for (int site_codon = 0 ; site_codon < Nsite; site_codon ++ ) {
         bool test = true;
         int* cur = new int[20];
+        for (int aa = 0; aa <Naa; aa++) {
+            cur[aa] = 0;
+        }
         for(int taxa = 0; taxa < Ntaxa; taxa++) {
 
             int state = Data[taxa][site_codon]; //GetState(taxa, site_codon);
             int aa_state = GetCodonStateSpace()->Translation(state);
-            int W = 18;
-            int S = 15;
-            int H = 6;
-            int Q = 13;
-            int C = 1;
+
             if (state != unknown) {
 
-                if (aa_state != C && aa_state != Q && aa_state != H && aa_state != S && aa_state != W ) {
+                if (
+                        //state != CCT && state != CCC && state != CCA && state != CCG &&
+                        //state != CTT && state != CTC && state != CTA && state != CAT &&
+                        state != TGG &&
+                        state != TCT && state != TGC &&
+                        state != CTG && state != CAC &&
+                        state != CAA && state != CAG &&
+                        //state != AGT && state != AGC
+                        state != CGT && state != CGC && state != CGA && state != CGG && state != AGA && state != AGG
+
+
+                        ) {
                     cur[aa_state] = 1;
                 } else {
                     test = false;
@@ -1198,7 +1339,6 @@ void   aa_meandiff(double* stat_container) {
     var /= static_cast<double> (Nsite);
     var = var - (mean * mean);
 
-
 	stat_container[0] = mean;
     stat_container[1] = var ;
 
@@ -1229,33 +1369,88 @@ void   aa_meandiff(double* stat_container) {
    }
 
 
-  void aa_usagewo_nr(double* stat_container) {
-        int W = 18;
-        int S = 15;
-        int H = 6;
-        int Q = 13;
-        int C = 1;
+  void aa_usage_wonr(double* stat_container) {
+        int CCT = GetCodonStateSpace()->GetState("CCT"); // P
+        int CCC = GetCodonStateSpace()->GetState("CCC"); // P
+        int CCA = GetCodonStateSpace()->GetState("CCA"); // P
+        int CCG = GetCodonStateSpace()->GetState("CCG"); // P
+
+        int CTT = GetCodonStateSpace()->GetState("CTT"); // L
+        int CTC = GetCodonStateSpace()->GetState("CTC"); // L
+        int CTA = GetCodonStateSpace()->GetState("CTA"); // L
+        int CTG = GetCodonStateSpace()->GetState("CTG"); // L
+
+        int TGG = GetCodonStateSpace()->GetState("TGG"); // W
+
+        int TCT = GetCodonStateSpace()->GetState("TCT"); // C
+        int TGC = GetCodonStateSpace()->GetState("TGC"); // C
+
+        int CAT = GetCodonStateSpace()->GetState("CAT"); // H
+        int CAC = GetCodonStateSpace()->GetState("CAC"); // H
+
+        int CAA = GetCodonStateSpace()->GetState("CAA"); // Q
+        int CAG = GetCodonStateSpace()->GetState("CAG"); // Q
+
+        int AGT = GetCodonStateSpace()->GetState("AGT"); // S
+        int AGC = GetCodonStateSpace()->GetState("AGC"); // S
+
+        int CGT = GetCodonStateSpace()->GetState("CGT"); // R
+        int CGC = GetCodonStateSpace()->GetState("CGC"); // R
+        int CGA = GetCodonStateSpace()->GetState("CGA"); // R
+        int CGG = GetCodonStateSpace()->GetState("CGG"); // R
+
+        int AGA = GetCodonStateSpace()->GetState("AGA"); // R
+        int AGG = GetCodonStateSpace()->GetState("AGG"); // R
+
+
         int tot = 20;
         for ( int aa = 0 ; aa < Naa; aa ++ ) {
             stat_container[aa] = 1.0;
         }
-        for (int taxa = 0; taxa < Ntaxa; taxa++) {
-        	for (int site_codon = 0; site_codon < Nsite; site_codon++) {
-               	int state = Data[taxa][site_codon]; //GetState(taxa,site_codon);
-               	int aa_state = GetCodonStateSpace()->Translation(state);
 
-               	if(state != unknown ) {
+        int total = 0;
+        for (int site_codon = 0 ; site_codon < Nsite; site_codon ++ ) {
+            bool test = true;
+            int* cur = new int[20];
+            for (int aa = 0; aa <Naa; aa++) {
+                cur[aa] = 0;
+            }
+            for(int taxa = 0; taxa < Ntaxa; taxa++) {
 
-                    if (aa_state != C && aa_state != Q && aa_state != H && aa_state != S && aa_state != W) {
-                        stat_container[aa_state]++;
-                        tot ++ ;
+                int state = Data[taxa][site_codon]; //GetState(taxa, site_codon);
+                int aa_state = GetCodonStateSpace()->Translation(state);
+
+                if (state != unknown) {
+
+                    if (
+                        //state != CCT && state != CCC && state != CCA && state != CCG &&
+                        //state != CTT && state != CTC && state != CTA && state != CAT &&
+                        state != TGG &&
+                        state != TCT && state != TGC &&
+                        state != CTG && state != CAC &&
+                        state != CAA && state != CAG &&
+                        //state != AGT && state != AGC
+                        state != CGT && state != CGC && state != CGA && state != CGG && state != AGA && state != AGG
+                        ) {
+                        cur[aa_state]++;
+                        total++;
+                    } else {
+                        test = false;
                     }
                 }
             }
+            if (test) {
+
+                for (int aa = 0; aa <Naa; aa++) {
+                     stat_container[aa] += cur[aa];
+                }
+            }
+            delete [] cur;
         }
         for (int aa = 0; aa < Naa; aa ++) {
-            	stat_container[aa]  /= tot;
+                    stat_container[aa]  /= total;
         }
+
 }
 
 

@@ -43,6 +43,16 @@ class Posterior
         Posterior(GlobalParameters* gparam);
         virtual ~Posterior();
 
+        static const int chainIDGetter =  0;
+        static const int paramGetter = 1;
+        static const int summariesGetter = 2;
+        static const int accsummariesGetter = 3;
+        static const int evoancstatsGetter = 4;
+        static const int evostatsGetter = 5;
+        static const int ssevostatsGetter = 6;
+        static const int distancesGetter = 7;
+        static const int weightsGetter = 8;
+
 
         double TOOSMALL;
         double TOOLARGE;
@@ -50,26 +60,34 @@ class Posterior
 
         int NSummaries;
         int NParam;
-        int NMapStats;
+        int NEvoStats;
+        int NSiteSpecificEvoStats;
+        int NAccessorySummaries;
+        int NEvoAncStats;
 
         string* listParam;
         string* listSummaries;
-        string* listMapStats;
+        string* listEvoStats;
+        string* listSiteSpecificEvoStats;
 
         std::map<string,int> mapUsedParam;
         std::map<string,int> mapUsedSummaries;
-        std::map<string,int> mapUsedMapStats;
-        std::map<string,int> mapUsedMapAncStats;
+        std::map<string,int> mapUsedAccessorySummaries;
+        std::map<string,int> mapUsedEvoStats;
+        std::map<string,int> mapUsedSiteSpecificEvoStats;
+        std::map<string,int> mapUsedEvoAncStats;
 
-        int NusedMapStats;
-        int NusedMapAncStats;
+        int NusedEvoStats;
+        int NusedSiteSpecificEvoStats;
+        int NusedEvoAncStats;
         int NusedParam;
         int NusedSummaries;
+        int NusedAccessorySummaries;
         int Ngenes;
 
         string localcontrolfile, output, model;
 
-        std::vector<std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>>> population_t;
+        std::vector<std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>>> population_t;
         std::vector<std::vector<double>> posterior;
         double*empVar;
         double*empMean;
@@ -77,7 +95,7 @@ class Posterior
         Random* rnd;
         int randomseed;
 
-        int Niter, Nrun, Naccepted, threshold, Nthread;
+        int OutPartialDistance, Niter, Nrun, Naccepted, threshold, Nthread, Nsite_codon;
         bool sorted;
         // writter
         void writePosterior(ofstream&os);
@@ -92,6 +110,7 @@ class Posterior
         void readMonitorPosterior(ifstream & is);
 
         //Getters
+        int PosteriorGetSize();
         double GetAcceptanceRate();
         std::vector<std::vector<double>> GetPartialDistances();
         std::vector<std::vector<double>> GetPartialDistancesT();
@@ -105,8 +124,19 @@ class Posterior
 
 
         //Setters
-        void registerNewSimulation(int chainID, std::vector<double> param ,std::vector<double> summaries,std::vector<double> mappingstats, std::vector<double> distances,std::vector<double> weights);
+        void registerNewSimulation(
 
+            int chainID, std::vector<double> param ,
+            std::vector<double> summaries,
+            std::vector<double> accsummaries,
+            std::vector<double> ancevostat,
+            std::vector<double> evostat,
+            std::vector<double> ssevostat,
+            std::vector<double> distances,
+            std::vector<double> weights
+            );
+
+        void SetNsite(int i);
 
         void incNiter(){
             this->Niter++;

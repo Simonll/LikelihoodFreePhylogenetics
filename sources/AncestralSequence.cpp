@@ -63,6 +63,9 @@ void AncestralSequence::GetNewStationaryCodonSequence(){
         }
     }
 
+
+
+
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
 
         double u = lparam->rnd->Uniform() ;

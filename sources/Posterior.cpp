@@ -11,6 +11,7 @@ Posterior::Posterior(GlobalParameters* gparam)
     this->localcontrolfile = gparam->localcontrolfile;
     this->output = gparam->output;
     this->model = gparam->model;
+    this->OutPartialDistance = gparam->OutPartialDistance;
 
     this->TOOSMALL = gparam->TOOSMALL;
     this->TOOLARGE = gparam->TOOLARGE;
@@ -18,7 +19,10 @@ Posterior::Posterior(GlobalParameters* gparam)
 
     this->NSummaries = gparam->NSummaries;
     this->NParam = gparam->NParam;
-    this->NMapStats = gparam->NMapStats;
+    this->NEvoStats = gparam->NEvoStats;
+    this->NSiteSpecificEvoStats = gparam->NSiteSpecificEvoStats;
+
+    if(gparam->verbose) {cerr << "Posterior1\n";}
 
     this->listParam = new string[this->NParam];
     for (int param_i = 0; param_i < this->NParam; param_i++){
@@ -26,7 +30,7 @@ Posterior::Posterior(GlobalParameters* gparam)
 
     }
 
-
+    if(gparam->verbose) {cerr << "Posterior2\n";}
 
     this->listSummaries = new string[this->NSummaries];
     for (int summary_i = 0; summary_i < this->NSummaries; summary_i++){
@@ -34,30 +38,47 @@ Posterior::Posterior(GlobalParameters* gparam)
 
     }
 
+    if(gparam->verbose) {cerr << "Posterior3\n";}
 
-    this->listMapStats = new string[this->NMapStats];
-    for (int MapStats_i = 0; MapStats_i < this->NMapStats; MapStats_i++){
-        this->listMapStats[MapStats_i] = gparam->listMapStats[MapStats_i];
+
+    this->listEvoStats = new string[this->NEvoStats];
+    for (int EvoStats_i = 0; EvoStats_i < this->NEvoStats; EvoStats_i++){
+        this->listEvoStats[EvoStats_i] = gparam->listEvoStats[EvoStats_i];
 
     }
 
+    if(gparam->verbose) {cerr << "Posterior4\n";}
 
-    this->NusedMapStats = gparam->NusedMapStats;
-    this->NusedMapAncStats = gparam->NusedMapAncStats;
+    this->listSiteSpecificEvoStats = new string[this->NSiteSpecificEvoStats];
+    for (int EvoStats_i = 0; EvoStats_i < this->NSiteSpecificEvoStats; EvoStats_i++){
+        this->listSiteSpecificEvoStats[EvoStats_i] = gparam->listSiteSpecificEvoStats[EvoStats_i];
+
+    }
+
+    if(gparam->verbose) {cerr << "Posterior5\n";}
+
+    this->NusedEvoStats = gparam->NusedEvoStats;
+    this->NusedSiteSpecificEvoStats = gparam->NusedSiteSpecificEvoStats;
+    this->NusedEvoAncStats = gparam->NusedEvoAncStats;
     this->NusedParam = gparam->NusedParam;
     this->NusedSummaries = gparam->NusedSummaries;
+    this->NusedAccessorySummaries = gparam->NusedAccessorySummaries;
     this->Ngenes = gparam->Ngenes;
 
+    if(gparam->verbose) {cerr << "Posterior6\n";}
 
     this->mapUsedParam.insert(gparam->mapUsedParam.begin(),gparam->mapUsedParam.end());
     this->mapUsedSummaries.insert(gparam->mapUsedSummaries.begin(),gparam->mapUsedSummaries.end());
-    this->mapUsedMapStats.insert(gparam->mapUsedMapStats.begin(),gparam->mapUsedMapStats.end());
-    this->mapUsedMapAncStats.insert(gparam->mapUsedMapAncStats.begin(),gparam->mapUsedMapAncStats.end());
+    this->mapUsedAccessorySummaries.insert(gparam->mapUsedAccessorySummaries.begin(),gparam->mapUsedAccessorySummaries.end());
+    this->mapUsedEvoStats.insert(gparam->mapUsedEvoStats.begin(),gparam->mapUsedEvoStats.end());
+    this->mapUsedSiteSpecificEvoStats.insert(gparam->mapUsedSiteSpecificEvoStats.begin(),gparam->mapUsedSiteSpecificEvoStats.end());
+    this->mapUsedEvoAncStats.insert(gparam->mapUsedEvoAncStats.begin(),gparam->mapUsedEvoAncStats.end());
 
+
+    if(gparam->verbose) {cerr << "Posterior7\n";}
 
     this->sorted = false;
     this->Naccepted = 0;
-
     this->randomseed = -1;
     this->rnd = new Random(randomseed);
 
@@ -79,6 +100,10 @@ Posterior::~Posterior()
     //dtor
 }
 
+int Posterior::PosteriorGetSize() {
+
+    return posterior.size();
+}
 
 
 std::vector<std::vector<double>> Posterior::GetPartialDistances(){
@@ -91,7 +116,7 @@ std::vector<std::vector<double>> Posterior::GetPartialDistances(){
             if (distance_i == 0) {
                 X_i.push_back(1.0);
             } else {
-                X_i.push_back(std::get<4>(population_t[simu_i])[distance_i]);
+                X_i.push_back(std::get<distancesGetter>(population_t[simu_i])[distance_i]);
             }
 
         }
@@ -113,7 +138,7 @@ std::vector<std::vector<double>> Posterior::GetPartialDistancesT(){
                 if (distance_i == 0) {
                     X_Ti[simu_i] = 1.0;
                 } else {
-                    X_Ti.push_back(std::get<4>(population_t[simu_i])[distance_i]);
+                    X_Ti.push_back(std::get<distancesGetter>(population_t[simu_i])[distance_i]);
                 }
 
 
@@ -133,7 +158,7 @@ std::vector<std::vector<double>> Posterior::GetTheta() {
 
     for (unsigned int simu_i = 0 ; simu_i < population_t.size(); simu_i++ ){
 
-            theta.push_back(std::get<1>(population_t[simu_i]));
+            theta.push_back(std::get<paramGetter>(population_t[simu_i]));
 
 
 
@@ -155,11 +180,11 @@ double Posterior::GetEpanechnikov(double x, double y){
 std::vector<double> Posterior::GetWeights(){
     std::vector<double> W;
 
-    double max_ = std::get<4>(population_t[population_t.size()-1])[NusedSummaries];
+    double max_ = std::get<distancesGetter>(population_t[population_t.size()-1])[NusedSummaries];
 
 
     for (unsigned int simu_i = 0 ; simu_i < population_t.size(); simu_i++ ){
-        W.push_back(GetEpanechnikov(std::get<4>(population_t[simu_i])[NusedSummaries],max_));
+        W.push_back(GetEpanechnikov(std::get<distancesGetter>(population_t[simu_i])[NusedSummaries],max_));
 
     }
 
@@ -172,13 +197,13 @@ std::vector<std::vector<double>> Posterior::GetLocalWeights(){
 
     double* max_ = new double[NusedSummaries];
     for (unsigned int distance_i = 0 ; distance_i < NusedSummaries; distance_i++){
-        max_[distance_i] = std::get<4>(population_t[population_t.size()-1])[distance_i];
+        max_[distance_i] = std::get<distancesGetter>(population_t[population_t.size()-1])[distance_i];
     }
 
     for (unsigned int simu_i = 0 ; simu_i < population_t.size(); simu_i++ ){
         std::vector<double> W_i;
         for (unsigned int distance_i = 0 ; distance_i < NusedSummaries; distance_i++){
-            W_i.push_back(GetEpanechnikov(std::get<4>(population_t[simu_i])[distance_i],max_[distance_i]));
+            W_i.push_back(GetEpanechnikov(std::get<distancesGetter>(population_t[simu_i])[distance_i],max_[distance_i]));
         }
 
         W.push_back(W_i);
@@ -193,38 +218,75 @@ void Posterior::writePosterior(ofstream&os) {
     for (unsigned int simu_i = 0 ; simu_i < population_t.size(); simu_i++ ){
 
         //write chainID
-        os << std::get<0>(population_t[simu_i]) << "\t";
+        os << std::get<chainIDGetter>(population_t[simu_i]) << "\t";
 
         //write parameters
         if (this->NusedParam > 0) {
-            for (unsigned int param_i = 0 ; param_i < std::get<1>(population_t[simu_i]).size(); param_i++){
-                os << std::get<1>(population_t[simu_i])[param_i] << "\t";
+            for (unsigned int param_i = 0 ; param_i < std::get<paramGetter>(population_t[simu_i]).size(); param_i++){
+                os << std::get<paramGetter>(population_t[simu_i])[param_i] << "\t";
             }
         }
         //write summaries
         if (this->NusedSummaries > 0) {
-            for (unsigned int summary_i = 0 ; summary_i < std::get<2>(population_t[simu_i]).size(); summary_i++){
-                os << std::get<2>(population_t[simu_i])[summary_i] << "\t";
+            for (unsigned int summary_i = 0 ; summary_i < std::get<summariesGetter>(population_t[simu_i]).size(); summary_i++){
+                os << std::get<summariesGetter>(population_t[simu_i])[summary_i] << "\t";
             }
         }
 
         //write distances (sum of square discrepancies)
         if (this->NusedSummaries > 0) {
-            for (unsigned int distance_i = 0 ; distance_i < std::get<4>(population_t[simu_i]).size(); distance_i++){
-                os << std::get<4>(population_t[simu_i])[distance_i] << "\t";
+            if (this->OutPartialDistance) {
+                for (unsigned int distance_i = 0 ; distance_i < std::get<distancesGetter>(population_t[simu_i]).size(); distance_i++){
+                    os << std::get<distancesGetter>(population_t[simu_i])[distance_i] << "\t";
+                }
+            } else {
+
+                os << std::get<distancesGetter>(population_t[simu_i])[std::get<distancesGetter>(population_t[simu_i]).size()-1] << "\t";
+
+            }
+        }
+
+        //write accessory summaries
+        if (this->NusedAccessorySummaries > 0) {
+            for (unsigned int summary_i = 0 ; summary_i < std::get<accsummariesGetter>(population_t[simu_i]).size(); summary_i++){
+                os << std::get<accsummariesGetter>(population_t[simu_i])[summary_i] << "\t";
             }
         }
 
         //write mappingstats
-        if (this->NusedMapStats > 0) {
-            for (unsigned int mapping_i = 0 ; mapping_i < std::get<3>(population_t[simu_i]).size(); mapping_i++){
-                if(mapping_i < std::get<3>(population_t[simu_i]).size()-1){
-                    os << std::get<3>(population_t[simu_i])[mapping_i] << "\t";
+        if (this->NusedEvoAncStats > 0) {
+            for (unsigned int mapping_i = 0 ; mapping_i < std::get<evoancstatsGetter>(population_t[simu_i]).size(); mapping_i++){
+                if(mapping_i < std::get<evoancstatsGetter>(population_t[simu_i]).size()-1){
+                    os << std::get<evoancstatsGetter>(population_t[simu_i])[mapping_i] << "\t";
                 } else {
-                    os << std::get<3>(population_t[simu_i])[mapping_i] << "\t";
+                    os << std::get<evoancstatsGetter>(population_t[simu_i])[mapping_i] << "\t";
                 }
             }
         }
+
+        //write mappingstats
+        if (this->NusedEvoStats > 0) {
+            for (unsigned int mapping_i = 0 ; mapping_i < std::get<evostatsGetter>(population_t[simu_i]).size(); mapping_i++){
+                if(mapping_i < std::get<evostatsGetter>(population_t[simu_i]).size()-1){
+                    os << std::get<evostatsGetter>(population_t[simu_i])[mapping_i] << "\t";
+                } else {
+                    os << std::get<evostatsGetter>(population_t[simu_i])[mapping_i] << "\t";
+                }
+            }
+        }
+
+        //write mappingstats
+        if (this->NusedSiteSpecificEvoStats > 0) {
+            for (unsigned int mapping_i = 0 ; mapping_i < std::get<ssevostatsGetter>(population_t[simu_i]).size(); mapping_i++){
+                if(mapping_i < std::get<ssevostatsGetter>(population_t[simu_i]).size()-1){
+                    os << std::get<ssevostatsGetter>(population_t[simu_i])[mapping_i] << "\t";
+                } else {
+                    os << std::get<ssevostatsGetter>(population_t[simu_i])[mapping_i] << "\t";
+                }
+            }
+        }
+
+
         os <<  "\n";
     }
 }
@@ -332,10 +394,10 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
 
     for (unsigned int simu_i = 0 ; simu_i < pop_size; simu_i++ ){
         for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++){
-            if(std::get<2>(population_t[simu_i])[summary_i] < summariesRealData[summary_i]){
+            if(std::get<summariesGetter>(population_t[simu_i])[summary_i] < summariesRealData[summary_i]){
                 ppp[summary_i]+=1;
             }
-            sum1[summary_i]+=exp2(std::get<2>(population_t[simu_i])[summary_i]);
+            sum1[summary_i]+=exp2(std::get<summariesGetter>(population_t[simu_i])[summary_i]);
         }
      }
 
@@ -347,8 +409,8 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
 
     for (unsigned int simu_i = 0 ; simu_i < pop_size; simu_i++ ){
         for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++){
-            sum2[summary_i] += (exp2(std::get<2>(population_t[simu_i])[summary_i]-mean[summary_i])*exp2(std::get<2>(population_t[simu_i])[summary_i]-mean[summary_i]));
-            sum3[summary_i] += exp2(std::get<2>(population_t[simu_i])[summary_i]-mean[summary_i]);
+            sum2[summary_i] += (exp2(std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i])*exp2(std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i]));
+            sum3[summary_i] += exp2(std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i]);
         }
     }
 
@@ -442,30 +504,32 @@ double Posterior::GetAcceptanceRate(){
 
 
 void Posterior::writeHeader(ofstream&os){
-
+    int verbose = 0;
     // write parameters' header
     //for (unsigned int param_i = 0 ; param_i < listUsedParam.size() ; param_i++){
     int k = 0;
 
+    //MCMCpt should go there
 
 
 
-    if (NusedParam > 0) {
-        string* arrParam = new string[NusedParam];
-        for (unsigned int param_i = 0 ; param_i < NParam ; param_i++){
-            auto it = mapUsedParam.find(listParam[param_i]);
-            if(it != mapUsedParam.end() ) {
+
+    if(verbose){cerr << "writeHeader1 "<< this->NusedParam << "\n"; }
+    if (this->NusedParam > 0) {
+        string* arrParam = new string[this->NusedParam];
+        for (unsigned int param_i = 0 ; param_i < this->NParam ; param_i++){
+            auto it = this->mapUsedParam.find(this->listParam[param_i]);
+            if(it != this->mapUsedParam.end() ) {
                 if(it->second != -1) {
                     arrParam[it->second] = it->first;
 
                 }
 
             }
-            //os << listParam[listUsedParam[param_i]] << "\t";
 
         }
 
-        for (unsigned int param_i = 0 ; param_i < NusedParam ; param_i++){
+        for (unsigned int param_i = 0 ; param_i < this->NusedParam ; param_i++){
             if(k == 0) {
                 os << arrParam[param_i];
                 k = 1;
@@ -476,13 +540,13 @@ void Posterior::writeHeader(ofstream&os){
         delete [] arrParam;
     }
 
+    if(verbose){cerr << "writeHeader2 "<< this->NusedSummaries << "\n"; }
     //write summaires' header
-    //for(unsigned int summary_i = 0 ; summary_i < listUsedSummaries.size(); summary_i++){
-    if (NusedSummaries > 0) {
-        string* arrSummaries = new string[NusedSummaries];
-        for(unsigned int summary_i = 0 ; summary_i < NSummaries; summary_i++){
-            auto it = mapUsedSummaries.find(listSummaries[summary_i]);
-            if(it != mapUsedSummaries.end() ) {
+    if (this->NusedSummaries > 0) {
+        string* arrSummaries = new string[this->NusedSummaries];
+        for(unsigned int summary_i = 0 ; summary_i < this->NSummaries; summary_i++){
+            auto it = this->mapUsedSummaries.find(this->listSummaries[summary_i]);
+            if(it != this->mapUsedSummaries.end() ) {
                 if(it->second != -1) {
                     arrSummaries[it->second] = it->first;
 
@@ -490,13 +554,10 @@ void Posterior::writeHeader(ofstream&os){
 
             }
 
-
-            //os << listSummaries[listUsedSummaries[summary_i]] << "\t";
-
         }
 
 
-        for(unsigned int summary_i = 0 ; summary_i < NusedSummaries; summary_i++){
+        for(unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++){
             if(k == 0 ){
                 os << arrSummaries[summary_i];
                 k = 1;
@@ -507,31 +568,61 @@ void Posterior::writeHeader(ofstream&os){
         }
 
         //write distance header
-//    for(unsigned int summary_i = 0 ; summary_i < listUsedSummaries.size(); summary_i++){
-//        os << "D_" << listSummaries[listUsedSummaries[summary_i]]  <<"\t";
-//    }
-
-        for(unsigned int summary_i = 0 ; summary_i < NusedSummaries; summary_i++){
-            if (k == 0) {
-                os << "D_" << arrSummaries[summary_i];
-                k = 1;
-            } else {
-                os << "\t" << "D_" << arrSummaries[summary_i];
+        if(this->OutPartialDistance) {
+            for(unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++){
+                if (k == 0) {
+                    os << "D_" << arrSummaries[summary_i];
+                    k = 1;
+                } else {
+                    os << "\t" << "D_" << arrSummaries[summary_i];
+                }
             }
         }
-
         os << "\tD_sum";
         delete [] arrSummaries;
 
 
     }
-    //write mappingstats
 
-    if (NusedMapAncStats > 0) {
-        string* arrMapAnc = new string[NusedMapAncStats];
-        for(unsigned int map_i = 0 ; map_i < NMapStats; map_i++){
-            auto it = mapUsedMapAncStats.find(listMapStats[map_i]);
-            if(it != mapUsedMapAncStats.end()) {
+
+    if (this->NusedAccessorySummaries > 0) {
+        string* arrSummaries = new string[this->NusedAccessorySummaries];
+        for(unsigned int summary_i = 0 ; summary_i < this->NSummaries; summary_i++){
+            auto it = this->mapUsedAccessorySummaries.find(this->listSummaries[summary_i]);
+            if(it != this->mapUsedAccessorySummaries.end() ) {
+                if(it->second != -1) {
+                    arrSummaries[it->second] = it->first;
+
+                }
+
+            }
+
+        }
+
+
+        for(unsigned int summary_i = 0 ; summary_i < this->NusedAccessorySummaries; summary_i++){
+            if(k == 0 ){
+                os << "Acc_" << arrSummaries[summary_i];
+                k = 1;
+            } else {
+                os << "\t" << "Acc_" <<arrSummaries[summary_i];
+            }
+
+        }
+
+    delete [] arrSummaries;
+
+
+    }
+
+
+    //write mappingstats
+    if(verbose){cerr << "writeHeader3 "<< this->NusedEvoAncStats << "\n"; }
+    if (this->NusedEvoAncStats > 0) {
+        string* arrMapAnc = new string[this->NusedEvoAncStats];
+        for(unsigned int map_i = 0 ; map_i < this->NEvoStats; map_i++){
+            auto it = this->mapUsedEvoAncStats.find(this->listEvoStats[map_i]);
+            if(it != this->mapUsedEvoAncStats.end()) {
                 if(it->second != -1) {
                     arrMapAnc[it->second] = it->first;
 
@@ -541,12 +632,12 @@ void Posterior::writeHeader(ofstream&os){
         }
 
 
-        for(unsigned int map_i = 0; map_i < NusedMapAncStats; map_i++){
+        for(unsigned int map_i = 0; map_i < NusedEvoAncStats; map_i++){
             if (k == 0) {
-                os << "Manc_" << arrMapAnc[map_i];
+                os << "A_" << arrMapAnc[map_i];
                 k = 1;
             } else {
-                os << "\t" << "Manc_" << arrMapAnc[map_i];
+                os << "\t" << "A_" << arrMapAnc[map_i];
             }
 
 
@@ -554,11 +645,13 @@ void Posterior::writeHeader(ofstream&os){
         delete [] arrMapAnc;
     }
 
-    if (NusedMapStats > 0) {
-        string* arrMap = new string[NusedMapStats];
-        for(unsigned int map_i = 0 ; map_i < NMapStats; map_i++){
-            auto it = mapUsedMapStats.find(listMapStats[map_i]);
-            if(it != mapUsedMapStats.end()) {
+
+    if(verbose){cerr << "writeHeader4 "<< this->NusedEvoStats << "\n"; }
+    if (this->NusedEvoStats > 0) {
+        string* arrMap = new string[this->NusedEvoStats];
+        for(unsigned int map_i = 0 ; map_i < this->NEvoStats; map_i++){
+            auto it = this->mapUsedEvoStats.find(this->listEvoStats[map_i]);
+            if(it != this->mapUsedEvoStats.end()) {
                 if(it->second != -1) {
                     arrMap[it->second] = it->first;
 
@@ -567,14 +660,44 @@ void Posterior::writeHeader(ofstream&os){
         }
 
 
-        for(unsigned int map_i = 0; map_i < NusedMapStats; map_i++){
+        for(unsigned int map_i = 0; map_i < this->NusedEvoStats; map_i++){
             if (k == 0) {
-                os << "M_" << arrMap[map_i];
+                os << "T_" << arrMap[map_i];
                 k = 1;
             } else {
-                os << "\t" << "M_" << arrMap[map_i];
+                os << "\t" << "T_" << arrMap[map_i];
             }
 
+        }
+        delete [] arrMap;
+
+
+    }
+
+    if(verbose){cerr << "writeHeader5 "<< this->NusedSiteSpecificEvoStats << "\n"; }
+    if (this->NusedSiteSpecificEvoStats > 0) {
+        string* arrMap = new string [this->NusedSiteSpecificEvoStats];
+        for(unsigned int map_i = 0 ; map_i < this->NSiteSpecificEvoStats; map_i++){
+            auto it = this->mapUsedSiteSpecificEvoStats.find(this->listSiteSpecificEvoStats[map_i]);
+            if(it != this->mapUsedSiteSpecificEvoStats.end()) {
+                if(it->second != -1) {
+                    arrMap[it->second] = it->first;
+
+                }
+            }
+        }
+
+
+        for(unsigned int map_i = 0; map_i < this->NusedSiteSpecificEvoStats; map_i++){
+            for (int bin_i = 0; bin_i < 100; bin_i++){
+
+                if (k == 0) {
+                    os << "SS_" << bin_i << "_" << arrMap[map_i];
+                    k = 1;
+                } else {
+                    os << "\t" << "SS_" << bin_i << "_" <<  arrMap[map_i];
+                }
+            }
         }
         delete [] arrMap;
 
@@ -585,24 +708,25 @@ void Posterior::writeHeader(ofstream&os){
 
 }
 
+void Posterior::SetNsite(int i){
+    this->Nsite_codon = i;
+
+
+}
+
 void Posterior::GetWeights(string kernel) {
         unsigned int pop_size = population_t.size();    if (kernel == "sNormal") {
 
         for (unsigned int param_i = 0 ; param_i < NusedParam ; param_i++){
             double new_weight = 0.0;
             for (unsigned int simu_i = 0 ; simu_i < pop_size; simu_i++) {
-                new_weight += std::get<5>(population_t[simu_i])[param_i]* (std::get<1>(population_t[simu_i])[param_i]  + 2.0 * (empVar[param_i]) * rnd->sNormal());
+                new_weight += std::get<weightsGetter>(population_t[simu_i])[param_i] * (std::get<paramGetter>(population_t[simu_i])[param_i]  + 2.0 * (empVar[param_i]) * rnd->sNormal());
 
             }
             new_weight /= pop_size;
 //            std::get<4>(population_t[simu_i])[param_i] = new_weight;
         }
-
-
-
     }
-
-
 }
 
 void Posterior::GetEmpVar() {
@@ -624,7 +748,7 @@ void Posterior::GetEmpVar() {
 
     for (unsigned int simu_i = 0 ; simu_i < NusedParam; simu_i++ ){
         for (unsigned int param_i = 0 ; param_i < NusedParam; param_i++){
-            sum1[param_i] += std::get<1>(population_t[simu_i])[param_i];
+            sum1[param_i] += std::get<paramGetter>(population_t[simu_i])[param_i];
         }
      }
 
@@ -637,9 +761,9 @@ void Posterior::GetEmpVar() {
     for (unsigned int simu_i = 0 ; simu_i < pop_size; simu_i++ ){
         for (unsigned int param_i = 0 ; param_i < NusedParam; param_i++){
             //(x - K) * (x - K)
-            sum2[param_i] += (std::get<1>(population_t[simu_i])[param_i]-mean[param_i])*(std::get<1>(population_t[simu_i])[param_i]-mean[param_i]);
+            sum2[param_i] += (std::get<paramGetter>(population_t[simu_i])[param_i]-mean[param_i])*(std::get<paramGetter>(population_t[simu_i])[param_i]-mean[param_i]);
             //x - K
-            sum3[param_i] += std::get<1>(population_t[simu_i])[param_i]-mean[param_i];
+            sum3[param_i] += std::get<paramGetter>(population_t[simu_i])[param_i]-mean[param_i];
         }
     }
 
@@ -658,20 +782,20 @@ void Posterior::GetEmpVar() {
 
 
 
-void Posterior::registerNewSimulation(int chainID, std::vector<double> param ,std::vector<double> summaries,std::vector<double> mappingstats ,std::vector<double> distances, std::vector<double> weights){
+void Posterior::registerNewSimulation(int chainID, std::vector<double> param ,std::vector<double> summaries,std::vector<double> accsummaries,std::vector<double> evoancstat ,std::vector<double> evostat ,std::vector<double> ssevostat ,std::vector<double> distances, std::vector<double> weights){
 
     if(population_t.empty()) {
 
         //cerr << "POPULATION IS EMPTY" << Naccepted <<  " "<< threshold <<  " \n";
 
-        population_t.push_back(make_tuple(chainID,param,summaries,mappingstats,distances,weights));
+        population_t.push_back(make_tuple(chainID,param,summaries,accsummaries,evoancstat, evostat,ssevostat,distances,weights));
         Naccepted++;
 
     } else if(population_t.size() < (unsigned) threshold){
 
         //cerr << "POPULATION IS LESS THAN THRESHOLD" << " " << population_t.size() << " "<< Naccepted  << " "<< threshold << " \n";
 
-        population_t.push_back(make_tuple(chainID,param,summaries,mappingstats,distances,weights));
+        population_t.push_back(make_tuple(chainID,param,summaries,accsummaries,evoancstat, evostat,ssevostat,distances,weights));
         Naccepted++;
 
     } else {
@@ -679,23 +803,23 @@ void Posterior::registerNewSimulation(int chainID, std::vector<double> param ,st
         if (!sorted) {
 
             std::sort(population_t.begin(), population_t.end(),
-                [](const std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &left,
-                   const std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &right)
+                [](const std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &left,
+                   const std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &right)
                     {
-                        return std::get<4>(left).back() < std::get<4>(right).back();
+                        return std::get<distancesGetter>(left).back() < std::get<distancesGetter>(right).back();
                     }
                 );
             sorted = true;
         }
 
-        std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> cur_tuple
-        = make_tuple(chainID,param,summaries,mappingstats,distances,weights);
+        std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> cur_tuple
+        = make_tuple(chainID,param,summaries,accsummaries,evoancstat, evostat,ssevostat,distances,weights);
 
         auto it = std::lower_bound(population_t.begin(), population_t.end(), cur_tuple,
-        [](const std::tuple<int, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>> &left,
-           const std::tuple<int, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>> &right)
+        [](const std::tuple<int, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &left,
+           const std::tuple<int, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &right)
             {
-                return std::get<4>(left).back() < std::get<4>(right).back();
+                return std::get<distancesGetter>(left).back() < std::get<distancesGetter>(right).back();
             }
         );
 
@@ -709,5 +833,6 @@ void Posterior::registerNewSimulation(int chainID, std::vector<double> param ,st
         }
 
     }
-    Niter++;
+    this->Niter++;
+    //cerr << this->Niter << " ";
 }

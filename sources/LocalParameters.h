@@ -66,31 +66,37 @@ class LocalParameters
 
         int NSummaries;
         int NParam;
-        int NMapStats;
+        int NEvoStats;
+        int NSiteSpecificEvoStats;
 
         string* listParam;
         string* listSummaries;
-        string* listMapStats;
+        string* listEvoStats;
+        string* listSiteSpecificEvoStats;
+        string* listSpecies;
 
         std::map<string,int> mapUsedParam;
         std::map<string,int> mapUsedSummaries;
-        std::map<string,int> mapUsedMapStats;
-        std::map<string,int> mapUsedMapAncStats;
+        std::map<string,int> mapUsedAccessorySummaries;
+        std::map<string,int> mapUsedEvoStats;
+        std::map<string,int> mapUsedEvoAncStats;
+        std::map<string,int> mapUsedSiteSpecificEvoStats;
 
-        int NusedMapStats;
-        int NusedMapAncStats;
+        int NusedEvoStats;
+        int NusedSiteSpecificEvoStats;
+        int NusedEvoAncStats;
         int NusedParam;
         int NusedSummaries;
+        int NusedAccessorySummaries;
         int Ngenes;
 
-        string localcontrolfile, output, model;
-        std::vector<double> summariesRealData;
+        string data, localcontrolfile, output, model;
 
-        //GlobalParameters* gparam;
+
+
         BranchSpecificParameters** bparam;
-        // data/model specific
 
-        string data;
+
         FileSequenceAlignment* dnadata;
         CodonStateSpace* codonstatespace;
         CodonSequenceAlignment* codondata;
@@ -104,7 +110,7 @@ class LocalParameters
         Node* newnode;
         Random* rnd;
 
-        bool iscodon;
+        bool iscodon, isdata;
         int optCpG, opt, optTpA;
         std::map <int,int> gtrMap;
         int gtr1NodeIndex;
@@ -118,7 +124,7 @@ class LocalParameters
         };
 
         int Nsite_codon, Nsite_nuc, Ntaxa, Nstate_codon, startPoint, endPoint, everyPoint, tofasta, Nrep;
-        string controlfile, code, chain, posteriorfile, taxa_a, taxa_b,taxa_gtr1_a, taxa_gtr1_b, taxa_gtr1_c, taxa_gtr2_a, taxa_gtr2_b,taxa_gtr2_c, distance;
+        string controlfile, code, chain, posteriorfile, taxa_a, taxa_b,taxa_gtr1_a, taxa_gtr1_b, taxa_gtr1_c, taxa_gtr2_a, taxa_gtr2_b,taxa_gtr2_c, distance, transformation;
 
         bool getrate, getrate1, getrate2;
 
@@ -131,10 +137,16 @@ class LocalParameters
         int *alloc;
         double lambda_TBL, lambda_omega, lambda_CpG, lambdaTG, lambdaCA, lambda_TpA, MutationNormFactor, MutationNormFactor1, MutationNormFactor2;
         double* muBranch;
-        int fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss;
+        int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss;
         int MCMCpointID;
+
+        std::vector<double> summariesRealData;
+        std::vector<double> accessorysummariesRealData;
         std::vector<double> summariesSimulatedData;
-        std::vector<double> mappingstats;
+        std::vector<double> accessorysummariesSimulatedData;
+        std::vector<double> evostats;
+        std::vector<double> ancevostats;
+        std::vector<double> sitespecificevostats;
         std::vector<double> weights;
 
         //Constructor
@@ -145,10 +157,9 @@ class LocalParameters
         // Writers
         void writeRealDataSummaries(ofstream&os,bool headers= true);
         void writeParam(ofstream& os);
-        void writePosteriorPredictivePvalues(ofstream& os);
-        void writeDistribution(ofstream& os);
-        void writeHeader(ofstream& os);
-        void writeMonitor(ofstream& os);
+
+
+
         void tobstats(ofstream& os);
         void tobstats(ofstream& os,const Link* from);
         void toSsstats(ofstream& os);
@@ -178,10 +189,13 @@ class LocalParameters
         int GetPointID();
         std::vector<double> GetCurrentParameters();
         std::vector<double> GetCurrentSummaries();
-        std::vector<double> GetCurrentMappingStats();
+        std::vector<double> GetCurrentAccessorySummaries();
+        std::vector<double> GetCurrentEvoStats();
+        std::vector<double> GetCurrentAncEvoStats();
+        std::vector<double> GetCurrentSiteSpecificEvoStats();
         std::vector<double> GetCurrentDistances();
         std::vector<double> GetCurrentWeights();
-        std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>>  GetNewSimulation();
+
 
         void GetGTR1();
         void GetGTR2();

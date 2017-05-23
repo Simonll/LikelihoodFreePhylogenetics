@@ -12,8 +12,9 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam){
         nuc2_usage = new double [lparam->Nnucp];
         nuc3_usage = new double [lparam->Nnucp];
         aa_usage = new double [lparam->Nstate_aa];
-        aa_usagewo_nr = new double [lparam->Nstate_aa];
+        aa_usage_wonR = new double [lparam->Nstate_aa];
         codon_usage = new double [lparam->Nstate_codon];
+        codon_usage_wonR = new double [lparam->Nstate_codon];
 
         for (int nuc = 0 ; nuc <lparam->Nnucp; nuc++) {
             nuc_usage[nuc] = 1.0;
@@ -24,11 +25,12 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam){
 
         for (int aa =0 ; aa < lparam->Nstate_aa ; aa++) {
             aa_usage[aa] = 1.0;
-            aa_usagewo_nr[aa] = 1.0;
+            aa_usage_wonR[aa] = 1.0;
         }
 
         for (int codon =0 ; codon < lparam->Nstate_codon ; codon++) {
             codon_usage[codon] = 1.0;
+            codon_usage_wonR[codon] = 1.0;
         }
 
         dinuc_usage = new double* [lparam->Nnucp];
@@ -151,12 +153,13 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam){
         //ss.computeSummaries();
 
         codon_bool = false;
+        codon_wonR_bool = false;
         dinuc_bool = false;
         dinuc12_bool = false;
         dinuc23_bool = false;
         dinuc31_bool = false;
         aa_bool = false;
-        aa_wo_nr = false;
+        aa_wonR_bool = false;
         dicodon_bool = false;
         diaa_bool = false;
         nuc_bool = false;
@@ -206,10 +209,9 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata){
        nuc2_usage = new double [ldata->Nnucp];
        nuc3_usage = new double [ldata->Nnucp];
        aa_usage = new double [ldata->Nstate_aa];
-       aa_usagewo_nr = new double [ldata->Nstate_aa];
-
+       aa_usage_wonR = new double [ldata->Nstate_aa];
        codon_usage = new double [ldata->Nstate_codon];
-
+       codon_usage_wonR = new double [ldata->Nstate_codon];
        for (int nuc = 0 ; nuc <ldata->Nnucp; nuc++) {
            nuc_usage[nuc] = 1.0;
            nuc1_usage[nuc] = 1.0;
@@ -219,11 +221,12 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata){
 
        for (int aa =0 ; aa < ldata->Nstate_aa ; aa++) {
            aa_usage[aa] = 1.0;
-           aa_usagewo_nr[aa] = 1.0;
+           aa_usage_wonR[aa] = 1.0;
        }
 
        for (int codon =0 ; codon < ldata->Nstate_codon ; codon++) {
            codon_usage[codon] = 1.0;
+           codon_usage_wonR[codon] = 1.0;
        }
 
        dinuc_usage = new double* [ldata->Nnucp];
@@ -344,12 +347,13 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata){
        //ss.computeSummaries();
 
        codon_bool = false;
+       codon_wonR_bool = false;
        dinuc_bool = false;
        dinuc12_bool = false;
        dinuc23_bool = false;
        dinuc31_bool = false;
        aa_bool = false;
-       aa_wo_nr = false;
+       aa_wonR_bool = false;
        dicodon_bool = false;
        diaa_bool = false;
        nuc_bool = false;
@@ -382,10 +386,10 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata){
        codon_taxa_comphet_bool = false;
        aa_site_comphet_bool = false;
        aa_taxa_comphet_bool = false;
-        cerr << "AAA23\n";
+
        MapFunctions();
 
-        cerr << "AAA24\n";
+
 }
 
 void SummaryStatistics::MapFunctions(){
@@ -578,26 +582,26 @@ void SummaryStatistics::MapFunctions(){
         GetSummariesMap["W"] = &SummaryStatistics::GetW;
         GetSummariesMap["Y"] = &SummaryStatistics::GetY;
 
-//        GetSummariesMap["AwonR"] = &SummaryStatistics::GetAwonR;
-//        GetSummariesMap["CwonR"] = &SummaryStatistics::GetCwonR;
-//        GetSummariesMap["DwonR"] = &SummaryStatistics::GetDwonR;
-//        GetSummariesMap["EwonR"] = &SummaryStatistics::GetEwonR;
-//        GetSummariesMap["FwonR"] = &SummaryStatistics::GetFwonR;
-//        GetSummariesMap["GwonR"] = &SummaryStatistics::GetGwonR;
-//        GetSummariesMap["HwonR"] = &SummaryStatistics::GetHwonR;
-//        GetSummariesMap["IwonR"] = &SummaryStatistics::GetIwonR;
-//        GetSummariesMap["KwonR"] = &SummaryStatistics::GetKwonR;
-//        GetSummariesMap["LwonR"] = &SummaryStatistics::GetLwonR;
-//        GetSummariesMap["MwonR"] = &SummaryStatistics::GetMwonR;
-//        GetSummariesMap["NwonR"] = &SummaryStatistics::GetNwonR;
-//        GetSummariesMap["PwonR"] = &SummaryStatistics::GetPwonR;
-//        GetSummariesMap["QwonR"] = &SummaryStatistics::GetQwonR;
-//        GetSummariesMap["RwonR"] = &SummaryStatistics::GetRwonR;
-//        GetSummariesMap["SwonR"] = &SummaryStatistics::GetSwonR;
-//        GetSummariesMap["TwonR"] = &SummaryStatistics::GetTwonR;
-//        GetSummariesMap["VwonR"] = &SummaryStatistics::GetVwonR;
-//        GetSummariesMap["WwonR"] = &SummaryStatistics::GetWwonR;
-//        GetSummariesMap["YwonR"] = &SummaryStatistics::GetYwonR;
+        GetSummariesMap["AwonR"] = &SummaryStatistics::GetAwonR;
+        GetSummariesMap["CwonR"] = &SummaryStatistics::GetCwonR;
+        GetSummariesMap["DwonR"] = &SummaryStatistics::GetDwonR;
+        GetSummariesMap["EwonR"] = &SummaryStatistics::GetEwonR;
+        GetSummariesMap["FwonR"] = &SummaryStatistics::GetFwonR;
+        GetSummariesMap["GwonR"] = &SummaryStatistics::GetGwonR;
+        GetSummariesMap["HwonR"] = &SummaryStatistics::GetHwonR;
+        GetSummariesMap["IwonR"] = &SummaryStatistics::GetIwonR;
+        GetSummariesMap["KwonR"] = &SummaryStatistics::GetKwonR;
+        GetSummariesMap["LwonR"] = &SummaryStatistics::GetLwonR;
+        GetSummariesMap["MwonR"] = &SummaryStatistics::GetMwonR;
+        GetSummariesMap["NwonR"] = &SummaryStatistics::GetNwonR;
+        GetSummariesMap["PwonR"] = &SummaryStatistics::GetPwonR;
+        GetSummariesMap["QwonR"] = &SummaryStatistics::GetQwonR;
+        GetSummariesMap["RwonR"] = &SummaryStatistics::GetRwonR;
+        GetSummariesMap["SwonR"] = &SummaryStatistics::GetSwonR;
+        GetSummariesMap["TwonR"] = &SummaryStatistics::GetTwonR;
+        GetSummariesMap["VwonR"] = &SummaryStatistics::GetVwonR;
+        GetSummariesMap["WwonR"] = &SummaryStatistics::GetWwonR;
+        GetSummariesMap["YwonR"] = &SummaryStatistics::GetYwonR;
 
 
         GetSummariesMap["TTT"] = &SummaryStatistics::GetTTT;
@@ -665,6 +669,72 @@ void SummaryStatistics::MapFunctions(){
         GetSummariesMap["GGA"] = &SummaryStatistics::GetGGA;
         GetSummariesMap["GGG"] = &SummaryStatistics::GetGGG;
 
+        GetSummariesMap["TTTwonR"] = &SummaryStatistics::GetTTTwonR;
+        GetSummariesMap["TTCwonR"] = &SummaryStatistics::GetTTCwonR;
+        GetSummariesMap["TTAwonR"] = &SummaryStatistics::GetTTAwonR;
+        GetSummariesMap["TTGwonR"] = &SummaryStatistics::GetTTGwonR;
+        GetSummariesMap["TCTwonR"] = &SummaryStatistics::GetTCTwonR;
+        GetSummariesMap["TCCwonR"] = &SummaryStatistics::GetTCCwonR;
+        GetSummariesMap["TCAwonR"] = &SummaryStatistics::GetTCAwonR;
+        GetSummariesMap["TCGwonR"] = &SummaryStatistics::GetTCGwonR;
+        GetSummariesMap["TATwonR"] = &SummaryStatistics::GetTATwonR;
+        GetSummariesMap["TACwonR"] = &SummaryStatistics::GetTACwonR;
+        GetSummariesMap["TAAwonR"] = &SummaryStatistics::GetTAAwonR;
+        GetSummariesMap["TAGwonR"] = &SummaryStatistics::GetTAGwonR;
+        GetSummariesMap["TGTwonR"] = &SummaryStatistics::GetTGTwonR;
+        GetSummariesMap["TGCwonR"] = &SummaryStatistics::GetTGCwonR;
+        GetSummariesMap["TGAwonR"] = &SummaryStatistics::GetTGAwonR;
+        GetSummariesMap["TGGwonR"] = &SummaryStatistics::GetTGGwonR;
+        GetSummariesMap["CTTwonR"] = &SummaryStatistics::GetCTTwonR;
+        GetSummariesMap["CTCwonR"] = &SummaryStatistics::GetCTCwonR;
+        GetSummariesMap["CTAwonR"] = &SummaryStatistics::GetCTAwonR;
+        GetSummariesMap["CTGwonR"] = &SummaryStatistics::GetCTGwonR;
+        GetSummariesMap["CCTwonR"] = &SummaryStatistics::GetCCTwonR;
+        GetSummariesMap["CCCwonR"] = &SummaryStatistics::GetCCCwonR;
+        GetSummariesMap["CCAwonR"] = &SummaryStatistics::GetCCAwonR;
+        GetSummariesMap["CCGwonR"] = &SummaryStatistics::GetCCGwonR;
+        GetSummariesMap["CATwonR"] = &SummaryStatistics::GetCATwonR;
+        GetSummariesMap["CACwonR"] = &SummaryStatistics::GetCACwonR;
+        GetSummariesMap["CAAwonR"] = &SummaryStatistics::GetCAAwonR;
+        GetSummariesMap["CAGwonR"] = &SummaryStatistics::GetCAGwonR;
+        GetSummariesMap["CGTwonR"] = &SummaryStatistics::GetCGTwonR;
+        GetSummariesMap["CGCwonR"] = &SummaryStatistics::GetCGCwonR;
+        GetSummariesMap["CGAwonR"] = &SummaryStatistics::GetCGAwonR;
+        GetSummariesMap["CGGwonR"] = &SummaryStatistics::GetCGGwonR;
+        GetSummariesMap["ATTwonR"] = &SummaryStatistics::GetATTwonR;
+        GetSummariesMap["ATCwonR"] = &SummaryStatistics::GetATCwonR;
+        GetSummariesMap["ATAwonR"] = &SummaryStatistics::GetATAwonR;
+        GetSummariesMap["ATGwonR"] = &SummaryStatistics::GetATGwonR;
+        GetSummariesMap["ACTwonR"] = &SummaryStatistics::GetACTwonR;
+        GetSummariesMap["ACCwonR"] = &SummaryStatistics::GetACCwonR;
+        GetSummariesMap["ACAwonR"] = &SummaryStatistics::GetACAwonR;
+        GetSummariesMap["ACGwonR"] = &SummaryStatistics::GetACGwonR;
+        GetSummariesMap["AATwonR"] = &SummaryStatistics::GetAATwonR;
+        GetSummariesMap["AACwonR"] = &SummaryStatistics::GetAACwonR;
+        GetSummariesMap["AAAwonR"] = &SummaryStatistics::GetAAAwonR;
+        GetSummariesMap["AAGwonR"] = &SummaryStatistics::GetAAGwonR;
+        GetSummariesMap["AGTwonR"] = &SummaryStatistics::GetAGTwonR;
+        GetSummariesMap["AGCwonR"] = &SummaryStatistics::GetAGCwonR;
+        GetSummariesMap["AGAwonR"] = &SummaryStatistics::GetAGAwonR;
+        GetSummariesMap["AGGwonR"] = &SummaryStatistics::GetAGGwonR;
+        GetSummariesMap["GTTwonR"] = &SummaryStatistics::GetGTTwonR;
+        GetSummariesMap["GTCwonR"] = &SummaryStatistics::GetGTCwonR;
+        GetSummariesMap["GTAwonR"] = &SummaryStatistics::GetGTAwonR;
+        GetSummariesMap["GTGwonR"] = &SummaryStatistics::GetGTGwonR;
+        GetSummariesMap["GCTwonR"] = &SummaryStatistics::GetGCTwonR;
+        GetSummariesMap["GCCwonR"] = &SummaryStatistics::GetGCCwonR;
+        GetSummariesMap["GCAwonR"] = &SummaryStatistics::GetGCAwonR;
+        GetSummariesMap["GCGwonR"] = &SummaryStatistics::GetGCGwonR;
+        GetSummariesMap["GATwonR"] = &SummaryStatistics::GetGATwonR;
+        GetSummariesMap["GACwonR"] = &SummaryStatistics::GetGACwonR;
+        GetSummariesMap["GAAwonR"] = &SummaryStatistics::GetGAAwonR;
+        GetSummariesMap["GAGwonR"] = &SummaryStatistics::GetGAGwonR;
+        GetSummariesMap["GGTwonR"] = &SummaryStatistics::GetGGTwonR;
+        GetSummariesMap["GGCwonR"] = &SummaryStatistics::GetGGCwonR;
+        GetSummariesMap["GGAwonR"] = &SummaryStatistics::GetGGAwonR;
+        GetSummariesMap["GGGwonR"] = &SummaryStatistics::GetGGGwonR;
+
+
         GetSummariesMap["nucsitecomphet"] = &SummaryStatistics::Getnuc_site_comphet;
         GetSummariesMap["nuc1sitecomphet"] = &SummaryStatistics::Getnuc1_site_comphet;
         GetSummariesMap["nuc2sitecomphet"] = &SummaryStatistics::Getnuc2_site_comphet;
@@ -677,6 +747,409 @@ void SummaryStatistics::MapFunctions(){
         GetSummariesMap["codontaxacomphet"] = &SummaryStatistics::Getcodon_taxa_comphet;
         GetSummariesMap["aasitecomphet"] = &SummaryStatistics::Getaa_site_comphet;
         GetSummariesMap["aataxacomphet"] = &SummaryStatistics::Getaa_taxa_comphet;
+
+
+        GetSummariesMap["diaaAA"]=&SummaryStatistics::GetDIAA_AA;
+        GetSummariesMap["diaaAC"]=&SummaryStatistics::GetDIAA_AC;
+        GetSummariesMap["diaaAD"]=&SummaryStatistics::GetDIAA_AD;
+        GetSummariesMap["diaaAE"]=&SummaryStatistics::GetDIAA_AE;
+        GetSummariesMap["diaaAF"]=&SummaryStatistics::GetDIAA_AF;
+        GetSummariesMap["diaaAG"]=&SummaryStatistics::GetDIAA_AG;
+        GetSummariesMap["diaaAH"]=&SummaryStatistics::GetDIAA_AH;
+        GetSummariesMap["diaaAI"]=&SummaryStatistics::GetDIAA_AI;
+        GetSummariesMap["diaaAK"]=&SummaryStatistics::GetDIAA_AK;
+        GetSummariesMap["diaaAL"]=&SummaryStatistics::GetDIAA_AL;
+        GetSummariesMap["diaaAM"]=&SummaryStatistics::GetDIAA_AM;
+        GetSummariesMap["diaaAN"]=&SummaryStatistics::GetDIAA_AN;
+        GetSummariesMap["diaaAP"]=&SummaryStatistics::GetDIAA_AP;
+        GetSummariesMap["diaaAQ"]=&SummaryStatistics::GetDIAA_AQ;
+        GetSummariesMap["diaaAR"]=&SummaryStatistics::GetDIAA_AR;
+        GetSummariesMap["diaaAS"]=&SummaryStatistics::GetDIAA_AS;
+        GetSummariesMap["diaaAT"]=&SummaryStatistics::GetDIAA_AT;
+        GetSummariesMap["diaaAV"]=&SummaryStatistics::GetDIAA_AV;
+        GetSummariesMap["diaaAW"]=&SummaryStatistics::GetDIAA_AW;
+        GetSummariesMap["diaaAY"]=&SummaryStatistics::GetDIAA_AY;
+        GetSummariesMap["diaaCA"]=&SummaryStatistics::GetDIAA_CA;
+        GetSummariesMap["diaaCC"]=&SummaryStatistics::GetDIAA_CC;
+        GetSummariesMap["diaaCD"]=&SummaryStatistics::GetDIAA_CD;
+        GetSummariesMap["diaaCE"]=&SummaryStatistics::GetDIAA_CE;
+        GetSummariesMap["diaaCF"]=&SummaryStatistics::GetDIAA_CF;
+        GetSummariesMap["diaaCG"]=&SummaryStatistics::GetDIAA_CG;
+        GetSummariesMap["diaaCH"]=&SummaryStatistics::GetDIAA_CH;
+        GetSummariesMap["diaaCI"]=&SummaryStatistics::GetDIAA_CI;
+        GetSummariesMap["diaaCK"]=&SummaryStatistics::GetDIAA_CK;
+        GetSummariesMap["diaaCL"]=&SummaryStatistics::GetDIAA_CL;
+        GetSummariesMap["diaaCM"]=&SummaryStatistics::GetDIAA_CM;
+        GetSummariesMap["diaaCN"]=&SummaryStatistics::GetDIAA_CN;
+        GetSummariesMap["diaaCP"]=&SummaryStatistics::GetDIAA_CP;
+        GetSummariesMap["diaaCQ"]=&SummaryStatistics::GetDIAA_CQ;
+        GetSummariesMap["diaaCR"]=&SummaryStatistics::GetDIAA_CR;
+        GetSummariesMap["diaaCS"]=&SummaryStatistics::GetDIAA_CS;
+        GetSummariesMap["diaaCT"]=&SummaryStatistics::GetDIAA_CT;
+        GetSummariesMap["diaaCV"]=&SummaryStatistics::GetDIAA_CV;
+        GetSummariesMap["diaaCW"]=&SummaryStatistics::GetDIAA_CW;
+        GetSummariesMap["diaaCY"]=&SummaryStatistics::GetDIAA_CY;
+        GetSummariesMap["diaaDA"]=&SummaryStatistics::GetDIAA_DA;
+        GetSummariesMap["diaaDC"]=&SummaryStatistics::GetDIAA_DC;
+        GetSummariesMap["diaaDD"]=&SummaryStatistics::GetDIAA_DD;
+        GetSummariesMap["diaaDE"]=&SummaryStatistics::GetDIAA_DE;
+        GetSummariesMap["diaaDF"]=&SummaryStatistics::GetDIAA_DF;
+        GetSummariesMap["diaaDG"]=&SummaryStatistics::GetDIAA_DG;
+        GetSummariesMap["diaaDH"]=&SummaryStatistics::GetDIAA_DH;
+        GetSummariesMap["diaaDI"]=&SummaryStatistics::GetDIAA_DI;
+        GetSummariesMap["diaaDK"]=&SummaryStatistics::GetDIAA_DK;
+        GetSummariesMap["diaaDL"]=&SummaryStatistics::GetDIAA_DL;
+        GetSummariesMap["diaaDM"]=&SummaryStatistics::GetDIAA_DM;
+        GetSummariesMap["diaaDN"]=&SummaryStatistics::GetDIAA_DN;
+        GetSummariesMap["diaaDP"]=&SummaryStatistics::GetDIAA_DP;
+        GetSummariesMap["diaaDQ"]=&SummaryStatistics::GetDIAA_DQ;
+        GetSummariesMap["diaaDR"]=&SummaryStatistics::GetDIAA_DR;
+        GetSummariesMap["diaaDS"]=&SummaryStatistics::GetDIAA_DS;
+        GetSummariesMap["diaaDT"]=&SummaryStatistics::GetDIAA_DT;
+        GetSummariesMap["diaaDV"]=&SummaryStatistics::GetDIAA_DV;
+        GetSummariesMap["diaaDW"]=&SummaryStatistics::GetDIAA_DW;
+        GetSummariesMap["diaaDY"]=&SummaryStatistics::GetDIAA_DY;
+        GetSummariesMap["diaaEA"]=&SummaryStatistics::GetDIAA_EA;
+        GetSummariesMap["diaaEC"]=&SummaryStatistics::GetDIAA_EC;
+        GetSummariesMap["diaaED"]=&SummaryStatistics::GetDIAA_ED;
+        GetSummariesMap["diaaEE"]=&SummaryStatistics::GetDIAA_EE;
+        GetSummariesMap["diaaEF"]=&SummaryStatistics::GetDIAA_EF;
+        GetSummariesMap["diaaEG"]=&SummaryStatistics::GetDIAA_EG;
+        GetSummariesMap["diaaEH"]=&SummaryStatistics::GetDIAA_EH;
+        GetSummariesMap["diaaEI"]=&SummaryStatistics::GetDIAA_EI;
+        GetSummariesMap["diaaEK"]=&SummaryStatistics::GetDIAA_EK;
+        GetSummariesMap["diaaEL"]=&SummaryStatistics::GetDIAA_EL;
+        GetSummariesMap["diaaEM"]=&SummaryStatistics::GetDIAA_EM;
+        GetSummariesMap["diaaEN"]=&SummaryStatistics::GetDIAA_EN;
+        GetSummariesMap["diaaEP"]=&SummaryStatistics::GetDIAA_EP;
+        GetSummariesMap["diaaEQ"]=&SummaryStatistics::GetDIAA_EQ;
+        GetSummariesMap["diaaER"]=&SummaryStatistics::GetDIAA_ER;
+        GetSummariesMap["diaaES"]=&SummaryStatistics::GetDIAA_ES;
+        GetSummariesMap["diaaET"]=&SummaryStatistics::GetDIAA_ET;
+        GetSummariesMap["diaaEV"]=&SummaryStatistics::GetDIAA_EV;
+        GetSummariesMap["diaaEW"]=&SummaryStatistics::GetDIAA_EW;
+        GetSummariesMap["diaaEY"]=&SummaryStatistics::GetDIAA_EY;
+        GetSummariesMap["diaaFA"]=&SummaryStatistics::GetDIAA_FA;
+        GetSummariesMap["diaaFC"]=&SummaryStatistics::GetDIAA_FC;
+        GetSummariesMap["diaaFD"]=&SummaryStatistics::GetDIAA_FD;
+        GetSummariesMap["diaaFE"]=&SummaryStatistics::GetDIAA_FE;
+        GetSummariesMap["diaaFF"]=&SummaryStatistics::GetDIAA_FF;
+        GetSummariesMap["diaaFG"]=&SummaryStatistics::GetDIAA_FG;
+        GetSummariesMap["diaaFH"]=&SummaryStatistics::GetDIAA_FH;
+        GetSummariesMap["diaaFI"]=&SummaryStatistics::GetDIAA_FI;
+        GetSummariesMap["diaaFK"]=&SummaryStatistics::GetDIAA_FK;
+        GetSummariesMap["diaaFL"]=&SummaryStatistics::GetDIAA_FL;
+        GetSummariesMap["diaaFM"]=&SummaryStatistics::GetDIAA_FM;
+        GetSummariesMap["diaaFN"]=&SummaryStatistics::GetDIAA_FN;
+        GetSummariesMap["diaaFP"]=&SummaryStatistics::GetDIAA_FP;
+        GetSummariesMap["diaaFQ"]=&SummaryStatistics::GetDIAA_FQ;
+        GetSummariesMap["diaaFR"]=&SummaryStatistics::GetDIAA_FR;
+        GetSummariesMap["diaaFS"]=&SummaryStatistics::GetDIAA_FS;
+        GetSummariesMap["diaaFT"]=&SummaryStatistics::GetDIAA_FT;
+        GetSummariesMap["diaaFV"]=&SummaryStatistics::GetDIAA_FV;
+        GetSummariesMap["diaaFW"]=&SummaryStatistics::GetDIAA_FW;
+        GetSummariesMap["diaaFY"]=&SummaryStatistics::GetDIAA_FY;
+        GetSummariesMap["diaaGA"]=&SummaryStatistics::GetDIAA_GA;
+        GetSummariesMap["diaaGC"]=&SummaryStatistics::GetDIAA_GC;
+        GetSummariesMap["diaaGD"]=&SummaryStatistics::GetDIAA_GD;
+        GetSummariesMap["diaaGE"]=&SummaryStatistics::GetDIAA_GE;
+        GetSummariesMap["diaaGF"]=&SummaryStatistics::GetDIAA_GF;
+        GetSummariesMap["diaaGG"]=&SummaryStatistics::GetDIAA_GG;
+        GetSummariesMap["diaaGH"]=&SummaryStatistics::GetDIAA_GH;
+        GetSummariesMap["diaaGI"]=&SummaryStatistics::GetDIAA_GI;
+        GetSummariesMap["diaaGK"]=&SummaryStatistics::GetDIAA_GK;
+        GetSummariesMap["diaaGL"]=&SummaryStatistics::GetDIAA_GL;
+        GetSummariesMap["diaaGM"]=&SummaryStatistics::GetDIAA_GM;
+        GetSummariesMap["diaaGN"]=&SummaryStatistics::GetDIAA_GN;
+        GetSummariesMap["diaaGP"]=&SummaryStatistics::GetDIAA_GP;
+        GetSummariesMap["diaaGQ"]=&SummaryStatistics::GetDIAA_GQ;
+        GetSummariesMap["diaaGR"]=&SummaryStatistics::GetDIAA_GR;
+        GetSummariesMap["diaaGS"]=&SummaryStatistics::GetDIAA_GS;
+        GetSummariesMap["diaaGT"]=&SummaryStatistics::GetDIAA_GT;
+        GetSummariesMap["diaaGV"]=&SummaryStatistics::GetDIAA_GV;
+        GetSummariesMap["diaaGW"]=&SummaryStatistics::GetDIAA_GW;
+        GetSummariesMap["diaaGY"]=&SummaryStatistics::GetDIAA_GY;
+        GetSummariesMap["diaaHA"]=&SummaryStatistics::GetDIAA_HA;
+        GetSummariesMap["diaaHC"]=&SummaryStatistics::GetDIAA_HC;
+        GetSummariesMap["diaaHD"]=&SummaryStatistics::GetDIAA_HD;
+        GetSummariesMap["diaaHE"]=&SummaryStatistics::GetDIAA_HE;
+        GetSummariesMap["diaaHF"]=&SummaryStatistics::GetDIAA_HF;
+        GetSummariesMap["diaaHG"]=&SummaryStatistics::GetDIAA_HG;
+        GetSummariesMap["diaaHH"]=&SummaryStatistics::GetDIAA_HH;
+        GetSummariesMap["diaaHI"]=&SummaryStatistics::GetDIAA_HI;
+        GetSummariesMap["diaaHK"]=&SummaryStatistics::GetDIAA_HK;
+        GetSummariesMap["diaaHL"]=&SummaryStatistics::GetDIAA_HL;
+        GetSummariesMap["diaaHM"]=&SummaryStatistics::GetDIAA_HM;
+        GetSummariesMap["diaaHN"]=&SummaryStatistics::GetDIAA_HN;
+        GetSummariesMap["diaaHP"]=&SummaryStatistics::GetDIAA_HP;
+        GetSummariesMap["diaaHQ"]=&SummaryStatistics::GetDIAA_HQ;
+        GetSummariesMap["diaaHR"]=&SummaryStatistics::GetDIAA_HR;
+        GetSummariesMap["diaaHS"]=&SummaryStatistics::GetDIAA_HS;
+        GetSummariesMap["diaaHT"]=&SummaryStatistics::GetDIAA_HT;
+        GetSummariesMap["diaaHV"]=&SummaryStatistics::GetDIAA_HV;
+        GetSummariesMap["diaaHW"]=&SummaryStatistics::GetDIAA_HW;
+        GetSummariesMap["diaaHY"]=&SummaryStatistics::GetDIAA_HY;
+        GetSummariesMap["diaaIA"]=&SummaryStatistics::GetDIAA_IA;
+        GetSummariesMap["diaaIC"]=&SummaryStatistics::GetDIAA_IC;
+        GetSummariesMap["diaaID"]=&SummaryStatistics::GetDIAA_ID;
+        GetSummariesMap["diaaIE"]=&SummaryStatistics::GetDIAA_IE;
+        GetSummariesMap["diaaIF"]=&SummaryStatistics::GetDIAA_IF;
+        GetSummariesMap["diaaIG"]=&SummaryStatistics::GetDIAA_IG;
+        GetSummariesMap["diaaIH"]=&SummaryStatistics::GetDIAA_IH;
+        GetSummariesMap["diaaII"]=&SummaryStatistics::GetDIAA_II;
+        GetSummariesMap["diaaIK"]=&SummaryStatistics::GetDIAA_IK;
+        GetSummariesMap["diaaIL"]=&SummaryStatistics::GetDIAA_IL;
+        GetSummariesMap["diaaIM"]=&SummaryStatistics::GetDIAA_IM;
+        GetSummariesMap["diaaIN"]=&SummaryStatistics::GetDIAA_IN;
+        GetSummariesMap["diaaIP"]=&SummaryStatistics::GetDIAA_IP;
+        GetSummariesMap["diaaIQ"]=&SummaryStatistics::GetDIAA_IQ;
+        GetSummariesMap["diaaIR"]=&SummaryStatistics::GetDIAA_IR;
+        GetSummariesMap["diaaIS"]=&SummaryStatistics::GetDIAA_IS;
+        GetSummariesMap["diaaIT"]=&SummaryStatistics::GetDIAA_IT;
+        GetSummariesMap["diaaIV"]=&SummaryStatistics::GetDIAA_IV;
+        GetSummariesMap["diaaIW"]=&SummaryStatistics::GetDIAA_IW;
+        GetSummariesMap["diaaIY"]=&SummaryStatistics::GetDIAA_IY;
+        GetSummariesMap["diaaKA"]=&SummaryStatistics::GetDIAA_KA;
+        GetSummariesMap["diaaKC"]=&SummaryStatistics::GetDIAA_KC;
+        GetSummariesMap["diaaKD"]=&SummaryStatistics::GetDIAA_KD;
+        GetSummariesMap["diaaKE"]=&SummaryStatistics::GetDIAA_KE;
+        GetSummariesMap["diaaKF"]=&SummaryStatistics::GetDIAA_KF;
+        GetSummariesMap["diaaKG"]=&SummaryStatistics::GetDIAA_KG;
+        GetSummariesMap["diaaKH"]=&SummaryStatistics::GetDIAA_KH;
+        GetSummariesMap["diaaKI"]=&SummaryStatistics::GetDIAA_KI;
+        GetSummariesMap["diaaKK"]=&SummaryStatistics::GetDIAA_KK;
+        GetSummariesMap["diaaKL"]=&SummaryStatistics::GetDIAA_KL;
+        GetSummariesMap["diaaKM"]=&SummaryStatistics::GetDIAA_KM;
+        GetSummariesMap["diaaKN"]=&SummaryStatistics::GetDIAA_KN;
+        GetSummariesMap["diaaKP"]=&SummaryStatistics::GetDIAA_KP;
+        GetSummariesMap["diaaKQ"]=&SummaryStatistics::GetDIAA_KQ;
+        GetSummariesMap["diaaKR"]=&SummaryStatistics::GetDIAA_KR;
+        GetSummariesMap["diaaKS"]=&SummaryStatistics::GetDIAA_KS;
+        GetSummariesMap["diaaKT"]=&SummaryStatistics::GetDIAA_KT;
+        GetSummariesMap["diaaKV"]=&SummaryStatistics::GetDIAA_KV;
+        GetSummariesMap["diaaKW"]=&SummaryStatistics::GetDIAA_KW;
+        GetSummariesMap["diaaKY"]=&SummaryStatistics::GetDIAA_KY;
+        GetSummariesMap["diaaLA"]=&SummaryStatistics::GetDIAA_LA;
+        GetSummariesMap["diaaLC"]=&SummaryStatistics::GetDIAA_LC;
+        GetSummariesMap["diaaLD"]=&SummaryStatistics::GetDIAA_LD;
+        GetSummariesMap["diaaLE"]=&SummaryStatistics::GetDIAA_LE;
+        GetSummariesMap["diaaLF"]=&SummaryStatistics::GetDIAA_LF;
+        GetSummariesMap["diaaLG"]=&SummaryStatistics::GetDIAA_LG;
+        GetSummariesMap["diaaLH"]=&SummaryStatistics::GetDIAA_LH;
+        GetSummariesMap["diaaLI"]=&SummaryStatistics::GetDIAA_LI;
+        GetSummariesMap["diaaLK"]=&SummaryStatistics::GetDIAA_LK;
+        GetSummariesMap["diaaLL"]=&SummaryStatistics::GetDIAA_LL;
+        GetSummariesMap["diaaLM"]=&SummaryStatistics::GetDIAA_LM;
+        GetSummariesMap["diaaLN"]=&SummaryStatistics::GetDIAA_LN;
+        GetSummariesMap["diaaLP"]=&SummaryStatistics::GetDIAA_LP;
+        GetSummariesMap["diaaLQ"]=&SummaryStatistics::GetDIAA_LQ;
+        GetSummariesMap["diaaLR"]=&SummaryStatistics::GetDIAA_LR;
+        GetSummariesMap["diaaLS"]=&SummaryStatistics::GetDIAA_LS;
+        GetSummariesMap["diaaLT"]=&SummaryStatistics::GetDIAA_LT;
+        GetSummariesMap["diaaLV"]=&SummaryStatistics::GetDIAA_LV;
+        GetSummariesMap["diaaLW"]=&SummaryStatistics::GetDIAA_LW;
+        GetSummariesMap["diaaLY"]=&SummaryStatistics::GetDIAA_LY;
+        GetSummariesMap["diaaMA"]=&SummaryStatistics::GetDIAA_MA;
+        GetSummariesMap["diaaMC"]=&SummaryStatistics::GetDIAA_MC;
+        GetSummariesMap["diaaMD"]=&SummaryStatistics::GetDIAA_MD;
+        GetSummariesMap["diaaME"]=&SummaryStatistics::GetDIAA_ME;
+        GetSummariesMap["diaaMF"]=&SummaryStatistics::GetDIAA_MF;
+        GetSummariesMap["diaaMG"]=&SummaryStatistics::GetDIAA_MG;
+        GetSummariesMap["diaaMH"]=&SummaryStatistics::GetDIAA_MH;
+        GetSummariesMap["diaaMI"]=&SummaryStatistics::GetDIAA_MI;
+        GetSummariesMap["diaaMK"]=&SummaryStatistics::GetDIAA_MK;
+        GetSummariesMap["diaaML"]=&SummaryStatistics::GetDIAA_ML;
+        GetSummariesMap["diaaMM"]=&SummaryStatistics::GetDIAA_MM;
+        GetSummariesMap["diaaMN"]=&SummaryStatistics::GetDIAA_MN;
+        GetSummariesMap["diaaMP"]=&SummaryStatistics::GetDIAA_MP;
+        GetSummariesMap["diaaMQ"]=&SummaryStatistics::GetDIAA_MQ;
+        GetSummariesMap["diaaMR"]=&SummaryStatistics::GetDIAA_MR;
+        GetSummariesMap["diaaMS"]=&SummaryStatistics::GetDIAA_MS;
+        GetSummariesMap["diaaMT"]=&SummaryStatistics::GetDIAA_MT;
+        GetSummariesMap["diaaMV"]=&SummaryStatistics::GetDIAA_MV;
+        GetSummariesMap["diaaMW"]=&SummaryStatistics::GetDIAA_MW;
+        GetSummariesMap["diaaMY"]=&SummaryStatistics::GetDIAA_MY;
+        GetSummariesMap["diaaNA"]=&SummaryStatistics::GetDIAA_NA;
+        GetSummariesMap["diaaNC"]=&SummaryStatistics::GetDIAA_NC;
+        GetSummariesMap["diaaND"]=&SummaryStatistics::GetDIAA_ND;
+        GetSummariesMap["diaaNE"]=&SummaryStatistics::GetDIAA_NE;
+        GetSummariesMap["diaaNF"]=&SummaryStatistics::GetDIAA_NF;
+        GetSummariesMap["diaaNG"]=&SummaryStatistics::GetDIAA_NG;
+        GetSummariesMap["diaaNH"]=&SummaryStatistics::GetDIAA_NH;
+        GetSummariesMap["diaaNI"]=&SummaryStatistics::GetDIAA_NI;
+        GetSummariesMap["diaaNK"]=&SummaryStatistics::GetDIAA_NK;
+        GetSummariesMap["diaaNL"]=&SummaryStatistics::GetDIAA_NL;
+        GetSummariesMap["diaaNM"]=&SummaryStatistics::GetDIAA_NM;
+        GetSummariesMap["diaaNN"]=&SummaryStatistics::GetDIAA_NN;
+        GetSummariesMap["diaaNP"]=&SummaryStatistics::GetDIAA_NP;
+        GetSummariesMap["diaaNQ"]=&SummaryStatistics::GetDIAA_NQ;
+        GetSummariesMap["diaaNR"]=&SummaryStatistics::GetDIAA_NR;
+        GetSummariesMap["diaaNS"]=&SummaryStatistics::GetDIAA_NS;
+        GetSummariesMap["diaaNT"]=&SummaryStatistics::GetDIAA_NT;
+        GetSummariesMap["diaaNV"]=&SummaryStatistics::GetDIAA_NV;
+        GetSummariesMap["diaaNW"]=&SummaryStatistics::GetDIAA_NW;
+        GetSummariesMap["diaaNY"]=&SummaryStatistics::GetDIAA_NY;
+        GetSummariesMap["diaaPA"]=&SummaryStatistics::GetDIAA_PA;
+        GetSummariesMap["diaaPC"]=&SummaryStatistics::GetDIAA_PC;
+        GetSummariesMap["diaaPD"]=&SummaryStatistics::GetDIAA_PD;
+        GetSummariesMap["diaaPE"]=&SummaryStatistics::GetDIAA_PE;
+        GetSummariesMap["diaaPF"]=&SummaryStatistics::GetDIAA_PF;
+        GetSummariesMap["diaaPG"]=&SummaryStatistics::GetDIAA_PG;
+        GetSummariesMap["diaaPH"]=&SummaryStatistics::GetDIAA_PH;
+        GetSummariesMap["diaaPI"]=&SummaryStatistics::GetDIAA_PI;
+        GetSummariesMap["diaaPK"]=&SummaryStatistics::GetDIAA_PK;
+        GetSummariesMap["diaaPL"]=&SummaryStatistics::GetDIAA_PL;
+        GetSummariesMap["diaaPM"]=&SummaryStatistics::GetDIAA_PM;
+        GetSummariesMap["diaaPN"]=&SummaryStatistics::GetDIAA_PN;
+        GetSummariesMap["diaaPP"]=&SummaryStatistics::GetDIAA_PP;
+        GetSummariesMap["diaaPQ"]=&SummaryStatistics::GetDIAA_PQ;
+        GetSummariesMap["diaaPR"]=&SummaryStatistics::GetDIAA_PR;
+        GetSummariesMap["diaaPS"]=&SummaryStatistics::GetDIAA_PS;
+        GetSummariesMap["diaaPT"]=&SummaryStatistics::GetDIAA_PT;
+        GetSummariesMap["diaaPV"]=&SummaryStatistics::GetDIAA_PV;
+        GetSummariesMap["diaaPW"]=&SummaryStatistics::GetDIAA_PW;
+        GetSummariesMap["diaaPY"]=&SummaryStatistics::GetDIAA_PY;
+        GetSummariesMap["diaaQA"]=&SummaryStatistics::GetDIAA_QA;
+        GetSummariesMap["diaaQC"]=&SummaryStatistics::GetDIAA_QC;
+        GetSummariesMap["diaaQD"]=&SummaryStatistics::GetDIAA_QD;
+        GetSummariesMap["diaaQE"]=&SummaryStatistics::GetDIAA_QE;
+        GetSummariesMap["diaaQF"]=&SummaryStatistics::GetDIAA_QF;
+        GetSummariesMap["diaaQG"]=&SummaryStatistics::GetDIAA_QG;
+        GetSummariesMap["diaaQH"]=&SummaryStatistics::GetDIAA_QH;
+        GetSummariesMap["diaaQI"]=&SummaryStatistics::GetDIAA_QI;
+        GetSummariesMap["diaaQK"]=&SummaryStatistics::GetDIAA_QK;
+        GetSummariesMap["diaaQL"]=&SummaryStatistics::GetDIAA_QL;
+        GetSummariesMap["diaaQM"]=&SummaryStatistics::GetDIAA_QM;
+        GetSummariesMap["diaaQN"]=&SummaryStatistics::GetDIAA_QN;
+        GetSummariesMap["diaaQP"]=&SummaryStatistics::GetDIAA_QP;
+        GetSummariesMap["diaaQQ"]=&SummaryStatistics::GetDIAA_QQ;
+        GetSummariesMap["diaaQR"]=&SummaryStatistics::GetDIAA_QR;
+        GetSummariesMap["diaaQS"]=&SummaryStatistics::GetDIAA_QS;
+        GetSummariesMap["diaaQT"]=&SummaryStatistics::GetDIAA_QT;
+        GetSummariesMap["diaaQV"]=&SummaryStatistics::GetDIAA_QV;
+        GetSummariesMap["diaaQW"]=&SummaryStatistics::GetDIAA_QW;
+        GetSummariesMap["diaaQY"]=&SummaryStatistics::GetDIAA_QY;
+        GetSummariesMap["diaaRA"]=&SummaryStatistics::GetDIAA_RA;
+        GetSummariesMap["diaaRC"]=&SummaryStatistics::GetDIAA_RC;
+        GetSummariesMap["diaaRD"]=&SummaryStatistics::GetDIAA_RD;
+        GetSummariesMap["diaaRE"]=&SummaryStatistics::GetDIAA_RE;
+        GetSummariesMap["diaaRF"]=&SummaryStatistics::GetDIAA_RF;
+        GetSummariesMap["diaaRG"]=&SummaryStatistics::GetDIAA_RG;
+        GetSummariesMap["diaaRH"]=&SummaryStatistics::GetDIAA_RH;
+        GetSummariesMap["diaaRI"]=&SummaryStatistics::GetDIAA_RI;
+        GetSummariesMap["diaaRK"]=&SummaryStatistics::GetDIAA_RK;
+        GetSummariesMap["diaaRL"]=&SummaryStatistics::GetDIAA_RL;
+        GetSummariesMap["diaaRM"]=&SummaryStatistics::GetDIAA_RM;
+        GetSummariesMap["diaaRN"]=&SummaryStatistics::GetDIAA_RN;
+        GetSummariesMap["diaaRP"]=&SummaryStatistics::GetDIAA_RP;
+        GetSummariesMap["diaaRQ"]=&SummaryStatistics::GetDIAA_RQ;
+        GetSummariesMap["diaaRR"]=&SummaryStatistics::GetDIAA_RR;
+        GetSummariesMap["diaaRS"]=&SummaryStatistics::GetDIAA_RS;
+        GetSummariesMap["diaaRT"]=&SummaryStatistics::GetDIAA_RT;
+        GetSummariesMap["diaaRV"]=&SummaryStatistics::GetDIAA_RV;
+        GetSummariesMap["diaaRW"]=&SummaryStatistics::GetDIAA_RW;
+        GetSummariesMap["diaaRY"]=&SummaryStatistics::GetDIAA_RY;
+        GetSummariesMap["diaaSA"]=&SummaryStatistics::GetDIAA_SA;
+        GetSummariesMap["diaaSC"]=&SummaryStatistics::GetDIAA_SC;
+        GetSummariesMap["diaaSD"]=&SummaryStatistics::GetDIAA_SD;
+        GetSummariesMap["diaaSE"]=&SummaryStatistics::GetDIAA_SE;
+        GetSummariesMap["diaaSF"]=&SummaryStatistics::GetDIAA_SF;
+        GetSummariesMap["diaaSG"]=&SummaryStatistics::GetDIAA_SG;
+        GetSummariesMap["diaaSH"]=&SummaryStatistics::GetDIAA_SH;
+        GetSummariesMap["diaaSI"]=&SummaryStatistics::GetDIAA_SI;
+        GetSummariesMap["diaaSK"]=&SummaryStatistics::GetDIAA_SK;
+        GetSummariesMap["diaaSL"]=&SummaryStatistics::GetDIAA_SL;
+        GetSummariesMap["diaaSM"]=&SummaryStatistics::GetDIAA_SM;
+        GetSummariesMap["diaaSN"]=&SummaryStatistics::GetDIAA_SN;
+        GetSummariesMap["diaaSP"]=&SummaryStatistics::GetDIAA_SP;
+        GetSummariesMap["diaaSQ"]=&SummaryStatistics::GetDIAA_SQ;
+        GetSummariesMap["diaaSR"]=&SummaryStatistics::GetDIAA_SR;
+        GetSummariesMap["diaaSS"]=&SummaryStatistics::GetDIAA_SS;
+        GetSummariesMap["diaaST"]=&SummaryStatistics::GetDIAA_ST;
+        GetSummariesMap["diaaSV"]=&SummaryStatistics::GetDIAA_SV;
+        GetSummariesMap["diaaSW"]=&SummaryStatistics::GetDIAA_SW;
+        GetSummariesMap["diaaSY"]=&SummaryStatistics::GetDIAA_SY;
+        GetSummariesMap["diaaTA"]=&SummaryStatistics::GetDIAA_TA;
+        GetSummariesMap["diaaTC"]=&SummaryStatistics::GetDIAA_TC;
+        GetSummariesMap["diaaTD"]=&SummaryStatistics::GetDIAA_TD;
+        GetSummariesMap["diaaTE"]=&SummaryStatistics::GetDIAA_TE;
+        GetSummariesMap["diaaTF"]=&SummaryStatistics::GetDIAA_TF;
+        GetSummariesMap["diaaTG"]=&SummaryStatistics::GetDIAA_TG;
+        GetSummariesMap["diaaTH"]=&SummaryStatistics::GetDIAA_TH;
+        GetSummariesMap["diaaTI"]=&SummaryStatistics::GetDIAA_TI;
+        GetSummariesMap["diaaTK"]=&SummaryStatistics::GetDIAA_TK;
+        GetSummariesMap["diaaTL"]=&SummaryStatistics::GetDIAA_TL;
+        GetSummariesMap["diaaTM"]=&SummaryStatistics::GetDIAA_TM;
+        GetSummariesMap["diaaTN"]=&SummaryStatistics::GetDIAA_TN;
+        GetSummariesMap["diaaTP"]=&SummaryStatistics::GetDIAA_TP;
+        GetSummariesMap["diaaTQ"]=&SummaryStatistics::GetDIAA_TQ;
+        GetSummariesMap["diaaTR"]=&SummaryStatistics::GetDIAA_TR;
+        GetSummariesMap["diaaTS"]=&SummaryStatistics::GetDIAA_TS;
+        GetSummariesMap["diaaTT"]=&SummaryStatistics::GetDIAA_TT;
+        GetSummariesMap["diaaTV"]=&SummaryStatistics::GetDIAA_TV;
+        GetSummariesMap["diaaTW"]=&SummaryStatistics::GetDIAA_TW;
+        GetSummariesMap["diaaTY"]=&SummaryStatistics::GetDIAA_TY;
+        GetSummariesMap["diaaVA"]=&SummaryStatistics::GetDIAA_VA;
+        GetSummariesMap["diaaVC"]=&SummaryStatistics::GetDIAA_VC;
+        GetSummariesMap["diaaVD"]=&SummaryStatistics::GetDIAA_VD;
+        GetSummariesMap["diaaVE"]=&SummaryStatistics::GetDIAA_VE;
+        GetSummariesMap["diaaVF"]=&SummaryStatistics::GetDIAA_VF;
+        GetSummariesMap["diaaVG"]=&SummaryStatistics::GetDIAA_VG;
+        GetSummariesMap["diaaVH"]=&SummaryStatistics::GetDIAA_VH;
+        GetSummariesMap["diaaVI"]=&SummaryStatistics::GetDIAA_VI;
+        GetSummariesMap["diaaVK"]=&SummaryStatistics::GetDIAA_VK;
+        GetSummariesMap["diaaVL"]=&SummaryStatistics::GetDIAA_VL;
+        GetSummariesMap["diaaVM"]=&SummaryStatistics::GetDIAA_VM;
+        GetSummariesMap["diaaVN"]=&SummaryStatistics::GetDIAA_VN;
+        GetSummariesMap["diaaVP"]=&SummaryStatistics::GetDIAA_VP;
+        GetSummariesMap["diaaVQ"]=&SummaryStatistics::GetDIAA_VQ;
+        GetSummariesMap["diaaVR"]=&SummaryStatistics::GetDIAA_VR;
+        GetSummariesMap["diaaVS"]=&SummaryStatistics::GetDIAA_VS;
+        GetSummariesMap["diaaVT"]=&SummaryStatistics::GetDIAA_VT;
+        GetSummariesMap["diaaVV"]=&SummaryStatistics::GetDIAA_VV;
+        GetSummariesMap["diaaVW"]=&SummaryStatistics::GetDIAA_VW;
+        GetSummariesMap["diaaVY"]=&SummaryStatistics::GetDIAA_VY;
+        GetSummariesMap["diaaWA"]=&SummaryStatistics::GetDIAA_WA;
+        GetSummariesMap["diaaWC"]=&SummaryStatistics::GetDIAA_WC;
+        GetSummariesMap["diaaWD"]=&SummaryStatistics::GetDIAA_WD;
+        GetSummariesMap["diaaWE"]=&SummaryStatistics::GetDIAA_WE;
+        GetSummariesMap["diaaWF"]=&SummaryStatistics::GetDIAA_WF;
+        GetSummariesMap["diaaWG"]=&SummaryStatistics::GetDIAA_WG;
+        GetSummariesMap["diaaWH"]=&SummaryStatistics::GetDIAA_WH;
+        GetSummariesMap["diaaWI"]=&SummaryStatistics::GetDIAA_WI;
+        GetSummariesMap["diaaWK"]=&SummaryStatistics::GetDIAA_WK;
+        GetSummariesMap["diaaWL"]=&SummaryStatistics::GetDIAA_WL;
+        GetSummariesMap["diaaWM"]=&SummaryStatistics::GetDIAA_WM;
+        GetSummariesMap["diaaWN"]=&SummaryStatistics::GetDIAA_WN;
+        GetSummariesMap["diaaWP"]=&SummaryStatistics::GetDIAA_WP;
+        GetSummariesMap["diaaWQ"]=&SummaryStatistics::GetDIAA_WQ;
+        GetSummariesMap["diaaWR"]=&SummaryStatistics::GetDIAA_WR;
+        GetSummariesMap["diaaWS"]=&SummaryStatistics::GetDIAA_WS;
+        GetSummariesMap["diaaWT"]=&SummaryStatistics::GetDIAA_WT;
+        GetSummariesMap["diaaWV"]=&SummaryStatistics::GetDIAA_WV;
+        GetSummariesMap["diaaWW"]=&SummaryStatistics::GetDIAA_WW;
+        GetSummariesMap["diaaWY"]=&SummaryStatistics::GetDIAA_WY;
+        GetSummariesMap["diaaYA"]=&SummaryStatistics::GetDIAA_YA;
+        GetSummariesMap["diaaYC"]=&SummaryStatistics::GetDIAA_YC;
+        GetSummariesMap["diaaYD"]=&SummaryStatistics::GetDIAA_YD;
+        GetSummariesMap["diaaYE"]=&SummaryStatistics::GetDIAA_YE;
+        GetSummariesMap["diaaYF"]=&SummaryStatistics::GetDIAA_YF;
+        GetSummariesMap["diaaYG"]=&SummaryStatistics::GetDIAA_YG;
+        GetSummariesMap["diaaYH"]=&SummaryStatistics::GetDIAA_YH;
+        GetSummariesMap["diaaYI"]=&SummaryStatistics::GetDIAA_YI;
+        GetSummariesMap["diaaYK"]=&SummaryStatistics::GetDIAA_YK;
+        GetSummariesMap["diaaYL"]=&SummaryStatistics::GetDIAA_YL;
+        GetSummariesMap["diaaYM"]=&SummaryStatistics::GetDIAA_YM;
+        GetSummariesMap["diaaYN"]=&SummaryStatistics::GetDIAA_YN;
+        GetSummariesMap["diaaYP"]=&SummaryStatistics::GetDIAA_YP;
+        GetSummariesMap["diaaYQ"]=&SummaryStatistics::GetDIAA_YQ;
+        GetSummariesMap["diaaYR"]=&SummaryStatistics::GetDIAA_YR;
+        GetSummariesMap["diaaYS"]=&SummaryStatistics::GetDIAA_YS;
+        GetSummariesMap["diaaYT"]=&SummaryStatistics::GetDIAA_YT;
+        GetSummariesMap["diaaYV"]=&SummaryStatistics::GetDIAA_YV;
+        GetSummariesMap["diaaYW"]=&SummaryStatistics::GetDIAA_YW;
+        GetSummariesMap["diaaYY"]=&SummaryStatistics::GetDIAA_YY;
+
 
 }
 
@@ -697,7 +1170,7 @@ SummaryStatistics::~SummaryStatistics()
         delete [] dicodon_usage;
         delete [] diaa_usage;
         delete [] aa_usage;
-        delete [] aa_usagewo_nr;
+        delete [] aa_usage_wonR;
         delete [] CGNAGR;
         delete [] nuc_usage;
         delete [] nuc1_usage;
@@ -727,8 +1200,14 @@ SummaryStatistics::~SummaryStatistics()
 
 
 void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence){
+
+    int verbose = 0;
+
     lparam->summariesSimulatedData.clear();
     lparam->summariesSimulatedData.shrink_to_fit();
+
+    lparam->accessorysummariesSimulatedData.clear();
+    lparam->accessorysummariesSimulatedData.shrink_to_fit();
 
     codon_bool = false;
     dinuc_bool = false;
@@ -736,7 +1215,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence){
     dinuc23_bool = false;
     dinuc31_bool = false;
     aa_bool = false;
-    aa_wo_nr = false;
+    aa_wonR_bool = false;
     dicodon_bool = false;
     diaa_bool = false;
     nuc_bool = false;
@@ -772,7 +1251,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence){
 
     CodonSequenceAlignment* simulation = new CodonSequenceAlignment(lparam->codondata,CurrentNodeLeafCodonSequence);
 
-
+    if(verbose){cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)1\n"; }
     string* arrSummaries = new string[lparam->NusedSummaries];
     for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++){
         auto it = lparam->mapUsedSummaries.find(lparam->listSummaries[i_summary]);
@@ -781,22 +1260,63 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence){
         }
     }
 
-
+    if(verbose){cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)2\n"; }
     for(unsigned int i_summary = 0 ; i_summary < lparam->NusedSummaries;i_summary++){
         auto it = GetSummariesMap.find(arrSummaries[i_summary]);
         if (it != GetSummariesMap.end()){
             funcpt f = GetSummariesMap[arrSummaries[i_summary]];
             double s = (this->*f)(simulation);
-            //double s = log2(it.*second(simulation));
+
             if (s < lparam->TOOSMALL || isinf(s)) {
                 s = lparam->TOOSMALL;
             }
-            s = log2(s);
+
+            if (lparam->transformation == "log2"){
+                s = log2(s);
+            } else if (lparam->transformation == "log10") {
+                s = log10(s);
+            }
+
+
             lparam->summariesSimulatedData.push_back(s);
         }
     }
+    if(verbose){cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)3\n"; }
+    string* arrAccSummaries = new string[lparam->NusedAccessorySummaries];
+    for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++){
+        auto it = lparam->mapUsedAccessorySummaries.find(lparam->listSummaries[i_summary]);
+        if(it != lparam->mapUsedAccessorySummaries.end() && it->second != -1) {
+            arrAccSummaries[it->second] = it->first;
+        }
+    }
+
+    if(verbose){cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)4\n"; }
+    for(unsigned int i_summary = 0 ; i_summary < lparam->NusedAccessorySummaries;i_summary++){
+        auto it = GetSummariesMap.find(arrAccSummaries[i_summary]);
+        if (it != GetSummariesMap.end()){
+            funcpt f = GetSummariesMap[arrAccSummaries[i_summary]];
+            double s = (this->*f)(simulation);
+
+            if (s < lparam->TOOSMALL || isinf(s)) {
+                s = lparam->TOOSMALL;
+            }
+
+            if (lparam->transformation == "log2"){
+                s = log2(s);
+            } else if (lparam->transformation == "log10") {
+                s = log10(s);
+            }
+
+
+            lparam->accessorysummariesSimulatedData.push_back(s);
+        }
+    }
+
+
     delete simulation;
+    delete [] arrAccSummaries;
     delete [] arrSummaries;
+    if(verbose){cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)5\n"; }
 }
 
 void SummaryStatistics::computeSummaries(){
@@ -804,13 +1324,17 @@ void SummaryStatistics::computeSummaries(){
     lparam->summariesRealData.clear();
     lparam->summariesRealData.shrink_to_fit();
 
+
+    lparam->accessorysummariesRealData.clear();
+    lparam->accessorysummariesRealData.shrink_to_fit();
+
     codon_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;
     dinuc31_bool = false;
     aa_bool = false;
-    aa_wo_nr = false;
+    aa_wonR_bool = false;
     dicodon_bool = false;
     diaa_bool = false;
     nuc_bool = false;
@@ -859,15 +1383,58 @@ void SummaryStatistics::computeSummaries(){
             funcpt f = GetSummariesMap[arrSummaries[i_summary]];
 
             double s = (this->*f)(lparam->codondata);
-            //double s = log2(it.*second(simulation));
+
             if (s < lparam->TOOSMALL || isinf(s)) {
                 s = lparam->TOOSMALL;
             }
-            s = log2(s);
+
+
+
+            if (lparam->transformation == "log2"){
+                s = log2(s);
+            } else if (lparam->transformation == "log10") {
+                s = log10(s);
+            }
+
+
             lparam->summariesRealData.push_back(s);
         }
     }
 
+
+    string* arrAccSummaries = new string[lparam->NusedAccessorySummaries];
+    for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++){
+        auto it = lparam->mapUsedAccessorySummaries.find(lparam->listSummaries[i_summary]);
+        if(it != lparam->mapUsedAccessorySummaries.end() && it->second != -1) {
+            arrAccSummaries[it->second] = it->first;
+        }
+    }
+
+
+    for(unsigned int i_summary = 0 ; i_summary < lparam->NusedAccessorySummaries;i_summary++){
+        auto it = GetSummariesMap.find(arrAccSummaries[i_summary]);
+        if (it != GetSummariesMap.end()){
+            funcpt f = GetSummariesMap[arrAccSummaries[i_summary]];
+
+            double s = (this->*f)(lparam->codondata);
+
+            if (s < lparam->TOOSMALL || isinf(s)) {
+                s = lparam->TOOSMALL;
+            }
+
+
+
+            if (lparam->transformation == "log2"){
+                s = log2(s);
+            } else if (lparam->transformation == "log10") {
+                s = log10(s);
+            }
+
+
+            lparam->accessorysummariesRealData.push_back(s);
+        }
+    }
+    delete [] arrAccSummaries;
     delete [] arrSummaries;
 }
 
@@ -883,7 +1450,7 @@ void SummaryStatistics::computeSummariesFromData(){
     dinuc23_bool = false;
     dinuc31_bool = false;
     aa_bool = false;
-    aa_wo_nr = false;
+    aa_wonR_bool = false;
     dicodon_bool = false;
     diaa_bool = false;
     nuc_bool = false;
@@ -917,7 +1484,7 @@ void SummaryStatistics::computeSummariesFromData(){
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
 
-    cerr << "DFDSF0:q\n";
+
 
     string* arrSummaries = new string[ldata->NusedSummaries];
     for (unsigned int i_summary = 0 ; i_summary < ldata->NSummaries ; i_summary++){
@@ -927,7 +1494,7 @@ void SummaryStatistics::computeSummariesFromData(){
         }
     }
 
-    cerr << "DFDSF1\n";
+
 
     for(unsigned int i_summary = 0 ; i_summary < ldata->NusedSummaries;i_summary++){
         auto it = GetSummariesMap.find(arrSummaries[i_summary]);
@@ -939,7 +1506,13 @@ void SummaryStatistics::computeSummariesFromData(){
             if (s < ldata->TOOSMALL || isinf(s)) {
                 s = ldata->TOOSMALL;
             }
-            s = log2(s);
+
+            if (lparam->transformation == "log2"){
+                s = log2(s);
+            } else if (lparam->transformation == "log10") {
+                s = log10(s);
+            }
+
             ldata->summariesRealData.push_back(s);
         }
     }

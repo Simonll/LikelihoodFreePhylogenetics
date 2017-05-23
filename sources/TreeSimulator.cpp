@@ -5,22 +5,25 @@ TreeSimulator::TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submat
     this->lparam = lparam;
     this->submatrix = submatrix;
     this->ancestralseq = ancestralseq;
-    this->evohist = new EvolHistStatistics(this->lparam);
-    this->ancestralSequenceEvohist = new EvolHistStatistics(this->lparam);
+    this->treeEvoStats = new EvolHistStatistics(this->lparam);
+    this->rootBranchEvoStats = new EvolHistStatistics(this->lparam);
 
-        CurrentNodeCodonSequence = new int*[lparam->refTree->GetNnode()];
-        CurrentNodeNucSequence = new int*[lparam->refTree->GetNnode()];
 
-        for (int node = 0 ; node < lparam->refTree->GetNnode(); node++) {
-            CurrentNodeCodonSequence[node]= new int[lparam->Nsite_codon];
-            CurrentNodeNucSequence[node]= new int[lparam->Nsite_codon*3];
-        }
-        CurrentLeafNodeCodonSequences= new int * [lparam->Ntaxa];
-        CurrentLeafNodeNucSequence= new int * [lparam->Ntaxa];
-        for (int taxa = 0 ; taxa < lparam->Ntaxa ; taxa ++ ) {
-            CurrentLeafNodeCodonSequences[taxa] = new int [lparam->Nsite_codon];
-            CurrentLeafNodeNucSequence[taxa] = new int [lparam->Nsite_nuc];
-        }
+    CurrentNodeCodonSequence = new int*[lparam->refTree->GetNnode()];
+    CurrentNodeNucSequence = new int*[lparam->refTree->GetNnode()];
+
+    for (int node = 0 ; node < lparam->refTree->GetNnode(); node++) {
+        CurrentNodeCodonSequence[node]= new int[lparam->Nsite_codon];
+        CurrentNodeNucSequence[node]= new int[lparam->Nsite_codon*3];
+    }
+
+    CurrentLeafNodeCodonSequences= new int * [lparam->Ntaxa];
+    CurrentLeafNodeNucSequence= new int * [lparam->Ntaxa];
+
+    for (int taxa = 0 ; taxa < lparam->Ntaxa ; taxa ++ ) {
+        CurrentLeafNodeCodonSequences[taxa] = new int [lparam->Nsite_codon];
+        CurrentLeafNodeNucSequence[taxa] = new int [lparam->Nsite_nuc];
+    }
 
 
 }
@@ -31,15 +34,24 @@ TreeSimulator::~TreeSimulator()
 }
 
 void TreeSimulator::resetSimulator(){
-// reset node sequeneces
+
+    int verbose = 0;
+
+    if(verbose) {cerr << "resetSimulator1\n";}
+    if(verbose) {cerr << lparam->refTree->GetNnode() << "resetSimulator1.1\n";}
     for (int node = 0 ; node < lparam->refTree->GetNnode(); node++) {
             for(int site_codon = 0 ; site_codon < lparam->Nsite_codon; site_codon++){
+
                 CurrentNodeCodonSequence[node][site_codon] = -2 ;
+
                 for(int j = 0 ; j < 3; j ++){
                     CurrentNodeNucSequence[node][site_codon*3+j] = -2;
+
                 }
             }
     }
+
+    if(verbose) {cerr << "resetSimulator2\n";}
     // reset nodeleaf sequences
     for (int taxa = 0 ; taxa < lparam->Ntaxa ; taxa ++ ) {
         for(int site_codon = 0 ; site_codon < lparam->Nsite_codon; site_codon++){
@@ -53,47 +65,72 @@ void TreeSimulator::resetSimulator(){
 
 void TreeSimulator::GetNewSimulatedCodonAlignment(){
 
-    // reset  submatrix
-    submatrix->resetSubMatrix();
+    int verbose = 0;
 
-    evohist->resetMappingStat();
-    ancestralSequenceEvohist->resetMappingStat();
+    submatrix->resetSubMatrix();
+    if(verbose){cerr << "submatrix->resetSubMatrix()\n";}
+
+    rootBranchEvoStats->resetEvoStats();
+    if(verbose){cerr << "rootBranchEvoStats->resetEvoStats()\n";}
+
+    treeEvoStats->resetEvoStats();
+    if(verbose){cerr << "treeEvoStats->resetEvoStats()\n";}
 
     resetSimulator();
+    if(verbose){cerr << "resetSimulator()\n";}
 
     ancestralseq->GetNewStationaryCodonSequence();
+    if(verbose){cerr << "ancestralseq->GetNewStationaryCodonSequence()\n";}
+
+    SetAncestralSequence();
+    if(verbose){cerr << "SetAncestralSequence()\n";}
+
+    //launch recursive simulation on a phylogenetic tree
+    ComputeRecursiveSimulation(lparam->refTree->GetRoot());
+    if(verbose){cerr << "ComputeRecursiveSimulation\n";}
+    //register mappingstats
+
+    resetEvoStatVectors();
+    if(verbose){cerr << "resetEvoStatVectors()\n";}
+
+    rootBranchEvoStats->GetEvoAncStats();
+    if(verbose){cerr << "ancestralSequenceEvohist->GetEvoAncStats()\n";}
+
+    treeEvoStats->GetEvoStats();
+    if(verbose){cerr << "evohist->GetEvoStats()\n";}
+
+    treeEvoStats->GetSiteSpecificEvoStats();
+    if(verbose){cerr << "evohist->GetSiteSpecificEvoStats()\n";}
+}
 
 
-    // copy stationary sequence to node sequence
+void TreeSimulator::resetEvoStatVectors(){
+    lparam->ancevostats.clear();
+    lparam->ancevostats.shrink_to_fit();
+
+    lparam->evostats.clear();
+    lparam->evostats.shrink_to_fit();
+
+    lparam->sitespecificevostats.clear();
+    lparam->sitespecificevostats.shrink_to_fit();
+
+}
+
+void TreeSimulator::SetAncestralSequence() {
     int NodeIndex = lparam->refTree->GetRoot()->GetNode()->GetIndex();
-
-    //exit(0);
-
-
-
-
     for (int site_codon = 0 ; site_codon < lparam->Nsite_codon; site_codon++){
-        CurrentNodeCodonSequence[NodeIndex][site_codon] = ancestralseq->GetCurrentAncestralCodonSequence(site_codon);
+        this->CurrentNodeCodonSequence[NodeIndex][site_codon] = this->ancestralseq->GetCurrentAncestralCodonSequence(site_codon);
         for(int j = 0 ; j < 3; j++) {
-            CurrentNodeNucSequence[NodeIndex][site_codon*3+j] = ancestralseq->GetCurrentAncestralNucSequence(site_codon*3+j);
+            this->CurrentNodeNucSequence[NodeIndex][site_codon*3+j] = this->ancestralseq->GetCurrentAncestralNucSequence(site_codon*3+j);
         }
     }
-
-    //lauchn recursive simulation on a phylogenetic tree
-    ComputeRecursiveSimulation(lparam->refTree->GetRoot());
-
-    //register mappingstats
-    lparam->mappingstats.clear();
-    lparam->mappingstats.shrink_to_fit();
-    ancestralSequenceEvohist->GetMapAncStats();
-
-    evohist->GetMapStats();
 
 
 }
 
-
 void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
+
+        int verbose = 0;
 
         int nucFrom = CurrentNodeNucSequence[NodeIndex][site_nuc];
         int CodonPos = site_nuc % 3;
@@ -110,6 +147,9 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
         int site_codon_start = site_codon-1 ;
         int site_codon_end = site_codon+2;
 
+
+        ///
+        /// GET 3 ADJACENT CODONS FOR CODON INTERFACE STATS
         {
             int codon_count = 0;
             for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end ; site_codon_i++) {
@@ -152,7 +192,6 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
 
 
 
-
         if(lparam->codonstatespace->CheckStop(nucposTo[3], nucposTo[4], nucposTo[5])){
                 cerr << "error while registring a substitution\n";
                 cerr << nucTo << "\n";
@@ -165,126 +204,124 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
         // Mapping statitics
          //Statistics on the ancestral sequence
          if(NodeIndex == lparam->refTree->GetRoot()->GetNode()->GetIndex()) {
-                ancestralSequenceEvohist->Nsub++;
+                rootBranchEvoStats->Nsub++;
+                //rootBranchEvoStats->ssNsub[site_codon]++;
 
                 if (CodonPos == 0){
-                    ancestralSequenceEvohist->gtnr_stat[3][nucFrom][nucTo]++;
-                    ancestralSequenceEvohist->gtnr_stat[CodonPos][nucFrom][nucTo]++;
-                    ancestralSequenceEvohist->dinuc_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                    ancestralSequenceEvohist->dinuc_stat[CodonPos][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                    rootBranchEvoStats->gtnr_stat[3][nucFrom][nucTo]++;
+                    rootBranchEvoStats->gtnr_stat[CodonPos][nucFrom][nucTo]++;
+                    rootBranchEvoStats->dinuc_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                    rootBranchEvoStats->dinuc_stat[CodonPos][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
                     if (site_nuc>0){
-                        ancestralSequenceEvohist->dinuc_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                        ancestralSequenceEvohist->dinuc_stat[2][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        rootBranchEvoStats->dinuc_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        rootBranchEvoStats->dinuc_stat[2][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
                     }
 
                     if(lparam->codonstatespace->Synonymous(codonFrom[1],codonTo[1])){
-                        ancestralSequenceEvohist->Nsynsub++;
-                        ancestralSequenceEvohist->ssNsynsub[site_codon]++;
+                        rootBranchEvoStats->Nsynsub++;
+                        //ancestralSequenceEvohist->ssNsynsub[site_codon]++;
 
-                        ancestralSequenceEvohist->gtnrSyn_stat[3][nucFrom][nucTo]++;
-                        ancestralSequenceEvohist->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrSyn_stat[3][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
 
-                        ancestralSequenceEvohist->dinucSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                        ancestralSequenceEvohist->dinucSyn_stat[CodonPos][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        rootBranchEvoStats->dinucSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        rootBranchEvoStats->dinucSyn_stat[CodonPos][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
                         if (site_nuc>0){
-                            ancestralSequenceEvohist->dinucSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                            ancestralSequenceEvohist->dinucSyn_stat[2][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                            rootBranchEvoStats->dinucSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                            rootBranchEvoStats->dinucSyn_stat[2][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
                         }
 
                     } else {
-                        ancestralSequenceEvohist->ssNnsynsub[site_codon]++;
-                        ancestralSequenceEvohist->gtnrNSyn_stat[3][nucFrom][nucTo]++;
-                        ancestralSequenceEvohist->gtnrNSyn_stat[CodonPos][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrNSyn_stat[3][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrNSyn_stat[CodonPos][nucFrom][nucTo]++;
 
-                        ancestralSequenceEvohist->dinucNSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                        ancestralSequenceEvohist->dinucNSyn_stat[CodonPos][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        rootBranchEvoStats->dinucNSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        rootBranchEvoStats->dinucNSyn_stat[CodonPos][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
                         if (site_nuc>0){
-                            ancestralSequenceEvohist->dinucNSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                            ancestralSequenceEvohist->dinucNSyn_stat[2][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                            rootBranchEvoStats->dinucNSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                            rootBranchEvoStats->dinucNSyn_stat[2][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
                         }
 
                     }
 
                 } else if(CodonPos == 1){
 
-                    ancestralSequenceEvohist->gtnr_stat[3][nucFrom][nucTo]++;
-                    ancestralSequenceEvohist->gtnr_stat[CodonPos][nucFrom][nucTo]++;
+                    rootBranchEvoStats->gtnr_stat[3][nucFrom][nucTo]++;
+                    rootBranchEvoStats->gtnr_stat[CodonPos][nucFrom][nucTo]++;
 
-                    ancestralSequenceEvohist->dinuc_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                    ancestralSequenceEvohist->dinuc_stat[CodonPos][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                    rootBranchEvoStats->dinuc_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                    rootBranchEvoStats->dinuc_stat[CodonPos][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
 
-                    ancestralSequenceEvohist->dinuc_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                    ancestralSequenceEvohist->dinuc_stat[0][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                    rootBranchEvoStats->dinuc_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                    rootBranchEvoStats->dinuc_stat[0][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
 
 
                     if(lparam->codonstatespace->Synonymous(codonFrom[1],codonTo[1])){
-                        ancestralSequenceEvohist->Nsynsub++;
-                        ancestralSequenceEvohist->ssNsynsub[site_codon]++;
+                        rootBranchEvoStats->Nsynsub++;
+                        //ancestralSequenceEvohist->ssNsynsub[site_codon]++;
 
-                        ancestralSequenceEvohist->gtnrSyn_stat[3][nucFrom][nucTo]++;
-                        ancestralSequenceEvohist->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrSyn_stat[3][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
 
-                        ancestralSequenceEvohist->dinucSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                        ancestralSequenceEvohist->dinucSyn_stat[CodonPos][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        rootBranchEvoStats->dinucSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        rootBranchEvoStats->dinucSyn_stat[CodonPos][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
 
-                        ancestralSequenceEvohist->dinucSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                        ancestralSequenceEvohist->dinucSyn_stat[0][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        rootBranchEvoStats->dinucSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        rootBranchEvoStats->dinucSyn_stat[0][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
                     } else {
-                        ancestralSequenceEvohist->ssNnsynsub[site_codon]++;
-                        ancestralSequenceEvohist->gtnrNSyn_stat[3][nucFrom][nucTo]++;
-                        ancestralSequenceEvohist->gtnrNSyn_stat[CodonPos][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrNSyn_stat[3][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrNSyn_stat[CodonPos][nucFrom][nucTo]++;
 
-                        ancestralSequenceEvohist->dinucNSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                        ancestralSequenceEvohist->dinucNSyn_stat[CodonPos][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        rootBranchEvoStats->dinucNSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        rootBranchEvoStats->dinucNSyn_stat[CodonPos][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
 
-                        ancestralSequenceEvohist->dinucNSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                        ancestralSequenceEvohist->dinucNSyn_stat[0][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        rootBranchEvoStats->dinucNSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        rootBranchEvoStats->dinucNSyn_stat[0][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
 
                     }
 
                 } else if (CodonPos == 2){
 
-                    ancestralSequenceEvohist->gtnr_stat[3][nucFrom][nucTo]++;
-                    ancestralSequenceEvohist->gtnr_stat[CodonPos][nucFrom][nucTo]++;
+                    rootBranchEvoStats->gtnr_stat[3][nucFrom][nucTo]++;
+                    rootBranchEvoStats->gtnr_stat[CodonPos][nucFrom][nucTo]++;
 
-                    ancestralSequenceEvohist->dinuc_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                    ancestralSequenceEvohist->dinuc_stat[1][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                    rootBranchEvoStats->dinuc_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                    rootBranchEvoStats->dinuc_stat[1][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
                     if (site_codon < lparam->Nsite_codon-2){
-                        ancestralSequenceEvohist->dinuc_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                        ancestralSequenceEvohist->dinuc_stat[CodonPos][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        rootBranchEvoStats->dinuc_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        rootBranchEvoStats->dinuc_stat[CodonPos][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
                     }
 
 
                     if(lparam->codonstatespace->Synonymous(codonFrom[1],codonTo[1])){
-                        ancestralSequenceEvohist->Nsynsub++;
-                        ancestralSequenceEvohist->ssNsynsub[site_codon]++;
+                        rootBranchEvoStats->Nsynsub++;
+                        //ancestralSequenceEvohist->ssNsynsub[site_codon]++;
 
-                        ancestralSequenceEvohist->gtnrSyn_stat[3][nucFrom][nucTo]++;
-                        ancestralSequenceEvohist->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrSyn_stat[3][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
 
-                        ancestralSequenceEvohist->dinucSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                        ancestralSequenceEvohist->dinucSyn_stat[1][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        rootBranchEvoStats->dinucSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        rootBranchEvoStats->dinucSyn_stat[1][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
                         if (site_codon < lparam->Nsite_codon-2){
-                            ancestralSequenceEvohist->dinucSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                            ancestralSequenceEvohist->dinucSyn_stat[CodonPos][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                            rootBranchEvoStats->dinucSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                            rootBranchEvoStats->dinucSyn_stat[CodonPos][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
                         }
 
                     } else {
-                        ancestralSequenceEvohist->ssNnsynsub[site_codon]++;
-                        ancestralSequenceEvohist->gtnrNSyn_stat[3][nucFrom][nucTo]++;
-                        ancestralSequenceEvohist->gtnrNSyn_stat[CodonPos][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrNSyn_stat[3][nucFrom][nucTo]++;
+                        rootBranchEvoStats->gtnrNSyn_stat[CodonPos][nucFrom][nucTo]++;
 
-                        ancestralSequenceEvohist->dinucNSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                        ancestralSequenceEvohist->dinucNSyn_stat[1][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        rootBranchEvoStats->dinucNSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        rootBranchEvoStats->dinucNSyn_stat[1][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
                         if (site_codon < lparam->Nsite_codon-2){
-                            ancestralSequenceEvohist->dinucNSyn_stat[3][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                            ancestralSequenceEvohist->dinucNSyn_stat[CodonPos][ancestralSequenceEvohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][ancestralSequenceEvohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                            rootBranchEvoStats->dinucNSyn_stat[3][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                            rootBranchEvoStats->dinucNSyn_stat[CodonPos][rootBranchEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][rootBranchEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
                         }
 
                     }
@@ -296,130 +333,187 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
 
         } else {
 
-            // Non-root event
-            evohist->Nsub++;
+            // Non-root events
+            treeEvoStats->Nsub++;
+            treeEvoStats->ssNsub[site_codon]++;
+
+            treeEvoStats->gtnr_stat[3][nucFrom][nucTo]++;
+            treeEvoStats->gtnr_stat[CodonPos][nucFrom][nucTo]++;
+
+//            treeEvoStats->codon_stat[3][codonFrom[1]][codonTo[1]]++;
+//            treeEvoStats->codon_stat[CodonPos][codonFrom[1]][codonTo[1]]++;
+//            treeEvoStats->ssgtnr_stat[site_codon][3][nucFrom][nucTo]++;
+//            treeEvoStats->ssgtnr_stat[site_codon][CodonPos][nucFrom][nucTo]++;
+//            treeEvoStats->sscodon_stat[site_codon][3][codonFrom[1]][codonTo[1]]++;
+//            treeEvoStats->sscodon_stat[site_codon][CodonPos][codonFrom[1]][codonTo[1]]++;
+            if(lparam->codonstatespace->Synonymous(codonFrom[1],codonTo[1])){
+                treeEvoStats->Nsynsub++;
+                treeEvoStats->ssNsynsub[site_codon]++;
+                treeEvoStats->gtnrSyn_stat[3][nucFrom][nucTo]++;
+                treeEvoStats->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
+//                treeEvoStats->ssgtnrSyn_stat[site_codon][3][nucFrom][nucTo]++;
+//                treeEvoStats->ssgtnrSyn_stat[site_codon][CodonPos][nucFrom][nucTo]++;
+            } else {
+
+                treeEvoStats->gtnrNSyn_stat[3][nucFrom][nucTo]++;
+                treeEvoStats->gtnrNSyn_stat[CodonPos][nucFrom][nucTo]++;
+//                treeEvoStats->ssgtnrNSyn_stat[site_codon][3][nucFrom][nucTo]++;
+//                treeEvoStats->ssgtnrNSyn_stat[site_codon][CodonPos][nucFrom][nucTo]++;
+
+            }
+            if(verbose){cerr << "10\n";}
 
             if (CodonPos == 0){
 
-                    evohist->gtnr_stat[3][nucFrom][nucTo]++;
-                    evohist->gtnr_stat[CodonPos][nucFrom][nucTo]++;
+                    treeEvoStats->dinuc_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                    treeEvoStats->dinuc_stat[CodonPos][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
 
-                    evohist->dinuc_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                    evohist->dinuc_stat[CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                    evohist->ssdinuc_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                    evohist->ssdinuc_stat[site_codon][CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+
+                    // SECOND FRAM FOR DINUC
                     if (site_nuc>0){
-                        evohist->dinuc_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                        evohist->dinuc_stat[2][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        treeEvoStats->dinuc_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        treeEvoStats->dinuc_stat[2][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+
+//                        evohist->ssdinuc_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                        evohist->ssdinuc_stat[site_codon][2][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
                     }
 
 
                     if(lparam->codonstatespace->Synonymous(codonFrom[1],codonTo[1])){
-                        evohist->Nsynsub++;
-                        evohist->ssNsynsub[site_codon]++;
 
-                        evohist->gtnrSyn_stat[3][nucFrom][nucTo]++;
-                        evohist->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
+                        treeEvoStats->dinucSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        treeEvoStats->dinucSyn_stat[CodonPos][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
 
-                        evohist->dinucSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                        evohist->dinucSyn_stat[CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                        evohist->ssdinucSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                        evohist->ssdinucSyn_stat[site_codon][CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+
                         if (site_nuc>0){
-                            evohist->dinucSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                            evohist->dinucSyn_stat[2][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                            treeEvoStats->dinucSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                            treeEvoStats->dinucSyn_stat[2][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+
+//                            evohist->ssdinucSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                            evohist->ssdinucSyn_stat[site_codon][2][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
                         }
 
                     } else {
-                        evohist->ssNnsynsub[site_codon]++;
-                        evohist->gtnrNSyn_stat[3][nucFrom][nucTo]++;
-                        evohist->gtnrNSyn_stat[CodonPos][nucFrom][nucTo]++;
 
-                        evohist->dinucNSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                        evohist->dinucNSyn_stat[CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+
+                        treeEvoStats->dinucNSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        treeEvoStats->dinucNSyn_stat[CodonPos][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+
+//                        evohist->ssdinucNSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                        evohist->ssdinucNSyn_stat[site_codon][CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
                         if (site_nuc>0){
-                            evohist->dinucNSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                            evohist->dinucNSyn_stat[2][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                            treeEvoStats->dinucNSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                            treeEvoStats->dinucNSyn_stat[2][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+
+//                            evohist->ssdinucNSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                            evohist->ssdinucNSyn_stat[site_codon][2][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
                         }
 
                     }
 
                 } else if(CodonPos == 1){
 
-                    evohist->gtnr_stat[3][nucFrom][nucTo]++;
-                    evohist->gtnr_stat[CodonPos][nucFrom][nucTo]++;
 
-                    evohist->dinuc_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                    evohist->dinuc_stat[CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                    treeEvoStats->dinuc_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                    treeEvoStats->dinuc_stat[CodonPos][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
 
-                    evohist->dinuc_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                    evohist->dinuc_stat[0][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                    evohist->ssdinuc_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                    evohist->ssdinuc_stat[site_codon][CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
 
 
+                    treeEvoStats->dinuc_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                    treeEvoStats->dinuc_stat[0][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+
+
+//                    evohist->ssdinuc_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                    evohist->ssdinuc_stat[site_codon][0][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
                     if(lparam->codonstatespace->Synonymous(codonFrom[1],codonTo[1])){
-                        evohist->Nsynsub++;
-                        evohist->ssNsynsub[site_codon]++;
 
-                        evohist->gtnrSyn_stat[3][nucFrom][nucTo]++;
-                        evohist->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
 
-                        evohist->dinucSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                        evohist->dinucSyn_stat[CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        treeEvoStats->dinucSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        treeEvoStats->dinucSyn_stat[CodonPos][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
 
-                        evohist->dinucSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                        evohist->dinucSyn_stat[0][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                        evohist->ssdinucSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                        evohist->ssdinucSyn_stat[site_codon][CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+
+
+                        treeEvoStats->dinucSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        treeEvoStats->dinucSyn_stat[0][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+
+//                        evohist->ssdinucSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                        evohist->ssdinucSyn_stat[site_codon][0][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
                     } else {
-                        evohist->ssNnsynsub[site_codon]++;
-                        evohist->gtnrNSyn_stat[3][nucFrom][nucTo]++;
-                        evohist->gtnrNSyn_stat[CodonPos][nucFrom][nucTo]++;
+                        treeEvoStats->dinucNSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        treeEvoStats->dinucNSyn_stat[CodonPos][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
 
-                        evohist->dinucNSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                        evohist->dinucNSyn_stat[CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                        evohist->ssdinucNSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                        evohist->ssdinucNSyn_stat[site_codon][CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
 
-                        evohist->dinucNSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                        evohist->dinucNSyn_stat[0][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
+                        treeEvoStats->dinucNSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        treeEvoStats->dinucNSyn_stat[0][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+
+
+//                        evohist->ssdinucNSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                       evohist->ssdinucNSyn_stat[site_codon][0][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
                     }
 
                 } else if (CodonPos == 2){
 
-                    evohist->gtnr_stat[3][nucFrom][nucTo]++;
-                    evohist->gtnr_stat[CodonPos][nucFrom][nucTo]++;
+                    treeEvoStats->dinuc_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                    treeEvoStats->dinuc_stat[1][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
-                    evohist->dinuc_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                    evohist->dinuc_stat[1][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                    evohist->ssdinuc_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                    evohist->ssdinuc_stat[site_codon][1][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
                     if (site_codon < lparam->Nsite_codon-2){
-                        evohist->dinuc_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                        evohist->dinuc_stat[CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        treeEvoStats->dinuc_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                        treeEvoStats->dinuc_stat[CodonPos][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+
+//                        evohist->ssdinuc_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                        evohist->ssdinuc_stat[site_codon][CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
                     }
 
 
                     if(lparam->codonstatespace->Synonymous(codonFrom[1],codonTo[1])){
-                        evohist->Nsynsub++;
-                        evohist->ssNsynsub[site_codon]++;
+                        treeEvoStats->dinucSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        treeEvoStats->dinucSyn_stat[1][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
-                        evohist->gtnrSyn_stat[3][nucFrom][nucTo]++;
-                        evohist->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
-
-                        evohist->dinucSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                        evohist->dinucSyn_stat[1][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                        evohist->ssdinucSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+//                        evohist->ssdinucSyn_stat[site_codon][1][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 
                         if (site_codon < lparam->Nsite_codon-2){
-                            evohist->dinucSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                            evohist->dinucSyn_stat[CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                            treeEvoStats->dinucSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                            treeEvoStats->dinucSyn_stat[CodonPos][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+
+//                            evohist->ssdinucSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                            evohist->ssdinucSyn_stat[site_codon][CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
                         }
 
                     } else {
-                        evohist->ssNnsynsub[site_codon]++;
-                        evohist->gtnrNSyn_stat[3][nucFrom][nucTo]++;
-                        evohist->gtnrNSyn_stat[CodonPos][nucFrom][nucTo]++;
 
-                        evohist->dinucNSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-                        evohist->dinucNSyn_stat[1][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        treeEvoStats->dinucNSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        treeEvoStats->dinucNSyn_stat[1][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+
+                        //evohist->ssdinucNSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+                        //evohist->ssdinucNSyn_stat[site_codon][1][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
+
 
                         if (site_codon < lparam->Nsite_codon-2){
-                            evohist->dinucNSyn_stat[3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
-                            evohist->dinucNSyn_stat[CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                            treeEvoStats->dinucNSyn_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+                            treeEvoStats->dinucNSyn_stat[CodonPos][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+
+//                            evohist->ssdinucNSyn_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
+//                            evohist->ssdinucNSyn_stat[site_codon][CodonPos][evohist->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][evohist->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++;
+
+
                         }
 
                     }
@@ -453,12 +547,13 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
 
 void TreeSimulator::ComputeRecursiveSimulation(Link* from){
 
+    int verbose = 0;
 
     int FromNodeIndex = from->GetNode()->GetIndex();
 
     if(from->isRoot()){
 
-
+        if (verbose) {cerr << "CRS1\n";}
         submatrix->UpdateSubMatrixTreeSim(FromNodeIndex,-1,CurrentNodeNucSequence);
 
 
@@ -479,6 +574,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from){
 
         blength = lparam->rootlength;
 
+        if (verbose) {cerr << "CRS2\n";}
         while (time < blength) {
             double u = lparam->rnd->Uniform() * submatrix->GetTotalSubRate(FromNodeIndex);
             int site_nuc = 0;
@@ -506,13 +602,19 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from){
 //
 //                }
 
+
+
             }
+
 
 
             //cerr << submatrix[FromNodeIndex][site_nuc][nucTo] << "\n";
             int site_codon = int(site_nuc/3);
+            if (verbose) {cerr << "CRS3\n";}
             RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo) ;
+            if (verbose) {cerr << "CRS4\n";}
             submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,CurrentNodeNucSequence);
+            if (verbose) {cerr << "CRS5\n";}
             //submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, -1,CurrentNodeNucSequence);
             rate = submatrix->GetTotalSubRate(FromNodeIndex);
             //cerr << "Sub " << rate << "\n";
@@ -564,6 +666,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from){
         time = (lparam->rnd->sExpo()) /rate;
 
         blength = atof(from->GetBranch()->GetName().c_str());
+        if (verbose) {cerr << "CRS5\n";}
 
         while (time < blength) {
             double u = lparam->rnd->Uniform() * submatrix->GetTotalSubRate(FromNodeIndex);
@@ -579,9 +682,15 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from){
                 testcummul +=  submatrix->GetSubRate(FromNodeIndex,site_nuc,nucTo);
 
             }
+            if (verbose) {cerr << "CRS6\n";}
+
             int site_codon = int(site_nuc/3);
 
+            if (verbose) {cerr << "CRS7\n";}
+
             RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo) ;
+
+            if (verbose) {cerr << "CRS8\n";}
 
             submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,CurrentNodeNucSequence);
             //submatrix->UpdateSubMatrixTreeSim(FromNodeIndex,-1,CurrentNodeNucSequence);

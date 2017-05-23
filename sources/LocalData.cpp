@@ -13,7 +13,7 @@
 
         this->NSummaries = gparam->NSummaries;
         this->NParam = gparam->NParam;
-        this->NMapStats = gparam->NMapStats;
+        this->NMapStats = gparam->NEvoStats;
 
         this->listParam = new string[this->NParam];
         for (int param_i = 0; param_i < this->NParam; param_i++){
@@ -29,21 +29,21 @@
 
         this->listMapStats = new string[this->NMapStats];
         for (int MapStats_i = 0; MapStats_i < this->NMapStats; MapStats_i++){
-            this->listMapStats[MapStats_i] = gparam->listMapStats[MapStats_i];
+            this->listMapStats[MapStats_i] = gparam->listEvoStats[MapStats_i];
 
         }
 
 
-        this->NusedMapStats = gparam->NusedMapStats;
-        this->NusedMapAncStats = gparam->NusedMapAncStats;
+        this->NusedMapStats = gparam->NusedEvoStats;
+        this->NusedMapAncStats = gparam->NusedEvoAncStats;
         this->NusedParam = gparam->NusedParam;
         this->NusedSummaries = gparam->NusedSummaries;
         this->Ngenes = gparam->Ngenes;
 
         this->mapUsedParam.insert(gparam->mapUsedParam.begin(),gparam->mapUsedParam.end());
         this->mapUsedSummaries.insert(gparam->mapUsedSummaries.begin(),gparam->mapUsedSummaries.end());
-        this->mapUsedMapStats.insert(gparam->mapUsedMapStats.begin(),gparam->mapUsedMapStats.end());
-        this->mapUsedMapAncStats.insert(gparam->mapUsedMapAncStats.begin(),gparam->mapUsedMapAncStats.end());
+        this->mapUsedMapStats.insert(gparam->mapUsedEvoStats.begin(),gparam->mapUsedEvoStats.end());
+        this->mapUsedMapAncStats.insert(gparam->mapUsedEvoAncStats.begin(),gparam->mapUsedEvoAncStats.end());
 
         for (int gene_i = 0; gene_i < this->Ngenes; gene_i++){
             this->listGenes.push_back(gparam->listGenes[gene_i]);

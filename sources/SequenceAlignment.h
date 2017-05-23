@@ -43,7 +43,7 @@ class SequenceAlignment	{
 		}
 		BKData = 0;
 	}
-	
+
 	SequenceAlignment(SequenceAlignment* from, int start, int length)	{
 
 		Ntaxa = from->Ntaxa;
@@ -64,7 +64,7 @@ class SequenceAlignment	{
 		}
 		BKData = 0;
 	}
-	
+
 	SequenceAlignment(SequenceAlignment* from, const TaxonSet* subset)	{
 
 		Ntaxa = subset->GetNtaxa();
@@ -192,7 +192,7 @@ class SequenceAlignment	{
 	int  GetNstate()	{
 		return statespace->GetNstate();
 	}
-	
+
 	// the list of taxa
 	const TaxonSet* GetTaxonSet() const {
 		return taxset;
@@ -205,7 +205,7 @@ class SequenceAlignment	{
 	int GetNtaxa()	{
 		return taxset->GetNtaxa();
 	}
-	
+
 	bool isMissing(int taxon, int site)	{
 		return Data[taxon][site] == -1;
 	}
@@ -219,7 +219,7 @@ class SequenceAlignment	{
 		}
 		return ret;
 	}
-	
+
 	bool ConstantColumn(int site)	{
 		bool ret = true;
 		int tax = 0;
@@ -283,7 +283,7 @@ class SequenceAlignment	{
 				index++;
 			}
 		}
-		
+
 		for (int k=0; k<Ntaxa; k++)	{
 			for (int i=sitemin; i<sitemax; i++)	{
 				Data[k][offset + (i-sitemin)] = tmpdata[k][i];
@@ -365,7 +365,7 @@ class SequenceAlignment	{
 			taxfreq[j] = new double[Nstate];
 			for (int k=0; k<Nstate; k++)	{
 				taxfreq[j][k] = 0;
-			} 
+			}
 		}
 
 		for (int i=0; i<Nsite; i++)	{
@@ -376,7 +376,7 @@ class SequenceAlignment	{
 				}
 			}
 		}
-				
+
 		for (int j=0; j<Ntaxa; j++)	{
 			double total = 0;
 			for (int k=0; k<Nstate; k++)	{
@@ -395,7 +395,7 @@ class SequenceAlignment	{
 				globalfreq[k] += taxfreq[j][k];
 			}
 			globalfreq[k] /= Ntaxa;
-		} 
+		}
 
 		for (int j=0; j<Ntaxa; j++)	{
 			for (int k=0; k<Nstate; k++)	{
@@ -441,7 +441,7 @@ class SequenceAlignment	{
 	StateSpace* statespace;
 	int** Data;
 	int** BKData;
-	
+
 };
 
 class FileSequenceAlignment : public SequenceAlignment	{
@@ -450,6 +450,7 @@ class FileSequenceAlignment : public SequenceAlignment	{
 	public:
 		FileSequenceAlignment(istream& is);
 		FileSequenceAlignment(string filename,int fullline,int myid);
+		FileSequenceAlignment(int ntaxa,int nsite_nuc, string * listspecies);
 
 	private:
 

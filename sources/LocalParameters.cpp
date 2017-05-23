@@ -18,13 +18,28 @@ LocalParameters::LocalParameters(GlobalParameters* gparam){
         this->output = gparam->output;
         this->model = gparam->model;
         this->distance = gparam->distance;
+        this->transformation = gparam->transformation;
         this->TOOSMALL = gparam->TOOSMALL;
         this->TOOLARGE = gparam->TOOLARGE;
         this->TOOLARGENEGATIVE = gparam->TOOLARGENEGATIVE;
+        this->Ntaxa = gparam->Ntaxa;
+        this->Nsite_codon = gparam->Nsite_codon;
+        this->Nsite_nuc = 3 * this->Nsite_codon;
+
+        if (gparam->listSpecies.size() > 0 && this->Ntaxa >0 && gparam->listSpecies.size() == this->Ntaxa){
+            this->listSpecies  = new string[this->Ntaxa];
+            for (int i = 0 ; i < this->Ntaxa; i ++){
+                this->listSpecies[i] = gparam->listSpecies[i];
+            }
+        }
+
 
         this->NSummaries = gparam->NSummaries;
         this->NParam = gparam->NParam;
-        this->NMapStats = gparam->NMapStats;
+        this->NEvoStats = gparam->NEvoStats;
+        this->NSiteSpecificEvoStats = gparam->NSiteSpecificEvoStats;
+
+        if(gparam->verbose) {cerr << "LocalParam1\n";}
 
         this->listParam = new string[this->NParam];
         for (int param_i = 0; param_i < this->NParam; param_i++){
@@ -32,29 +47,50 @@ LocalParameters::LocalParameters(GlobalParameters* gparam){
 
         }
 
+        if(gparam->verbose) {cerr << "LocalParam2\n";}
+
+
         this->listSummaries = new string[this->NSummaries];
         for (int summary_i = 0; summary_i < this->NSummaries; summary_i++){
             this->listSummaries[summary_i] = gparam->listSummaries[summary_i];
 
         }
 
-        this->listMapStats = new string[this->NMapStats];
-        for (int MapStats_i = 0; MapStats_i < this->NMapStats; MapStats_i++){
-            this->listMapStats[MapStats_i] = gparam->listMapStats[MapStats_i];
+        if(gparam->verbose) {cerr << "LocalParam3\n";}
+
+
+        this->listEvoStats = new string[this->NEvoStats];
+        for (int EvoStats_i = 0; EvoStats_i < this->NEvoStats; EvoStats_i++){
+            this->listEvoStats[EvoStats_i] = gparam->listEvoStats[EvoStats_i];
 
         }
 
-        this->NusedMapStats = gparam->NusedMapStats;
-        this->NusedMapAncStats = gparam->NusedMapAncStats;
+        if(gparam->verbose) {cerr << "LocalParam4\n";}
+
+
+        this->listSiteSpecificEvoStats = new string[this->NSiteSpecificEvoStats];
+        for (int EvoStats_i = 0; EvoStats_i < this->NSiteSpecificEvoStats; EvoStats_i++){
+            this->listSiteSpecificEvoStats[EvoStats_i] = gparam->listSiteSpecificEvoStats[EvoStats_i];
+
+        }
+
+        if(gparam->verbose) {cerr << "LocalParam5\n";}
+
+        this->NusedEvoStats = gparam->NusedEvoStats;
+        this->NusedSiteSpecificEvoStats = gparam->NusedSiteSpecificEvoStats;
+        this->NusedEvoAncStats = gparam->NusedEvoAncStats;
         this->NusedParam = gparam->NusedParam;
         this->NusedSummaries = gparam->NusedSummaries;
+        this->NusedAccessorySummaries = gparam->NusedAccessorySummaries;
         this->Ngenes = gparam->Ngenes;
 
 
         this->mapUsedParam.insert(gparam->mapUsedParam.begin(),gparam->mapUsedParam.end());
         this->mapUsedSummaries.insert(gparam->mapUsedSummaries.begin(),gparam->mapUsedSummaries.end());
-        this->mapUsedMapStats.insert(gparam->mapUsedMapStats.begin(),gparam->mapUsedMapStats.end());
-        this->mapUsedMapAncStats.insert(gparam->mapUsedMapAncStats.begin(),gparam->mapUsedMapAncStats.end());
+        this->mapUsedAccessorySummaries.insert(gparam->mapUsedAccessorySummaries.begin(),gparam->mapUsedAccessorySummaries.end());
+        this->mapUsedEvoStats.insert(gparam->mapUsedEvoStats.begin(),gparam->mapUsedEvoStats.end());
+        this->mapUsedSiteSpecificEvoStats.insert(gparam->mapUsedSiteSpecificEvoStats.begin(),gparam->mapUsedSiteSpecificEvoStats.end());
+        this->mapUsedEvoAncStats.insert(gparam->mapUsedEvoAncStats.begin(),gparam->mapUsedEvoAncStats.end());
 
 
 
@@ -72,6 +108,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam){
         this->lambda_TpA = 1.0;
         this->lambdaCA = 1.0;
         this->lambdaTG = 1.0;
+        this->fixNsite = 0;
         this->fixlambda_TBL = 1;
         this->fixlambda_omega = 1;
         this->fixlambda_CpG = 1;
@@ -95,7 +132,8 @@ LocalParameters::LocalParameters(GlobalParameters* gparam){
         this->optCpG = 1;
         this->optTpA = 1;
         this->rootlength = 10.0;
-
+        this->Nsite_codon = 1000;
+        this->Nsite_nuc = 3*this->Nsite_codon;
         this->startPoint = 1;
         this->endPoint = 1;
         this->everyPoint = 1;
@@ -109,53 +147,55 @@ LocalParameters::LocalParameters(GlobalParameters* gparam){
         this->taxa_a = "";
         this->taxa_b = "";
         this->tofasta = 0;
+        this->isdata = false;
+        this->iscodon = false;
 
 
 
 
 
-        nucrrnr = new double*[Nnucp];
-        nucrrnr1 = new double*[Nnucp];
-        nucrrnr2 = new double*[Nnucp];
-        gtnr = new double*[Nnucp];
-        gtnr1 = new double*[Nnucp];
-        gtnr2 = new double*[Nnucp];
-        for (int i = 0; i < Nnucp; i++){
-            gtnr[i] = new double[Nnucp];
-            nucrrnr[i] = new double[Nnucp];
-            gtnr1[i] = new double[Nnucp];
-            nucrrnr1[i] = new double[Nnuc];
-            gtnr2[i] = new double[Nnucp];
-            nucrrnr2[i] = new double[Nnuc];
+        this->nucrrnr = new double*[this->Nnucp];
+        this->nucrrnr1 = new double*[this->Nnucp];
+        this->nucrrnr2 = new double*[this->Nnucp];
+        this->gtnr = new double*[this->Nnucp];
+        this->gtnr1 = new double*[this->Nnucp];
+        this->gtnr2 = new double*[this->Nnucp];
+        for (int i = 0; i < this->Nnucp; i++){
+            this->gtnr[i] = new double[this->Nnucp];
+            this->nucrrnr[i] = new double[this->Nnucp];
+            this->gtnr1[i] = new double[this->Nnucp];
+            this->nucrrnr1[i] = new double[this->Nnucp];
+            this->gtnr2[i] = new double[this->Nnucp];
+            this->nucrrnr2[i] = new double[this->Nnucp];
         }
 
-        for (int i = 0; i < Nnucp; i++){
-            for (int j = 0; j < Nnucp; j++){
-                gtnr[i][j] = 0.0;
-                nucrrnr[i][j] = 0.0;
-                gtnr1[i][j] = 0.0;
-                nucrrnr1[i][j] = 0.0;
-                gtnr2[i][j] = 0.0;
-                nucrrnr2[i][j] = 0.0;
+        for (int i = 0; i < this->Nnucp; i++){
+            for (int j = 0; j < this->Nnucp; j++){
+                this->gtnr[i][j] = 0.0;
+                this->nucrrnr[i][j] = 0.0;
+                this->gtnr1[i][j] = 0.0;
+                this->nucrrnr1[i][j] = 0.0;
+                this->gtnr2[i][j] = 0.0;
+                this->nucrrnr2[i][j] = 0.0;
             }
         }
 
-        nucp = new double [Nnucp];
-        nucp1 = new double [Nnucp];
-        nucp2 = new double [Nnucp];
-        for (int i = 0; i < Nnucp; i++){
-            nucp[i] = 0.0;
-            nucp1[i] = 0.0;
-            nucp2[i] = 0.0;
+        this->nucp = new double [this->Nnucp];
+        this->nucp1 = new double [this->Nnucp];
+        this->nucp2 = new double [this->Nnucp];
+        for (int i = 0; i < this->Nnucp; i++){
+            this->nucp[i] = 0.0;
+            this->nucp1[i] = 0.0;
+            this->nucp2[i] = 0.0;
         }
 
-        nucrr = new double [Nnucrr];
-        nucrr1 = new double [Nnucrr];
-        nucrr2 = new double [Nnucrr];
-        for (int i= 0; i < Nnucrr; i++){
-            nucrr[i] = 0.0;
-            nucrr1[i] = 0.0;
-            nucrr2[i] = 0.0;
+        this->nucrr = new double [this->Nnucrr];
+        this->nucrr1 = new double [this->Nnucrr];
+        this->nucrr2 = new double [this->Nnucrr];
+        for (int i= 0; i < this->Nnucrr; i++){
+            this->nucrr[i] = 0.0;
+            this->nucrr1[i] = 0.0;
+            this->nucrr2[i] = 0.0;
         }
 
 
@@ -164,75 +204,107 @@ LocalParameters::LocalParameters(GlobalParameters* gparam){
 
         readLocalInstructions();
 
-        dnadata = new FileSequenceAlignment((data).c_str(), 0, 0);
+        if (this->isdata){
+            cerr << "alignment found\n";
 
-        if (iscodon) {
-            if(code == "Universal" ) {
-                cerr << "Universal\n";
-                codonstatespace =  new CodonStateSpace(Universal);
-                codondata  = new CodonSequenceAlignment(dnadata, true, Universal);
-                taxonset = codondata->GetTaxonSet();
-            }else if (code == "MtMam")  {
-                cerr << "MtMam\n";
-                codonstatespace =  new CodonStateSpace(MtMam);
-                codondata  = new CodonSequenceAlignment(dnadata, true, MtMam);
-                taxonset = codondata->GetTaxonSet();
-            }else if (code == "MtInv") {
-                cerr << "MtInv\n";
-                codonstatespace =  new CodonStateSpace(MtInv);
-                codondata  = new CodonSequenceAlignment(dnadata, true, MtInv);
-                taxonset = codondata->GetTaxonSet();
-            } else {
-                cerr << "wrong genetic code\n";
+            this->dnadata = new FileSequenceAlignment((data).c_str(), 0, 0);
+
+            if (this->iscodon) {
+                if(code == "Universal" ) {
+
+                    cerr << "Universal\n";
+                    this->codonstatespace =  new CodonStateSpace(Universal);
+                    this->codondata  = new CodonSequenceAlignment(dnadata, true, Universal);
+                    this->taxonset = this->codondata->GetTaxonSet();
+                } else if (code == "MtMam")  {
+
+                    cerr << "MtMam\n";
+                    this->codonstatespace =  new CodonStateSpace(MtMam);
+                    this->codondata  = new CodonSequenceAlignment(dnadata, true, MtMam);
+                    this->taxonset = this->codondata->GetTaxonSet();
+                } else if (code == "MtInv") {
+
+                    cerr << "MtInv\n";
+                    this->codonstatespace =  new CodonStateSpace(MtInv);
+                    this->codondata  = new CodonSequenceAlignment(dnadata, true, MtInv);
+                    this->taxonset = this->codondata->GetTaxonSet();
+                } else {
+                    cerr << "wrong genetic code\n";
+                }
+            }
+       } else {
+
+            cerr << "no alignment found\n";
+
+            this->dnadata = new FileSequenceAlignment(this->Ntaxa, this->Nsite_nuc,this->listSpecies);
+
+            if (this->iscodon) {
+                if(code == "Universal" ) {
+
+                    cerr << "Universal\n";
+                    this->codonstatespace =  new CodonStateSpace(Universal);
+                    this->codondata  = new CodonSequenceAlignment(dnadata, true, Universal);
+                    this->taxonset = this->codondata->GetTaxonSet();
+                } else if (code == "MtMam")  {
+
+                    cerr << "MtMam\n";
+                    this->codonstatespace =  new CodonStateSpace(MtMam);
+                    this->codondata  = new CodonSequenceAlignment(dnadata, true, MtMam);
+                    this->taxonset = this->codondata->GetTaxonSet();
+                } else if (code == "MtInv") {
+
+                    cerr << "MtInv\n";
+                    this->codonstatespace =  new CodonStateSpace(MtInv);
+                    this->codondata  = new CodonSequenceAlignment(dnadata, true, MtInv);
+                    this->taxonset = this->codondata->GetTaxonSet();
+
+                } else {
+                    cerr << "wrong genetic code\n";
+                }
+            }
+
+
+        }
+
+
+
+
+        this->Nsite_codon  = this->codondata->GetNsite();
+        this->Nsite_nuc    = this->Nsite_codon * 3;
+        this->Ntaxa        = this->codondata->GetNtaxa();
+        this->Nstate_codon = this->codondata->GetNstate();
+
+        this->codonprofile = new double [this->Nstate_codon];
+        for (int i = 0 ; i < this->Nstate_codon; i++) {
+            this->codonprofile[i] = 0.0;
+        }
+
+        this->ssaaprofiles = new double*[Nsite_codon];
+        for(int i =0 ; i < this->Nsite_codon; i++){
+                this->ssaaprofiles[i] = new double [Nstate_aa];
+        }
+        for(int i = 0; i < this->Nsite_codon; i++){
+            for(int j =0 ; j < this->Nstate_aa; j++){
+                this->ssaaprofiles[i][j] = 0.0;
             }
         }
 
-        // init parameters
-        // data specific
-        Nsite_codon = codondata->GetNsite();
-        Ntaxa = codondata->GetNtaxa();
-        Nstate_codon = codondata->GetNstate();
-        Nsite_nuc = Nsite_codon * 3;
-
-
-
-        codonprofile = new double [Nstate_codon];
-        for (int i = 0 ; i < Nstate_codon; i++) {
-            codonprofile[i] = 0.0;
+        this->alloc = new int [Nsite_codon];
+        for(int i =0 ; i < this->Nsite_codon; i++){
+                this->alloc[i] = -1;
         }
 
+        this->newlink = new Link();
+        this->newnext = new Link();
+        this->branchToInGroup = new Branch();
+        this->branchToOutGroup = new Branch();
+        this->newnode = new Node();
 
-        ssaaprofiles = new double*[Nsite_codon];
-        for(int i =0 ; i < Nsite_codon; i++){
-                ssaaprofiles[i] = new double [Nstate_aa];
-        }
-        for(int i = 0; i < Nsite_codon; i++){
-            for(int j =0 ; j < Nstate_aa; j++){
-                ssaaprofiles[i][j] = 0.0;
-            }
-        }
-
-        alloc = new int [Nsite_codon];
-        for(int i =0 ; i < Nsite_codon; i++){
-                alloc[i] = -1;
-        }
-
-
-
-        newlink = new Link();
-        newnext = new Link();
-        branchToInGroup = new Branch();
-        branchToOutGroup = new Branch();
-        newnode = new Node();
-
-
-        cerr << "Nsite_codon : " << Nsite_codon << "\n";
-        cerr << "Nsite_nuc : " << Nsite_nuc << "\n";
-        cerr << "Ntaxa : " <<  Ntaxa << "\n";
-        cerr << "Nstate_codon : " << Nstate_codon << "\n";
-        cerr << "Rooted at " << taxa_a << " " << taxa_b  << "\n";
-
-
+        cerr << "Nsite_codon : " << this->Nsite_codon << "\n";
+        cerr << "Nsite_nuc : " << this->Nsite_nuc << "\n";
+        cerr << "Ntaxa : " <<  this->Ntaxa << "\n";
+        cerr << "Nstate_codon : " << this->Nstate_codon << "\n";
+        cerr << "Rooted at " << this->taxa_a << " " << taxa_b  << "\n";
 
 }
 
@@ -389,6 +461,7 @@ void LocalParameters::readLocalInstructions(){
                     iss >> s;
                     this->data = s;
                     cerr << "data " << data<< "\n";
+                    this->isdata = true;
                 } else if (s =="-chain") {
                     iss >> s;
                     this->chain = s;
@@ -472,6 +545,12 @@ void LocalParameters::readLocalInstructions(){
                     this->lambda_omega = atof(s.c_str());
                     this->fixlambda_omega = 1;
                     cerr << "fix omega X" << this->lambda_omega << "\n";
+
+                } else if (s =="-omega"){
+                    iss >> s;
+                    this->omega = atof(s.c_str());
+                    this->fixomega = 1;
+                    cerr << "fix omega X" << this->omega << "\n";
 
                 } else if (s == "-freelambdaTBL") {
                     this->fixlambda_TBL = 0;
@@ -620,7 +699,16 @@ void LocalParameters::readLocalInstructions(){
                     this->verbose = 1;
                     cerr << "verbose " << this->verbose << "\n";
 
+                } else if (s == "-fixNsite"){
+                    iss >> s;
+                    this->fixNsite = 1;
+                    iss >> s;
+                    this->Nsite_codon = atoi(s.c_str());
+                    this->Nsite_nuc = this->Nsite_codon * 3;
+                    cerr << "fixNsite " << this->Nsite_codon << " " << this->Nsite_nuc << "\n";
+
                 }
+
 
            }
 
@@ -713,10 +801,10 @@ std::vector<double> LocalParameters::GetCurrentDistances(){
     std::vector<double> cur_dist;
     double dist = 0.0 ;
 
-    if (this->distance == "log2") {
+    if (this->distance == "Euclidian") {
 
         for (unsigned int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++){
-            // cerr << summariesRealData[i_summary] << " " << summariesSimulatedData[i_summary] << "\n";
+
              double sqdisc  = this->summariesRealData[i_summary] - summariesSimulatedData[i_summary];
              sqdisc *= sqdisc ;
 
@@ -725,10 +813,10 @@ std::vector<double> LocalParameters::GetCurrentDistances(){
         }
 
         cur_dist.push_back(dist);
-    } else if (this->distance == "log2") {
+    } else if (this->distance == "normedEuclidian") {
 
         for (unsigned int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++){
-            // cerr << summariesRealData[i_summary] << " " << summariesSimulatedData[i_summary] << "\n";
+
              double sqdisc  = (this->summariesRealData[i_summary] - summariesSimulatedData[i_summary])/this->summariesRealData[i_summary];
              sqdisc *= sqdisc ;
 
@@ -738,22 +826,7 @@ std::vector<double> LocalParameters::GetCurrentDistances(){
 
         cur_dist.push_back(dist);
 
-    } else if (this->distance == "norm") {
-
-        for (unsigned int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++){
-            // cerr << summariesRealData[i_summary] << " " << summariesSimulatedData[i_summary] << "\n";
-             double sqdisc  = (exp2(this->summariesRealData[i_summary]) - exp2(summariesSimulatedData[i_summary]))/exp2(this->summariesRealData[i_summary]);
-             sqdisc *= sqdisc ;
-
-             dist += sqdisc;
-             cur_dist.push_back(sqdisc);
-        }
-
-        cur_dist.push_back(dist);
-
     }
-
-
     return cur_dist;
 
 }
@@ -895,14 +968,29 @@ std::vector<double> LocalParameters::GetCurrentWeights(){
     return weights;
 }
 
-std::vector<double> LocalParameters::GetCurrentMappingStats(){
-    return mappingstats;
+std::vector<double> LocalParameters::GetCurrentEvoStats(){
+    return evostats;
+
+}
+
+std::vector<double> LocalParameters::GetCurrentAncEvoStats(){
+    return ancevostats;
+
+}
+
+std::vector<double> LocalParameters::GetCurrentSiteSpecificEvoStats(){
+    return sitespecificevostats;
 
 }
 
 std::vector<double> LocalParameters::GetCurrentSummaries() {
     return summariesSimulatedData;
 }
+
+std::vector<double> LocalParameters::GetCurrentAccessorySummaries() {
+    return accessorysummariesSimulatedData;
+}
+
 
 std::vector<double> LocalParameters::GetCurrentParameters(){
     string* arrParam = new string[this->NusedParam];
@@ -977,17 +1065,6 @@ std::vector<double> LocalParameters::GetCurrentParameters(){
     return cur_param;
 }
 
-std::tuple<std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> LocalParameters::GetNewSimulation(){
-    std::vector<double> param = GetCurrentParameters();
-    std::vector<double> summaries = GetCurrentSummaries();
-    std::vector<double> mappingstats = GetCurrentMappingStats();
-    std::vector<double> distances = GetCurrentDistances();
-    std::vector<double> weights = GetCurrentWeights();
-    return make_tuple(param,summaries,mappingstats,distances,weights);
-    //gparam->registerNewSimulation(param,summaries,mappingstats,distances,weights);
-
-
-}
 
 
 void LocalParameters::writeParam(ofstream& os){
@@ -1894,14 +1971,6 @@ void LocalParameters::SetTreeStuffRecursively(Link *from,int notNodeIndex,int gt
 
      }
 }
-
-
-
-
-
-
-
-
 
 void LocalParameters::toFasta(ofstream &os, int** curent_nodeleaf_sequence_codon) {
     for(int taxa = 0 ; taxa < Ntaxa ; taxa++) {
