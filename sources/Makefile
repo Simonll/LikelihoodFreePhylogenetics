@@ -6,7 +6,7 @@ SOURCES=main.cpp GlobalParameters.cpp TaxonSet.cpp Tree.cpp  Random.cpp  Sequenc
   PriorSampler.cpp AncestralSequence.cpp TreeSimulator.cpp Regression.cpp linalg.cpp BranchSpecificParameters.cpp  LocalData.cpp\
   Posterior.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=HS
+EXECUTABLE=LFP
 PROGSDIR=../bin/Debug
 
 all: $(SOURCES) $(EXECUTABLE)
