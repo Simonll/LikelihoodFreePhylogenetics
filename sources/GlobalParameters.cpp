@@ -391,10 +391,11 @@ void GlobalParameters::readInstructions() {
            cerr << "### OLDPARAMS ### \n";
            localcontrolfile = line;
 
-       } else if (!line.empty() && line.substr(0,10) == "#LOCALPARAM") {
+       } else if (!line.empty() && line.substr(0,11) == "#LOCALPARAM") {
            localcontrolfile = line;
 
        }
+       /////////////////////////
    }
    is.close();
 

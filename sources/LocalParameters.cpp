@@ -1923,17 +1923,6 @@ void LocalParameters::SetTreeStuff(){
 
   }
 
-
-
-//  this->bparam = new BranchSpecificParameters*[this->refTree->GetNnode()];
-//
-//  for(int node_i = 0 ; node_i < this->refTree->GetNnode(); node_i++){
-//        this->bparam[node_i] = new BranchSpecificParameters();
-//
-//  }
-//
-//  SetTreeStuffRecursively(refTree->GetRoot());
-
 }
 
 
