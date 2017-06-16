@@ -236,30 +236,34 @@ LocalParameters::LocalParameters(GlobalParameters* gparam){
 
             cerr << "no alignment found\n";
 
-            this->dnadata = new FileSequenceAlignment(this->Ntaxa, this->Nsite_nuc,this->listSpecies);
+            if (this->Ntaxa > 0 && this->Nsite_nuc > 0 && this->listSpecies >0) {
 
-            if (this->iscodon) {
-                if(code == "Universal" ) {
 
-                    cerr << "Universal\n";
-                    this->codonstatespace =  new CodonStateSpace(Universal);
-                    this->codondata  = new CodonSequenceAlignment(dnadata, true, Universal);
-                    this->taxonset = this->codondata->GetTaxonSet();
-                } else if (code == "MtMam")  {
+                this->dnadata = new FileSequenceAlignment(this->Ntaxa, this->Nsite_nuc,this->listSpecies);
 
-                    cerr << "MtMam\n";
-                    this->codonstatespace =  new CodonStateSpace(MtMam);
-                    this->codondata  = new CodonSequenceAlignment(dnadata, true, MtMam);
-                    this->taxonset = this->codondata->GetTaxonSet();
-                } else if (code == "MtInv") {
+                if (this->iscodon) {
+                    if(code == "Universal" ) {
 
-                    cerr << "MtInv\n";
-                    this->codonstatespace =  new CodonStateSpace(MtInv);
-                    this->codondata  = new CodonSequenceAlignment(dnadata, true, MtInv);
-                    this->taxonset = this->codondata->GetTaxonSet();
+                        cerr << "Universal\n";
+                        this->codonstatespace =  new CodonStateSpace(Universal);
+                        this->codondata  = new CodonSequenceAlignment(dnadata, true, Universal);
+                        this->taxonset = this->codondata->GetTaxonSet();
+                    } else if (code == "MtMam")  {
 
-                } else {
-                    cerr << "wrong genetic code\n";
+                        cerr << "MtMam\n";
+                        this->codonstatespace =  new CodonStateSpace(MtMam);
+                        this->codondata  = new CodonSequenceAlignment(dnadata, true, MtMam);
+                        this->taxonset = this->codondata->GetTaxonSet();
+                    } else if (code == "MtInv") {
+
+                        cerr << "MtInv\n";
+                        this->codonstatespace =  new CodonStateSpace(MtInv);
+                        this->codondata  = new CodonSequenceAlignment(dnadata, true, MtInv);
+                        this->taxonset = this->codondata->GetTaxonSet();
+
+                    } else {
+                        cerr << "wrong genetic code\n";
+                    }
                 }
             }
 

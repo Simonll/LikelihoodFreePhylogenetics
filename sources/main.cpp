@@ -78,7 +78,6 @@ int main(int argc, char* argv[]){
                     cerr << "#SSMAP\n";
                     cerr << "#MAP\n";
                     cerr << "#ANCESTRALMAP\n";
-                    cerr << "#SSMAP\n";
                     cerr << "#DIST\n";
                     cerr << "#TRANS\n";
                     cerr << "#SPEUDODATA\n";
@@ -117,7 +116,6 @@ int main(int argc, char* argv[]){
             realDataSummaries_os.close();
 
         }
-
         else if (model == "FMSCpGV2" || model == "CodonMutSelFiniteABC") {
             cerr << "CodonMutSelFiniteCpG\n";
 
@@ -352,10 +350,6 @@ int main(int argc, char* argv[]){
             exit(0);
 
         }
-
-
-
-
         else if (model == "MutSelAACpGV2" || model == "CodonMutSelSBDPABC") {
             cerr << "CodonMutSelSBDPCpG\n";
 
@@ -673,7 +667,7 @@ int main(int argc, char* argv[]){
             exit(0);
 
         }
-        else if (model == "FMutSelSimu" || model == "FMutSel0Simu" || model == "MGMutSelSimu"){
+        else if (model == "FMutSelSimu"){
 
 
             GlobalParameters* gparam = new GlobalParameters(model, controlfile);
@@ -761,7 +755,6 @@ int main(int argc, char* argv[]){
             exit(0);
 
         }
-
         else if (model == "CodonMutSelSBDP"){
             cerr << "CodonMutSelSBDP" << "\n";
             GlobalParameters* gparam = new GlobalParameters(model, controlfile);
@@ -855,26 +848,26 @@ int main(int argc, char* argv[]){
             cerr << "CodonMutSelFinite" << "\n";
             GlobalParameters* gparam = new GlobalParameters(model, controlfile);
             Posterior* post = new Posterior(gparam);
-
+            if(gparam->verbose) {cerr << "debug1\n";}
             LocalParameters* lparam =  new LocalParameters(gparam);
             lparam->readChainCodonMutSelFinite();
-
+            if(gparam->verbose) {cerr << "debug2\n";}
             ofstream lparam_os ((gparam->output+".inputparam").c_str());
             lparam->writeParam(lparam_os);
             lparam_os.close();
-
+            if(gparam->verbose) {cerr << "debug3\n";}
             SummaryStatistics* ss =new SummaryStatistics(lparam);
             ss->computeSummaries();
-
+            if(gparam->verbose) {cerr << "debug4\n";}
             ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
             lparam->writeRealDataSummaries(realDataSummaries_os);
             realDataSummaries_os.close();
-
+            if(gparam->verbose) {cerr << "debug5\n";}
             PriorSampler* sampler = new PriorSampler(lparam);
             SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
             AncestralSequence* ancestraseq = new AncestralSequence(lparam);
             TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
-
+            if(gparam->verbose) {cerr << "debug6\n";}
             cerr << "Start simulating \n" ;
             while(lparam->startPoint < lparam->endPoint){
                     lparam->readChainCodonMutSelFinite();
@@ -884,11 +877,11 @@ int main(int argc, char* argv[]){
 
 
                         sampler->sample();
-
+                        if(gparam->verbose) {cerr << "debug7\n";}
                         simulator->GetNewSimulatedCodonAlignment();
-
+                        if(gparam->verbose) {cerr << "debug8\n";}
                         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-
+                        if(gparam->verbose) {cerr << "debug9\n";}
                         post->registerNewSimulation(
                                     lparam->startPoint,
                                     lparam->GetCurrentParameters(),
@@ -900,7 +893,7 @@ int main(int argc, char* argv[]){
                                     lparam->GetCurrentDistances(),
                                     lparam->GetCurrentWeights()
                                     );
-
+                        if(gparam->verbose) {cerr << "debug10\n";}
                         if (lparam->tofasta){
                             ostringstream oss;
                             oss << gparam->output << "-pt" <<lparam->startPoint <<"-" << iter << ".phylip";
@@ -924,12 +917,12 @@ int main(int argc, char* argv[]){
 
             }
             cerr << "End of the simulation process\n";
-
+            if(gparam->verbose) {cerr << "debug11\n";}
             ofstream dist_os((gparam->output+".post").c_str(),OUT);
             post->writeHeader(dist_os);
             post->writePosterior(dist_os);
             dist_os.close();
-
+            if(gparam->verbose) {cerr << "debug12\n";}
             //ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
             //post->writePosteriorPredictivePvalues(ppp_os,lparam->summariesRealData);
             //ppp_os.close();
@@ -939,161 +932,6 @@ int main(int argc, char* argv[]){
 
 
         }
-
-//        else if (model ==  "MutSelAACpGEmpirical") {
-//
-//            cerr << "MutSelAACpGEmpirical" << "\n";
-//
-//            gparam = new GlobalParameters(controlfile);
-//
-//            lparam = new LocalParameters*[1];
-//            ss = new SummaryStatistics*[1];
-//            sampler = new PriorSampler*[1];
-//            simulator = new SiteInterSubMatrix*[1];
-//
-//            lparam[0] = new LocalParameters(gparam);
-//            ss[0] = new SummaryStatistics(lparam[0]);
-//            ss[0]->computeSummaries();
-//            sampler[0] = new PriorSampler(lparam[0]);
-//            simulator[0] = new SiteInterSubMatrix(lparam[0]);
-//
-//
-//            while(lparam[0]->startPoint < lparam[0]->endPoint) {
-//                int rep = 0;
-//                while (rep < lparam[0]->Nrep) {
-//                    lparam[0]->readChainMutSelAAC();
-//                    lparam[0]->SetTree();
-//                    sampler[0]->sample();
-//                    simulator[0]->GetNewStationaryCodonSequence();
-//                    simulator[0]->GetNewAncestralCodonSequence();
-//                    simulator[0]->GetNewSimulatedCodonAlignment();
-//                    ss[0]->computeSummaries(simulator[0]->CurrentLeafNodeCodonSequences);
-//                    lparam[0]->registerNewSimulation();
-//
-//
-//                    if (lparam[0]->tofasta) {
-//                        ostringstream oss;
-//                        oss << lparam[0]->output << "_" << lparam[0]->startPoint << "." << rep << ".fasta";
-//                        ofstream fasta_os(oss.str(),OUT);
-//                        lparam[0]->toAli(fasta_os,simulator[0]->CurrentLeafNodeCodonSequences);
-//                        fasta_os.close();
-//                        oss.str("");
-//                        oss << lparam[0]->output << "_" << lparam[0]->startPoint << "." << rep << ".tre";
-//                        ofstream tree_os(oss.str(),OUT);
-//                        lparam[0]->refTree->Print(tree_os);
-//                        tree_os.close();
-//
-//                    }
-//                    rep++;
-//                    cerr << ".";
-//                }
-//
-//                lparam[0]->startPoint +=lparam[0]->everyPoint;
-//
-//            }
-//
-//            ofstream dist_os((gparam->output+".post").c_str(),OUT);
-//            gparam->writeHeader(dist_os);
-//            gparam->writePosterior(dist_os);
-//            dist_os.close();
-//
-//            ofstream emp_os((gparam->output+".emp").c_str(),OUT);
-//            gparam->writeHeader(emp_os);
-//            gparam->writePosterior(emp_os);
-//            emp_os.close();
-//
-//            ofstream ppp_os((gparam->output+".empppp").c_str(),OUT);
-//            gparam->writePosteriorPredictivePvalues(ppp_os);
-//            ppp_os.close();
-//
-//
-//         else if (model == "MutSelAACpGppchecks" || model == "FMutSelppchecks") {
-//            // the chain point is defined within the conf file
-//
-//            if (model == "MutSelAACpGppchecks") {
-//
-//                cerr << model  << "\n";
-//
-//            } else if (model == "FMutSelppchecks") {
-//
-//                cerr << model  << "\n";
-//
-//            }
-//
-//
-//            GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-//            Posterior* post = new Posterior(gparam);
-//
-//            LocalParameters* lparam =  new LocalParameters(gparam);
-//            if (model == "MutSelAACpGppchecks") {
-//
-//                lparam->readChainCodonMutSelSBDP();
-//
-//            } else if (model == "FMutSelppchecks") {
-//
-//                lparam->readChainCodonMutSelFinite();
-//
-//            }
-//
-//
-//            ofstream lparam_os ((gparam->output+".inputparam").c_str());
-//            lparam->writeParam(lparam_os);
-//            lparam_os.close();
-//
-//            SummaryStatistics* ss = new SummaryStatistics(lparam);
-//            ss->computeSummaries();
-//
-//            ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
-//            lparam->writeRealDataSummaries(realDataSummaries_os);
-//            realDataSummaries_os.close();
-//
-//            PriorSampler* sampler = new PriorSampler(lparam);
-//            SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
-//            AncestralSequence* ancestraseq = new AncestralSequence(lparam);
-//            TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
-//
-//            post->readPosterior(lparam->posteriorfile);
-//
-//            cerr << "The simulation process started\n";
-//
-//            if (!post->posterior.empty()) {
-//                cerr << post->posterior.size() << "\n";
-//                unsigned int it = 0 ;
-//                while(it < 1000) {
-//                    lparam->SetCurrentParametersFromPosterior(post->posterior,0);
-//                    //cerr << "AAA1\n";
-//                    simulator->GetNewSimulatedCodonAlignment();
-//
-//                    ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-//
-//                    post->registerNewSimulation(
-//                                it,
-//                                lparam->GetCurrentParameters(),
-//                                lparam->GetCurrentSummaries(),
-//                                lparam->GetCurrentMappingStats(),
-//                                lparam->GetCurrentDistances(),
-//                                lparam->GetCurrentWeights()
-//                                );
-//                    it++;
-//                    cerr << ".";
-//                }
-//
-//            cerr << "End of the simulation process\n";
-//
-//            ofstream dist_os((gparam->output+".post").c_str(),OUT);
-//            post->writeHeader(dist_os);
-//            post->writePosterior(dist_os);
-//            dist_os.close();
-//
-////            ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
-////            post->writePosteriorPredictivePvalues(ppp_os);
-////            ppp_os.close();
-//
-//
-//            }
-//
-//        }
-
         else if (model == "MutSelAACpGppchecksV2" || model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks" || model == "MAP100CodonMutSelSBDPPPChecks") {
 
             // the chain pointS are extract from the posterior file according to chainID
