@@ -1,7 +1,7 @@
 # LikelihoodFreePhylogenetics
 
 
-./HS -m CodonMutSelFinite ANKRD28-M0GTRW-A-M0GTRWCpG.conf
+./LFP -m CodonMutSelFinite ANKRD28-M0GTRW-A-M0GTRWCpG.conf
 
 \###### Configuration file ANKRD28-M0GTRW-A-M0GTRWCpG.conf ######
 
