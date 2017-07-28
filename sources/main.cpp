@@ -997,18 +997,18 @@ int main(int argc, char* argv[]){
                     lparam->SetCurrentParametersFromPosterior(post->posterior,point);
 
                     if (model == "MutSelAACpGppchecksV2" || model == "MAP100CodonMutSelSBDPPPChecks") {
-
+                        if(gparam->verbose) {cerr << "MAP100CodonMutSelSBDPPPChecks " <<"debug6\n";}
                         lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
 
                     } else if (model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks") {
-
+                        if(gparam->verbose) {cerr << "MAP100CodonMutSelFinitePPChecks " <<"debug6\n";}
                         lparam->readChainCodonMutSelFinite(lparam->GetPointID());
 
                     }
                     int rep = 0;
                     while (rep < post->Nrun){
                         rep++;
-
+                        if(gparam->verbose) {cerr << rep <<" debug7\n";}
                         simulator->GetNewSimulatedCodonAlignment();
 
                         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
