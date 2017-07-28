@@ -1008,7 +1008,7 @@ int main(int argc, char* argv[]){
                     int rep = 0;
                     while (rep < post->Nrun){
                         rep++;
-                        if(gparam->verbose) {cerr << rep <<" debug7\n";}
+                        if(gparam->verbose) {cerr << rep << " " << point <<" debug7\n";}
                         simulator->GetNewSimulatedCodonAlignment();
 
                         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
