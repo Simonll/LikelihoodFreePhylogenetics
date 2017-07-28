@@ -992,7 +992,7 @@ int main(int argc, char* argv[]){
             if (!post->posterior.empty()) {
 
                 int it = 0 ;
-                while(it < 10000) {
+                while(it < post->threshold) {
                     int point = static_cast<int> (lparam->rnd->Uniform() * 99);
                     lparam->SetCurrentParametersFromPosterior(post->posterior,point);
 
