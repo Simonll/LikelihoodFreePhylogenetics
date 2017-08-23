@@ -98,16 +98,17 @@ class Posterior
         int OutPartialDistance, Niter, Nrun, Naccepted, threshold, Nthread, Nsite_codon;
         bool sorted;
         // writter
-        void writePosterior(ofstream&os);
+        void writePosterior(ofstream& os);
         void writeMonitorPosterior(ofstream& os);
         void writePosteriorPredictivePvalues(ofstream& os, std::vector<double> realDataSummaries);
-        void writeHeader(ofstream&os);
+        void writeHeader(ofstream& os);
 
 
         //readers
         void readPosterior(string posteriorfile);
+        void readPosterior(ifstream& is);
         void readMonitorPosterior();
-        void readMonitorPosterior(ifstream & is);
+        void readMonitorPosterior(ifstream& is);
 
         //Getters
         int PosteriorGetSize();
