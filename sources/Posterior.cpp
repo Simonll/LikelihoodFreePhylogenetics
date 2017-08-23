@@ -343,7 +343,7 @@ void Posterior::readPosterior(string posteriorfile){
 void Posterior::readPosterior(ifstream& is){
     
     if (!is)       {
-        cerr << "error: did not find " << posteriorfile << "\n";
+        cerr << "error: did not find posteriorfile"<< "\n";
         exit(1);
     }
     string line;
