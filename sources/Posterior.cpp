@@ -340,6 +340,53 @@ void Posterior::readPosterior(string posteriorfile){
     is.close();
 }
 
+void Posterior::readPosterior(ifstream& is){
+    
+    if (!is)       {
+        cerr << "error: did not find " << posteriorfile << "\n";
+        exit(1);
+    }
+    string line;
+    std::getline(is, line);
+    istringstream iss(line);
+    string w;
+    int k = 0;
+    while(iss >> w){
+
+        auto it = mapUsedParam.find(w);
+        if (it != mapUsedParam.end()) {
+            cerr << it->second << " " << k << "\n";
+            it->second = k;
+            k++;
+
+        } else {
+
+            cerr << "Undefined parameter " << w << "\n";
+            exit(0);
+
+        }
+
+    }
+
+    NusedParam = k;
+    while(std::getline(is, line)) {
+        if(!line.empty()) {
+            //cerr << line << "\n";
+            istringstream iss(line);
+            double w;
+            std::vector <double> cur_param;
+
+            for (unsigned int param_i = 0; param_i < NusedParam; param_i++) {
+                    iss >> w;
+                    cur_param.push_back(w);
+            }
+
+            posterior.push_back(cur_param);
+        }
+    }
+    is.close();
+}
+
 void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double>summariesRealData){
 
 
