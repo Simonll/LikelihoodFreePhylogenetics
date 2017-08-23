@@ -174,16 +174,24 @@ int main(int argc, char* argv[]){
 
 
                 }
-//
 
             }
 
+            ifstream monitor_is((gparam->output+".monitor").c_str());
+            if(monitor_is) {
+               monitor_is.close();
+               post1->readMonitorPosterior(monitor_is);
+               monitor_is.close();
+               
+               ifstream posterior_is((gparam->output+".post").c_str());
+               post1->readPosterior(posterior_is);
+               post2->readPosterior(posterior_is);
+               post3->readPosterior(posterior_is);
+            }
+            
             cerr << "The simulation process started\n";
 
-
-
-
-            while(post3->Niter < 1000000) {
+            while(post3->Niter < post3->Nrun) {
                     cerr << ".";
                     omp_set_dynamic(0);
                     omp_set_num_threads(gparam->Nthread);
@@ -436,7 +444,17 @@ int main(int argc, char* argv[]){
             cerr << "The simulation process started\n";
             cerr << post3->Niter << " on " << post3->Nrun << "\n";
 
-
+            ifstream monitor_is((gparam->output+".monitor").c_str());
+            if(monitor_is) {
+               monitor_is.close();
+               post1->readMonitorPosterior(monitor_is);
+               monitor_is.close();
+               
+               ifstream posterior_is((gparam->output+".post").c_str());
+               post1->readPosterior(posterior_is);
+               post2->readPosterior(posterior_is);
+               post3->readPosterior(posterior_is);
+            }
 
             while(post3->Niter < post3->Nrun) {
                     cerr << ".";
