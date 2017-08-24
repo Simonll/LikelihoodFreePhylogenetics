@@ -512,7 +512,7 @@ void Posterior::readPosterior(ifstream& is)
                 }
             }
         }
-        for(int v = 0 ; v < this->mapUsedSummaries; v++)
+        for(int v = 0 ; v < this->NusedSummaries; v++)
         {
             cerr << arr[v] << "\n";
         }
