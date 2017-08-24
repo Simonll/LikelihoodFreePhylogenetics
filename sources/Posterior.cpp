@@ -429,7 +429,7 @@ void Posterior::readPosterior(ifstream& is)
 {
     is.clear();                 // clear fail and eof bits
     is.seekg(0, std::ios::beg);
-    int verbose = 1;
+    int verbose = 0;
 
 
 
