@@ -524,6 +524,8 @@ int main(int argc, char* argv[])
         if(monitor_is)
         {
             post1->readMonitorPosterior(monitor_is);
+            post2->readMonitorPosterior(monitor_is);
+            post3->readMonitorPosterior(monitor_is);
             monitor_is.close();
 
             ifstream posterior_is((gparam->output+"-1M.post").c_str());
