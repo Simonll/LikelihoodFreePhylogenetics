@@ -568,7 +568,7 @@ void Posterior::readPosterior(ifstream& is)
     std::getline(is, line);// skip header
     while(std::getline(is, line))
     {
-
+        cerr << ".";
         if(!line.empty())
         {
             //cerr << line << "\n";
@@ -579,8 +579,9 @@ void Posterior::readPosterior(ifstream& is)
             std::vector<double> cur_summaries;
             std::vector<double> cur_evostats;
             int i = 0;
-            double dscalar;
-            while(iss_tmp >> dscalar)
+            string  w;
+
+            while(iss_tmp >> w)
             {
                 auto it = mapHeader.find(i);
                 if (it != mapHeader.end())
@@ -588,17 +589,17 @@ void Posterior::readPosterior(ifstream& is)
 
                     if (it->second == "P")
                     {
-                        cur_param.push_back(dscalar);
+                        cur_param.push_back(std::stof(w));
 
                     }
                     else if (it->second == "S")
                     {
-                        cur_summaries.push_back(dscalar);
+                        cur_summaries.push_back(std::stof(w));
 
                     }
                     else if (it->second == "ES")
                     {
-                        cur_evostats.push_back(dscalar);
+                        cur_evostats.push_back(std::stof(w));
 
                     }
 
