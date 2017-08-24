@@ -4,19 +4,19 @@
 
 class SequenceSimulator
 {
-    public:
+public:
 
-        //Stationary
+    //Stationary
 
-        //Evolutionary Statistics
+    //Evolutionary Statistics
 
 
-        SequenceSimulator();
-        ~SequenceSimulator();
+    SequenceSimulator();
+    ~SequenceSimulator();
 
-    protected:
+protected:
 
-    private:
+private:
 };
 
 #endif // SEQUENCESIMULATOR_H

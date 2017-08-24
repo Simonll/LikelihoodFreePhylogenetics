@@ -35,39 +35,39 @@
 
 class Regression
 {
-    public:
+public:
 
 
-        GlobalParameters* gparam;
-        Posterior* post;
+    GlobalParameters* gparam;
+    Posterior* post;
 
-        //local regression adjustment
-        //(X_T dot W dot X)^{-1} dot X_T dot W dot Y
-        std::vector<std::vector<double>> Y_HAT;
-        std::vector<std::vector<double>> Yres; //Matrix of residual = Y - Y_HAT
-        std::vector<std::vector<double>> B_HAT; //Matrix of regression coefficient
-
-
+    //local regression adjustment
+    //(X_T dot W dot X)^{-1} dot X_T dot W dot Y
+    std::vector<std::vector<double>> Y_HAT;
+    std::vector<std::vector<double>> Yres; //Matrix of residual = Y - Y_HAT
+    std::vector<std::vector<double>> B_HAT; //Matrix of regression coefficient
 
 
-        Regression(GlobalParameters* gparam, Posterior* post);
-        virtual ~Regression();
-
-        //Getters
-        double GetRSquare(int i);
-        double GetAjustedRSquare(int i);
-        double GetRSquarePred(int i);
-        double GetS(int i);
-        double** GetXWX_t();
-        double** GetX_tWY();
-
-        void ComputeMultipleRegression();
-        void ComputeX_TWY();
 
 
-    protected:
+    Regression(GlobalParameters* gparam, Posterior* post);
+    virtual ~Regression();
 
-    private:
+    //Getters
+    double GetRSquare(int i);
+    double GetAjustedRSquare(int i);
+    double GetRSquarePred(int i);
+    double GetS(int i);
+    double** GetXWX_t();
+    double** GetX_tWY();
+
+    void ComputeMultipleRegression();
+    void ComputeX_TWY();
+
+
+protected:
+
+private:
 };
 
 #endif // REGRESSION_H

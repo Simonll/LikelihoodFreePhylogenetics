@@ -35,48 +35,55 @@
 
 class PriorSampler
 {
-    public:
-        LocalParameters* lparam;
+public:
+    LocalParameters* lparam;
 
-        PriorSampler(LocalParameters* lparam);
-        virtual ~PriorSampler();
+    PriorSampler(LocalParameters* lparam);
+    virtual ~PriorSampler();
 
-        void sample();
+    void sample();
 
-    protected:
+protected:
 
-        double Unif(double inf, double sup) {
-            return lparam->rnd->Uniform()* (sup-inf) + inf;
-        }
+    double Unif(double inf, double sup)
+    {
+        return lparam->rnd->Uniform()* (sup-inf) + inf;
+    }
 
-        double log2Unif(){
-            return pow(2,lparam->rnd->Uniform()*2-1);
-        }
-
-
-        double log10Unif(){
-            return pow(10,lparam->rnd->Uniform()*2-1);
-        }
+    double log2Unif()
+    {
+        return pow(2,lparam->rnd->Uniform()*2-1);
+    }
 
 
-        double logUnifTruncated(){
-            double a = pow (100,lparam->rnd->Uniform()*2-1);
-            // 1 < x <= 4
-            if ( a <= 20.0 && a > 5.0 ) {
+    double log10Unif()
+    {
+        return pow(10,lparam->rnd->Uniform()*2-1);
+    }
 
-                a /= 5;
+
+    double logUnifTruncated()
+    {
+        double a = pow (100,lparam->rnd->Uniform()*2-1);
+        // 1 < x <= 4
+        if ( a <= 20.0 && a > 5.0 )
+        {
+
+            a /= 5;
 
             // 4 < x <= 20
-            } else if ( a > 20 ) {
-
-                a /= 5;
-
-            }
-            return a;
         }
+        else if ( a > 20 )
+        {
+
+            a /= 5;
+
+        }
+        return a;
+    }
 
 
-    private:
+private:
 };
 
 #endif // SAMPLER_H

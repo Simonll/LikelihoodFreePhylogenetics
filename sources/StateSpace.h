@@ -1,4 +1,3 @@
-
 /********************
 
 PhyloBayes MPI. Copyright 2010-2013 Nicolas Lartillot, Nicolas Rodrigue, Daniel Stubbs, Jacques Richer.
@@ -21,65 +20,74 @@ along with PhyloBayes. If not, see <http://www.gnu.org/licenses/>.
 
 // pure interface
 //
-class StateSpace	{
+class StateSpace
+{
 
-	public:
+public:
 
-	virtual ~StateSpace() {}
+    virtual ~StateSpace() {}
 
-	virtual string GetState(int state) = 0;
-	virtual int GetNstate() = 0;
+    virtual string GetState(int state) = 0;
+    virtual int GetNstate() = 0;
 
-	virtual int GetState(string from) = 0;
+    virtual int GetState(string from) = 0;
 
 };
 
 // simple state space: assumes that states are referred to using a one-letter code
 //
-class SimpleStateSpace : public StateSpace	{
+class SimpleStateSpace : public StateSpace
+{
 
-	public:
+public:
 
 
-	int GetState(string from);
+    int GetState(string from);
 
-	int GetNstate() {
-		return Nstate;
-	}
-	
-	string GetState(int state);
+    int GetNstate()
+    {
+        return Nstate;
+    }
 
-	char GetCharState(int state) {return AlphabetSet[state];}
+    string GetState(int state);
 
-	protected:
-	int Nstate;
-	char* Alphabet;
-	int NAlphabetSet;
-	char* AlphabetSet;
+    char GetCharState(int state)
+    {
+        return AlphabetSet[state];
+    }
+
+protected:
+    int Nstate;
+    char* Alphabet;
+    int NAlphabetSet;
+    char* AlphabetSet;
 };
 
-class DNAStateSpace : public SimpleStateSpace	{
+class DNAStateSpace : public SimpleStateSpace
+{
 
-	public:
+public:
 
-	DNAStateSpace();
-	~DNAStateSpace();
+    DNAStateSpace();
+    ~DNAStateSpace();
 };
 
-class RNAStateSpace : public SimpleStateSpace	{
+class RNAStateSpace : public SimpleStateSpace
+{
 
-	public:
+public:
 
-	RNAStateSpace();
-	~RNAStateSpace();
+    RNAStateSpace();
+    ~RNAStateSpace();
 };
 
-class ProteinStateSpace : public SimpleStateSpace	{
+class ProteinStateSpace : public SimpleStateSpace
+{
 
-	public:
+public:
 
-	ProteinStateSpace();
-	~ProteinStateSpace();
+    ProteinStateSpace();
+    ~ProteinStateSpace();
 };
 
 #endif // STATESPACE_H

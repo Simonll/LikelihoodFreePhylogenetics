@@ -15,665 +15,743 @@ PriorSampler::~PriorSampler()
 }
 
 
-void PriorSampler::sample(){
+void PriorSampler::sample()
+{
 
 
-                if (lparam->fixroot == 0) {
+    if (lparam->fixroot == 0)
+    {
 
-                    lparam->percentFromOutGroup = lparam->rnd->Uniform();
-                    lparam->SetBranchesLengthsBetweenInAndOutGroup();
+        lparam->percentFromOutGroup = lparam->rnd->Uniform();
+        lparam->SetBranchesLengthsBetweenInAndOutGroup();
 
-                }
+    }
 
-                if(lparam->fixlambda_omega != 1) {
+    if(lparam->fixlambda_omega != 1)
+    {
 
-                    lparam->lambda_omega = log2Unif();
+        lparam->lambda_omega = log2Unif();
 
-                }
+    }
 
-                if(lparam->fixlambda_TBL != 1) {
+    if(lparam->fixlambda_TBL != 1)
+    {
 
-                    lparam->lambda_TBL = log2Unif();
+        lparam->lambda_TBL = log2Unif();
 
 //                    for(int node = 0; node < lparam->refTree->GetNnode(); node++){
 //                        lparam->muBranch[node] = lparam->lambda_TBL;
 //                    }
-                }
-
-                if(lparam->fixlambda_CpG != 1) {
-
-                    lparam->lambda_CpG = log10Unif();
-
-                }
-
-
-                if(lparam->fixlambda_TpA != 1) {
-
-                    lparam->lambda_TpA = log10Unif();
-
-                }
-
-
-                if (lparam->fixrr != 1) {
-                    if (lparam->verbose) {
-                       cerr << "freenucrr\n";
-                    }
-                     //nucrrnr[0][0] = 0.0; //AA
-                     lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
-                     lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
-                     lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
-                     lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1]; //ca
-                    //nucrrnr[1][1] = 0.0; //cc
-                     lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
-                     lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2); ; //ct
-                     lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2]; //ga
-                     lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2]; //gc
-                    //nucrrnr[2][2] = 0.0; //gg
-                     lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
-                     lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3]; //ta
-                     lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3]; //tc
-                     lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3]; //tg
-                    //nucrrnr[3][3] = 0.0; //tt
-
-
-                    double sum = 0.0;
-                    for (int nuc1=0; nuc1<4-1; nuc1++) {
-                        for (int nuc2=nuc1+1; nuc2<4; nuc2++) {
-                           sum += lparam->nucrrnr[nuc1][nuc2];
-                        }
-                    }
-
-                    for (int nuc1=0; nuc1<4; nuc1++) {
-                        for (int nuc2=0; nuc2<4; nuc2++) {
-                           lparam->nucrrnr[nuc1][nuc2] /= sum;
-                        }
-                    }
-
-                    lparam->getrate = false;
-
-                    lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
-                    lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
-                    lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
-                    lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
-                    //gtnr[1][1] = 0.0; //cc
-                    lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
-                    lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
-                    lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
-                    lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
-                    //gtnr[2][2] = 0.0; //gg
-                    lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
-                    lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
-                    lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
-                    lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
-                    //gtnr[3][3] = 0.0; //tt
-
-                }
-
-                if (lparam->fixkappa != 1) {
-                    if (lparam->verbose) {
-                        cerr << "freekappa\n";
-                    }
-                    //nucrrnr[0][0] = 0.0; //AA
-                     lparam->nucrrnr[0][1] = 1.0; //ac
-                     lparam->nucrrnr[0][2] = Unif(1.0,10.0); //ag
-                     lparam->nucrrnr[0][3] = 1.0; //at
-                     lparam->nucrrnr[1][0] = 1.0; //ca
-                    //nucrrnr[1][1] = 0.0; //cc
-                     lparam->nucrrnr[1][2] = 1.0; //cg
-                     lparam->nucrrnr[1][3] = lparam->nucrrnr[0][2]; //ct
-                     lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2]; //ga
-                     lparam->nucrrnr[2][1] = 1.0; //gc
-                    //nucrrnr[2][2] = 0.0; //gg
-                     lparam->nucrrnr[2][3] = 1.0; //gt
-                     lparam->nucrrnr[3][0] = 1.0; //ta
-                     lparam->nucrrnr[3][1] = lparam->nucrrnr[0][2]; //tc
-                     lparam->nucrrnr[3][2] = 1.0; //tg
-                    //nucrrnr[3][3] = 0.0; //tt
-
-                    double sum = 0.0 ;
-                    for (int nuc1=0; nuc1<4-1; nuc1++) {
-                        for (int nuc2=nuc1+1; nuc2<4; nuc2++) {
-                           sum += lparam->nucrrnr[nuc1][nuc2];
-                        }
-                    }
-
-                    for (int nuc1=0; nuc1<4; nuc1++) {
-                        for (int nuc2=0; nuc2<4; nuc2++) {
-                           lparam->nucrrnr[nuc1][nuc2] /= sum;
-                        }
-                    }
-
-                    lparam->getrate = false;
-
-
-                    lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
-                    lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
-                    lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
-                    lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
-                    //gtnr[1][1] = 0.0; //cc
-                    lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
-                    lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
-                    lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
-                    lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
-                    //gtnr[2][2] = 0.0; //gg
-                    lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
-                    lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
-                    lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
-                    lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
-                    //gtnr[3][3] = 0.0; //tt
-
-                }
-
-                if (lparam->fixhky != 1) {
-                    if (lparam->verbose) {
-                      cerr << "freehky\n";
-                    }
-
-                     lparam->nucp[0] = lparam->rnd->sExpo();
-                     lparam->nucp[1] = lparam->rnd->sExpo();
-                     lparam->nucp[2] = lparam->rnd->sExpo();
-                     lparam->nucp[3] = lparam->rnd->sExpo();
-
-                    //nucrrnr[0][0] = 0.0; //AA
-                     lparam->nucrrnr[0][1] = 1.0; //ac
-                     lparam->nucrrnr[0][2] = Unif(1.0,10.0); //ag
-                     lparam->nucrrnr[0][3] = 1.0; //at
-                     lparam->nucrrnr[1][0] = 1.0; //ca
-                    //nucrrnr[1][1] = 0.0; //cc
-                     lparam->nucrrnr[1][2] = 1.0; //cg
-                     lparam->nucrrnr[1][3] = lparam->nucrrnr[0][2]; //ct
-                     lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2]; //ga
-                     lparam->nucrrnr[2][1] = 1.0; //gc
-                    //nucrrnr[2][2] = 0.0; //gg
-                     lparam->nucrrnr[2][3] = 1.0; //gt
-                     lparam->nucrrnr[3][0] = 1.0; //ta
-                     lparam->nucrrnr[3][1] = lparam->nucrrnr[0][2]; //tc
-                     lparam->nucrrnr[3][2] = 1.0; //tg
-                    //nucrrnr[3][3] = 0.0; //tt
-
-
-
-                    double sum =  0.0 ;
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        sum += lparam->nucp[nuc1];
-                    }
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        lparam->nucp[nuc1]/=sum;
-                    }
-
-                    sum = 0.0 ;
-                    for (int nuc1=0; nuc1<4-1; nuc1++) {
-                        for (int nuc2=nuc1+1; nuc2<4; nuc2++) {
-                           sum += lparam->nucrrnr[nuc1][nuc2];
-                        }
-                    }
-
-                    for (int nuc1=0; nuc1<4; nuc1++) {
-                        for (int nuc2=0; nuc2<4; nuc2++) {
-                           lparam->nucrrnr[nuc1][nuc2] /= sum;
-                        }
-                    }
-
-                    lparam->getrate = false;
-
-                    lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
-                    lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
-                    lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
-                    lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
-                    //gtnr[1][1] = 0.0; //cc
-                    lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
-                    lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
-                    lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
-                    lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
-                    //gtnr[2][2] = 0.0; //gg
-                    lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
-                    lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
-                    lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
-                    lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
-                    //gtnr[3][3] = 0.0; //tt
-                }
-
-                if (lparam->fixstat != 1) {
-                    if (lparam->verbose) {
-                        cerr << "freestat\n";
-
-                    }
-                     lparam->nucp[0] = lparam->rnd->sExpo();
-                     lparam->nucp[1] = lparam->rnd->sExpo();
-                     lparam->nucp[2] = lparam->rnd->sExpo();
-                     lparam->nucp[3] = lparam->rnd->sExpo();
-
-                     double sum =  0.0 ;
-                     for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        sum += lparam->nucp[nuc1];
-                     }
-                     for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        lparam->nucp[nuc1]/=sum;
-                     }
-
-                     lparam->getrate = false;
-
-                     lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
-                     lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
-                     lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
-                     lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
-                     //gtnr[1][1] = 0.0; //cc
-                     lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
-                     lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
-                     lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
-                     lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
-                     //gtnr[2][2] = 0.0; //gg
-                     lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
-                     lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
-                     lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
-                     lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
-                     //gtnr[3][3] = 0.0; //tt
-
-                }
-
-                if (lparam->fixtr != 1) {
-                    if (lparam->verbose) {
-                        cerr << "freetr\n";
-                    }
-
-                     lparam->nucp[0] = lparam->rnd->sExpo();
-                     lparam->nucp[1] = lparam->rnd->sExpo();
-                     lparam->nucp[2] = lparam->rnd->sExpo();
-                     lparam->nucp[3] = lparam->rnd->sExpo();
-                    //nucrrnr[0][0] = 0.0; //AA
-                     lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
-                     //lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
-                     lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
-                     lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];    //ca
-                    //nucrrnr[1][1] = 0.0; //cc
-                     lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
-                     //lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //ct
-                     //lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];    //ga
-                     lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];    //gc
-                    //nucrrnr[2][2] = 0.0; //gg
-                     lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
-                     lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];    //ta
-                     //lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3];    //tc
-                     lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3];    //tg
-                    //nucrrnr[3][3] = 0.0; //tt
-
-                    double sum =  0.0 ;
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        sum += lparam->nucp[nuc1];
-                    }
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        lparam->nucp[nuc1]/=sum;
-                    }
-
-                    sum = 0.0 ;
-                    for (int nuc1=0; nuc1<4-1; nuc1++) {
-                        for (int nuc2=nuc1+1; nuc2<4; nuc2++) {
-                           sum += lparam->nucrrnr[nuc1][nuc2];
-                        }
-                    }
-
-                    for (int nuc1=0; nuc1<4; nuc1++) {
-                        for (int nuc2=0; nuc2<4; nuc2++) {
-                           lparam->nucrrnr[nuc1][nuc2] /= sum;
-                        }
-                    }
-
-                    lparam->getrate = false;
-
-                    lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
-                    lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
-                    lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
-                    lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
-                    //gtnr[1][1] = 0.0; //cc
-                    lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
-                    lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
-                    lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
-                    lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
-                    //gtnr[2][2] = 0.0; //gg
-                    lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
-                    lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
-                    lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
-                    lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
-                    //gtnr[3][3] = 0.0; //tt
-
-                }
-
-                if (lparam->fixts != 1) {
-                    if (lparam->verbose) {
-                        cerr << "freets\n";
-                    }
-
-                     lparam->nucp[0] = lparam->rnd->sExpo();
-                     lparam->nucp[1] = lparam->rnd->sExpo();
-                     lparam->nucp[2] = lparam->rnd->sExpo();
-                     lparam->nucp[3] = lparam->rnd->sExpo();
-                    //nucrrnr[0][0] = 0.0; //AA
-                     //lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
-                     lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
-                     //lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
-                     //lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];    //ca
-                    //nucrrnr[1][1] = 0.0; //cc
-                     //lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
-                     lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //ct
-                     lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];    //ga
-                     //lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];    //gc
-                    //nucrrnr[2][2] = 0.0; //gg
-                    //lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
-                     //lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];    //ta
-                     lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3];    //tc
-                     //lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3];    //tg
-                    //nucrrnr[3][3] = 0.0; //tt
-
-                    double sum =  0.0 ;
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        sum += lparam->nucp[nuc1];
-                    }
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        lparam->nucp[nuc1]/=sum;
-                    }
-
-                    sum = 0.0 ;
-                    for (int nuc1=0; nuc1<4-1; nuc1++) {
-                        for (int nuc2=nuc1+1; nuc2<4; nuc2++) {
-                           sum += lparam->nucrrnr[nuc1][nuc2];
-                        }
-                    }
-
-                    for (int nuc1=0; nuc1<4; nuc1++) {
-                        for (int nuc2=0; nuc2<4; nuc2++) {
-                           lparam->nucrrnr[nuc1][nuc2] /= sum;
-                        }
-                    }
-
-                    lparam->getrate = false;
-
-                    lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
-                    lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
-                    lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
-                    lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
-                    //gtnr[1][1] = 0.0; //cc
-                    lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
-                    lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
-                    lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
-                    lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
-                    //gtnr[2][2] = 0.0; //gg
-                    lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
-                    lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
-                    lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
-                    lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
-                    //gtnr[3][3] = 0.0; //tt
-
-                }
-                if (lparam->fixgtr != 1) {
-                    if (lparam->verbose) {
-                        cerr << "freegtr\n";
-                    }
-
-                     lparam->nucp[0] = lparam->rnd->sExpo();
-                     lparam->nucp[1] = lparam->rnd->sExpo();
-                     lparam->nucp[2] = lparam->rnd->sExpo();
-                     lparam->nucp[3] = lparam->rnd->sExpo();
-                    //nucrrnr[0][0] = 0.0; //AA
-                     lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
-                     lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
-                     lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
-                     lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];    //ca
-                    //nucrrnr[1][1] = 0.0; //cc
-                     lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
-                     lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //ct
-                     lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];    //ga
-                     lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];    //gc
-                    //nucrrnr[2][2] = 0.0; //gg
-                     lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
-                     lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];    //ta
-                     lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3];    //tc
-                     lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3];    //tg
-                    //nucrrnr[3][3] = 0.0; //tt
-
-                    double sum =  0.0 ;
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        sum += lparam->nucp[nuc1];
-                    }
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        lparam->nucp[nuc1]/=sum;
-                    }
-
-                    sum = 0.0 ;
-                    for (int nuc1=0; nuc1<4-1; nuc1++) {
-                        for (int nuc2=nuc1+1; nuc2<4; nuc2++) {
-                           sum += lparam->nucrrnr[nuc1][nuc2];
-                        }
-                    }
-
-                    for (int nuc1=0; nuc1<4; nuc1++) {
-                        for (int nuc2=0; nuc2<4; nuc2++) {
-                           lparam->nucrrnr[nuc1][nuc2] /= sum;
-                        }
-                    }
-
-                    lparam->getrate = false;
-
-                    lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
-                    lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
-                    lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
-                    lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
-                    //gtnr[1][1] = 0.0; //cc
-                    lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
-                    lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
-                    lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
-                    lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
-                    //gtnr[2][2] = 0.0; //gg
-                    lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
-                    lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
-                    lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
-                    lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
-                    //gtnr[3][3] = 0.0; //tt
-
-                }
-
-                if (lparam->fixgtr2 == 0) {
-                    if (lparam->verbose) {
-                        cerr << "freegtr2\n";
-                    }
-
-                     lparam->nucp[0] = lparam->rnd->sExpo();
-                     lparam->nucp[1] = lparam->rnd->sExpo();
-                     lparam->nucp[2] = lparam->rnd->sExpo();
-                     lparam->nucp[3] = lparam->rnd->sExpo();
-                    //nucrrnr[0][0] = 0.0; //AA
-                     lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
-                     lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
-                     lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
-                     lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];    //ca
-                    //nucrrnr[1][1] = 0.0; //cc
-                     lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
-                     lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //ct
-                     lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];    //ga
-                     lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];    //gc
-                    //nucrrnr[2][2] = 0.0; //gg
-                     lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
-                     lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];    //ta
-                     lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3];    //tc
-                     lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3];    //tg
-                    //nucrrnr[3][3] = 0.0; //tt
-
-                    double sum =  0.0 ;
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        sum += lparam->nucp[nuc1];
-                    }
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        lparam->nucp[nuc1]/=sum;
-                    }
-
-                    sum = 0.0 ;
-                    for (int nuc1=0; nuc1<4-1; nuc1++) {
-                        for (int nuc2=nuc1+1; nuc2<4; nuc2++) {
-                           sum += lparam->nucrrnr[nuc1][nuc2];
-                        }
-                    }
-
-                    for (int nuc1=0; nuc1<4; nuc1++) {
-                        for (int nuc2=0; nuc2<4; nuc2++) {
-                           lparam->nucrrnr[nuc1][nuc2] /= sum;
-                        }
-                    }
-
-                    lparam->getrate = false;
-
-                    lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
-                    lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
-                    lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
-                    lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
-                    //gtnr[1][1] = 0.0; //cc
-                    lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
-                    lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
-                    lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
-                    lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
-                    //gtnr[2][2] = 0.0; //gg
-                    lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
-                    lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
-                    lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
-                    lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
-                    //gtnr[3][3] = 0.0; //tt
-
-                }
-
-                if (lparam->fixss != 1) {
-                    if (lparam->verbose) {
-                        cerr << "freess\n";
-                    }
-
-                     lparam->nucp[0] = lparam->rnd->sExpo();
-                     lparam->nucp[1] = lparam->rnd->sExpo();
-                     lparam->nucp[2] = lparam->rnd->sExpo();
-                     lparam->nucp[3] = lparam->rnd->sExpo();
-                    //nucrrnr[0][0] = 0.0; //AA
-                     lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //at2gc
-                     lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //at2gc
-                     lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at2ta
-                     lparam->nucrrnr[1][0] = lparam->rnd->Gamma(1,2);  //cg2at
-                    //nucrrnr[1][1] = 0.0; //cc
-                     lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg2gc
-                     lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //cg2ta
-                     lparam->nucrrnr[2][0] = lparam->nucrrnr[1][3];     //gc2at
-                     lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];    //gc2cg
-                    //nucrrnr[2][2] = 0.0; //gg
-                     lparam->nucrrnr[2][3] = lparam->nucrrnr[0][1];    //gc2ta
-                     lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];    //ta2at
-                     lparam->nucrrnr[3][1] = lparam->nucrrnr[0][2];    //ta2cg
-                     lparam->nucrrnr[3][2] = lparam->nucrrnr[0][1];    //ta2gc
-                    //nucrrnr[3][3] = 0.0; //tt
-
-                    double sum =  0.0 ;
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        sum += lparam->nucp[nuc1];
-                    }
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        lparam->nucp[nuc1]/=sum;
-                    }
-
-                    sum = 0.0 ;
-                    for (int nuc1=0; nuc1<4-1; nuc1++) {
-                        for (int nuc2=nuc1+1; nuc2<4; nuc2++) {
-                           sum += lparam->nucrrnr[nuc1][nuc2];
-                        }
-                    }
-
-                    for (int nuc1=0; nuc1<4; nuc1++) {
-                        for (int nuc2=0; nuc2<4; nuc2++) {
-                           lparam->nucrrnr[nuc1][nuc2] /= sum;
-                        }
-                    }
-
-                    lparam->getrate = false;
-
-                    lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
-                    lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
-                    lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
-                    lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
-                    //gtnr[1][1] = 0.0; //cc
-                    lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
-                    lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
-                    lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
-                    lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
-                    //gtnr[2][2] = 0.0; //gg
-                    lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
-                    lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
-                    lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
-                    lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
-                    //gtnr[3][3] = 0.0; //tt
-
-                }
-
-                if (lparam->fixgtnr != 1) {
-                    if (lparam->verbose) {
-                        cerr << "freegtnr\n";
-                    }
-                     lparam->nucp[0] = lparam->rnd->sExpo();
-                     lparam->nucp[1] = lparam->rnd->sExpo();
-                     lparam->nucp[2] = lparam->rnd->sExpo();
-                     lparam->nucp[3] = lparam->rnd->sExpo();
-                    //nucrrnr[0][0] = 0.0; //AA
-                     lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
-                     lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
-                     lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
-                     lparam->nucrrnr[1][0] = lparam->rnd->Gamma(1,2);  //ca
-                    //nucrrnr[1][1] = 0.0; //cc
-                     lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
-                     lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //ct
-                     lparam->nucrrnr[2][0] = lparam->rnd->Gamma(2,2);  //ga
-                     lparam->nucrrnr[2][1] = lparam->rnd->Gamma(1,2);  //gc
-                    //nucrrnr[2][2] = 0.0; //gg
-                     lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
-                     lparam->nucrrnr[3][0] = lparam->rnd->Gamma(1,2);  //ta
-                     lparam->nucrrnr[3][1] = lparam->rnd->Gamma(2,2);  //tc
-                     lparam->nucrrnr[3][2] = lparam->rnd->Gamma(1,2);  //tg
-                    //nucrrnr[3][3] = 0.0; //tt
-
-                    double sum =  0.0 ;
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        sum += lparam->nucp[nuc1];
-                    }
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        lparam->nucp[nuc1]/=sum;
-                    }
-
-                    sum = 0.0 ;
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        for (int nuc2 = 0 ; nuc2 < lparam->Nnucp; nuc2++){
-                            sum += lparam->nucrrnr[nuc1][nuc2];
-                        }
-                    }
-
-                    for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++){
-                        for (int nuc2 = 0 ; nuc2 < lparam->Nnucp; nuc2++){
-                            lparam->nucrrnr[nuc1][nuc2] /= sum;
-                        }
-                    }
-
-                    lparam->getrate = false;
-
-                    lparam->gtnr[0][1] = lparam->GetGTNR(0,1); //ac
-                    lparam->gtnr[0][2] = lparam->GetGTNR(0,2); //ag
-                    lparam->gtnr[0][3] = lparam->GetGTNR(0,3); //at
-                    lparam->gtnr[1][0] = lparam->GetGTNR(1,0); //ca
-                    //gtnr[1][1] = 0.0; //cc
-                    lparam->gtnr[1][2] = lparam->GetGTNR(1,2); //cg
-                    lparam->gtnr[1][3] = lparam->GetGTNR(1,3); //ct
-                    lparam->gtnr[2][0] = lparam->GetGTNR(2,0); //ga
-                    lparam->gtnr[2][1] = lparam->GetGTNR(2,1); //gc
-                    //gtnr[2][2] = 0.0; //gg
-                    lparam->gtnr[2][3] = lparam->GetGTNR(2,3); //gt
-                    lparam->gtnr[3][0] = lparam->GetGTNR(3,0); //ta
-                    lparam->gtnr[3][1] = lparam->GetGTNR(3,1); //tc
-                    lparam->gtnr[3][2] = lparam->GetGTNR(3,2); //tg
-                    //gtnr[3][3] = 0.0; //tt
-
-                }
-
-
+    }
+
+    if(lparam->fixlambda_CpG != 1)
+    {
+
+        lparam->lambda_CpG = log10Unif();
+
+    }
+
+
+    if(lparam->fixlambda_TpA != 1)
+    {
+
+        lparam->lambda_TpA = log10Unif();
+
+    }
+
+
+    if (lparam->fixrr != 1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freenucrr\n";
+        }
+        //nucrrnr[0][0] = 0.0; //AA
+        lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
+        lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
+        lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
+        lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1]; //ca
+        //nucrrnr[1][1] = 0.0; //cc
+        lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
+        lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2); ; //ct
+        lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2]; //ga
+        lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2]; //gc
+        //nucrrnr[2][2] = 0.0; //gg
+        lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
+        lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3]; //ta
+        lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3]; //tc
+        lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3]; //tg
+        //nucrrnr[3][3] = 0.0; //tt
+
+
+        double sum = 0.0;
+        for (int nuc1=0; nuc1<4-1; nuc1++)
+        {
+            for (int nuc2=nuc1+1; nuc2<4; nuc2++)
+            {
+                sum += lparam->nucrrnr[nuc1][nuc2];
+            }
+        }
+
+        for (int nuc1=0; nuc1<4; nuc1++)
+        {
+            for (int nuc2=0; nuc2<4; nuc2++)
+            {
+                lparam->nucrrnr[nuc1][nuc2] /= sum;
+            }
+        }
+
+        lparam->getrate = false;
+
+        lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
+        lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
+        lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
+        lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
+        //gtnr[1][1] = 0.0; //cc
+        lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
+        lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
+        lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
+        lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
+        //gtnr[2][2] = 0.0; //gg
+        lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
+        lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
+        lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
+        lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
+        //gtnr[3][3] = 0.0; //tt
+
+    }
+
+    if (lparam->fixkappa != 1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freekappa\n";
+        }
+        //nucrrnr[0][0] = 0.0; //AA
+        lparam->nucrrnr[0][1] = 1.0; //ac
+        lparam->nucrrnr[0][2] = Unif(1.0,10.0); //ag
+        lparam->nucrrnr[0][3] = 1.0; //at
+        lparam->nucrrnr[1][0] = 1.0; //ca
+        //nucrrnr[1][1] = 0.0; //cc
+        lparam->nucrrnr[1][2] = 1.0; //cg
+        lparam->nucrrnr[1][3] = lparam->nucrrnr[0][2]; //ct
+        lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2]; //ga
+        lparam->nucrrnr[2][1] = 1.0; //gc
+        //nucrrnr[2][2] = 0.0; //gg
+        lparam->nucrrnr[2][3] = 1.0; //gt
+        lparam->nucrrnr[3][0] = 1.0; //ta
+        lparam->nucrrnr[3][1] = lparam->nucrrnr[0][2]; //tc
+        lparam->nucrrnr[3][2] = 1.0; //tg
+        //nucrrnr[3][3] = 0.0; //tt
+
+        double sum = 0.0 ;
+        for (int nuc1=0; nuc1<4-1; nuc1++)
+        {
+            for (int nuc2=nuc1+1; nuc2<4; nuc2++)
+            {
+                sum += lparam->nucrrnr[nuc1][nuc2];
+            }
+        }
+
+        for (int nuc1=0; nuc1<4; nuc1++)
+        {
+            for (int nuc2=0; nuc2<4; nuc2++)
+            {
+                lparam->nucrrnr[nuc1][nuc2] /= sum;
+            }
+        }
+
+        lparam->getrate = false;
+
+
+        lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
+        lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
+        lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
+        lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
+        //gtnr[1][1] = 0.0; //cc
+        lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
+        lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
+        lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
+        lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
+        //gtnr[2][2] = 0.0; //gg
+        lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
+        lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
+        lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
+        lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
+        //gtnr[3][3] = 0.0; //tt
+
+    }
+
+    if (lparam->fixhky != 1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freehky\n";
+        }
+
+        lparam->nucp[0] = lparam->rnd->sExpo();
+        lparam->nucp[1] = lparam->rnd->sExpo();
+        lparam->nucp[2] = lparam->rnd->sExpo();
+        lparam->nucp[3] = lparam->rnd->sExpo();
+
+        //nucrrnr[0][0] = 0.0; //AA
+        lparam->nucrrnr[0][1] = 1.0; //ac
+        lparam->nucrrnr[0][2] = Unif(1.0,10.0); //ag
+        lparam->nucrrnr[0][3] = 1.0; //at
+        lparam->nucrrnr[1][0] = 1.0; //ca
+        //nucrrnr[1][1] = 0.0; //cc
+        lparam->nucrrnr[1][2] = 1.0; //cg
+        lparam->nucrrnr[1][3] = lparam->nucrrnr[0][2]; //ct
+        lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2]; //ga
+        lparam->nucrrnr[2][1] = 1.0; //gc
+        //nucrrnr[2][2] = 0.0; //gg
+        lparam->nucrrnr[2][3] = 1.0; //gt
+        lparam->nucrrnr[3][0] = 1.0; //ta
+        lparam->nucrrnr[3][1] = lparam->nucrrnr[0][2]; //tc
+        lparam->nucrrnr[3][2] = 1.0; //tg
+        //nucrrnr[3][3] = 0.0; //tt
+
+
+
+        double sum =  0.0 ;
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            sum += lparam->nucp[nuc1];
+        }
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            lparam->nucp[nuc1]/=sum;
+        }
+
+        sum = 0.0 ;
+        for (int nuc1=0; nuc1<4-1; nuc1++)
+        {
+            for (int nuc2=nuc1+1; nuc2<4; nuc2++)
+            {
+                sum += lparam->nucrrnr[nuc1][nuc2];
+            }
+        }
+
+        for (int nuc1=0; nuc1<4; nuc1++)
+        {
+            for (int nuc2=0; nuc2<4; nuc2++)
+            {
+                lparam->nucrrnr[nuc1][nuc2] /= sum;
+            }
+        }
+
+        lparam->getrate = false;
+
+        lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
+        lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
+        lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
+        lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
+        //gtnr[1][1] = 0.0; //cc
+        lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
+        lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
+        lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
+        lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
+        //gtnr[2][2] = 0.0; //gg
+        lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
+        lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
+        lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
+        lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
+        //gtnr[3][3] = 0.0; //tt
+    }
+
+    if (lparam->fixstat != 1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freestat\n";
 
         }
+        lparam->nucp[0] = lparam->rnd->sExpo();
+        lparam->nucp[1] = lparam->rnd->sExpo();
+        lparam->nucp[2] = lparam->rnd->sExpo();
+        lparam->nucp[3] = lparam->rnd->sExpo();
+
+        double sum =  0.0 ;
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            sum += lparam->nucp[nuc1];
+        }
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            lparam->nucp[nuc1]/=sum;
+        }
+
+        lparam->getrate = false;
+
+        lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
+        lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
+        lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
+        lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
+        //gtnr[1][1] = 0.0; //cc
+        lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
+        lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
+        lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
+        lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
+        //gtnr[2][2] = 0.0; //gg
+        lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
+        lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
+        lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
+        lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
+        //gtnr[3][3] = 0.0; //tt
+
+    }
+
+    if (lparam->fixtr != 1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freetr\n";
+        }
+
+        lparam->nucp[0] = lparam->rnd->sExpo();
+        lparam->nucp[1] = lparam->rnd->sExpo();
+        lparam->nucp[2] = lparam->rnd->sExpo();
+        lparam->nucp[3] = lparam->rnd->sExpo();
+        //nucrrnr[0][0] = 0.0; //AA
+        lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
+        //lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
+        lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
+        lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];    //ca
+        //nucrrnr[1][1] = 0.0; //cc
+        lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
+        //lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //ct
+        //lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];    //ga
+        lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];    //gc
+        //nucrrnr[2][2] = 0.0; //gg
+        lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
+        lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];    //ta
+        //lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3];    //tc
+        lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3];    //tg
+        //nucrrnr[3][3] = 0.0; //tt
+
+        double sum =  0.0 ;
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            sum += lparam->nucp[nuc1];
+        }
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            lparam->nucp[nuc1]/=sum;
+        }
+
+        sum = 0.0 ;
+        for (int nuc1=0; nuc1<4-1; nuc1++)
+        {
+            for (int nuc2=nuc1+1; nuc2<4; nuc2++)
+            {
+                sum += lparam->nucrrnr[nuc1][nuc2];
+            }
+        }
+
+        for (int nuc1=0; nuc1<4; nuc1++)
+        {
+            for (int nuc2=0; nuc2<4; nuc2++)
+            {
+                lparam->nucrrnr[nuc1][nuc2] /= sum;
+            }
+        }
+
+        lparam->getrate = false;
+
+        lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
+        lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
+        lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
+        lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
+        //gtnr[1][1] = 0.0; //cc
+        lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
+        lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
+        lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
+        lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
+        //gtnr[2][2] = 0.0; //gg
+        lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
+        lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
+        lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
+        lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
+        //gtnr[3][3] = 0.0; //tt
+
+    }
+
+    if (lparam->fixts != 1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freets\n";
+        }
+
+        lparam->nucp[0] = lparam->rnd->sExpo();
+        lparam->nucp[1] = lparam->rnd->sExpo();
+        lparam->nucp[2] = lparam->rnd->sExpo();
+        lparam->nucp[3] = lparam->rnd->sExpo();
+        //nucrrnr[0][0] = 0.0; //AA
+        //lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
+        lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
+        //lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
+        //lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];    //ca
+        //nucrrnr[1][1] = 0.0; //cc
+        //lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
+        lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //ct
+        lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];    //ga
+        //lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];    //gc
+        //nucrrnr[2][2] = 0.0; //gg
+        //lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
+        //lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];    //ta
+        lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3];    //tc
+        //lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3];    //tg
+        //nucrrnr[3][3] = 0.0; //tt
+
+        double sum =  0.0 ;
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            sum += lparam->nucp[nuc1];
+        }
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            lparam->nucp[nuc1]/=sum;
+        }
+
+        sum = 0.0 ;
+        for (int nuc1=0; nuc1<4-1; nuc1++)
+        {
+            for (int nuc2=nuc1+1; nuc2<4; nuc2++)
+            {
+                sum += lparam->nucrrnr[nuc1][nuc2];
+            }
+        }
+
+        for (int nuc1=0; nuc1<4; nuc1++)
+        {
+            for (int nuc2=0; nuc2<4; nuc2++)
+            {
+                lparam->nucrrnr[nuc1][nuc2] /= sum;
+            }
+        }
+
+        lparam->getrate = false;
+
+        lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
+        lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
+        lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
+        lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
+        //gtnr[1][1] = 0.0; //cc
+        lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
+        lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
+        lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
+        lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
+        //gtnr[2][2] = 0.0; //gg
+        lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
+        lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
+        lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
+        lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
+        //gtnr[3][3] = 0.0; //tt
+
+    }
+    if (lparam->fixgtr != 1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freegtr\n";
+        }
+
+        lparam->nucp[0] = lparam->rnd->sExpo();
+        lparam->nucp[1] = lparam->rnd->sExpo();
+        lparam->nucp[2] = lparam->rnd->sExpo();
+        lparam->nucp[3] = lparam->rnd->sExpo();
+        //nucrrnr[0][0] = 0.0; //AA
+        lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
+        lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
+        lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
+        lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];    //ca
+        //nucrrnr[1][1] = 0.0; //cc
+        lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
+        lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //ct
+        lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];    //ga
+        lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];    //gc
+        //nucrrnr[2][2] = 0.0; //gg
+        lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
+        lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];    //ta
+        lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3];    //tc
+        lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3];    //tg
+        //nucrrnr[3][3] = 0.0; //tt
+
+        double sum =  0.0 ;
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            sum += lparam->nucp[nuc1];
+        }
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            lparam->nucp[nuc1]/=sum;
+        }
+
+        sum = 0.0 ;
+        for (int nuc1=0; nuc1<4-1; nuc1++)
+        {
+            for (int nuc2=nuc1+1; nuc2<4; nuc2++)
+            {
+                sum += lparam->nucrrnr[nuc1][nuc2];
+            }
+        }
+
+        for (int nuc1=0; nuc1<4; nuc1++)
+        {
+            for (int nuc2=0; nuc2<4; nuc2++)
+            {
+                lparam->nucrrnr[nuc1][nuc2] /= sum;
+            }
+        }
+
+        lparam->getrate = false;
+
+        lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
+        lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
+        lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
+        lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
+        //gtnr[1][1] = 0.0; //cc
+        lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
+        lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
+        lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
+        lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
+        //gtnr[2][2] = 0.0; //gg
+        lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
+        lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
+        lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
+        lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
+        //gtnr[3][3] = 0.0; //tt
+
+    }
+
+    if (lparam->fixgtr2 == 0)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freegtr2\n";
+        }
+
+        lparam->nucp[0] = lparam->rnd->sExpo();
+        lparam->nucp[1] = lparam->rnd->sExpo();
+        lparam->nucp[2] = lparam->rnd->sExpo();
+        lparam->nucp[3] = lparam->rnd->sExpo();
+        //nucrrnr[0][0] = 0.0; //AA
+        lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
+        lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
+        lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
+        lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];    //ca
+        //nucrrnr[1][1] = 0.0; //cc
+        lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
+        lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //ct
+        lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];    //ga
+        lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];    //gc
+        //nucrrnr[2][2] = 0.0; //gg
+        lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
+        lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];    //ta
+        lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3];    //tc
+        lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3];    //tg
+        //nucrrnr[3][3] = 0.0; //tt
+
+        double sum =  0.0 ;
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            sum += lparam->nucp[nuc1];
+        }
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            lparam->nucp[nuc1]/=sum;
+        }
+
+        sum = 0.0 ;
+        for (int nuc1=0; nuc1<4-1; nuc1++)
+        {
+            for (int nuc2=nuc1+1; nuc2<4; nuc2++)
+            {
+                sum += lparam->nucrrnr[nuc1][nuc2];
+            }
+        }
+
+        for (int nuc1=0; nuc1<4; nuc1++)
+        {
+            for (int nuc2=0; nuc2<4; nuc2++)
+            {
+                lparam->nucrrnr[nuc1][nuc2] /= sum;
+            }
+        }
+
+        lparam->getrate = false;
+
+        lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
+        lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
+        lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
+        lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
+        //gtnr[1][1] = 0.0; //cc
+        lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
+        lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
+        lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
+        lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
+        //gtnr[2][2] = 0.0; //gg
+        lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
+        lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
+        lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
+        lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
+        //gtnr[3][3] = 0.0; //tt
+
+    }
+
+    if (lparam->fixss != 1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freess\n";
+        }
+
+        lparam->nucp[0] = lparam->rnd->sExpo();
+        lparam->nucp[1] = lparam->rnd->sExpo();
+        lparam->nucp[2] = lparam->rnd->sExpo();
+        lparam->nucp[3] = lparam->rnd->sExpo();
+        //nucrrnr[0][0] = 0.0; //AA
+        lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //at2gc
+        lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //at2gc
+        lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at2ta
+        lparam->nucrrnr[1][0] = lparam->rnd->Gamma(1,2);  //cg2at
+        //nucrrnr[1][1] = 0.0; //cc
+        lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg2gc
+        lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //cg2ta
+        lparam->nucrrnr[2][0] = lparam->nucrrnr[1][3];     //gc2at
+        lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];    //gc2cg
+        //nucrrnr[2][2] = 0.0; //gg
+        lparam->nucrrnr[2][3] = lparam->nucrrnr[0][1];    //gc2ta
+        lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];    //ta2at
+        lparam->nucrrnr[3][1] = lparam->nucrrnr[0][2];    //ta2cg
+        lparam->nucrrnr[3][2] = lparam->nucrrnr[0][1];    //ta2gc
+        //nucrrnr[3][3] = 0.0; //tt
+
+        double sum =  0.0 ;
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            sum += lparam->nucp[nuc1];
+        }
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            lparam->nucp[nuc1]/=sum;
+        }
+
+        sum = 0.0 ;
+        for (int nuc1=0; nuc1<4-1; nuc1++)
+        {
+            for (int nuc2=nuc1+1; nuc2<4; nuc2++)
+            {
+                sum += lparam->nucrrnr[nuc1][nuc2];
+            }
+        }
+
+        for (int nuc1=0; nuc1<4; nuc1++)
+        {
+            for (int nuc2=0; nuc2<4; nuc2++)
+            {
+                lparam->nucrrnr[nuc1][nuc2] /= sum;
+            }
+        }
+
+        lparam->getrate = false;
+
+        lparam->gtnr[0][1] = lparam->GetGTR(0,1); //ac
+        lparam->gtnr[0][2] = lparam->GetGTR(0,2); //ag
+        lparam->gtnr[0][3] = lparam->GetGTR(0,3); //at
+        lparam->gtnr[1][0] = lparam->GetGTR(1,0); //ca
+        //gtnr[1][1] = 0.0; //cc
+        lparam->gtnr[1][2] = lparam->GetGTR(1,2); //cg
+        lparam->gtnr[1][3] = lparam->GetGTR(1,3); //ct
+        lparam->gtnr[2][0] = lparam->GetGTR(2,0); //ga
+        lparam->gtnr[2][1] = lparam->GetGTR(2,1); //gc
+        //gtnr[2][2] = 0.0; //gg
+        lparam->gtnr[2][3] = lparam->GetGTR(2,3); //gt
+        lparam->gtnr[3][0] = lparam->GetGTR(3,0); //ta
+        lparam->gtnr[3][1] = lparam->GetGTR(3,1); //tc
+        lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
+        //gtnr[3][3] = 0.0; //tt
+
+    }
+
+    if (lparam->fixgtnr != 1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freegtnr\n";
+        }
+        lparam->nucp[0] = lparam->rnd->sExpo();
+        lparam->nucp[1] = lparam->rnd->sExpo();
+        lparam->nucp[2] = lparam->rnd->sExpo();
+        lparam->nucp[3] = lparam->rnd->sExpo();
+        //nucrrnr[0][0] = 0.0; //AA
+        lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
+        lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
+        lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1,2);  //at
+        lparam->nucrrnr[1][0] = lparam->rnd->Gamma(1,2);  //ca
+        //nucrrnr[1][1] = 0.0; //cc
+        lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1,2);  //cg
+        lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2,2);  //ct
+        lparam->nucrrnr[2][0] = lparam->rnd->Gamma(2,2);  //ga
+        lparam->nucrrnr[2][1] = lparam->rnd->Gamma(1,2);  //gc
+        //nucrrnr[2][2] = 0.0; //gg
+        lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1,2);  //gt
+        lparam->nucrrnr[3][0] = lparam->rnd->Gamma(1,2);  //ta
+        lparam->nucrrnr[3][1] = lparam->rnd->Gamma(2,2);  //tc
+        lparam->nucrrnr[3][2] = lparam->rnd->Gamma(1,2);  //tg
+        //nucrrnr[3][3] = 0.0; //tt
+
+        double sum =  0.0 ;
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            sum += lparam->nucp[nuc1];
+        }
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            lparam->nucp[nuc1]/=sum;
+        }
+
+        sum = 0.0 ;
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            for (int nuc2 = 0 ; nuc2 < lparam->Nnucp; nuc2++)
+            {
+                sum += lparam->nucrrnr[nuc1][nuc2];
+            }
+        }
+
+        for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
+        {
+            for (int nuc2 = 0 ; nuc2 < lparam->Nnucp; nuc2++)
+            {
+                lparam->nucrrnr[nuc1][nuc2] /= sum;
+            }
+        }
+
+        lparam->getrate = false;
+
+        lparam->gtnr[0][1] = lparam->GetGTNR(0,1); //ac
+        lparam->gtnr[0][2] = lparam->GetGTNR(0,2); //ag
+        lparam->gtnr[0][3] = lparam->GetGTNR(0,3); //at
+        lparam->gtnr[1][0] = lparam->GetGTNR(1,0); //ca
+        //gtnr[1][1] = 0.0; //cc
+        lparam->gtnr[1][2] = lparam->GetGTNR(1,2); //cg
+        lparam->gtnr[1][3] = lparam->GetGTNR(1,3); //ct
+        lparam->gtnr[2][0] = lparam->GetGTNR(2,0); //ga
+        lparam->gtnr[2][1] = lparam->GetGTNR(2,1); //gc
+        //gtnr[2][2] = 0.0; //gg
+        lparam->gtnr[2][3] = lparam->GetGTNR(2,3); //gt
+        lparam->gtnr[3][0] = lparam->GetGTNR(3,0); //ta
+        lparam->gtnr[3][1] = lparam->GetGTNR(3,1); //tc
+        lparam->gtnr[3][2] = lparam->GetGTNR(3,2); //tg
+        //gtnr[3][3] = 0.0; //tt
+
+    }
+
+
+
+}
 
 //void PriorSampler::sample(){
 //

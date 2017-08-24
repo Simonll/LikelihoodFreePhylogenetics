@@ -125,9 +125,9 @@ class Posterior
 
 
         //Setters
-        void registerNewSimulation(
-
-            int chainID, std::vector<double> param ,
+    void registerNewSimulation(
+            int chainID,
+            std::vector<double> param ,
             std::vector<double> summaries,
             std::vector<double> accsummaries,
             std::vector<double> ancevostat,

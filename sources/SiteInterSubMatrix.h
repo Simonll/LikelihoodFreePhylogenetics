@@ -40,70 +40,74 @@
 
 class SiteInterSubMatrix
 {
-    public:
+public:
 
-        // SiteInterSubMatrix
-        double*** submatrixTreeSim;
-        double*** mutmatrixTreeSim;
-        double*** selmatrixTreeSim;
-        double* TotalSubRate;
-        double* TotalMutRate;
-
-
-        //parameters
-        LocalParameters* lparam;
-
-        //Constructor
-        SiteInterSubMatrix(LocalParameters* lparam);
-        virtual ~SiteInterSubMatrix();
+    // SiteInterSubMatrix
+    double*** submatrixTreeSim;
+    double*** mutmatrixTreeSim;
+    double*** selmatrixTreeSim;
+    double* TotalSubRate;
+    double* TotalMutRate;
 
 
-        //Getters
-        double GetSubRate(int NodeIndex, int site_codon);
-        double GetMutRate(int NodeIndex, int site_codon);
-        double GetCpGMutRate(int NodeIndex, int**CurrentNodeNucSequence);
-        double GetCpGSubRate(int NodeIndex, int**CurrentNodeNucSequence);
-        double GetSynMutRate(int NodeIndex, int**CurrentNodeNucSequence);
+    //parameters
+    LocalParameters* lparam;
 
-        //Setters
-        void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);
-        void findCodonContext(int NodeIndex, int site_nuc,int nucFrom, int nucTo, int &pos1From, int &pos2From, int &pos3From, int &pos1To, int &pos2To, int &pos3To,int** CurrentNodeNucSequence);
-        void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon,int**CurrentNodeNucSequence);
-        int testCpGcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
-        int testTpAcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
-        int testContextDinuc(int NodeIndex, int site_nuc, int* context, int nucTo, int**CurrentNodeNucSequence);
-        void resetSubMatrix();
-        void transfertNodeMatrix(int sourceNodeIndex, int sinkNodeIndex, int site_nuc);
+    //Constructor
+    SiteInterSubMatrix(LocalParameters* lparam);
+    virtual ~SiteInterSubMatrix();
 
 
+    //Getters
+    double GetSubRate(int NodeIndex, int site_codon);
+    double GetMutRate(int NodeIndex, int site_codon);
+    double GetCpGMutRate(int NodeIndex, int**CurrentNodeNucSequence);
+    double GetCpGSubRate(int NodeIndex, int**CurrentNodeNucSequence);
+    double GetSynMutRate(int NodeIndex, int**CurrentNodeNucSequence);
 
-        double GetTotalMutRate(int NodeIndex) {
-
-            return TotalMutRate[NodeIndex];
-        }
-
-        double GetTotalSubRate(int NodeIndex) {
-
-            return TotalSubRate[NodeIndex];
-        }
-
-
-        double GetSubRate(int NodeIndex, int site_nuc, int nucTo){
-            return submatrixTreeSim[NodeIndex][site_nuc][nucTo];
-
-        }
-
-        double GetMutRate(int NodeIndex, int site_nuc, int nucTo){
-            return mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
-
-        }
+    //Setters
+    void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);
+    void findCodonContext(int NodeIndex, int site_nuc,int nucFrom, int nucTo, int &pos1From, int &pos2From, int &pos3From, int &pos1To, int &pos2To, int &pos3To,int** CurrentNodeNucSequence);
+    void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon,int**CurrentNodeNucSequence);
+    int testCpGcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
+    int testTpAcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
+    int testContextDinuc(int NodeIndex, int site_nuc, int* context, int nucTo, int**CurrentNodeNucSequence);
+    void resetSubMatrix();
+    void transfertNodeMatrix(int sourceNodeIndex, int sinkNodeIndex, int site_nuc);
 
 
 
-    protected:
+    double GetTotalMutRate(int NodeIndex)
+    {
+
+        return TotalMutRate[NodeIndex];
+    }
+
+    double GetTotalSubRate(int NodeIndex)
+    {
+
+        return TotalSubRate[NodeIndex];
+    }
 
 
-    private:
+    double GetSubRate(int NodeIndex, int site_nuc, int nucTo)
+    {
+        return submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+
+    }
+
+    double GetMutRate(int NodeIndex, int site_nuc, int nucTo)
+    {
+        return mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+
+    }
+
+
+
+protected:
+
+
+private:
 };
 
 #endif // SITEINTERSUBMATRIX_H

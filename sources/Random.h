@@ -1,4 +1,3 @@
-
 /********************
 
 PhyloBayes MPI. Copyright 2010-2013 Nicolas Lartillot, Nicolas Rodrigue, Daniel Stubbs, Jacques Richer.
@@ -46,70 +45,77 @@ static const double Logroot2pi =0.918938533204673;
 // const double InfProb = -30;
 
 
-class Random {
+class Random
+{
 
-	public:
+public:
 
-	//static const double INFPROB=250;
+    //static const double INFPROB=250;
 
-  	Random(int seed = -1);
+    Random(int seed = -1);
 
-	void InitRandom(int seed = -1);
+    void InitRandom(int seed = -1);
 
-	int GetSeed();
+    int GetSeed();
 
-	double Uniform();
-	double Gamma(double alpha,double beta);
-  	double sNormal(void);
-  	double sExpo(void);
-  	double sGamma(double);
-  	double sGammanew(double);
+    double Uniform();
+    double Gamma(double alpha,double beta);
+    double sNormal(void);
+    double sExpo(void);
+    double sGamma(double);
+    double sGammanew(double);
 
- 	int Choose(int);
-	int FiniteDiscrete(int n, const double* probarray);
-  	void DrawFromUrn(int*, int n, int N);
-	int DrawFromDiscreteDistribution(double* p, int n);
-	int DrawFromLogDiscreteDistribution(double* ll, int n);
+    int Choose(int);
+    int FiniteDiscrete(int n, const double* probarray);
+    void DrawFromUrn(int*, int n, int N);
+    int DrawFromDiscreteDistribution(double* p, int n);
+    int DrawFromLogDiscreteDistribution(double* ll, int n);
 
-	double logGamma(double a);
+    double logGamma(double a);
 
-	long int GetCount() {return count;}
+    long int GetCount()
+    {
+        return count;
+    }
 
-	private:
+private:
 
-	long int count;
-	int Seed;
-	int mt_index;
-	unsigned long mt_buffer[MT_LEN];
-
-
-  };
+    long int count;
+    int Seed;
+    int mt_index;
+    unsigned long mt_buffer[MT_LEN];
 
 
-class rnd	{
+};
 
-	private:
-	static Random* array;
-	static int dim;
 
-	public:
-	/*
-	rnd(int indim = 1, int inseed = -1)	{
-		cerr << "in random_array::constructor\n";
-		init(indim,inseed);
-	}
-	*/
+class rnd
+{
 
-	static void init(int indim = 1, int seed = -1)	{
-		dim = indim;
-		array = new Random[dim];
-		for (int i=0; i<dim; i++)	{
-			array[i].InitRandom(seed);
-			// cerr << "seed " << i << " was : " << array[i].GetSeed() << '\n';
-		}
-	}
+private:
+    static Random* array;
+    static int dim;
 
-	static Random& GetRandom(int i = -1);
+public:
+    /*
+    rnd(int indim = 1, int inseed = -1)	{
+    	cerr << "in random_array::constructor\n";
+    	init(indim,inseed);
+    }
+    */
+
+    static void init(int indim = 1, int seed = -1)
+    {
+        dim = indim;
+        array = new Random[dim];
+        for (int i=0; i<dim; i++)
+        {
+            array[i].InitRandom(seed);
+            // cerr << "seed " << i << " was : " << array[i].GetSeed() << '\n';
+        }
+    }
+
+    static Random& GetRandom(int i = -1);
 };
 
 #endif // RANDOM_H

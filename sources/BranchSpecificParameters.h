@@ -33,23 +33,23 @@
 
 class BranchSpecificParameters
 {
-    public:
-        static const int Nnucp = 4;
-        static const int Nnucrr = 6;
-        static const int  Ndinuc = 16;
-        double* nucp, *nucrr; // 6 param
-        double** nucrrnr; //12 param
-        double** gtnr;
+public:
+    static const int Nnucp = 4;
+    static const int Nnucrr = 6;
+    static const int  Ndinuc = 16;
+    double* nucp, *nucrr; // 6 param
+    double** nucrrnr; //12 param
+    double** gtnr;
 
-        BranchSpecificParameters();
-        virtual ~BranchSpecificParameters();
+    BranchSpecificParameters();
+    virtual ~BranchSpecificParameters();
 
-        void SetLocalParaemters(double* nucp, double* nucrr);
+    void SetLocalParaemters(double* nucp, double* nucrr);
 
 
-    protected:
+protected:
 
-    private:
+private:
 };
 
 #endif // BRANCHSPECIFICPARAMETERS_H

@@ -1,4 +1,3 @@
-
 #include <omp.h>
 #include <iostream>
 #include <cstdlib>
@@ -37,7 +36,8 @@
 
 
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[])
+{
 // Comments
 
     // program options
@@ -47,1006 +47,1224 @@ int main(int argc, char* argv[]){
 
 
 
-        try {
-            if(argc < 2) {
+    try
+    {
+        if(argc < 2)
+        {
+            throw(0);
+        }
+        int i = 1;
+        while (i < argc)
+        {
+            string s = argv[i];
+            if (s == "-v" || s == "--version" )
+            {
                 throw(0);
             }
-            int i = 1;
-            while (i < argc) {
-                string s = argv[i];
-                if (s == "-v" || s == "--version" ) {
-                   throw(0);
-                } else if ( s =="-m") {
-                    i++;
-                    model = argv[i];
-                    i++;
-                    controlfile = argv[i];
-                }
+            else if ( s =="-m")
+            {
                 i++;
-            }// end while
+                model = argv[i];
+                i++;
+                controlfile = argv[i];
+            }
+            i++;
+        }// end while
 
-        }// end try
-        catch (...) {
-                    cerr << "\n";
-                    cerr << "version 1.0\n";
-                    cerr << "###########################\n";
-                    cerr << "-m < stats | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP | MAP100CodonMutSelFinitePPChecks | MAP100CodonMutSelSBDPPPChecks > <controlfile>\n";
-                    cerr << "###########################\n";
-                    cerr << "#SUMMARIES\n";
-                    cerr << "#ACCSUMMARIES\n";
-                    cerr << "#PARAM\n";
-                    cerr << "#SSMAP\n";
-                    cerr << "#MAP\n";
-                    cerr << "#ANCESTRALMAP\n";
-                    cerr << "#DIST\n";
-                    cerr << "#TRANS\n";
-                    cerr << "#SPEUDODATA\n";
-                    cerr << "#NRUN\n";
-                    cerr << "#SAMPLING\n";
-                    cerr << "#LOCALPARAM\n";
-                    cerr << "###########################\n";
-                    exit(1);
+    }// end try
+    catch (...)
+    {
+        cerr << "\n";
+        cerr << "version 1.0\n";
+        cerr << "###########################\n";
+        cerr << "-m < stats | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP | MAP100CodonMutSelFinitePPChecks | MAP100CodonMutSelSBDPPPChecks > <controlfile>\n";
+        cerr << "###########################\n";
+        cerr << "#SUMMARIES\n";
+        cerr << "#ACCSUMMARIES\n";
+        cerr << "#PARAM\n";
+        cerr << "#SSMAP\n";
+        cerr << "#MAP\n";
+        cerr << "#ANCESTRALMAP\n";
+        cerr << "#DIST\n";
+        cerr << "#TRANS\n";
+        cerr << "#SPEUDODATA\n";
+        cerr << "#NRUN\n";
+        cerr << "#SAMPLING\n";
+        cerr << "#LOCALPARAM\n";
+        cerr << "###########################\n";
+        exit(1);
+    }
+
+    cerr << "models\n";
+    if (model == "stats")
+    {
+
+        GlobalParameters* gparam = new GlobalParameters(model, controlfile);
+        Posterior* post = new Posterior(gparam);
+
+        LocalData* ldata = new  LocalData(gparam);
+        ldata->readLocalData(1);
+        SummaryStatistics* ss = new SummaryStatistics(ldata);
+        ofstream realDataSummaries_os ((ldata->output+".stats").c_str());
+        int k = 1 ;
+
+        while (k < gparam->listGenes.size())
+        {
+            cerr << "#########\n";
+            cerr << k << "\n";
+            cerr << "#########\n";
+
+            ldata->readLocalData(k);
+
+            ss->computeSummariesFromData();
+
+            ldata->writeRealDataSummaries(realDataSummaries_os,k==1);
+            k++;
+
         }
+        realDataSummaries_os.close();
 
-        cerr << "models\n";
-        if (model == "stats") {
+    }
+    else if (model == "FMSCpGV2" || model == "CodonMutSelFiniteABC")
+    {
+        cerr << "CodonMutSelFiniteCpG\n";
 
-            GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-            Posterior* post = new Posterior(gparam);
+        GlobalParameters* gparam = new GlobalParameters(model, controlfile);
 
-            LocalData* ldata = new  LocalData(gparam);
-            ldata->readLocalData(1);
-            SummaryStatistics* ss = new SummaryStatistics(ldata);
-            ofstream realDataSummaries_os ((ldata->output+".stats").c_str());
-            int k = 1 ;
 
-            while (k < gparam->listGenes.size()){
-                cerr << "#########\n";
-                cerr << k << "\n";
-                cerr << "#########\n";
+        int Npoint = (int) (gparam->chainPointEnd-gparam->chainPointStart)/gparam->chainPointEvery;
 
-                ldata->readLocalData(k);
 
-                ss->computeSummariesFromData();
+        Posterior* post1 = new Posterior(gparam);
+        Posterior* post2 = new Posterior(gparam);
+        Posterior* post3 = new Posterior(gparam);
 
-                ldata->writeRealDataSummaries(realDataSummaries_os,k==1);
-                k++;
+        cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " " << gparam->chainPointEvery << " " << Npoint << "\n";
+
+
+        LocalParameters** lparam = new LocalParameters*[Npoint];
+        SummaryStatistics** ss = new SummaryStatistics*[Npoint];
+        PriorSampler** sampler = new PriorSampler*[Npoint];
+        SiteInterSubMatrix** submatrix = new SiteInterSubMatrix*[Npoint];
+        AncestralSequence** ancestraseq = new AncestralSequence*[Npoint];
+        TreeSimulator** simulator = new TreeSimulator*[Npoint];
+
+
+        omp_set_dynamic(0);
+        omp_set_num_threads(gparam->Nthread);
+        int pt_i;
+        cerr << "Npoint\t" << Npoint << "\n";
+        #pragma omp parallel for
+        for (pt_i = gparam->chainPointStart ; pt_i < gparam->chainPointEnd; pt_i+=gparam->chainPointEvery)
+        {
+            //int thread_id = omp_get_thread_num();
+            //for (int thread_i = 0 ; thread_i < gparam->Nthread; thread_i++){
+            int l = (int) (pt_i-gparam->chainPointStart)/gparam->chainPointEvery;
+            lparam[l] = new LocalParameters(gparam);
+            lparam[l]->readChainCodonMutSelFinite(pt_i);
+            ss[l] = new SummaryStatistics(lparam[l]);
+            ss[l]->computeSummaries();
+            sampler[l] = new PriorSampler(lparam[l]);
+            submatrix[l] = new SiteInterSubMatrix(lparam[l]);
+            ancestraseq[l] = new AncestralSequence(lparam[l]);
+            simulator[l] = new TreeSimulator(lparam[l],submatrix[l],ancestraseq[l]);
+
+
+            if (l == 0)
+            {
+
+                post1->SetNsite(lparam[l]->Nsite_codon);
+                post2->SetNsite(lparam[l]->Nsite_codon);
+                post3->SetNsite(lparam[l]->Nsite_codon);
+
+
+                ostringstream ost2;
+                ost2 <<  gparam->output << ".realdata";
+                ofstream realDataSummaries_os (ost2.str());
+                lparam[l]->writeRealDataSummaries(realDataSummaries_os);
+                realDataSummaries_os.close();
+
 
             }
-            realDataSummaries_os.close();
 
         }
-        else if (model == "FMSCpGV2" || model == "CodonMutSelFiniteABC") {
-            cerr << "CodonMutSelFiniteCpG\n";
 
-            GlobalParameters* gparam = new GlobalParameters(model, controlfile);
+        ifstream monitor_is((gparam->output+".monitor").c_str());
+        if(monitor_is)
+        {
+            monitor_is.close();
+            post1->readMonitorPosterior(monitor_is);
+            monitor_is.close();
 
+            ifstream posterior_is((gparam->output+".post").c_str());
+            post1->readPosterior(posterior_is);
+            post2->readPosterior(posterior_is);
+            post3->readPosterior(posterior_is);
+        }
 
-            int Npoint = (int) (gparam->chainPointEnd-gparam->chainPointStart)/gparam->chainPointEvery;
+        cerr << "The simulation process started\n";
 
-
-            Posterior* post1 = new Posterior(gparam);
-            Posterior* post2 = new Posterior(gparam);
-            Posterior* post3 = new Posterior(gparam);
-
-            cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " " << gparam->chainPointEvery << " " << Npoint << "\n";
-
-
-            LocalParameters** lparam = new LocalParameters*[Npoint];
-            SummaryStatistics** ss = new SummaryStatistics*[Npoint];
-            PriorSampler** sampler = new PriorSampler*[Npoint];
-            SiteInterSubMatrix** submatrix = new SiteInterSubMatrix*[Npoint];
-            AncestralSequence** ancestraseq = new AncestralSequence*[Npoint];
-            TreeSimulator** simulator = new TreeSimulator*[Npoint];
-
-
+        while(post3->Niter < post3->Nrun)
+        {
+            cerr << ".";
             omp_set_dynamic(0);
             omp_set_num_threads(gparam->Nthread);
-            int pt_i;
-            cerr << "Npoint\t" << Npoint << "\n";
-            #pragma omp parallel for
-            for (pt_i = gparam->chainPointStart ; pt_i < gparam->chainPointEnd; pt_i+=gparam->chainPointEvery) {
-                //int thread_id = omp_get_thread_num();
-                //for (int thread_i = 0 ; thread_i < gparam->Nthread; thread_i++){
-                int l = (int) (pt_i-gparam->chainPointStart)/gparam->chainPointEvery;
-                lparam[l] = new LocalParameters(gparam);
-                lparam[l]->readChainCodonMutSelFinite(pt_i);
-                ss[l] = new SummaryStatistics(lparam[l]);
-                ss[l]->computeSummaries();
-                sampler[l] = new PriorSampler(lparam[l]);
-                submatrix[l] = new SiteInterSubMatrix(lparam[l]);
-                ancestraseq[l] = new AncestralSequence(lparam[l]);
-                simulator[l] = new TreeSimulator(lparam[l],submatrix[l],ancestraseq[l]);
+            #pragma omp parallel
+            {
 
+                #pragma omp for
+                for (int l = 0 ; l < Npoint; l++)
+                {
 
-                if (l == 0) {
+                    sampler[l]->sample();
 
-                    post1->SetNsite(lparam[l]->Nsite_codon);
-                    post2->SetNsite(lparam[l]->Nsite_codon);
-                    post3->SetNsite(lparam[l]->Nsite_codon);
+                    simulator[l]->GetNewSimulatedCodonAlignment();
 
+                    ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
 
-                    ostringstream ost2;
-                    ost2 <<  gparam->output << ".realdata";
-                    ofstream realDataSummaries_os (ost2.str());
-                    lparam[l]->writeRealDataSummaries(realDataSummaries_os);
-                    realDataSummaries_os.close();
-
-
-                }
-
-            }
-
-            ifstream monitor_is((gparam->output+".monitor").c_str());
-            if(monitor_is) {
-               monitor_is.close();
-               post1->readMonitorPosterior(monitor_is);
-               monitor_is.close();
-               
-               ifstream posterior_is((gparam->output+".post").c_str());
-               post1->readPosterior(posterior_is);
-               post2->readPosterior(posterior_is);
-               post3->readPosterior(posterior_is);
-            }
-            
-            cerr << "The simulation process started\n";
-
-            while(post3->Niter < post3->Nrun) {
-                    cerr << ".";
-                    omp_set_dynamic(0);
-                    omp_set_num_threads(gparam->Nthread);
-                    #pragma omp parallel
+                    #pragma omp critical
                     {
 
-                        #pragma omp for
-                        for (int l = 0 ; l < Npoint; l++){
 
-                            sampler[l]->sample();
+                        if(post3->Niter < 100000 && post3->Nrun == 100000)
+                        {
 
-                            simulator[l]->GetNewSimulatedCodonAlignment();
+                            post1->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
 
-                            ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
+                            post2->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
 
-                            #pragma omp critical
+                            post3->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
+
+
+                            if (post3->Niter % post3->threshold == 0)
                             {
 
 
-                                if(post3->Niter < 100000 && post3->Nrun == 100000) {
+                                ofstream dist_os1((gparam->output+"-100K.post").c_str(),OUT);
+                                post1->writeHeader(dist_os1);
+                                post1->writePosterior(dist_os1);
+                                dist_os1.close();
 
-                                    post1->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
-
-                                    post2->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
-
-                                    post3->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
+                                ofstream monitor_os1((gparam->output+"-100K.monitor").c_str(),OUT);
+                                post1->writeMonitorPosterior(monitor_os1);
+                                monitor_os1.close();
 
 
-                                    if (post3->Niter % post3->threshold == 0) {
-
-
-                                        ofstream dist_os1((gparam->output+"-100K.post").c_str(),OUT);
-                                        post1->writeHeader(dist_os1);
-                                        post1->writePosterior(dist_os1);
-                                        dist_os1.close();
-
-                                        ofstream monitor_os1((gparam->output+"-100K.monitor").c_str(),OUT);
-                                        post1->writeMonitorPosterior(monitor_os1);
-                                        monitor_os1.close();
-
-
-                                    }
+                            }
 
 
 
-                                }
+                        }
 
-                                if(post3->Niter < 1000000 && post3->Nrun == 1000000) {
+                        if(post3->Niter < 1000000 && post3->Nrun == 1000000)
+                        {
 
-                                    post2->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
+                            post2->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
 
-                                    post3->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
-
-
-                                    if (post3->Niter % post3->threshold == 0) {
+                            post3->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
 
 
-                                        ofstream dist_os2((gparam->output+"-1M.post").c_str(),OUT);
-                                        post2->writeHeader(dist_os2);
-                                        post2->writePosterior(dist_os2);
-                                        dist_os2.close();
-
-                                        ofstream monitor_os2((gparam->output+"-1M.monitor").c_str(),OUT);
-                                        post2->writeMonitorPosterior(monitor_os2);
-                                        monitor_os2.close();
-
-                                    }
-
-                                }
+                            if (post3->Niter % post3->threshold == 0)
+                            {
 
 
-                                if(post3->Niter < 10000000  && post3->Nrun == 10000000 ) {
+                                ofstream dist_os2((gparam->output+"-1M.post").c_str(),OUT);
+                                post2->writeHeader(dist_os2);
+                                post2->writePosterior(dist_os2);
+                                dist_os2.close();
 
-                                    post3->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
+                                ofstream monitor_os2((gparam->output+"-1M.monitor").c_str(),OUT);
+                                post2->writeMonitorPosterior(monitor_os2);
+                                monitor_os2.close();
 
+                            }
 
-                                    if (post3->Niter % post3->threshold == 0) {
-
-                                        ofstream dist_os3((gparam->output+"-10M.post").c_str(),OUT);
-                                        post3->writeHeader(dist_os3);
-                                        post3->writePosterior(dist_os3);
-                                        dist_os3.close();
-
-                                        ofstream monitor_os3((gparam->output+"-10M.monitor").c_str(),OUT);
-                                        post3->writeMonitorPosterior(monitor_os3);
-                                        monitor_os3.close();
+                        }
 
 
+                        if(post3->Niter < 10000000  && post3->Nrun == 10000000 )
+                        {
 
-                                    }
+                            post3->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
 
-                                }
+
+                            if (post3->Niter % post3->threshold == 0)
+                            {
+
+                                ofstream dist_os3((gparam->output+"-10M.post").c_str(),OUT);
+                                post3->writeHeader(dist_os3);
+                                post3->writePosterior(dist_os3);
+                                dist_os3.close();
+
+                                ofstream monitor_os3((gparam->output+"-10M.monitor").c_str(),OUT);
+                                post3->writeMonitorPosterior(monitor_os3);
+                                monitor_os3.close();
 
 
 
                             }
+
                         }
 
+
+
                     }
-
-            }
-
-            cerr << "End of the simulation process\n";
-            exit(0);
-
-        }
-        else if (model == "MutSelAACpGV2" || model == "CodonMutSelSBDPABC") {
-            cerr << "CodonMutSelSBDPCpG\n";
-
-            GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-            cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " " << gparam->chainPointEvery << "\n";
-            int Npoint = (int) (gparam->chainPointEnd-gparam->chainPointStart)/gparam->chainPointEvery;
-            Posterior* post1 = new Posterior(gparam);
-            Posterior* post2 = new Posterior(gparam);
-            Posterior* post3 = new Posterior(gparam);
-
-            LocalParameters** lparam = new LocalParameters*[Npoint];
-
-            if(gparam->verbose) {cerr << "debug1\n";}
-
-            if(gparam->verbose) {cerr << "debug2\n";}
-            cerr << "Npoint\t" << Npoint << "\n";
-            if(gparam->verbose) {cerr << "debug3\n";}
-            SummaryStatistics** ss = new SummaryStatistics*[Npoint];
-            if(gparam->verbose) {cerr << "debug4\n";}
-            PriorSampler** sampler = new PriorSampler*[Npoint];
-            if(gparam->verbose) {cerr << "debug5\n";}
-            SiteInterSubMatrix** submatrix = new SiteInterSubMatrix*[Npoint];
-            if(gparam->verbose) {cerr << "debug6\n";}
-            AncestralSequence** ancestraseq = new AncestralSequence*[Npoint];
-            if(gparam->verbose) {cerr << "debug7\n";}
-            TreeSimulator** simulator = new TreeSimulator*[Npoint];
-            if(gparam->verbose) {cerr << "debug8\n";}
-
-
-
-
-            omp_set_dynamic(0);
-            omp_set_num_threads(gparam->Nthread);
-            int pt_i;
-            #pragma omp parallel for
-            for (pt_i = gparam->chainPointStart ; pt_i < gparam->chainPointEnd; pt_i+=gparam->chainPointEvery) {
-                //int thread_id = omp_get_thread_num();
-                //for (int thread_i = 0 ; thread_i < gparam->Nthread; thread_i++){
-                int l = (int) (pt_i-gparam->chainPointStart)/gparam->chainPointEvery;
-                if(gparam->verbose) {cerr << "debug9\n"; cerr << (l) << "\n";}
-                lparam[l] = new LocalParameters(gparam);
-                if(gparam->verbose) {cerr << "debug10\n";}
-                lparam[l]->readChainCodonMutSelSBDP(pt_i);
-                if(gparam->verbose) {cerr << "debug11\n";}
-                ss[l] = new SummaryStatistics(lparam[l]);
-                if(gparam->verbose) {cerr << "debug12\n";}
-                ss[l]->computeSummaries();
-                if(gparam->verbose) {cerr << "debug13\n";}
-                sampler[l] = new PriorSampler(lparam[l]);
-                if(gparam->verbose) {cerr << "debug14\n";}
-                submatrix[l] = new SiteInterSubMatrix(lparam[l]);
-                if(gparam->verbose) {cerr << "debug15\n";}
-                ancestraseq[l] = new AncestralSequence(lparam[l]);
-                if(gparam->verbose) {cerr << "debug16\n";}
-                simulator[l] = new TreeSimulator(lparam[l],submatrix[l],ancestraseq[l]);
-                if(gparam->verbose) {cerr << "debug17\n";}
-
-
-                if (l == 0) {
-
-                    post1->SetNsite(lparam[l]->Nsite_codon);
-                    post2->SetNsite(lparam[l]->Nsite_codon);
-                    post3->SetNsite(lparam[l]->Nsite_codon);
-
-
-                    ostringstream ost1;
-                    ost1 <<  gparam->output << ".inputparam";
-                    ofstream lparam_os (ost1.str());
-                    lparam[l]->writeParam(lparam_os);
-                    lparam_os.close();
-
-
-                    ostringstream ost2;
-                    ost2 <<  gparam->output << ".realdata";
-                    ofstream realDataSummaries_os (ost2.str());
-                    lparam[l]->writeRealDataSummaries(realDataSummaries_os);
-                    realDataSummaries_os.close();
-
-
                 }
 
             }
 
-            cerr << "The simulation process started\n";
-            cerr << post3->Niter << " on " << post3->Nrun << "\n";
+        }
 
-            ifstream monitor_is((gparam->output+".monitor").c_str());
-            if(monitor_is) {
-               monitor_is.close();
-               post1->readMonitorPosterior(monitor_is);
-               monitor_is.close();
-               
-               ifstream posterior_is((gparam->output+".post").c_str());
-               post1->readPosterior(posterior_is);
-               post2->readPosterior(posterior_is);
-               post3->readPosterior(posterior_is);
+        cerr << "End of the simulation process\n";
+        exit(0);
+
+    }
+    else if (model == "MutSelAACpGV2" || model == "CodonMutSelSBDPABC")
+    {
+        cerr << "CodonMutSelSBDPCpG\n";
+
+        GlobalParameters* gparam = new GlobalParameters(model, controlfile);
+        cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " " << gparam->chainPointEvery << "\n";
+        int Npoint = (int) (gparam->chainPointEnd-gparam->chainPointStart)/gparam->chainPointEvery;
+        Posterior* post1 = new Posterior(gparam);
+        Posterior* post2 = new Posterior(gparam);
+        Posterior* post3 = new Posterior(gparam);
+
+        LocalParameters** lparam = new LocalParameters*[Npoint];
+
+        if(gparam->verbose)
+        {
+            cerr << "debug1\n";
+        }
+
+        if(gparam->verbose)
+        {
+            cerr << "debug2\n";
+        }
+        cerr << "Npoint\t" << Npoint << "\n";
+        if(gparam->verbose)
+        {
+            cerr << "debug3\n";
+        }
+        SummaryStatistics** ss = new SummaryStatistics*[Npoint];
+        if(gparam->verbose)
+        {
+            cerr << "debug4\n";
+        }
+        PriorSampler** sampler = new PriorSampler*[Npoint];
+        if(gparam->verbose)
+        {
+            cerr << "debug5\n";
+        }
+        SiteInterSubMatrix** submatrix = new SiteInterSubMatrix*[Npoint];
+        if(gparam->verbose)
+        {
+            cerr << "debug6\n";
+        }
+        AncestralSequence** ancestraseq = new AncestralSequence*[Npoint];
+        if(gparam->verbose)
+        {
+            cerr << "debug7\n";
+        }
+        TreeSimulator** simulator = new TreeSimulator*[Npoint];
+        if(gparam->verbose)
+        {
+            cerr << "debug8\n";
+        }
+
+
+
+
+        omp_set_dynamic(0);
+        omp_set_num_threads(gparam->Nthread);
+        int pt_i;
+        #pragma omp parallel for
+        for (pt_i = gparam->chainPointStart ; pt_i < gparam->chainPointEnd; pt_i+=gparam->chainPointEvery)
+        {
+            //int thread_id = omp_get_thread_num();
+            //for (int thread_i = 0 ; thread_i < gparam->Nthread; thread_i++){
+            int l = (int) (pt_i-gparam->chainPointStart)/gparam->chainPointEvery;
+            if(gparam->verbose)
+            {
+                cerr << "debug9\n";
+                cerr << (l) << "\n";
+            }
+            lparam[l] = new LocalParameters(gparam);
+            if(gparam->verbose)
+            {
+                cerr << "debug10\n";
+            }
+            lparam[l]->readChainCodonMutSelSBDP(pt_i);
+            if(gparam->verbose)
+            {
+                cerr << "debug11\n";
+            }
+            ss[l] = new SummaryStatistics(lparam[l]);
+            if(gparam->verbose)
+            {
+                cerr << "debug12\n";
+            }
+            ss[l]->computeSummaries();
+            if(gparam->verbose)
+            {
+                cerr << "debug13\n";
+            }
+            sampler[l] = new PriorSampler(lparam[l]);
+            if(gparam->verbose)
+            {
+                cerr << "debug14\n";
+            }
+            submatrix[l] = new SiteInterSubMatrix(lparam[l]);
+            if(gparam->verbose)
+            {
+                cerr << "debug15\n";
+            }
+            ancestraseq[l] = new AncestralSequence(lparam[l]);
+            if(gparam->verbose)
+            {
+                cerr << "debug16\n";
+            }
+            simulator[l] = new TreeSimulator(lparam[l],submatrix[l],ancestraseq[l]);
+            if(gparam->verbose)
+            {
+                cerr << "debug17\n";
             }
 
-            while(post3->Niter < post3->Nrun) {
-                    cerr << ".";
-                    omp_set_dynamic(0);
-                    omp_set_num_threads(gparam->Nthread);
-                    #pragma omp parallel
+
+            if (l == 0)
+            {
+
+                post1->SetNsite(lparam[l]->Nsite_codon);
+                post2->SetNsite(lparam[l]->Nsite_codon);
+                post3->SetNsite(lparam[l]->Nsite_codon);
+
+
+                ostringstream ost1;
+                ost1 <<  gparam->output << ".inputparam";
+                ofstream lparam_os (ost1.str());
+                lparam[l]->writeParam(lparam_os);
+                lparam_os.close();
+
+
+                ostringstream ost2;
+                ost2 <<  gparam->output << ".realdata";
+                ofstream realDataSummaries_os (ost2.str());
+                lparam[l]->writeRealDataSummaries(realDataSummaries_os);
+                realDataSummaries_os.close();
+
+
+            }
+
+        }
+
+        cerr << "The simulation process started\n";
+        cerr << post3->Niter << " on " << post3->Nrun << "\n";
+
+        ifstream monitor_is((gparam->output+".monitor").c_str());
+        if(monitor_is)
+        {
+            monitor_is.close();
+            post1->readMonitorPosterior(monitor_is);
+            monitor_is.close();
+
+            ifstream posterior_is((gparam->output+".post").c_str());
+            post1->readPosterior(posterior_is);
+            post2->readPosterior(posterior_is);
+            post3->readPosterior(posterior_is);
+        }
+
+        while(post3->Niter < post3->Nrun)
+        {
+            cerr << ".";
+            omp_set_dynamic(0);
+            omp_set_num_threads(gparam->Nthread);
+            #pragma omp parallel
+            {
+
+
+                #pragma omp for
+                for (int l = 0 ; l < Npoint; l++)
+                {
+
+
+                    if(gparam->verbose)
+                    {
+                        cerr << "debug18\n";
+                    }
+                    sampler[l]->sample();
+
+                    if(gparam->verbose)
+                    {
+                        cerr << "debug19\n";
+                    }
+                    simulator[l]->GetNewSimulatedCodonAlignment();
+                    if(gparam->verbose)
+                    {
+                        cerr << "debug20\n";
+                    }
+
+                    ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
+                    if(gparam->verbose)
+                    {
+                        cerr << "debug21\n";
+                    }
+
+                    #pragma omp critical
                     {
 
+                        if(post3->Niter < 100000 && post3->Nrun < 100)
+                        {
 
-                        #pragma omp for
-                        for (int l = 0 ; l < Npoint; l++){
+                            post1->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
+
+                            post2->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
+
+                            post3->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
 
 
-                             if(gparam->verbose) {cerr << "debug18\n";}
-                            sampler[l]->sample();
-
-                             if(gparam->verbose) {cerr << "debug19\n";}
-                            simulator[l]->GetNewSimulatedCodonAlignment();
-                             if(gparam->verbose) {cerr << "debug20\n";}
-
-                            ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
-                             if(gparam->verbose) {cerr << "debug21\n";}
-
-                            #pragma omp critical
+                            if (post3->Niter % post3->threshold == 0)
                             {
 
-                                if(post3->Niter < 100000 && post3->Nrun < 100) {
 
-                                    post1->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
+                                ofstream dist_os1((gparam->output+"-TEST.post").c_str(),OUT);
+                                post1->writeHeader(dist_os1);
+                                post1->writePosterior(dist_os1);
+                                dist_os1.close();
 
-                                    post2->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
+                                ofstream monitor_os1((gparam->output+"-TEST.monitor").c_str(),OUT);
+                                post1->writeMonitorPosterior(monitor_os1);
+                                monitor_os1.close();
 
-                                    post3->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
-
-
-                                    if (post3->Niter % post3->threshold == 0) {
-
-
-                                        ofstream dist_os1((gparam->output+"-TEST.post").c_str(),OUT);
-                                        post1->writeHeader(dist_os1);
-                                        post1->writePosterior(dist_os1);
-                                        dist_os1.close();
-
-                                        ofstream monitor_os1((gparam->output+"-TEST.monitor").c_str(),OUT);
-                                        post1->writeMonitorPosterior(monitor_os1);
-                                        monitor_os1.close();
-
-
-                                    }
-
-
-
-                                }
-
-
-                                if(post3->Niter < 100000 && post3->Nrun == 100000) {
-
-                                    post1->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
-
-                                    post2->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
-
-                                    post3->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
-
-
-                                    if (post3->Niter % post3->threshold == 0) {
-
-
-                                        ofstream dist_os1((gparam->output+"-100K.post").c_str(),OUT);
-                                        post1->writeHeader(dist_os1);
-                                        post1->writePosterior(dist_os1);
-                                        dist_os1.close();
-
-                                        ofstream monitor_os1((gparam->output+"-100K.monitor").c_str(),OUT);
-                                        post1->writeMonitorPosterior(monitor_os1);
-                                        monitor_os1.close();
-
-
-                                    }
-
-
-
-                                }
-
-                                if(post3->Niter < 1000000 && post3->Nrun == 1000000) {
-
-                                    post2->registerNewSimulation(
-                                       lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
-
-                                    post3->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
-
-
-                                    if (post3->Niter % post3->threshold == 0) {
-
-
-                                        ofstream dist_os2((gparam->output+"-1M.post").c_str(),OUT);
-                                        post2->writeHeader(dist_os2);
-                                        post2->writePosterior(dist_os2);
-                                        dist_os2.close();
-
-                                        ofstream monitor_os2((gparam->output+"-1M.monitor").c_str(),OUT);
-                                        post2->writeMonitorPosterior(monitor_os2);
-                                        monitor_os2.close();
-
-                                    }
-
-                                }
-
-
-                                if(post3->Niter < 10000000  && post3->Nrun == 10000000 ) {
-
-                                    post3->registerNewSimulation(
-                                        lparam[l]->MCMCpointID,
-                                        lparam[l]->GetCurrentParameters(),
-                                        lparam[l]->GetCurrentSummaries(),
-                                        lparam[l]->GetCurrentAccessorySummaries(),
-                                        lparam[l]->GetCurrentAncEvoStats(),
-                                        lparam[l]->GetCurrentEvoStats(),
-                                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                        lparam[l]->GetCurrentDistances(),
-                                        lparam[l]->GetCurrentWeights()
-                                        );
-
-
-                                    if (post3->Niter % post3->threshold == 0) {
-
-                                        ofstream dist_os3((gparam->output+"-10M.post").c_str(),OUT);
-                                        post3->writeHeader(dist_os3);
-                                        post3->writePosterior(dist_os3);
-                                        dist_os3.close();
-
-                                        ofstream monitor_os3((gparam->output+"-10M.monitor").c_str(),OUT);
-                                        post3->writeMonitorPosterior(monitor_os3);
-                                        monitor_os3.close();
-
-
-
-                                    }
-
-                                }
 
                             }
+
+
+
+                        }
+
+
+                        if(post3->Niter < 100000 && post3->Nrun == 100000)
+                        {
+
+                            post1->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
+
+                            post2->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
+
+                            post3->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
+
+
+                            if (post3->Niter % post3->threshold == 0)
+                            {
+
+
+                                ofstream dist_os1((gparam->output+"-100K.post").c_str(),OUT);
+                                post1->writeHeader(dist_os1);
+                                post1->writePosterior(dist_os1);
+                                dist_os1.close();
+
+                                ofstream monitor_os1((gparam->output+"-100K.monitor").c_str(),OUT);
+                                post1->writeMonitorPosterior(monitor_os1);
+                                monitor_os1.close();
+
+
+                            }
+
+
+
+                        }
+
+                        if(post3->Niter < 1000000 && post3->Nrun == 1000000)
+                        {
+
+                            post2->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
+
+                            post3->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
+
+
+                            if (post3->Niter % post3->threshold == 0)
+                            {
+
+
+                                ofstream dist_os2((gparam->output+"-1M.post").c_str(),OUT);
+                                post2->writeHeader(dist_os2);
+                                post2->writePosterior(dist_os2);
+                                dist_os2.close();
+
+                                ofstream monitor_os2((gparam->output+"-1M.monitor").c_str(),OUT);
+                                post2->writeMonitorPosterior(monitor_os2);
+                                monitor_os2.close();
+
+                            }
+
+                        }
+
+
+                        if(post3->Niter < 10000000  && post3->Nrun == 10000000 )
+                        {
+
+                            post3->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
+
+
+                            if (post3->Niter % post3->threshold == 0)
+                            {
+
+                                ofstream dist_os3((gparam->output+"-10M.post").c_str(),OUT);
+                                post3->writeHeader(dist_os3);
+                                post3->writePosterior(dist_os3);
+                                dist_os3.close();
+
+                                ofstream monitor_os3((gparam->output+"-10M.monitor").c_str(),OUT);
+                                post3->writeMonitorPosterior(monitor_os3);
+                                monitor_os3.close();
+
+
+
+                            }
+
                         }
 
                     }
+                }
 
             }
-
-            cerr << "End of the simulation process\n";
-            exit(0);
 
         }
-        else if (model == "FMutSelSimu"){
+
+        cerr << "End of the simulation process\n";
+        exit(0);
+
+    }
+    else if (model == "FMutSelSimu")
+    {
 
 
-            GlobalParameters* gparam = new GlobalParameters(model, controlfile);
+        GlobalParameters* gparam = new GlobalParameters(model, controlfile);
 
-            if(gparam->verbose) {cerr << "debug2\n";}
-            LocalParameters* lparam =  new LocalParameters(gparam);
-            lparam->readFMutSelCodeML();
+        if(gparam->verbose)
+        {
+            cerr << "debug2\n";
+        }
+        LocalParameters* lparam =  new LocalParameters(gparam);
+        lparam->readFMutSelCodeML();
 
-            if(gparam->verbose) {cerr << "debug3\n";}
-            Posterior* post = new Posterior(gparam);
-            post->SetNsite(lparam->Nsite_codon);
+        if(gparam->verbose)
+        {
+            cerr << "debug3\n";
+        }
+        Posterior* post = new Posterior(gparam);
+        post->SetNsite(lparam->Nsite_codon);
 
 
-            if(gparam->verbose) {cerr << "debug4\n";}
-            SummaryStatistics* ss = new SummaryStatistics(lparam);
+        if(gparam->verbose)
+        {
+            cerr << "debug4\n";
+        }
+        SummaryStatistics* ss = new SummaryStatistics(lparam);
 
-            if(gparam->verbose) {cerr << "debug5\n";}
-            ss->computeSummaries();
+        if(gparam->verbose)
+        {
+            cerr << "debug5\n";
+        }
+        ss->computeSummaries();
 
-            if(gparam->verbose) {cerr << "debug6\n";}
-            PriorSampler* sampler = new PriorSampler(lparam);
+        if(gparam->verbose)
+        {
+            cerr << "debug6\n";
+        }
+        PriorSampler* sampler = new PriorSampler(lparam);
 
-            if(gparam->verbose) {cerr << "debug7\n";}
-            SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
+        if(gparam->verbose)
+        {
+            cerr << "debug7\n";
+        }
+        SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
 
-            if(gparam->verbose) {cerr << "debug8\n";}
-            AncestralSequence* ancestraseq = new AncestralSequence(lparam);
+        if(gparam->verbose)
+        {
+            cerr << "debug8\n";
+        }
+        AncestralSequence* ancestraseq = new AncestralSequence(lparam);
 
-            cerr << "debug9\n";
-            TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
+        cerr << "debug9\n";
+        TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
 
-            cerr << "debug10\n";
-            ofstream lparam_os ((gparam->output+".inputparam").c_str());
-            lparam->writeParam(lparam_os);
-            lparam_os.close();
+        cerr << "debug10\n";
+        ofstream lparam_os ((gparam->output+".inputparam").c_str());
+        lparam->writeParam(lparam_os);
+        lparam_os.close();
 
-            ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
-            lparam->writeRealDataSummaries(realDataSummaries_os);
-            realDataSummaries_os.close();
+        ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
+        lparam->writeRealDataSummaries(realDataSummaries_os);
+        realDataSummaries_os.close();
 
-            while(post->Niter < post->Nrun) {
-                    if(gparam->verbose) {cerr << "debug11\n";}
-                    sampler->sample();
-
-                    if(gparam->verbose) {cerr << "debug12\n";}
-                    simulator->GetNewSimulatedCodonAlignment();
-
-                    if(gparam->verbose) {cerr << "debug13\n";}
-                    ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-
-                    if(gparam->verbose) {cerr << "debug14\n";}
-                    post->registerNewSimulation(
-                                        1,
-                                        lparam->GetCurrentParameters(),
-                                        lparam->GetCurrentSummaries(),
-                                        lparam->GetCurrentAccessorySummaries(),
-                                        lparam->GetCurrentAncEvoStats(),
-                                        lparam->GetCurrentEvoStats(),
-                                        lparam->GetCurrentSiteSpecificEvoStats(),
-                                        lparam->GetCurrentDistances(),
-                                        lparam->GetCurrentWeights()
-                                    );
-
-                    if (lparam->tofasta){
-                        ostringstream oss;
-                        oss << gparam->output << "-" << post->Niter << ".phylip";
-                        string output = oss.str();
-                        ofstream ali_os((output).c_str(),OUT);
-                        lparam->toAli(ali_os,simulator->CurrentLeafNodeCodonSequences);
-                        ali_os.close();
-                    }
-                    cerr << ".";
-
+        while(post->Niter < post->Nrun)
+        {
+            if(gparam->verbose)
+            {
+                cerr << "debug11\n";
             }
-            cerr << "End of the simulation process\n";
-            if(gparam->verbose) {cerr << "debug15\n";}
-            ofstream dist_os((gparam->output+".post").c_str(),OUT);
-            post->writeHeader(dist_os);
-            post->writePosterior(dist_os);
-            dist_os.close();
+            sampler->sample();
+
+            if(gparam->verbose)
+            {
+                cerr << "debug12\n";
+            }
+            simulator->GetNewSimulatedCodonAlignment();
+
+            if(gparam->verbose)
+            {
+                cerr << "debug13\n";
+            }
+            ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
+
+            if(gparam->verbose)
+            {
+                cerr << "debug14\n";
+            }
+            post->registerNewSimulation(
+                1,
+                lparam->GetCurrentParameters(),
+                lparam->GetCurrentSummaries(),
+                lparam->GetCurrentAccessorySummaries(),
+                lparam->GetCurrentAncEvoStats(),
+                lparam->GetCurrentEvoStats(),
+                lparam->GetCurrentSiteSpecificEvoStats(),
+                lparam->GetCurrentDistances(),
+                lparam->GetCurrentWeights()
+            );
+
+            if (lparam->tofasta)
+            {
+                ostringstream oss;
+                oss << gparam->output << "-" << post->Niter << ".phylip";
+                string output = oss.str();
+                ofstream ali_os((output).c_str(),OUT);
+                lparam->toAli(ali_os,simulator->CurrentLeafNodeCodonSequences);
+                ali_os.close();
+            }
+            cerr << ".";
+
+        }
+        cerr << "End of the simulation process\n";
+        if(gparam->verbose)
+        {
+            cerr << "debug15\n";
+        }
+        ofstream dist_os((gparam->output+".post").c_str(),OUT);
+        post->writeHeader(dist_os);
+        post->writePosterior(dist_os);
+        dist_os.close();
 
 //            ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
 //            post->writePosteriorPredictivePvalues(ppp_os,lparam->summariesRealData);
 //            ppp_os.close();
-            exit(0);
+        exit(0);
 
-        }
-        else if (model == "CodonMutSelSBDP"){
-            cerr << "CodonMutSelSBDP" << "\n";
-            GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-            Posterior* post = new Posterior(gparam);
+    }
+    else if (model == "CodonMutSelSBDP")
+    {
+        cerr << "CodonMutSelSBDP" << "\n";
+        GlobalParameters* gparam = new GlobalParameters(model, controlfile);
+        Posterior* post = new Posterior(gparam);
 
-            LocalParameters* lparam =  new LocalParameters(gparam);
+        LocalParameters* lparam =  new LocalParameters(gparam);
+        lparam->readChainCodonMutSelSBDP();
+
+
+        ofstream lparam_os ((gparam->output+".inputparam").c_str());
+        lparam->writeParam(lparam_os);
+        lparam_os.close();
+
+        SummaryStatistics* ss =new SummaryStatistics(lparam);
+        ss->computeSummaries();
+
+        ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
+        lparam->writeRealDataSummaries(realDataSummaries_os);
+        realDataSummaries_os.close();
+
+        PriorSampler* sampler = new PriorSampler(lparam);
+        SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
+        AncestralSequence* ancestraseq = new AncestralSequence(lparam);
+        TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
+
+        cerr << "Start simulating \n" ;
+        while(lparam->startPoint < lparam->endPoint)
+        {
             lparam->readChainCodonMutSelSBDP();
 
-
-            ofstream lparam_os ((gparam->output+".inputparam").c_str());
-            lparam->writeParam(lparam_os);
-            lparam_os.close();
-
-            SummaryStatistics* ss =new SummaryStatistics(lparam);
-            ss->computeSummaries();
-
-            ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
-            lparam->writeRealDataSummaries(realDataSummaries_os);
-            realDataSummaries_os.close();
-
-            PriorSampler* sampler = new PriorSampler(lparam);
-            SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
-            AncestralSequence* ancestraseq = new AncestralSequence(lparam);
-            TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
-
-            cerr << "Start simulating \n" ;
-            while(lparam->startPoint < lparam->endPoint){
-                    lparam->readChainCodonMutSelSBDP();
-
-                    int iter = 0 ;
-                    while(iter < post->Nrun) {
-
-
-
-                        sampler->sample();
-
-                        simulator->GetNewSimulatedCodonAlignment();
-
-                        ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-
-                        post->registerNewSimulation(
-                                    lparam->startPoint,
-                                    lparam->GetCurrentParameters(),
-                                    lparam->GetCurrentSummaries(),
-                                    lparam->GetCurrentAccessorySummaries(),
-                                    lparam->GetCurrentAncEvoStats(),
-                                    lparam->GetCurrentEvoStats(),
-                                    lparam->GetCurrentSiteSpecificEvoStats(),
-                                    lparam->GetCurrentDistances(),
-                                    lparam->GetCurrentWeights()
-                                    );
-
-                        if (lparam->tofasta){
-                            ostringstream oss;
-                            oss << gparam->output << "-pt" <<lparam->startPoint <<"-" << iter << ".phylip";
-                            string output = oss.str();
-                            ofstream ali_os((output).c_str(),OUT);
-                            lparam->toAli(ali_os,simulator->CurrentLeafNodeCodonSequences);
-                            ali_os.close();
-                        }
-                        iter++;
-
-                    }
-
-                    int rep = 1;
-                    while (rep < lparam->everyPoint){
-                        rep++;
-                        lparam->incrementStartPoint();
-
-                    }
-                    lparam->incrementStartPoint();
-                    cerr << ".";
-
-            }
-            cerr << "End of the simulation process\n";
-
-            ofstream dist_os((gparam->output+".post").c_str(),OUT);
-            post->writeHeader(dist_os);
-            post->writePosterior(dist_os);
-            dist_os.close();
-
-            //ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
-            //post->writePosteriorPredictivePvalues(ppp_os,lparam->summariesRealData);
-            //ppp_os.close();
-
-            exit(0);
-
-
-        }
-        else if (model == "CodonMutSelFinite"){
-            cerr << "CodonMutSelFinite" << "\n";
-            GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-            Posterior* post = new Posterior(gparam);
-            if(gparam->verbose) {cerr << "debug1\n";}
-            LocalParameters* lparam =  new LocalParameters(gparam);
-            lparam->readChainCodonMutSelFinite();
-            if(gparam->verbose) {cerr << "debug2\n";}
-            ofstream lparam_os ((gparam->output+".inputparam").c_str());
-            lparam->writeParam(lparam_os);
-            lparam_os.close();
-            if(gparam->verbose) {cerr << "debug3\n";}
-            SummaryStatistics* ss =new SummaryStatistics(lparam);
-            ss->computeSummaries();
-            if(gparam->verbose) {cerr << "debug4\n";}
-            ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
-            lparam->writeRealDataSummaries(realDataSummaries_os);
-            realDataSummaries_os.close();
-            if(gparam->verbose) {cerr << "debug5\n";}
-            PriorSampler* sampler = new PriorSampler(lparam);
-            SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
-            AncestralSequence* ancestraseq = new AncestralSequence(lparam);
-            TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
-            if(gparam->verbose) {cerr << "debug6\n";}
-            cerr << "Start simulating \n" ;
-            while(lparam->startPoint < lparam->endPoint){
-                    lparam->readChainCodonMutSelFinite();
-                    int iter = 0 ;
-                    while(iter < post->Nrun) {
-
-
-
-                        sampler->sample();
-                        if(gparam->verbose) {cerr << "debug7\n";}
-                        simulator->GetNewSimulatedCodonAlignment();
-                        if(gparam->verbose) {cerr << "debug8\n";}
-                        ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-                        if(gparam->verbose) {cerr << "debug9\n";}
-                        post->registerNewSimulation(
-                                    lparam->startPoint,
-                                    lparam->GetCurrentParameters(),
-                                    lparam->GetCurrentSummaries(),
-                                    lparam->GetCurrentAccessorySummaries(),
-                                    lparam->GetCurrentAncEvoStats(),
-                                    lparam->GetCurrentEvoStats(),
-                                    lparam->GetCurrentSiteSpecificEvoStats(),
-                                    lparam->GetCurrentDistances(),
-                                    lparam->GetCurrentWeights()
-                                    );
-                        if(gparam->verbose) {cerr << "debug10\n";}
-                        if (lparam->tofasta){
-                            ostringstream oss;
-                            oss << gparam->output << "-pt" <<lparam->startPoint <<"-" << iter << ".phylip";
-                            string output = oss.str();
-                            ofstream ali_os((output).c_str(),OUT);
-                            lparam->toAli(ali_os,simulator->CurrentLeafNodeCodonSequences);
-                            ali_os.close();
-                        }
-                        iter++;
-
-                    }
-
-                    int rep = 1;
-                    while (rep < lparam->everyPoint){
-                        rep++;
-                        lparam->incrementStartPoint();
-
-                    }
-                    lparam->incrementStartPoint();
-                    cerr << ".";
-
-            }
-            cerr << "End of the simulation process\n";
-            if(gparam->verbose) {cerr << "debug11\n";}
-            ofstream dist_os((gparam->output+".post").c_str(),OUT);
-            post->writeHeader(dist_os);
-            post->writePosterior(dist_os);
-            dist_os.close();
-            if(gparam->verbose) {cerr << "debug12\n";}
-            //ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
-            //post->writePosteriorPredictivePvalues(ppp_os,lparam->summariesRealData);
-            //ppp_os.close();
-
-            exit(0);
-
-
-
-        }
-        else if (model == "MutSelAACpGppchecksV2" || model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks" || model == "MAP100CodonMutSelSBDPPPChecks") {
-
-            // the chain pointS are extract from the posterior file according to chainID
-            cerr << model  << "\n";
-
-
-            GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-            Posterior* post = new Posterior(gparam);
-
-            LocalParameters* lparam =  new LocalParameters(gparam);
-
-            if (model == "MutSelAACpGppchecksV2" || model == "MAP100CodonMutSelSBDPPPChecks") {
-
-                lparam->readChainCodonMutSelSBDP();
-
-            } else if (model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks") {
-
-                lparam->readChainCodonMutSelFinite();
-
-            }
-
-
-            ofstream lparam_os ((gparam->output+".inputparam").c_str());
-            lparam->writeParam(lparam_os);
-            lparam_os.close();
-
-            SummaryStatistics* ss = new SummaryStatistics(lparam);
-            ss->computeSummaries();
-
-            ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
-            lparam->writeRealDataSummaries(realDataSummaries_os);
-            realDataSummaries_os.close();
-
-            if(gparam->verbose) {cerr << "debug1\n";}
-
-            PriorSampler* sampler = new PriorSampler(lparam);
-
-            if(gparam->verbose) {cerr << "debug2\n";}
-
-            SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
-
-            if(gparam->verbose) {cerr << "debug3\n";}
-
-            AncestralSequence* ancestraseq = new AncestralSequence(lparam);
-
-            if(gparam->verbose) {cerr << "debug4\n";}
-
-            cerr << lparam->Nsite_codon << "\n";
-            TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
-
-            if(gparam->verbose) {cerr << "debug5\n";}
-
-
-            post->readPosterior(lparam->posteriorfile);
-
-            cerr << "The simulation process started\n";
-
-            if (!post->posterior.empty()) {
-
-                int it = 0 ;
-                while(it < post->threshold) {
-                    int point = static_cast<int> (lparam->rnd->Uniform() * 99);
-                    lparam->SetCurrentParametersFromPosterior(post->posterior,point);
-
-                    if (model == "MutSelAACpGppchecksV2" || model == "MAP100CodonMutSelSBDPPPChecks") {
-                        if(gparam->verbose) {cerr << "MAP100CodonMutSelSBDPPPChecks " <<"debug6\n";}
-                        lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
-
-                    } else if (model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks") {
-                        if(gparam->verbose) {cerr << "MAP100CodonMutSelFinitePPChecks " <<"debug6\n";}
-                        lparam->readChainCodonMutSelFinite(lparam->GetPointID());
-
-                    }
-                    int rep = 0;
-                    while (rep < post->Nrun){
-                        rep++;
-                        if(gparam->verbose) {cerr << rep << " " << point <<" debug7\n";}
-                        simulator->GetNewSimulatedCodonAlignment();
-
-                        ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-
-                        post->registerNewSimulation(
-                                    point,
-                                    lparam->GetCurrentParameters(),
-                                    lparam->GetCurrentSummaries(),
-                                    lparam->GetCurrentAccessorySummaries(),
-                                    lparam->GetCurrentAncEvoStats(),
-                                    lparam->GetCurrentEvoStats(),
-                                    lparam->GetCurrentSiteSpecificEvoStats(),
-                                    lparam->GetCurrentDistances(),
-                                    lparam->GetCurrentWeights()
-                                    );
-                        it++;
-                    }
-
-                    cerr << ".";
+            int iter = 0 ;
+            while(iter < post->Nrun)
+            {
+
+
+
+                sampler->sample();
+
+                simulator->GetNewSimulatedCodonAlignment();
+
+                ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
+
+                post->registerNewSimulation(
+                    lparam->startPoint,
+                    lparam->GetCurrentParameters(),
+                    lparam->GetCurrentSummaries(),
+                    lparam->GetCurrentAccessorySummaries(),
+                    lparam->GetCurrentAncEvoStats(),
+                    lparam->GetCurrentEvoStats(),
+                    lparam->GetCurrentSiteSpecificEvoStats(),
+                    lparam->GetCurrentDistances(),
+                    lparam->GetCurrentWeights()
+                );
+
+                if (lparam->tofasta)
+                {
+                    ostringstream oss;
+                    oss << gparam->output << "-pt" <<lparam->startPoint <<"-" << iter << ".phylip";
+                    string output = oss.str();
+                    ofstream ali_os((output).c_str(),OUT);
+                    lparam->toAli(ali_os,simulator->CurrentLeafNodeCodonSequences);
+                    ali_os.close();
                 }
+                iter++;
+
+            }
+
+            int rep = 1;
+            while (rep < lparam->everyPoint)
+            {
+                rep++;
+                lparam->incrementStartPoint();
+
+            }
+            lparam->incrementStartPoint();
+            cerr << ".";
+
+        }
+        cerr << "End of the simulation process\n";
+
+        ofstream dist_os((gparam->output+".post").c_str(),OUT);
+        post->writeHeader(dist_os);
+        post->writePosterior(dist_os);
+        dist_os.close();
+
+        //ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
+        //post->writePosteriorPredictivePvalues(ppp_os,lparam->summariesRealData);
+        //ppp_os.close();
+
+        exit(0);
+
+
+    }
+    else if (model == "CodonMutSelFinite")
+    {
+        cerr << "CodonMutSelFinite" << "\n";
+        GlobalParameters* gparam = new GlobalParameters(model, controlfile);
+        Posterior* post = new Posterior(gparam);
+        if(gparam->verbose)
+        {
+            cerr << "debug1\n";
+        }
+        LocalParameters* lparam =  new LocalParameters(gparam);
+        lparam->readChainCodonMutSelFinite();
+        if(gparam->verbose)
+        {
+            cerr << "debug2\n";
+        }
+        ofstream lparam_os ((gparam->output+".inputparam").c_str());
+        lparam->writeParam(lparam_os);
+        lparam_os.close();
+        if(gparam->verbose)
+        {
+            cerr << "debug3\n";
+        }
+        SummaryStatistics* ss =new SummaryStatistics(lparam);
+        ss->computeSummaries();
+        if(gparam->verbose)
+        {
+            cerr << "debug4\n";
+        }
+        ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
+        lparam->writeRealDataSummaries(realDataSummaries_os);
+        realDataSummaries_os.close();
+        if(gparam->verbose)
+        {
+            cerr << "debug5\n";
+        }
+        PriorSampler* sampler = new PriorSampler(lparam);
+        SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
+        AncestralSequence* ancestraseq = new AncestralSequence(lparam);
+        TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
+        if(gparam->verbose)
+        {
+            cerr << "debug6\n";
+        }
+        cerr << "Start simulating \n" ;
+        while(lparam->startPoint < lparam->endPoint)
+        {
+            lparam->readChainCodonMutSelFinite();
+            int iter = 0 ;
+            while(iter < post->Nrun)
+            {
+
+
+
+                sampler->sample();
+                if(gparam->verbose)
+                {
+                    cerr << "debug7\n";
+                }
+                simulator->GetNewSimulatedCodonAlignment();
+                if(gparam->verbose)
+                {
+                    cerr << "debug8\n";
+                }
+                ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
+                if(gparam->verbose)
+                {
+                    cerr << "debug9\n";
+                }
+                post->registerNewSimulation(
+                    lparam->startPoint,
+                    lparam->GetCurrentParameters(),
+                    lparam->GetCurrentSummaries(),
+                    lparam->GetCurrentAccessorySummaries(),
+                    lparam->GetCurrentAncEvoStats(),
+                    lparam->GetCurrentEvoStats(),
+                    lparam->GetCurrentSiteSpecificEvoStats(),
+                    lparam->GetCurrentDistances(),
+                    lparam->GetCurrentWeights()
+                );
+                if(gparam->verbose)
+                {
+                    cerr << "debug10\n";
+                }
+                if (lparam->tofasta)
+                {
+                    ostringstream oss;
+                    oss << gparam->output << "-pt" <<lparam->startPoint <<"-" << iter << ".phylip";
+                    string output = oss.str();
+                    ofstream ali_os((output).c_str(),OUT);
+                    lparam->toAli(ali_os,simulator->CurrentLeafNodeCodonSequences);
+                    ali_os.close();
+                }
+                iter++;
+
+            }
+
+            int rep = 1;
+            while (rep < lparam->everyPoint)
+            {
+                rep++;
+                lparam->incrementStartPoint();
+
+            }
+            lparam->incrementStartPoint();
+            cerr << ".";
+
+        }
+        cerr << "End of the simulation process\n";
+        if(gparam->verbose)
+        {
+            cerr << "debug11\n";
+        }
+        ofstream dist_os((gparam->output+".post").c_str(),OUT);
+        post->writeHeader(dist_os);
+        post->writePosterior(dist_os);
+        dist_os.close();
+        if(gparam->verbose)
+        {
+            cerr << "debug12\n";
+        }
+        //ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
+        //post->writePosteriorPredictivePvalues(ppp_os,lparam->summariesRealData);
+        //ppp_os.close();
+
+        exit(0);
+
+
+
+    }
+    else if (model == "MutSelAACpGppchecksV2" || model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks" || model == "MAP100CodonMutSelSBDPPPChecks")
+    {
+
+        // the chain pointS are extract from the posterior file according to chainID
+        cerr << model  << "\n";
+
+
+        GlobalParameters* gparam = new GlobalParameters(model, controlfile);
+        Posterior* post = new Posterior(gparam);
+
+        LocalParameters* lparam =  new LocalParameters(gparam);
+
+        if (model == "MutSelAACpGppchecksV2" || model == "MAP100CodonMutSelSBDPPPChecks")
+        {
+
+            lparam->readChainCodonMutSelSBDP();
+
+        }
+        else if (model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks")
+        {
+
+            lparam->readChainCodonMutSelFinite();
+
+        }
+
+
+        ofstream lparam_os ((gparam->output+".inputparam").c_str());
+        lparam->writeParam(lparam_os);
+        lparam_os.close();
+
+        SummaryStatistics* ss = new SummaryStatistics(lparam);
+        ss->computeSummaries();
+
+        ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
+        lparam->writeRealDataSummaries(realDataSummaries_os);
+        realDataSummaries_os.close();
+
+        if(gparam->verbose)
+        {
+            cerr << "debug1\n";
+        }
+
+        PriorSampler* sampler = new PriorSampler(lparam);
+
+        if(gparam->verbose)
+        {
+            cerr << "debug2\n";
+        }
+
+        SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
+
+        if(gparam->verbose)
+        {
+            cerr << "debug3\n";
+        }
+
+        AncestralSequence* ancestraseq = new AncestralSequence(lparam);
+
+        if(gparam->verbose)
+        {
+            cerr << "debug4\n";
+        }
+
+        cerr << lparam->Nsite_codon << "\n";
+        TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
+
+        if(gparam->verbose)
+        {
+            cerr << "debug5\n";
+        }
+
+
+        post->readPosterior(lparam->posteriorfile);
+
+        cerr << "The simulation process started\n";
+
+        if (!post->posterior.empty())
+        {
+
+            int it = 0 ;
+            while(it < post->threshold)
+            {
+                int point = static_cast<int> (lparam->rnd->Uniform() * 99);
+                lparam->SetCurrentParametersFromPosterior(post->posterior,point);
+
+                if (model == "MutSelAACpGppchecksV2" || model == "MAP100CodonMutSelSBDPPPChecks")
+                {
+                    if(gparam->verbose)
+                    {
+                        cerr << "MAP100CodonMutSelSBDPPPChecks " <<"debug6\n";
+                    }
+                    lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
+
+                }
+                else if (model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks")
+                {
+                    if(gparam->verbose)
+                    {
+                        cerr << "MAP100CodonMutSelFinitePPChecks " <<"debug6\n";
+                    }
+                    lparam->readChainCodonMutSelFinite(lparam->GetPointID());
+
+                }
+                int rep = 0;
+                while (rep < post->Nrun)
+                {
+                    rep++;
+                    if(gparam->verbose)
+                    {
+                        cerr << rep << " " << point <<" debug7\n";
+                    }
+                    simulator->GetNewSimulatedCodonAlignment();
+
+                    ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
+
+                    post->registerNewSimulation(
+                        point,
+                        lparam->GetCurrentParameters(),
+                        lparam->GetCurrentSummaries(),
+                        lparam->GetCurrentAccessorySummaries(),
+                        lparam->GetCurrentAncEvoStats(),
+                        lparam->GetCurrentEvoStats(),
+                        lparam->GetCurrentSiteSpecificEvoStats(),
+                        lparam->GetCurrentDistances(),
+                        lparam->GetCurrentWeights()
+                    );
+                    it++;
+                }
+
+                cerr << ".";
+            }
 
             cerr << "End of the simulation process\n";
 
@@ -1060,10 +1278,10 @@ int main(int argc, char* argv[]){
 //            ppp_os.close();
 
 
-            }
-
         }
-        // end main
+
+    }
+    // end main
 
 }
 

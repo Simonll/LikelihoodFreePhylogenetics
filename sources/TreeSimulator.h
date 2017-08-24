@@ -42,55 +42,55 @@
 
 class TreeSimulator
 {
-    public:
+public:
 
 
 
 
-        //Simulating along a tree
-        int** CurrentNodeCodonSequence;
-        int** CurrentNodeNucSequence;
-        int** CurrentLeafNodeNucSequence;
-        int** CurrentLeafNodeCodonSequences;
+    //Simulating along a tree
+    int** CurrentNodeCodonSequence;
+    int** CurrentNodeNucSequence;
+    int** CurrentLeafNodeNucSequence;
+    int** CurrentLeafNodeCodonSequences;
 
-        //parameters
-        LocalParameters* lparam;
+    //parameters
+    LocalParameters* lparam;
 
-        //Evolutionary Statistics
-        EvolHistStatistics* treeEvoStats;
-        EvolHistStatistics* rootBranchEvoStats;
-
-
-        //Substitution Matrix
-        SiteInterSubMatrix* submatrix;
-
-        //Ancestral Sequence
-        AncestralSequence* ancestralseq;
+    //Evolutionary Statistics
+    EvolHistStatistics* treeEvoStats;
+    EvolHistStatistics* rootBranchEvoStats;
 
 
-        //Simulation functions
-        void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon);
-        void RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo);
+    //Substitution Matrix
+    SiteInterSubMatrix* submatrix;
 
-        void ComputeRecursiveSimulation(Link* from);
-        void resetSimulator();
-        void resetEvoStatVectors();
-        void WriteAncestral();
-
-        //Setters
-        void SetAncestralSequence();
-
-        //Getters
-        void GetNewSimulatedCodonAlignment();
+    //Ancestral Sequence
+    AncestralSequence* ancestralseq;
 
 
+    //Simulation functions
+    void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon);
+    void RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo);
 
-        TreeSimulator(LocalParameters* lparam,SiteInterSubMatrix* submatrix,AncestralSequence* ancestralseq);
-        ~TreeSimulator();
+    void ComputeRecursiveSimulation(Link* from);
+    void resetSimulator();
+    void resetEvoStatVectors();
+    void WriteAncestral();
 
-    protected:
+    //Setters
+    void SetAncestralSequence();
 
-    private:
+    //Getters
+    void GetNewSimulatedCodonAlignment();
+
+
+
+    TreeSimulator(LocalParameters* lparam,SiteInterSubMatrix* submatrix,AncestralSequence* ancestralseq);
+    ~TreeSimulator();
+
+protected:
+
+private:
 };
 
 #endif // TREESIMULATOR_H

@@ -41,32 +41,32 @@
 
 class AncestralSequence
 {
-    public:
+public:
 
-     double** CurrentStationaryCodonSequence;
-        int*  CurrentCodonSequence;
-        int*  CurrentNucSequence;
-        int*  CurrentAncestralCodonSequence;
-        int*  CurrentAncestralNucSequence;
+    double** CurrentStationaryCodonSequence;
+    int*  CurrentCodonSequence;
+    int*  CurrentNucSequence;
+    int*  CurrentAncestralCodonSequence;
+    int*  CurrentAncestralNucSequence;
 
-        LocalParameters* lparam;
-
-
+    LocalParameters* lparam;
 
 
 
 
-        AncestralSequence(LocalParameters* lparam);
-        ~AncestralSequence();
 
-        void WriteStationary();
-        void GetNewStationaryCodonSequence();
-        int GetCurrentAncestralCodonSequence(int site_codon);
-        int GetCurrentAncestralNucSequence(int site_nuc);
 
-    protected:
+    AncestralSequence(LocalParameters* lparam);
+    ~AncestralSequence();
 
-    private:
+    void WriteStationary();
+    void GetNewStationaryCodonSequence();
+    int GetCurrentAncestralCodonSequence(int site_codon);
+    int GetCurrentAncestralNucSequence(int site_nuc);
+
+protected:
+
+private:
 };
 
 #endif // ANCESTRALSEQUENCE_H

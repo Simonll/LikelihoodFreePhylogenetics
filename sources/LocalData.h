@@ -41,65 +41,65 @@
 
 class  LocalData
 {
-    public:
-        static const int Nnucp = 4;
-        static const int Nnucrr = 6;
-        static const int Ndinuc = 16;
-        static const int Nstate_aa = 20;
+public:
+    static const int Nnucp = 4;
+    static const int Nnucrr = 6;
+    static const int Ndinuc = 16;
+    static const int Nstate_aa = 20;
 
-        //to be set by global param
-        double TOOSMALL;
-        double TOOLARGE;
-        double TOOLARGENEGATIVE;
+    //to be set by global param
+    double TOOSMALL;
+    double TOOLARGE;
+    double TOOLARGENEGATIVE;
 
-        int NSummaries;
-        int NParam;
-        int NMapStats;
+    int NSummaries;
+    int NParam;
+    int NMapStats;
 
-        string* listParam;
-        string* listSummaries;
-        string* listMapStats;
+    string* listParam;
+    string* listSummaries;
+    string* listMapStats;
 
-        std::map<string,int> mapUsedParam;
-        std::map<string,int> mapUsedSummaries;
-        std::map<string,int> mapUsedMapStats;
-        std::map<string,int> mapUsedMapAncStats;
+    std::map<string,int> mapUsedParam;
+    std::map<string,int> mapUsedSummaries;
+    std::map<string,int> mapUsedMapStats;
+    std::map<string,int> mapUsedMapAncStats;
 
-        int NusedMapStats;
-        int NusedMapAncStats;
-        int NusedParam;
-        int NusedSummaries;
-        int Ngenes;
+    int NusedMapStats;
+    int NusedMapAncStats;
+    int NusedParam;
+    int NusedSummaries;
+    int Ngenes;
 
-        std::vector<string> listGenes;
+    std::vector<string> listGenes;
 
-        string localcontrolfile, output, model;
-        std::vector<double> summariesRealData;
+    string localcontrolfile, output, model;
+    std::vector<double> summariesRealData;
 
 
-        void writeRealDataSummaries(ofstream&os,bool headers= true);
-        void toFasta(ofstream &os, int** currentNodeleafCodonSequence);
-        void toAli(ofstream &os, int** currentNodeleafCodonSequence);
+    void writeRealDataSummaries(ofstream&os,bool headers= true);
+    void toFasta(ofstream &os, int** currentNodeleafCodonSequence);
+    void toAli(ofstream &os, int** currentNodeleafCodonSequence);
 
-        //GlobalParameters* gparam;
-        string data;
-        string tree;
-        FileSequenceAlignment* dnadata;
-        CodonStateSpace* codonstatespace;
-        CodonSequenceAlignment* codondata;
-        Tree* refTree;
-        const TaxonSet*  taxonset;
-        bool iscodon;
-        string code;
-        int Nsite_codon, Nsite_nuc, Ntaxa, Nnode, Nstate_codon;
+    //GlobalParameters* gparam;
+    string data;
+    string tree;
+    FileSequenceAlignment* dnadata;
+    CodonStateSpace* codonstatespace;
+    CodonSequenceAlignment* codondata;
+    Tree* refTree;
+    const TaxonSet*  taxonset;
+    bool iscodon;
+    string code;
+    int Nsite_codon, Nsite_nuc, Ntaxa, Nnode, Nstate_codon;
 
-        void readLocalData(int k);
-         LocalData(GlobalParameters* gparam);
-        virtual ~ LocalData();
+    void readLocalData(int k);
+    LocalData(GlobalParameters* gparam);
+    virtual ~ LocalData();
 
-    protected:
+protected:
 
-    private:
+private:
 };
 
 #endif // DATASTATS_H

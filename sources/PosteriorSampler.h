@@ -34,17 +34,17 @@
 
 class PosteriorSampler
 {
-    public:
-        LocalParameters* lparam;
-        PosteriorSampler();
-        virtual ~PosteriorSampler();
+public:
+    LocalParameters* lparam;
+    PosteriorSampler();
+    virtual ~PosteriorSampler();
 
-    protected:
+protected:
 
     void sample();
     std::tuple<double,double> sampleFromAjustedDensity(int param,double inf, double sup);
 
-    private:
+private:
 };
 
 #endif // POSTERIORSAMPLER_H
