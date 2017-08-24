@@ -520,13 +520,13 @@ int main(int argc, char* argv[])
         cerr << "The simulation process started\n";
         cerr << post3->Niter << " on " << post3->Nrun << "\n";
 
-        ifstream monitor_is((gparam->output+".monitor").c_str());
+        ifstream monitor_is((gparam->output+"-1M.monitor").c_str());
         if(monitor_is)
         {
             post1->readMonitorPosterior(monitor_is);
             monitor_is.close();
 
-            ifstream posterior_is((gparam->output+".post").c_str());
+            ifstream posterior_is((gparam->output+"-1M.post").c_str());
             if (!posterior_is)
             {
                 cerr << "error: did not find posteriorfile"<< "\n";
