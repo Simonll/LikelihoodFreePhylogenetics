@@ -535,6 +535,7 @@ int main(int argc, char* argv[])
             post1->readPosterior(posterior_is);
             post2->readPosterior(posterior_is);
             post3->readPosterior(posterior_is);
+            posterior_is.close();
         }
 
         while(post3->Niter < post3->Nrun)

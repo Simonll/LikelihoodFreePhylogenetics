@@ -698,7 +698,7 @@ if(verbose)
 
 
     }
-    is.close();
+
     cerr << "posterior registred\n";
 }
 
