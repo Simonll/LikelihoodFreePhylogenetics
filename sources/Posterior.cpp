@@ -663,7 +663,7 @@ void Posterior::readPosterior(ifstream& is)
                         cur_evostats.push_back(std::stof(w));
 
                     }
-                    else if (it-second == "D_sum")
+                    else if (it->second == "D_sum")
                     {
                         cur_D_sum.push_back(std::stof(w));
 
