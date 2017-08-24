@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
         if(monitor_is)
         {
             monitor_is.close();
-            post1->readMonitorPosterior(monitor_is);
+            post1->readMonitor(monitor_is);
             monitor_is.close();
 
             ifstream posterior_is((gparam->output+".post").c_str());
@@ -523,9 +523,9 @@ int main(int argc, char* argv[])
         ifstream monitor_is((gparam->output+"-1M.monitor").c_str());
         if(monitor_is)
         {
-            post1->readMonitorPosterior(monitor_is);
-            post2->readMonitorPosterior(monitor_is);
-            post3->readMonitorPosterior(monitor_is);
+            post1->readMonitor(monitor_is);
+            post2->readMonitor(monitor_is);
+            post3->readMonitor(monitor_is);
             monitor_is.close();
 
             ifstream posterior_is((gparam->output+"-1M.post").c_str());
