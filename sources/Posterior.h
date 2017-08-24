@@ -107,8 +107,8 @@ class Posterior
         //readers
         void readPosterior(string posteriorfile);
         void readPosterior(ifstream& is);
-        void readMonitorPosterior();
-        void readMonitorPosterior(ifstream& is);
+        void readMonitor();
+        void readMonitor(ifstream& is);
 
         //Getters
         int PosteriorGetSize();
