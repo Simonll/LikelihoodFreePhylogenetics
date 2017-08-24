@@ -641,9 +641,10 @@ void Posterior::readPosterior(ifstream& is)
             mapHeaderIndex = 0;
             string  w;
 
+
             while(iss_tmp >> w)
             {
-                auto it = mapHeader.find(i);
+                auto it = mapHeader.find(mapHeaderIndex);
                 if (it != mapHeader.end())
                 {
 
@@ -667,7 +668,7 @@ void Posterior::readPosterior(ifstream& is)
                         cur_D_sum.push_back(std::stof(w));
 
                     }
-
+                    mapHeaderIndex++;
 
                 }
             }
