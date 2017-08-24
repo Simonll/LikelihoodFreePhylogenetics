@@ -439,7 +439,7 @@ void Posterior::readPosterior(ifstream& is)
 
     if(verbose)
     {
-        cerr << "readPosterior1 "<< this->NusedParam << "\n";
+        cerr << "readPosterior NusedParam"<< this->NusedParam << "\n";
     }
 
     std::map<int,string> mapHeader;
@@ -481,6 +481,10 @@ void Posterior::readPosterior(ifstream& is)
         delete[] arr;
     }
 
+    if(verbose)
+    {
+        cerr << "readPosterior NusedSummaries"<< this->NusedSummaries << "\n";
+    }
 
     if (this->NusedSummaries > 0)
     {
@@ -578,7 +582,10 @@ void Posterior::readPosterior(ifstream& is)
 //    }
 
 
-
+if(verbose)
+    {
+        cerr << "readPosterior NusedEvoStats"<< this->NusedEvoStats << "\n";
+    }
 
     if (this->NusedEvoStats > 0)
     {
