@@ -665,7 +665,7 @@ void Posterior::readPosterior(ifstream& is)
                     }
                     else if (it->second == "D_sum")
                     {
-                        cur_D_sum.push_back(std::stof(w));
+                        cur_distances.push_back(std::stof(w));
 
                     }
                     mapHeaderIndex++;
@@ -681,7 +681,7 @@ void Posterior::readPosterior(ifstream& is)
                 tmp,
                 cur_evostats,
                 tmp,
-                cur_D_sum,
+                cur_distances,
                 tmp
             );
         }
