@@ -519,6 +519,7 @@ void Posterior::readPosterior(ifstream& is)
                     cerr << k << " "<< this->NusedSummaries << " " << w << " " << "\n";
                     exit(0);
                 }
+                arr[this->NusedSummaries] = "D_sum";
                 mapHeader[mapHeaderIndex] = "D_sum";
                 k++;
                 mapHeaderIndex++;
@@ -672,6 +673,7 @@ void Posterior::readPosterior(ifstream& is)
 
                 }
             }
+            cerr << "registring\n";
             std::vector<double> tmp;
             registerNewSimulation(
                 1,
@@ -684,12 +686,13 @@ void Posterior::readPosterior(ifstream& is)
                 cur_distances,
                 tmp
             );
+            cerr << "registring\n";
         }
 
 
     }
     is.close();
-
+    cerr << "posterior registred\n";
 }
 
 void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double>summariesRealData)
