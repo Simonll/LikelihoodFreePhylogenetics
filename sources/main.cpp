@@ -620,12 +620,12 @@ int main(int argc, char* argv[])
                             {
 
 
-                                ofstream dist_os1((gparam->output+"-TEST.post").c_str(),OUT);
+                                ofstream dist_os1((gparam->output+".post").c_str(),OUT);
                                 post1->writeHeader(dist_os1);
                                 post1->writePosterior(dist_os1);
                                 dist_os1.close();
 
-                                ofstream monitor_os1((gparam->output+"-TEST.monitor").c_str(),OUT);
+                                ofstream monitor_os1((gparam->output+".monitor").c_str(),OUT);
                                 post1->writeMonitorPosterior(monitor_os1);
                                 monitor_os1.close();
 
