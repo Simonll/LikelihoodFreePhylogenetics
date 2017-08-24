@@ -572,7 +572,11 @@ int main(int argc, char* argv[])
                     #pragma omp critical
                     {
 
-                        if(post3->Niter < 100000 && post3->Nrun < 100)
+
+
+
+
+                        if(post1->Niter < 100000 && post1->Nrun < 100)
                         {
 
                             post1->registerNewSimulation(
@@ -587,32 +591,32 @@ int main(int argc, char* argv[])
                                 lparam[l]->GetCurrentWeights()
                             );
 
-                            post2->registerNewSimulation(
-                                lparam[l]->MCMCpointID,
-                                lparam[l]->GetCurrentParameters(),
-                                lparam[l]->GetCurrentSummaries(),
-                                lparam[l]->GetCurrentAccessorySummaries(),
-                                lparam[l]->GetCurrentAncEvoStats(),
-                                lparam[l]->GetCurrentEvoStats(),
-                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                lparam[l]->GetCurrentDistances(),
-                                lparam[l]->GetCurrentWeights()
-                            );
+//                            post2->registerNewSimulation(
+//                                lparam[l]->MCMCpointID,
+//                                lparam[l]->GetCurrentParameters(),
+//                                lparam[l]->GetCurrentSummaries(),
+//                                lparam[l]->GetCurrentAccessorySummaries(),
+//                                lparam[l]->GetCurrentAncEvoStats(),
+//                                lparam[l]->GetCurrentEvoStats(),
+//                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+//                                lparam[l]->GetCurrentDistances(),
+//                                lparam[l]->GetCurrentWeights()
+//                            );
+//
+//                            post3->registerNewSimulation(
+//                                lparam[l]->MCMCpointID,
+//                                lparam[l]->GetCurrentParameters(),
+//                                lparam[l]->GetCurrentSummaries(),
+//                                lparam[l]->GetCurrentAccessorySummaries(),
+//                                lparam[l]->GetCurrentAncEvoStats(),
+//                                lparam[l]->GetCurrentEvoStats(),
+//                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+//                                lparam[l]->GetCurrentDistances(),
+//                                lparam[l]->GetCurrentWeights()
+//                            );
 
-                            post3->registerNewSimulation(
-                                lparam[l]->MCMCpointID,
-                                lparam[l]->GetCurrentParameters(),
-                                lparam[l]->GetCurrentSummaries(),
-                                lparam[l]->GetCurrentAccessorySummaries(),
-                                lparam[l]->GetCurrentAncEvoStats(),
-                                lparam[l]->GetCurrentEvoStats(),
-                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                lparam[l]->GetCurrentDistances(),
-                                lparam[l]->GetCurrentWeights()
-                            );
 
-
-                            if (post3->Niter % post3->threshold == 0)
+                            if (post1->Niter % post1->threshold == 0)
                             {
 
 
