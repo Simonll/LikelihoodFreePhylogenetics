@@ -637,7 +637,7 @@ void Posterior::readPosterior(ifstream& is)
             std::vector<double> cur_param;
             std::vector<double> cur_summaries;
             std::vector<double> cur_evostats;
-            std::vector<double> cur_distances
+            std::vector<double> cur_distances;
             mapHeaderIndex = 0;
             string  w;
 
