@@ -532,7 +532,7 @@ void Posterior::readPosterior(ifstream& is)
         string* arr = new string[this->NusedEvoStats];
         while(iss >> w || k < this->NusedEvoStats)
         {
-            w = string("T_") + string(w);
+            w = w.erase(0,2)
             auto it = mapUsedEvoStats.find(w);
             if (it != mapUsedEvoStats.end())
             {
