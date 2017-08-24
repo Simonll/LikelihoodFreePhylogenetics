@@ -523,11 +523,15 @@ int main(int argc, char* argv[])
         ifstream monitor_is((gparam->output+".monitor").c_str());
         if(monitor_is)
         {
-            monitor_is.close();
             post1->readMonitorPosterior(monitor_is);
             monitor_is.close();
 
             ifstream posterior_is((gparam->output+".post").c_str());
+            if (!posterior_is)
+            {
+                cerr << "error: did not find posteriorfile"<< "\n";
+                exit(1);
+            }
             post1->readPosterior(posterior_is);
             post2->readPosterior(posterior_is);
             post3->readPosterior(posterior_is);

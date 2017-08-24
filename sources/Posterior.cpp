@@ -427,12 +427,10 @@ void Posterior::readPosterior(string posteriorfile)
 
 void Posterior::readPosterior(ifstream& is)
 {
+    is.clear();                 // clear fail and eof bits
+    is.seekg(0, std::ios::beg);
     int verbose = 0;
-    if (!is)
-    {
-        cerr << "error: did not find posteriorfile"<< "\n";
-        exit(1);
-    }
+
 
 
     //check correspondence between control file and posterior file
@@ -445,7 +443,7 @@ void Posterior::readPosterior(ifstream& is)
     }
 
     std::map<int,string> mapHeader;
-
+    int l = 0;
     if (this->NusedParam > 0)
     {
         is.clear();                 // clear fail and eof bits
@@ -470,8 +468,9 @@ void Posterior::readPosterior(ifstream& is)
                         exit(0);
                     }
                     arr[it->second] = it->first;
-                    mapHeader[it->second] = "P";
+                    mapHeader[l] = "P";
                     k++;
+                    l++;
                 }
             }
         }
@@ -507,12 +506,13 @@ void Posterior::readPosterior(ifstream& is)
                         exit(0);
                     }
                     arr[it->second] = it->first;
-                    mapHeader[it->second] = "S";
+                    mapHeader[l] = "S";
                     k++;
+                    l++;
                 }
             }
         }
-        for(int v = 0 ; v < this->NusedParam; v++)
+        for(int v = 0 ; v < this->mapUsedSummaries; v++)
         {
             cerr << arr[v] << "\n";
         }
@@ -532,7 +532,7 @@ void Posterior::readPosterior(ifstream& is)
         string* arr = new string[this->NusedEvoStats];
         while(iss >> w || k < this->NusedEvoStats)
         {
-            w = w.erase(0,2)
+            w = w.erase(0,2);
             auto it = mapUsedEvoStats.find(w);
             if (it != mapUsedEvoStats.end())
             {
@@ -544,12 +544,13 @@ void Posterior::readPosterior(ifstream& is)
                         exit(0);
                     }
                     arr[it->second] = it->first;
-                    mapHeader[it->second] = "ES";
+                    mapHeader[l] = "ES";
                     k++;
+                    l++;
                 }
             }
         }
-        for(int v = 0 ; v < this->NusedParam; v++)
+        for(int v = 0 ; v < this->NusedEvoStats; v++)
         {
             cerr << arr[v] << "\n";
         }
