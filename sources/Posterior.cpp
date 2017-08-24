@@ -467,10 +467,23 @@ void Posterior::readPosterior(ifstream& is)
                         cerr << k << " "<< it->second << " " << w << " " << it->first << "\n";
                         exit(0);
                     }
-                    arr[it->second] = it->first;
-                    mapHeader[mapHeaderIndex] = "P";
-                    k++;
-                    mapHeaderIndex++;
+
+                    if (w == "chainID")
+                    {
+                        arr[it->second] = it->first;
+                        mapHeader[mapHeaderIndex] = "chainID";
+                        k++;
+                        mapHeaderIndex++;
+
+                    }
+                    else
+                    {
+                        arr[it->second] = it->first;
+                        mapHeader[mapHeaderIndex] = "P";
+                        k++;
+                        mapHeaderIndex++;
+                    }
+
                 }
             }
         }
@@ -582,7 +595,7 @@ void Posterior::readPosterior(ifstream& is)
 //    }
 
 
-if(verbose)
+    if(verbose)
     {
         cerr << "readPosterior NusedEvoStats"<< this->NusedEvoStats << "\n";
     }
@@ -642,6 +655,7 @@ if(verbose)
 
 
             istringstream iss_tmp(line);
+            int chainID;
             std::vector<double> cur_param;
             std::vector<double> cur_summaries;
             std::vector<double> cur_evostats;
@@ -660,6 +674,11 @@ if(verbose)
                     {
                         cur_param.push_back(std::stof(w));
 
+                    }
+                    else if (it->second == "chainID")
+
+                    {
+                        chainID = std::stoi(w);
                     }
                     else if (it->second == "S")
                     {
@@ -683,7 +702,7 @@ if(verbose)
             cerr << "registring\n";
             std::vector<double> tmp;
             registerNewSimulation(
-                1,
+                chainID,
                 cur_param,
                 cur_summaries,
                 tmp,
