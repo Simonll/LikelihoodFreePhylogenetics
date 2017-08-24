@@ -443,7 +443,7 @@ void Posterior::readPosterior(ifstream& is)
     }
 
     std::map<int,string> mapHeader;
-    int l = 0;
+    int mapHeaderIndex = 0;
     if (this->NusedParam > 0)
     {
         is.clear();                 // clear fail and eof bits
@@ -468,9 +468,9 @@ void Posterior::readPosterior(ifstream& is)
                         exit(0);
                     }
                     arr[it->second] = it->first;
-                    mapHeader[l] = "P";
+                    mapHeader[mapHeaderIndex] = "P";
                     k++;
-                    l++;
+                    mapHeaderIndex++;
                 }
             }
         }
@@ -491,11 +491,12 @@ void Posterior::readPosterior(ifstream& is)
         istringstream iss(line);
         string w;
         int k = 0;
-        string* arr = new string[this->NusedSummaries];
-        while(iss >> w || k < this->NusedSummaries)
+        string* arr = new string[this->NusedSummaries+1];
+        while(iss >> w || k < this->NusedSummaries+1)
         {
 
             auto it = mapUsedSummaries.find(w);
+
             if (it != mapUsedSummaries.end())
             {
                 if(it->second != -1)
@@ -506,18 +507,76 @@ void Posterior::readPosterior(ifstream& is)
                         exit(0);
                     }
                     arr[it->second] = it->first;
-                    mapHeader[l] = "S";
+                    mapHeader[mapHeaderIndex] = "S";
                     k++;
-                    l++;
+                    mapHeaderIndex++;
                 }
             }
+            else if (w == "D_sum")
+            {
+                if (k != this->NusedSummaries)
+                {
+                    cerr << k << " "<< this->NusedSummaries << " " << w << " " << "\n";
+                    exit(0);
+                }
+                mapHeader[mapHeaderIndex] = "D_sum";
+                k++;
+                mapHeaderIndex++;
+            }
+
+
         }
-        for(int v = 0 ; v < this->NusedSummaries; v++)
+
+        for(int v = 0 ; v < this->NusedSummaries+1; v++)
         {
             cerr << arr[v] << "\n";
         }
         delete[] arr;
     }
+
+
+//    if (this->OutPartialDistance)
+//    {
+//        is.clear();                 // clear fail and eof bits
+//        is.seekg(0, std::ios::beg); // back to the start!
+//        string line;
+//        std::getline(is, line);
+//        istringstream iss(line);
+//        string w;
+//        int k = 0;
+//        string* arr = new string[this->NusedSummaries];
+//        while(iss >> w || k < this->NusedSummaries)
+//        {
+//
+//
+//            w = w.erase(0,2);
+//            auto it = mapUsedSummaries.find(w);
+//
+//            if (it != mapUsedSummaries.end())
+//            {
+//                if(it->second != -1)
+//                {
+//                    if(k!=it->second)
+//                    {
+//                        cerr << k << " "<< it->second << " " << w << " " << it->first << "\n";
+//                        exit(0);
+//                    }
+//                    arr[it->second] = it->first;
+//                    mapHeader[mapHeaderIndex] = "D";
+//                    k++;
+//                    mapHeaderIndex++;
+//                }
+//            }
+//
+//        }
+//        for(int v = 0 ; v < this->NusedSummaries; v++)
+//        {
+//            cerr << "D_"<< arr[v] << "\n";
+//        }
+//        delete[] arr;
+//    }
+
+
 
 
     if (this->NusedEvoStats > 0)
@@ -544,9 +603,9 @@ void Posterior::readPosterior(ifstream& is)
                         exit(0);
                     }
                     arr[it->second] = it->first;
-                    mapHeader[l] = "ES";
+                    mapHeader[mapHeaderIndex] = "ES";
                     k++;
-                    l++;
+                    mapHeaderIndex++;
                 }
             }
         }
@@ -578,7 +637,8 @@ void Posterior::readPosterior(ifstream& is)
             std::vector<double> cur_param;
             std::vector<double> cur_summaries;
             std::vector<double> cur_evostats;
-            int i = 0;
+            std::vector<double> cur_distances
+            mapHeaderIndex = 0;
             string  w;
 
             while(iss_tmp >> w)
@@ -602,6 +662,11 @@ void Posterior::readPosterior(ifstream& is)
                         cur_evostats.push_back(std::stof(w));
 
                     }
+                    else if (it-second == "D_sum")
+                    {
+                        cur_D_sum.push_back(std::stof(w));
+
+                    }
 
 
                 }
@@ -615,7 +680,7 @@ void Posterior::readPosterior(ifstream& is)
                 tmp,
                 cur_evostats,
                 tmp,
-                tmp,
+                cur_D_sum,
                 tmp
             );
         }
