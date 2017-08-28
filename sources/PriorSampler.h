@@ -60,6 +60,11 @@ protected:
     {
         return pow(10,lparam->rnd->Uniform()*2-1);
     }
+    
+    double log50Unif()
+    {
+        return pow(50,lparam->rnd->Uniform()*2-1);
+    }
 
 
     double logUnifTruncated()
