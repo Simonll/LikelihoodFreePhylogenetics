@@ -47,7 +47,9 @@ void PriorSampler::sample()
     if(lparam->fixlambda_CpG != 1)
     {
 
-        lparam->lambda_CpG = log10Unif();
+        //lparam->lambda_CpG = log10Unif();
+        lparam->lambda_CpG = log50Unif();
+        
 
     }
 
