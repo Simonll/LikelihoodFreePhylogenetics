@@ -31,13 +31,13 @@ void PriorSampler::sample()
     {
 
         //lparam->lambda_omega = log2Unif();
-        lparam->lambda_omega = logNUnif(5);
+        lparam->lambda_omega = logNUnif(3);
     }
 
     if(lparam->fixlambda_TBL != 1)
     {
 
-        lparam->lambda_TBL = log2Unif();
+        lparam->lambda_TBL = logNUnif(2);
 
 //                    for(int node = 0; node < lparam->refTree->GetNnode(); node++){
 //                        lparam->muBranch[node] = lparam->lambda_TBL;
