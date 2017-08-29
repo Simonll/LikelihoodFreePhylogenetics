@@ -30,8 +30,8 @@ void PriorSampler::sample()
     if(lparam->fixlambda_omega != 1)
     {
 
-        lparam->lambda_omega = log2Unif();
-
+        //lparam->lambda_omega = log2Unif();
+        lparam->lambda_omega = logNUnif(5);
     }
 
     if(lparam->fixlambda_TBL != 1)
@@ -48,7 +48,7 @@ void PriorSampler::sample()
     {
 
         //lparam->lambda_CpG = log10Unif();
-        lparam->lambda_CpG = log50Unif();
+        lparam->lambda_CpG = logNUnif(50);
         
 
     }
