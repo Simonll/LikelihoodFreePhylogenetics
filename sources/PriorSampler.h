@@ -50,15 +50,15 @@ protected:
         return lparam->rnd->Uniform()* (sup-inf) + inf;
     }
 
-    double log2Unif()
-    {
-        return pow(2,lparam->rnd->Uniform()*2-1);
-    }
-
-
+   
     double log10Unif()
     {
         return pow(10,lparam->rnd->Uniform()*2-1);
+    }
+    
+    double logNUnif(int n)
+    {
+        return pow(n,lparam->rnd->Uniform()*2-1);
     }
     
     double log50Unif()
