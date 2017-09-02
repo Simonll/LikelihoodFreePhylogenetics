@@ -46,14 +46,15 @@ public:
 
 
     static const int NSummaries = 718;
-    static const int NParam = 25;
+    static const int NParam = 26;
     static const int NEvoStats = 1356;
     static const int NSiteSpecificEvoStats = 2;
 
 
     const string listParam[NParam] = {"chainID","root","lambda","lambda_CpG","lambda_TpA","lambdaTG","lambdaCA","lambda_TBL", "lambda_omega",
                                       "nucsA", "nucsC", "nucsG","nucsT",
-                                      "nucrrAC","nucrrAG","nucrrAT","nucrrCA","nucrrCG","nucrrCT","nucrrGA","nucrrGC","nucrrGT","nucrrTA","nucrrTC","nucrrTG"
+                                      "nucrrAC","nucrrAG","nucrrAT","nucrrCA","nucrrCG","nucrrCT","nucrrGA","nucrrGC","nucrrGT","nucrrTA","nucrrTC","nucrrTG",
+                                      "wR"
                                      };
 
     const string listSummaries[NSummaries] =

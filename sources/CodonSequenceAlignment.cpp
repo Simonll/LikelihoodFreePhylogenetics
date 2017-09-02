@@ -1,3 +1,9 @@
+/****
+
+Adapted from: PhyloBayes MPI code
+
+****/
+
 /********************
 
 PhyloBayes MPI. Copyright 2010-2013 Nicolas Lartillot, Nicolas Rodrigue, Daniel Stubbs, Jacques Richer.

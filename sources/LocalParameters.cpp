@@ -1,12 +1,4 @@
-
 #include "LocalParameters.h"
-
-
-
-//---------------------------------------------------------------------------------
-//               Parameters()
-//---------------------------------------------------------------------------------
-
 
 
 LocalParameters::LocalParameters(GlobalParameters* gparam)
@@ -145,6 +137,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->fixts = 1;
     this->fixrr = 1;
     this->fixss = 1;
+    this->fixwR = 1;
     this->rooted = 0;
     this->fixroot = -1;
     this->verbose = 0;

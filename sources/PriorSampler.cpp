@@ -49,7 +49,7 @@ void PriorSampler::sample()
 
         //lparam->lambda_CpG = log10Unif();
         lparam->lambda_CpG = logNUnif(50);
-        
+
 
     }
 
@@ -750,9 +750,31 @@ void PriorSampler::sample()
         //gtnr[3][3] = 0.0; //tt
 
     }
+    if (lparam->fixwR != 1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freewR\n";
+        }
 
+        int CGA = lparam->codonstatespace->GetState("CGA");
+        int CGC = lparam->codonstatespace->GetState("CGC");
+        int CGG = lparam->codonstatespace->GetState("CGG");
+        int CGT = lparam->codonstatespace->GetState("CGT");
+        int AGA = lparam->codonstatespace->GetState("AGA");
+        int AGG = lparam->codonstatespace->GetState("AGG");
 
+        double u = lparam->rnd->Uniform();
+        double dtot = (4*u)+(1-u)*2;
 
+        lparam->codonprofile[CGA] = u/dtot;
+        lparam->codonprofile[CGC] = u/dtot;
+        lparam->codonprofile[CGG] = u/dtot;
+        lparam->codonprofile[CGT] = u/dtot;
+        lparam->codonprofile[AGA] = (1-u)/dtot;
+        lparam->codonprofile[AGG] = (1-u)/dtot;
+
+    }
 }
 
 //void PriorSampler::sample(){
