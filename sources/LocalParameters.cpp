@@ -657,7 +657,6 @@ void LocalParameters::readLocalInstructions()
         else if (s == "-freelambdaTBL")
         {
             this->fixlambda_TBL = 0;
-            iss >> s;
             cerr << "free TBL\n";
 
         }
