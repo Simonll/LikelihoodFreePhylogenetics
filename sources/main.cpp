@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         cerr << "\n";
         cerr << "version 1.0\n";
         cerr << "###########################\n";
-        cerr << "-m < stats | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP | MAP100CodonMutSelFinitePPChecks | MAP100CodonMutSelSBDPPPChecks > <controlfile>\n";
+        cerr << "-m < stats | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP |MAP100CodonMutSelFinitePPChecks | MAP100CodonMutSelSBDPPPChecks > <controlfile>\n";
         cerr << "###########################\n";
         cerr << "#SUMMARIES\n";
         cerr << "#ACCSUMMARIES\n";
@@ -1227,7 +1227,7 @@ int main(int argc, char* argv[])
             int it = 0 ;
             while(it < post->threshold)
             {
-                int point = static_cast<int> (lparam->rnd->Uniform() * 99);
+                int point = static_cast<int> (lparam->rnd->Uniform() * 9999);
                 lparam->SetCurrentParametersFromPosterior(post->posterior,point);
 
                 if (model == "MutSelAACpGppchecksV2" || model == "MAP100CodonMutSelSBDPPPChecks")

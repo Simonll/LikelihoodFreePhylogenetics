@@ -163,6 +163,11 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->tofasta = 0;
     this->isdata = false;
     this->iscodon = false;
+    this->lambda_TBL_prior = "log2Unif";
+    this->lambda_CpG_prior = "log20Unif";
+    this->lambda_TpA_prior = "log20Unif";
+    this->lambda_omega_prior = "log3Unif";
+
 
 
 
@@ -652,9 +657,18 @@ void LocalParameters::readLocalInstructions()
         else if (s == "-freelambdaTBL")
         {
             this->fixlambda_TBL = 0;
+            iss >> s;
             cerr << "free TBL\n";
 
         }
+        else if (s == "-priorlambdaTBL")
+        {
+            iss >> s;
+            this->lambda_TBL_prior = s;
+            cerr << "prior TBL " << this->lambda_TBL_prior << "\n";
+
+        }
+
         else if (s =="-lambdaCpG" || s == "-fixlambdaCpG")
         {
             iss >> s;
@@ -772,16 +786,37 @@ void LocalParameters::readLocalInstructions()
             cerr << "freelambdaCpG\n";
 
         }
+        else if (s == "-priorlambdaCpG")
+        {
+            iss >> s;
+            this->lambda_CpG_prior = s;
+            cerr << "prior CpG " << this->lambda_CpG_prior << "\n";
+
+        }
         else if (s == "-freelambdaTpA")
         {
             this->fixlambda_TpA = 0;
             cerr << "freelambdaTpA\n";
 
         }
+        else if (s == "-priorlambdaTpA")
+        {
+            iss >> s;
+            this->lambda_TpA_prior = s;
+            cerr << "prior TpA " << this->lambda_TpA_prior << "\n";
+
+        }
         else if (s == "-freelambdaomega")
         {
             this->fixlambda_omega = 0;
             cerr << "freelambdaomega\n";
+
+        }
+        else if (s == "-priorlambdaomega")
+        {
+            iss >> s;
+            this->lambda_omega_prior = s;
+            cerr << "prior omega " << this->lambda_omega_prior << "\n";
 
         }
         else if (s =="-freegtnr")

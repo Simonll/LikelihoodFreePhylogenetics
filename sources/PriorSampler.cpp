@@ -30,14 +30,26 @@ void PriorSampler::sample()
     if(lparam->fixlambda_omega != 1)
     {
 
-        //lparam->lambda_omega = log2Unif();
-        lparam->lambda_omega = logNUnif(3);
+        if (lparam->lambda_omega_prior == "log2Unif") {
+            lparam->lambda_omega = logNUnif(2);
+
+        } else if (lparam->lambda_omega_prior == "log3Unif"){
+            lparam->lambda_omega = logNUnif(3);
+        }
+
+
     }
 
     if(lparam->fixlambda_TBL != 1)
     {
 
-        lparam->lambda_TBL = logNUnif(2);
+        if (lparam->lambda_TBL_prior == "log2Unif") {
+            lparam->lambda_TBL = logNUnif(2);
+
+        } else if (lparam->lambda_TBL_prior == "log3Unif"){
+            lparam->lambda_TBL = logNUnif(3);
+        }
+
 
 //                    for(int node = 0; node < lparam->refTree->GetNnode(); node++){
 //                        lparam->muBranch[node] = lparam->lambda_TBL;
@@ -47,8 +59,20 @@ void PriorSampler::sample()
     if(lparam->fixlambda_CpG != 1)
     {
 
-        //lparam->lambda_CpG = log10Unif();
-        lparam->lambda_CpG = logNUnif(50);
+        if (lparam->lambda_CpG_prior == "log10Unif") {
+            lparam->lambda_CpG = logNUnif(10);
+
+        } else if (lparam->lambda_CpG_prior == "log20Unif"){
+            lparam->lambda_CpG = logNUnif(20);
+
+        } else if (lparam->lambda_CpG_prior == "log50Unif"){
+            lparam->lambda_CpG = logNUnif(50);
+
+        } else if (lparam->lambda_CpG_prior == "log100Unif"){
+            lparam->lambda_CpG = logNUnif(100);
+        }
+
+
 
 
     }
@@ -57,7 +81,19 @@ void PriorSampler::sample()
     if(lparam->fixlambda_TpA != 1)
     {
 
-        lparam->lambda_TpA = log10Unif();
+       if (lparam->lambda_TpA_prior == "log10Unif") {
+           lparam->lambda_TpA = logNUnif(10);
+
+       } else if (lparam->lambda_TpA_prior == "log20Unif"){
+           lparam->lambda_TpA = logNUnif(20);
+
+       } else if (lparam->lambda_TpA_prior == "log50Unif"){
+           lparam->lambda_TpA = logNUnif(50);
+
+       } else if (lparam->lambda_TpA_prior == "log100Unif"){
+           lparam->lambda_TpA = logNUnif(100);
+       }
+
 
     }
 
