@@ -1157,13 +1157,13 @@ int main(int argc, char* argv[])
 
         LocalParameters* lparam =  new LocalParameters(gparam);
 
-        if (model == "MutSelAACpGppchecksV2" || model == "MAP100CodonMutSelSBDPPPChecks")
+        if (model == "MutSelAACpGppchecksV2" || model == "CodonMutSelSBDPPPred")
         {
 
             lparam->readChainCodonMutSelSBDP();
 
         }
-        else if (model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks")
+        else if (model == "FMutSelppchecksV2" || model == "CodonMutSelFinitePPred")
         {
 
             lparam->readChainCodonMutSelFinite();
