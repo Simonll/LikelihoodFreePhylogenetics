@@ -1145,7 +1145,7 @@ int main(int argc, char* argv[])
 
 
     }
-    else if (model == "MutSelAACpGppchecksV2" || model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks" || model == "MAP100CodonMutSelSBDPPPChecks")
+    else if (model == "MutSelAACpGppchecksV2" || model == "FMutSelppchecksV2" || model == "CodonMutSelFinitePPPred" || model == "MAP100CodonMutSelSBDPPPred")
     {
 
         // the chain pointS are extract from the posterior file according to chainID

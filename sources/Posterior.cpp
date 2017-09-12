@@ -655,7 +655,7 @@ void Posterior::readPosterior(ifstream& is)
 
 
             istringstream iss_tmp(line);
-            int chainID;
+            int chainID = 1;
             std::vector<double> cur_param;
             std::vector<double> cur_summaries;
             std::vector<double> cur_evostats;
