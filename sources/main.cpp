@@ -1227,7 +1227,7 @@ int main(int argc, char* argv[])
             int it = 0 ;
             while(it < post->threshold)
             {
-                int point = static_cast<int> (lparam->rnd->Uniform() * 9999);
+                int point = static_cast<int> (lparam->rnd->Uniform() * 99);
                 lparam->SetCurrentParametersFromPosterior(post->posterior,point);
 
                 if (model == "MutSelAACpGppchecksV2" || model == "MAP100CodonMutSelSBDPPPChecks")
