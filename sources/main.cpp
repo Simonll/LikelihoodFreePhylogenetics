@@ -1230,20 +1230,20 @@ int main(int argc, char* argv[])
                 int point = static_cast<int> (lparam->rnd->Uniform() * 99);
                 lparam->SetCurrentParametersFromPosterior(post->posterior,point);
 
-                if (model == "MutSelAACpGppchecksV2" || model == "MAP100CodonMutSelSBDPPPChecks")
+                if (model == "MutSelAACpGppchecksV2" || model == "CodonMutSelSBDPPPred")
                 {
                     if(gparam->verbose)
                     {
-                        cerr << "MAP100CodonMutSelSBDPPPChecks " <<"debug6\n";
+                        cerr << "CodonMutSelSBDPPPred " <<"debug6\n";
                     }
                     lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
 
                 }
-                else if (model == "FMutSelppchecksV2" || model == "MAP100CodonMutSelFinitePPChecks")
+                else if (model == "FMutSelppchecksV2" || model == "CodonMutSelFinitePPred")
                 {
                     if(gparam->verbose)
                     {
-                        cerr << "MAP100CodonMutSelFinitePPChecks " <<"debug6\n";
+                        cerr << "CodonMutSelFinitePPred " <<"debug6\n";
                     }
                     lparam->readChainCodonMutSelFinite(lparam->GetPointID());
 
