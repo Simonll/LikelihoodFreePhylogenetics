@@ -1260,14 +1260,14 @@ int main(int argc, char* argv[])
 
                     if(gparam->verbose)
                     {
-                        cerr << rep << " " << point <<" debug7.1\n";
+                        cerr <<" debug7.1\n";
                     }
 
                     ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
 
                     if(gparam->verbose)
                     {
-                        cerr << rep << " " << point <<" debug7.2\n";
+                        cerr << " debug7.2\n";
                     }
                     post->registerNewSimulation(
                         point,

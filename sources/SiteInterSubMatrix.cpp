@@ -25,6 +25,10 @@ SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam)
 
     TotalSubRate = new double[lparam->refTree->GetNnode()];
     TotalMutRate = new double[lparam->refTree->GetNnode()];
+    TotalSubRateNonSyn = new double[lparam->refTree->GetNnode()];
+    TotalMutRateNonSyn = new double[lparam->refTree->GetNnode()];
+    TotalSubRateSyn = new double[lparam->refTree->GetNnode()];
+    TotalMutRateSyn = new double[lparam->refTree->GetNnode()];
 
 
 }
@@ -45,8 +49,10 @@ void SiteInterSubMatrix::resetSubMatrix()
 
         TotalMutRate[node] = 0.0;
         TotalSubRate[node] = 0.0;
-
-
+        TotalMutRateNonSyn[node] = 0.0;
+        TotalSubRateNonSyn[node] = 0.0;
+        TotalMutRateSyn[node] = 0.0;
+        TotalSubRateSyn[node] = 0.0;
 
         for (int site_nuc = 0 ; site_nuc < lparam->Nsite_nuc ; site_nuc ++ )
         {
