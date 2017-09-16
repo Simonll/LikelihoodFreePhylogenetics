@@ -7,6 +7,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     // input info
     //this->gparam = gparam;
     this->localcontrolfile = gparam->localcontrolfile;
+    this->verbose = gparam->verbose;
     this->output = gparam->output;
     this->model = gparam->model;
     this->distance = gparam->distance;
@@ -17,6 +18,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->Ntaxa = gparam->Ntaxa;
     this->Nsite_codon = gparam->Nsite_codon;
     this->Nsite_nuc = 3 * this->Nsite_codon;
+
 
     if (gparam->listSpecies.size() > 0 && this->Ntaxa >0 && gparam->listSpecies.size() == this->Ntaxa)
     {

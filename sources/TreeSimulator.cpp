@@ -663,7 +663,7 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo)
 void TreeSimulator::ComputeRecursiveSimulation(Link* from)
 {
 
-    int verbose = 0;
+    int verbose = lparam->verbose;
 
     int FromNodeIndex = from->GetNode()->GetIndex();
 
@@ -694,6 +694,10 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
             //cerr << "Mut " << rate << "\n";
         }
 
+        if (verbose)
+        {
+            cerr << "CRS1.1\n";
+        }
         ////
         // IF is ROOT
         ////
@@ -782,6 +786,11 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
             time += (lparam->rnd->sExpo()) /rate;
 
 
+        }
+
+        if (verbose)
+        {
+            cerr << "CRS5.1\n";
         }
 
         rootBranchEvoStats->MutRate[1][0] = submatrix->GetTotalMutRate(FromNodeIndex);

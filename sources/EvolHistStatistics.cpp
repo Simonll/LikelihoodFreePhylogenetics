@@ -3529,7 +3529,7 @@ void EvolHistStatistics::GetEvoStats()
 void EvolHistStatistics::resetEvoStats()
 {
 
-    int verbose = 0;
+    int verbose = lparam->verbose;
 
     if(verbose)
     {
@@ -3664,6 +3664,10 @@ void EvolHistStatistics::resetEvoStats()
 
     }
 
+    if(verbose)
+    {
+        cerr << "resetEvoStats8\n";
+    }
 
 
 }
