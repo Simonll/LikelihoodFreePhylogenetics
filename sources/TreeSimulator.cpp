@@ -717,6 +717,9 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
         if (verbose)
         {
             cerr << "CRS2\n";
+            cerr << time << "\n" << blength;
+            cerr << submatrix->GetTotalMutRate(FromNodeIndex) << "\n" << submatrix->GetTotalMutRateNonSyn(FromNodeIndex) << "\n" << submatrix->GetTotalMutRateSyn(FromNodeIndex) << "\n";
+            cerr << submatrix->GetTotalSubRate(FromNodeIndex) << "\n" << submatrix->GetTotalSubRateNonSyn(FromNodeIndex) << "\n" << submatrix->GetTotalSubRateSyn(FromNodeIndex) << "\n";
         }
         while (time < blength)
         {
