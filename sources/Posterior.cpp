@@ -3,7 +3,7 @@
 Posterior::Posterior(GlobalParameters* gparam)
 {
 
-
+    this->verbose = gparam->verbose;
     this->Niter = gparam->Niter;
     this->Nrun = gparam->Nrun;
     this->threshold = gparam->threshold;
@@ -22,7 +22,7 @@ Posterior::Posterior(GlobalParameters* gparam)
     this->NEvoStats = gparam->NEvoStats;
     this->NSiteSpecificEvoStats = gparam->NSiteSpecificEvoStats;
 
-    if(gparam->verbose)
+    if(verbose)
     {
         cerr << "Posterior1\n";
     }
@@ -34,7 +34,7 @@ Posterior::Posterior(GlobalParameters* gparam)
 
     }
 
-    if(gparam->verbose)
+    if(verbose)
     {
         cerr << "Posterior2\n";
     }
@@ -46,7 +46,7 @@ Posterior::Posterior(GlobalParameters* gparam)
 
     }
 
-    if(gparam->verbose)
+    if(verbose)
     {
         cerr << "Posterior3\n";
     }
@@ -59,7 +59,7 @@ Posterior::Posterior(GlobalParameters* gparam)
 
     }
 
-    if(gparam->verbose)
+    if(verbose)
     {
         cerr << "Posterior4\n";
     }
@@ -71,7 +71,7 @@ Posterior::Posterior(GlobalParameters* gparam)
 
     }
 
-    if(gparam->verbose)
+    if(verbose)
     {
         cerr << "Posterior5\n";
     }
@@ -84,7 +84,7 @@ Posterior::Posterior(GlobalParameters* gparam)
     this->NusedAccessorySummaries = gparam->NusedAccessorySummaries;
     this->Ngenes = gparam->Ngenes;
 
-    if(gparam->verbose)
+    if(verbose)
     {
         cerr << "Posterior6\n";
     }
@@ -97,7 +97,7 @@ Posterior::Posterior(GlobalParameters* gparam)
     this->mapUsedEvoAncStats.insert(gparam->mapUsedEvoAncStats.begin(),gparam->mapUsedEvoAncStats.end());
 
 
-    if(gparam->verbose)
+    if(verbose)
     {
         cerr << "Posterior7\n";
     }
@@ -882,7 +882,7 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
 void Posterior::readMonitor(ifstream & is)
 {
 
-    int verbose = lparam->verbose;
+
 
     is.clear();                 // clear fail and eof bits
     is.seekg(0, std::ios::beg);
@@ -935,7 +935,7 @@ double Posterior::GetAcceptanceRate()
 
 void Posterior::writeHeader(ofstream&os)
 {
-    int verbose = 0;
+
     // write parameters' header
     //for (unsigned int param_i = 0 ; param_i < listUsedParam.size() ; param_i++){
     int k = 0;

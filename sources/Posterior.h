@@ -58,6 +58,7 @@ class Posterior
         double TOOLARGE;
         double TOOLARGENEGATIVE;
 
+        int verbose;
         int NSummaries;
         int NParam;
         int NEvoStats;

@@ -38,7 +38,7 @@ TreeSimulator::~TreeSimulator()
 void TreeSimulator::resetSimulator()
 {
 
-    iint verbose = lparam->verbose;
+    int verbose = lparam->verbose;
 
     if(verbose)
     {
