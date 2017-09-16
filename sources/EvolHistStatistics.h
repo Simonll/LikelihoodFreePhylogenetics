@@ -54,6 +54,8 @@ public:
 
 
     double** branch_stat;
+    double** MutRate;
+    double** SubRate;
     double*** gtnr_stat;
     double*** dinuc_stat;
     double*** codon_stat;
@@ -13324,6 +13326,64 @@ private:
         return (Nsynsub/lparam->Nsite_codon);
     }
 
+    double GetMutRateStart()
+    {
+        return MutRate[0][0];
+    }
+
+    double GetSubRateStart()
+    {
+        return SubRate[0][0];
+    }
+
+    double GetMutRateNonSynStart()
+    {
+        return MutRate[0][1];
+    }
+
+    double GetSubRateNonSynStart()
+    {
+        return SubRate[0][1];
+    }
+
+    double GetMutRateSynStart()
+    {
+        return MutRate[0][2];
+    }
+
+    double GetSubRateSynStart()
+    {
+        return SubRate[0][2];
+    }
+
+    double GetMutRateEnd()
+    {
+        return MutRate[1][0];
+    }
+
+    double GetSubRateEnd()
+    {
+        return SubRate[1][0];
+    }
+
+    double GetMutRateNonSynEnd()
+    {
+        return MutRate[1][1];
+    }
+
+    double GetSubRateNonSynEnd()
+    {
+        return SubRate[1][1];
+    }
+    double GetMutRateSynEnd()
+    {
+        return MutRate[1][2];
+    }
+
+    double GetSubRateSynEnd()
+    {
+        return SubRate[1][2];
+    }
 
 
 };

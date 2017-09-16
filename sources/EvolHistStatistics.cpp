@@ -4,8 +4,18 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam)
 {
     this->lparam = lparam;
 
+
     Nsub = 0.0;
     Nsynsub = 0.0;
+
+    MutRate = new double*[2];
+    SubRate = new double*[2];
+    for (int i = 0; i < 2; i++)
+    {
+        MutRate[i] = new double [3];
+        SubRate[i] = new double [3];
+    }
+
 
     gtnr_stat = new double**[4];
     gtnrSyn_stat = new double**[4];
@@ -3311,9 +3321,20 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam)
     GetEvoStatMap["Nsub"] = &EvolHistStatistics::GetNsub;
     GetEvoStatMap["Nsynsub"] = &EvolHistStatistics::GetNSynsub;
 
+    GetEvoStatMap["MutRateStart"] = &EvolHistStatistics::GetMutRateStart;
+    GetEvoStatMap["SubRateStart"] = &EvolHistStatistics::GetMutRateStart;
+    GetEvoStatMap["MutRateNonSynStart"] = &EvolHistStatistics::GetMutRateNonSynStart;
+    GetEvoStatMap["SubRateNonSynStart"] = &EvolHistStatistics::GetSubRateNonSynStart;
+    GetEvoStatMap["MutRateSynStart"] = &EvolHistStatistics::GetMutRateSynStart;
+    GetEvoStatMap["SubRateSynStart"] = &EvolHistStatistics::GetSubRateSynStart;
 
 
-
+    GetEvoStatMap["MutRateEnd"] = &EvolHistStatistics::GetMutRateEnd;
+    GetEvoStatMap["SubRateEnd"] = &EvolHistStatistics::GetMutRateEnd;
+    GetEvoStatMap["MutRateNonSynEnd"] = &EvolHistStatistics::GetMutRateNonSynEnd;
+    GetEvoStatMap["SubRateNonSynEnd"] = &EvolHistStatistics::GetSubRateNonSynEnd;
+    GetEvoStatMap["MutRateSynEnd"] = &EvolHistStatistics::GetMutRateSynEnd;
+    GetEvoStatMap["SubRateSynEnd"] = &EvolHistStatistics::GetSubRateSynEnd;
 }
 
 EvolHistStatistics::~EvolHistStatistics()
@@ -3630,6 +3651,20 @@ void EvolHistStatistics::resetEvoStats()
     {
         cerr << "resetEvoStats7\n";
     }
+
+    for (int i = 0; i < 2; i++)
+    {
+        for(int j = 0 ; j < 3; j++)
+        {
+
+        MutRate[i][j] = 0.0;
+        SubRate[i][j] = 0.0;
+
+        }
+
+    }
+
+
 
 }
 

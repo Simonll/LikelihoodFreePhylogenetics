@@ -48,6 +48,10 @@ public:
     double*** selmatrixTreeSim;
     double* TotalSubRate;
     double* TotalMutRate;
+    double* TotalSubRateNonSyn;
+    double* TotalMutRateNonSyn;
+    double* TotalSubRateSyn;
+    double* TotalMutRateSyn;
 
 
     //parameters
@@ -61,9 +65,9 @@ public:
     //Getters
     double GetSubRate(int NodeIndex, int site_codon);
     double GetMutRate(int NodeIndex, int site_codon);
-    double GetCpGMutRate(int NodeIndex, int**CurrentNodeNucSequence);
-    double GetCpGSubRate(int NodeIndex, int**CurrentNodeNucSequence);
-    double GetSynMutRate(int NodeIndex, int**CurrentNodeNucSequence);
+    double GetMutRateCpG(int NodeIndex, int**CurrentNodeNucSequence);
+    double GetSubRateCpG(int NodeIndex, int**CurrentNodeNucSequence);
+    double GetMutRateSyn(int NodeIndex, int**CurrentNodeNucSequence);
 
     //Setters
     void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);
@@ -90,6 +94,31 @@ public:
     }
 
 
+    double GetTotalMutRateNonSyn(int NodeIndex)
+    {
+
+        return TotalMutRateNonSyn[NodeIndex];
+    }
+
+    double GetTotalSubRateNonSyn(int NodeIndex)
+    {
+
+        return TotalSubRateNonSyn[NodeIndex];
+    }
+
+    double GetTotalMutRateSyn(int NodeIndex)
+    {
+
+        return TotalMutRateSyn[NodeIndex];
+    }
+
+    double GetTotalSubRateSyn(int NodeIndex)
+    {
+
+        return TotalSubRateSyn[NodeIndex];
+    }
+
+
     double GetSubRate(int NodeIndex, int site_nuc, int nucTo)
     {
         return submatrixTreeSim[NodeIndex][site_nuc][nucTo];
@@ -102,11 +131,7 @@ public:
 
     }
 
-
-
 protected:
-
-
 private:
 };
 
