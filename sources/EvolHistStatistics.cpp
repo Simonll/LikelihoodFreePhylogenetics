@@ -3322,7 +3322,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam)
     GetEvoStatMap["Nsynsub"] = &EvolHistStatistics::GetNSynsub;
 
     GetEvoStatMap["MutRateStart"] = &EvolHistStatistics::GetMutRateStart;
-    GetEvoStatMap["SubRateStart"] = &EvolHistStatistics::GetMutRateStart;
+    GetEvoStatMap["SubRateStart"] = &EvolHistStatistics::GetSubRateStart;
     GetEvoStatMap["MutRateNonSynStart"] = &EvolHistStatistics::GetMutRateNonSynStart;
     GetEvoStatMap["SubRateNonSynStart"] = &EvolHistStatistics::GetSubRateNonSynStart;
     GetEvoStatMap["MutRateSynStart"] = &EvolHistStatistics::GetMutRateSynStart;
@@ -3330,7 +3330,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam)
 
 
     GetEvoStatMap["MutRateEnd"] = &EvolHistStatistics::GetMutRateEnd;
-    GetEvoStatMap["SubRateEnd"] = &EvolHistStatistics::GetMutRateEnd;
+    GetEvoStatMap["SubRateEnd"] = &EvolHistStatistics::GetSubRateEnd;
     GetEvoStatMap["MutRateNonSynEnd"] = &EvolHistStatistics::GetMutRateNonSynEnd;
     GetEvoStatMap["SubRateNonSynEnd"] = &EvolHistStatistics::GetSubRateNonSynEnd;
     GetEvoStatMap["MutRateSynEnd"] = &EvolHistStatistics::GetMutRateSynEnd;
