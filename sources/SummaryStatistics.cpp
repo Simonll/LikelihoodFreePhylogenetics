@@ -1240,7 +1240,7 @@ SummaryStatistics::~SummaryStatistics()
 void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
 {
 
-    int verbose = 0;
+    int verbose = lparam->verbose;
 
     lparam->summariesSimulatedData.clear();
     lparam->summariesSimulatedData.shrink_to_fit();

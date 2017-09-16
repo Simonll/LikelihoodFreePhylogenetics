@@ -882,9 +882,11 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
 void Posterior::readMonitor(ifstream & is)
 {
 
+    int verbose = lparam->verbose;
+
     is.clear();                 // clear fail and eof bits
     is.seekg(0, std::ios::beg);
-    int verbose = 0;
+
 
 
     string line;

@@ -3347,7 +3347,7 @@ EvolHistStatistics::~EvolHistStatistics()
 void EvolHistStatistics::GetSiteSpecificEvoStats()
 {
 
-    int verbose = 0;
+    int verbose = lparam->verbose;
 
     if(verbose)
     {
@@ -3418,7 +3418,7 @@ void EvolHistStatistics::GetSiteSpecificEvoStats()
 
 void EvolHistStatistics::GetEvoAncStats()
 {
-    int verbose = 0;
+    int verbose = lparam->verbose;
 
     if(verbose)
     {
@@ -3472,7 +3472,7 @@ void EvolHistStatistics::GetEvoAncStats()
 
 void EvolHistStatistics::GetEvoStats()
 {
-    int verbose = 0;
+    int verbose = lparam->verbose;
     if(verbose)
     {
         cerr << "GetEvoStats1\n";

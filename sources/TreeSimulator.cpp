@@ -38,7 +38,7 @@ TreeSimulator::~TreeSimulator()
 void TreeSimulator::resetSimulator()
 {
 
-    int verbose = 0;
+    iint verbose = lparam->verbose;
 
     if(verbose)
     {
@@ -84,7 +84,7 @@ void TreeSimulator::resetSimulator()
 void TreeSimulator::GetNewSimulatedCodonAlignment()
 {
 
-    int verbose = 0;
+    int verbose = lparam->verbose;
 
     submatrix->resetSubMatrix();
     if(verbose)
@@ -187,7 +187,7 @@ void TreeSimulator::SetAncestralSequence()
 void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo)
 {
 
-    int verbose = 0;
+    int verbose = lparam->verbose;
 
     int nucFrom = CurrentNodeNucSequence[NodeIndex][site_nuc];
     int CodonPos = site_nuc % 3;
