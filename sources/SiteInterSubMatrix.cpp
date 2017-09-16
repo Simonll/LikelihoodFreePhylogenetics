@@ -141,6 +141,10 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
 
         deltaTotalSub -= GetSubRate(NodeIndex,site_codon);
         deltaTotalMut -= GetMutRate(NodeIndex,site_codon);
+        deltaTotalSubNonSyn -= GetSubRateNonSyn(NodeIndex,site_codon);
+        deltaTotalMutNonSyn -= GetMutRateNonSyn(NodeIndex,site_codon);
+        deltaTotalSubSyn -= GetSubRateSyn(NodeIndex,site_codon);
+        deltaTotalMutSyn -= GetMutRateSyn(NodeIndex,site_codon);
 
     }
 
@@ -574,4 +578,26 @@ double SiteInterSubMatrix::GetSubRate(int NodeIndex, int site_codon)
     //TotalSub[NodeIndex] = sum;
     return sum;
 }
+
+double SiteInterSubMatrix::GetSubRateNonSyn(int NodeIndex, int site_codon)
+{
+    return 0.0;
+}
+
+double SiteInterSubMatrix::GetSubRateSyn(int NodeIndex, int site_codon)
+{
+    return 0.0;
+}
+
+double SiteInterSubMatrix::GetMutRateNonSyn(int NodeIndex, int site_codon)
+{
+    return 0.0;
+}
+
+double SiteInterSubMatrix::GetMutRateSyn(int NodeIndex, int site_codon)
+{
+    return 0.0;
+}
+
+
 

@@ -142,7 +142,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->fixwR = 1;
     this->rooted = 0;
     this->fixroot = -1;
-    this->verbose = 0;
     this->randomseed = -1;
     this->opt = 1;
     this->optCpG = 1;

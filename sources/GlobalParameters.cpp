@@ -464,6 +464,7 @@ void GlobalParameters::readInstructions()
         }
         else if (!line.empty() && line.substr(0,11) == "#LOCALPARAM")
         {
+            cerr << "### LOCALPARAM ### \n";
             localcontrolfile = line;
 
         }
