@@ -65,13 +65,16 @@ public:
     //Getters
     double GetSubRate(int NodeIndex, int site_codon);
     double GetMutRate(int NodeIndex, int site_codon);
+
     double GetSubRateNonSyn(int NodeIndex, int site_codon,int**CurrentNodeNucSequence);
     double GetMutRateNonSyn(int NodeIndex, int site_codon,int**CurrentNodeNucSequence);
+
     double GetSubRateSyn(int NodeIndex, int site_codon,int**CurrentNodeNucSequence);
     double GetMutRateSyn(int NodeIndex, int site_codon,int**CurrentNodeNucSequence);
+
     double GetMutRateCpG(int NodeIndex, int**CurrentNodeNucSequence);
     double GetSubRateCpG(int NodeIndex, int**CurrentNodeNucSequence);
-    double GetMutRateSyn(int NodeIndex, int**CurrentNodeNucSequence);
+
 
     //Setters
     void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);

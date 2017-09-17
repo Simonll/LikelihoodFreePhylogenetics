@@ -240,13 +240,15 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                             SubRate = MutRate * lparam->lambda_omega *  lparam->omega;
                             MutRateNonSyn = MutRate;
                             SubRateNonSyn = SubRate;
+
                         }
                         else
                         {
                             S = log(lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]);
-                            SubRate = MutRate ;
+                            SubRate = MutRate;
                             MutRateSyn = MutRate;
                             SubRateSyn = SubRate;
+
                         }
 
                         //NUMERICAL SECURITY
@@ -257,6 +259,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                         else if (S > lparam->TOOLARGE)
                         {
                             SubRate *= S;
+
                         }
                         else if (S < lparam->TOOLARGENEGATIVE)
                         {
@@ -266,14 +269,15 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                         {
                             SubRate *=  (S / (1.0 -exp(-S)));
                         }
+
                         if (!lparam->codonstatespace->Synonymous(codonFrom,codonTo))
                         {
-                            MutRateNonSyn = MutRate;
+
                             SubRateNonSyn = SubRate;
                         }
                         else
                         {
-                            MutRateSyn = MutRate;
+
                             SubRateSyn = SubRate;
                         }
 
