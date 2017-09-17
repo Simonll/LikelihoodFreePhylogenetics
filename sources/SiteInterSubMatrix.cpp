@@ -141,10 +141,10 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
 
         deltaTotalSub -= GetSubRate(NodeIndex,site_codon);
         deltaTotalMut -= GetMutRate(NodeIndex,site_codon);
-        deltaTotalSubNonSyn -= GetSubRateNonSyn(NodeIndex,site_codon);
-        deltaTotalMutNonSyn -= GetMutRateNonSyn(NodeIndex,site_codon);
-        deltaTotalSubSyn -= GetSubRateSyn(NodeIndex,site_codon);
-        deltaTotalMutSyn -= GetMutRateSyn(NodeIndex,site_codon);
+        deltaTotalSubNonSyn -= GetSubRateNonSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+        deltaTotalMutNonSyn -= GetMutRateNonSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+        deltaTotalSubSyn -= GetSubRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+        deltaTotalMutSyn -= GetMutRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
 
     }
 
@@ -311,6 +311,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                 deltaTotalMutNonSyn += MutRateNonSyn;
                 deltaTotalSubSyn += SubRateSyn;
                 deltaTotalMutSyn += MutRateSyn;
+
                 mutmatrixTreeSim[NodeIndex][site_nuc][nucTo] = MutRate;
                 selmatrixTreeSim[NodeIndex][site_nuc][nucTo] = S;
                 submatrixTreeSim[NodeIndex][site_nuc][nucTo] = SubRate;
@@ -460,64 +461,64 @@ void SiteInterSubMatrix::findCodonContext(int NodeIndex,  int site_nuc,int nucFr
     }
 }
 
-
-double SiteInterSubMatrix::GetMutRateSyn(int NodeIndex,int** CurrentNodeNucSequence)
-{
-    int nucFrom, pos1From, pos2From, pos3From, pos1To, pos2To, pos3To, codonFrom, codonTo;
-    double sum  = 0;
-    for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++)
-    {
-        nucFrom = CurrentNodeNucSequence[NodeIndex][site_nuc];
-        for (int nucTo = 0; nucTo < 4; nucTo++)
-        {
-            findCodonContext(NodeIndex, site_nuc, nucFrom, nucTo, pos1From, pos2From, pos3From, pos1To, pos2To, pos3To,CurrentNodeNucSequence);
-            if(!lparam->codonstatespace->CheckStop(pos1To, pos2To, pos3To))
-            {
-                codonFrom = lparam->codonstatespace->GetCodonFromDNA(pos1From, pos2From, pos3From);
-                codonTo = lparam->codonstatespace->GetCodonFromDNA(pos1To, pos2To, pos3To) ;
-                if (lparam->codonstatespace->Synonymous(codonFrom,codonTo))
-                {
-                    sum += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
-                }
-            }
-        }
-    }
-    return sum;
-}
-
-double SiteInterSubMatrix::GetSubRateCpG(int NodeIndex,int** CurrentNodeNucSequence)
-{
-    double sum  = 0.0;
-    for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++)
-    {
-        int nucFrom = CurrentNodeNucSequence[NodeIndex][site_nuc];
-        for (int nucTo = 0; nucTo < 4; nucTo++)
-        {
-            if(testCpGcontext(NodeIndex, site_nuc, nucFrom, nucTo,CurrentNodeNucSequence) > 0)
-            {
-                sum += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
-            }
-        }
-    }
-    return sum;
-}
-
-double SiteInterSubMatrix::GetMutRateCpG(int NodeIndex,int** CurrentNodeNucSequence)
-{
-    double sum  = 0.0;
-    for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++)
-    {
-        int nucFrom = CurrentNodeNucSequence[NodeIndex][site_nuc];
-        for (int nucTo = 0; nucTo < 4; nucTo++)
-        {
-            if(testCpGcontext(NodeIndex, site_nuc, nucFrom, nucTo,CurrentNodeNucSequence)> 0)
-            {
-                sum += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
-            }
-        }
-    }
-    return sum;
-}
+//
+//double SiteInterSubMatrix::GetMutRateSyn(int NodeIndex,int** CurrentNodeNucSequence)
+//{
+//    int nucFrom, pos1From, pos2From, pos3From, pos1To, pos2To, pos3To, codonFrom, codonTo;
+//    double sum  = 0;
+//    for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++)
+//    {
+//        nucFrom = CurrentNodeNucSequence[NodeIndex][site_nuc];
+//        for (int nucTo = 0; nucTo < 4; nucTo++)
+//        {
+//            findCodonContext(NodeIndex, site_nuc, nucFrom, nucTo, pos1From, pos2From, pos3From, pos1To, pos2To, pos3To,CurrentNodeNucSequence);
+//            if(!lparam->codonstatespace->CheckStop(pos1To, pos2To, pos3To))
+//            {
+//                codonFrom = lparam->codonstatespace->GetCodonFromDNA(pos1From, pos2From, pos3From);
+//                codonTo = lparam->codonstatespace->GetCodonFromDNA(pos1To, pos2To, pos3To) ;
+//                if (lparam->codonstatespace->Synonymous(codonFrom,codonTo))
+//                {
+//                    sum += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+//                }
+//            }
+//        }
+//    }
+//    return sum;
+//}
+//
+//double SiteInterSubMatrix::GetSubRateCpG(int NodeIndex,int** CurrentNodeNucSequence)
+//{
+//    double sum  = 0.0;
+//    for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++)
+//    {
+//        int nucFrom = CurrentNodeNucSequence[NodeIndex][site_nuc];
+//        for (int nucTo = 0; nucTo < 4; nucTo++)
+//        {
+//            if(testCpGcontext(NodeIndex, site_nuc, nucFrom, nucTo,CurrentNodeNucSequence) > 0)
+//            {
+//                sum += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+//            }
+//        }
+//    }
+//    return sum;
+//}
+//
+//double SiteInterSubMatrix::GetMutRateCpG(int NodeIndex,int** CurrentNodeNucSequence)
+//{
+//    double sum  = 0.0;
+//    for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++)
+//    {
+//        int nucFrom = CurrentNodeNucSequence[NodeIndex][site_nuc];
+//        for (int nucTo = 0; nucTo < 4; nucTo++)
+//        {
+//            if(testCpGcontext(NodeIndex, site_nuc, nucFrom, nucTo,CurrentNodeNucSequence)> 0)
+//            {
+//                sum += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+//            }
+//        }
+//    }
+//    return sum;
+//}
 
 
 double SiteInterSubMatrix::GetMutRate(int NodeIndex, int site_codon)
@@ -579,24 +580,299 @@ double SiteInterSubMatrix::GetSubRate(int NodeIndex, int site_codon)
     return sum;
 }
 
-double SiteInterSubMatrix::GetSubRateNonSyn(int NodeIndex, int site_codon)
+double SiteInterSubMatrix::GetSubRateNonSyn(int NodeIndex, int site_codon,int** CurrentNodeNucSequence)
 {
-    return 0.0;
+
+    double sum  = 0.0;
+    int site_codon_start = 0 ;
+    int site_codon_end = lparam->Nsite_codon;
+
+
+    if (site_codon > -1)
+    {
+        if (site_codon < lparam->Nsite_codon-1)
+        {
+            site_codon_end = site_codon + 2;
+        }
+        if (site_codon > 0)
+        {
+            site_codon_start =  site_codon - 1;
+        }
+    }
+
+    int site_nuc_start = site_codon_start * 3;
+    int site_nuc_end = site_codon_end * 3;
+
+    int* nucposFrom = new int[3];
+    int* nucposTo = new int[3];
+
+    for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end ; site_codon_i++)
+    {
+
+        int site_nuc_start = (site_codon_i * 3);  // site_codon to site_nuc
+        for (int codonPos = 0; codonPos < 3; codonPos++)
+        {
+            nucposFrom[codonPos] = CurrentNodeNucSequence[NodeIndex][site_nuc_start+codonPos];
+            nucposTo[codonPos] = CurrentNodeNucSequence[NodeIndex][site_nuc_start+codonPos];
+        }
+
+        for ( int codonPos = 0; codonPos < 3; codonPos++ )   // for each nucleotide codon postions [0,2] we will be computing adjacent nucleotide.
+        {
+            int site_nuc =  site_nuc_start+codonPos;
+            for (int nucTo = 0; nucTo < 4; nucTo++)
+            {
+                if (nucposFrom[codonPos] != nucTo)
+                {
+                    nucposTo[codonPos] = nucTo;
+
+                    if(lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1], nucposTo[2]))
+                    {
+
+                        int codonFrom = lparam->codonstatespace->GetCodonFromDNA(nucposFrom[0], nucposFrom[1], nucposFrom[2]);
+                        int codonTo = lparam->codonstatespace->GetCodonFromDNA(nucposTo[0], nucposTo[1], nucposTo[2]);
+
+                        if (!lparam->codonstatespace->Synonymous(codonFrom,codonTo))
+                        {
+
+                            sum += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+    }
+
+    delete [] nucposFrom;
+    delete [] nucposTo;
+
+
+    return sum;
 }
 
-double SiteInterSubMatrix::GetSubRateSyn(int NodeIndex, int site_codon)
+double SiteInterSubMatrix::GetSubRateSyn(int NodeIndex, int site_codon,int** CurrentNodeNucSequence)
 {
-    return 0.0;
+    double sum  = 0.0;
+    int site_codon_start = 0 ;
+    int site_codon_end = lparam->Nsite_codon;
+
+
+    if (site_codon > -1)
+    {
+        if (site_codon < lparam->Nsite_codon-1)
+        {
+            site_codon_end = site_codon + 2;
+        }
+        if (site_codon > 0)
+        {
+            site_codon_start =  site_codon - 1;
+        }
+    }
+
+    int site_nuc_start = site_codon_start * 3;
+    int site_nuc_end = site_codon_end * 3;
+
+    int* nucposFrom = new int[3];
+    int* nucposTo = new int[3];
+
+    for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end ; site_codon_i++)
+    {
+
+        int site_nuc_start = (site_codon_i * 3);  // site_codon to site_nuc
+        for (int codonPos = 0; codonPos < 3; codonPos++)
+        {
+            nucposFrom[codonPos] = CurrentNodeNucSequence[NodeIndex][site_nuc_start+codonPos];
+            nucposTo[codonPos] = CurrentNodeNucSequence[NodeIndex][site_nuc_start+codonPos];
+        }
+
+        for ( int codonPos = 0; codonPos < 3; codonPos++ )   // for each nucleotide codon postions [0,2] we will be computing adjacent nucleotide.
+        {
+            int site_nuc =  site_nuc_start+codonPos;
+            for (int nucTo = 0; nucTo < 4; nucTo++)
+            {
+                if (nucposFrom[codonPos] != nucTo)
+                {
+                    nucposTo[codonPos] = nucTo;
+
+                    if(lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1], nucposTo[2]))
+                    {
+
+                        int codonFrom = lparam->codonstatespace->GetCodonFromDNA(nucposFrom[0], nucposFrom[1], nucposFrom[2]);
+                        int codonTo = lparam->codonstatespace->GetCodonFromDNA(nucposTo[0], nucposTo[1], nucposTo[2]);
+
+                        if (lparam->codonstatespace->Synonymous(codonFrom,codonTo))
+                        {
+
+                            sum += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+
+                        }
+
+
+
+                    }
+
+                }
+
+            }
+        }
+
+    }
+
+    delete [] nucposFrom;
+    delete [] nucposTo;
+
+
+    return sum;
 }
 
-double SiteInterSubMatrix::GetMutRateNonSyn(int NodeIndex, int site_codon)
+double SiteInterSubMatrix::GetMutRateNonSyn(int NodeIndex, int site_codon,int** CurrentNodeNucSequence)
 {
-    return 0.0;
+    double sum  = 0.0;
+    int site_codon_start = 0 ;
+    int site_codon_end = lparam->Nsite_codon;
+
+
+    if (site_codon > -1)
+    {
+        if (site_codon < lparam->Nsite_codon-1)
+        {
+            site_codon_end = site_codon + 2;
+        }
+        if (site_codon > 0)
+        {
+            site_codon_start =  site_codon - 1;
+        }
+    }
+
+    int site_nuc_start = site_codon_start * 3;
+    int site_nuc_end = site_codon_end * 3;
+
+    int* nucposFrom = new int[3];
+    int* nucposTo = new int[3];
+
+    for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end ; site_codon_i++)
+    {
+
+        int site_nuc_start = (site_codon_i * 3);  // site_codon to site_nuc
+        for (int codonPos = 0; codonPos < 3; codonPos++)
+        {
+            nucposFrom[codonPos] = CurrentNodeNucSequence[NodeIndex][site_nuc_start+codonPos];
+            nucposTo[codonPos] = CurrentNodeNucSequence[NodeIndex][site_nuc_start+codonPos];
+        }
+
+        for ( int codonPos = 0; codonPos < 3; codonPos++ )   // for each nucleotide codon postions [0,2] we will be computing adjacent nucleotide.
+        {
+            int site_nuc =  site_nuc_start+codonPos;
+            for (int nucTo = 0; nucTo < 4; nucTo++)
+            {
+                if (nucposFrom[codonPos] != nucTo)
+                {
+                    nucposTo[codonPos] = nucTo;
+
+                    if(lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1], nucposTo[2]))
+                    {
+
+                        int codonFrom = lparam->codonstatespace->GetCodonFromDNA(nucposFrom[0], nucposFrom[1], nucposFrom[2]);
+                        int codonTo = lparam->codonstatespace->GetCodonFromDNA(nucposTo[0], nucposTo[1], nucposTo[2]);
+
+                        if (!lparam->codonstatespace->Synonymous(codonFrom,codonTo))
+                        {
+
+                            sum += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+    }
+
+    delete [] nucposFrom;
+    delete [] nucposTo;
+
+
+    return sum;
 }
 
-double SiteInterSubMatrix::GetMutRateSyn(int NodeIndex, int site_codon)
+double SiteInterSubMatrix::GetMutRateSyn(int NodeIndex, int site_codon,int** CurrentNodeNucSequence)
 {
-    return 0.0;
+    double sum  = 0.0;
+    int site_codon_start = 0 ;
+    int site_codon_end = lparam->Nsite_codon;
+
+
+    if (site_codon > -1)
+    {
+        if (site_codon < lparam->Nsite_codon-1)
+        {
+            site_codon_end = site_codon + 2;
+        }
+        if (site_codon > 0)
+        {
+            site_codon_start =  site_codon - 1;
+        }
+    }
+
+    int site_nuc_start = site_codon_start * 3;
+    int site_nuc_end = site_codon_end * 3;
+
+    int* nucposFrom = new int[3];
+    int* nucposTo = new int[3];
+
+    for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end ; site_codon_i++)
+    {
+
+        int site_nuc_start = (site_codon_i * 3);  // site_codon to site_nuc
+        for (int codonPos = 0; codonPos < 3; codonPos++)
+        {
+            nucposFrom[codonPos] = CurrentNodeNucSequence[NodeIndex][site_nuc_start+codonPos];
+            nucposTo[codonPos] = CurrentNodeNucSequence[NodeIndex][site_nuc_start+codonPos];
+        }
+
+        for ( int codonPos = 0; codonPos < 3; codonPos++ )   // for each nucleotide codon postions [0,2] we will be computing adjacent nucleotide.
+        {
+            int site_nuc =  site_nuc_start+codonPos;
+            for (int nucTo = 0; nucTo < 4; nucTo++)
+            {
+                if (nucposFrom[codonPos] != nucTo)
+                {
+                    nucposTo[codonPos] = nucTo;
+
+                    if(lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1], nucposTo[2]))
+                    {
+
+                        int codonFrom = lparam->codonstatespace->GetCodonFromDNA(nucposFrom[0], nucposFrom[1], nucposFrom[2]);
+                        int codonTo = lparam->codonstatespace->GetCodonFromDNA(nucposTo[0], nucposTo[1], nucposTo[2]);
+
+                        if (lparam->codonstatespace->Synonymous(codonFrom,codonTo))
+                        {
+
+                            sum += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+    }
+
+    delete [] nucposFrom;
+    delete [] nucposTo;
+
+
+    return sum;
 }
 
 
