@@ -604,8 +604,6 @@ double SiteInterSubMatrix::GetSubRateNonSyn(int NodeIndex, int site_codon,int** 
         }
     }
 
-    int site_nuc_start = site_codon_start * 3;
-    int site_nuc_end = site_codon_end * 3;
 
     int* nucposFrom = new int[3];
     int* nucposTo = new int[3];
@@ -677,8 +675,6 @@ double SiteInterSubMatrix::GetSubRateSyn(int NodeIndex, int site_codon,int** Cur
         }
     }
 
-    int site_nuc_start = site_codon_start * 3;
-    int site_nuc_end = site_codon_end * 3;
 
     int* nucposFrom = new int[3];
     int* nucposTo = new int[3];
@@ -752,8 +748,6 @@ double SiteInterSubMatrix::GetMutRateNonSyn(int NodeIndex, int site_codon,int** 
         }
     }
 
-    int site_nuc_start = site_codon_start * 3;
-    int site_nuc_end = site_codon_end * 3;
 
     int* nucposFrom = new int[3];
     int* nucposTo = new int[3];
@@ -825,8 +819,7 @@ double SiteInterSubMatrix::GetMutRateSyn(int NodeIndex, int site_codon,int** Cur
         }
     }
 
-    int site_nuc_start = site_codon_start * 3;
-    int site_nuc_end = site_codon_end * 3;
+
 
     int* nucposFrom = new int[3];
     int* nucposTo = new int[3];
