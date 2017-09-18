@@ -308,7 +308,9 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                     }
                     nucposTo[codonPos]  = nucposFrom[codonPos];
                 }
-
+                ////
+                //IF nucposFrom[codonPos] == nucTo set prob to 0
+                ////
                 deltaTotalSub += SubRate;
                 deltaTotalMut += MutRate;
                 deltaTotalSubNonSyn += SubRateNonSyn;
@@ -363,6 +365,10 @@ void SiteInterSubMatrix::transfertTotalRate(int sourceNodeIndex,int sinkNodeInde
 {
     TotalSubRate[sinkNodeIndex] = TotalSubRate[sourceNodeIndex] ;
     TotalMutRate[sinkNodeIndex] = TotalMutRate[sourceNodeIndex] ;
+//    TotalSubRateNonSyn[sinkNodeIndex] = TotalSubRateNonSyn[sourceNodeIndex] ;
+//    TotalMutRateNonSyn[sinkNodeIndex] = TotalMutRateNonSyn[sourceNodeIndex] ;
+//    TotalSubRateSyn[sinkNodeIndex] = TotalSubRateSyn[sourceNodeIndex] ;
+//    TotalMutRateSyn[sinkNodeIndex] = TotalMutRateSyn[sourceNodeIndex] ;
 
 }
 
@@ -587,10 +593,15 @@ double SiteInterSubMatrix::GetSubRate(int NodeIndex, int site_codon)
 double SiteInterSubMatrix::GetSubRateNonSyn(int NodeIndex, int site_codon,int** CurrentNodeNucSequence)
 {
 
+    int verbose = lparam->verbose;
     double sum  = 0.0;
     int site_codon_start = 0 ;
     int site_codon_end = lparam->Nsite_codon;
 
+    if(verbose)
+    {
+        cerr << "SiteInterSubMatrix::GetSubRateNonSyn " << NodeIndex << " " << site_codon << "\n";
+    }
 
     if (site_codon > -1)
     {
