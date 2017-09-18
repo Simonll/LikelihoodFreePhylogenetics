@@ -123,16 +123,19 @@ int  SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite, int innucF
 
 }
 
-void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,int**CurrentNodeNucSequence)
-{
-    PartialSubRate[NodeIndex] = GetSubRate(NodeIndex,site_codon);
-    PartialMutRate[NodeIndex] = GetMutRate(NodeIndex,site_codon);
-    PartialSubRateNonSyn[NodeIndex] = GetSubRateNonSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
-    PartialMutRateNonSyn[NodeIndex] = GetMutRateNonSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
-    PartialSubRateSyn[NodeIndex] = GetSubRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
-    PartialMutRateSyn[NodeIndex] = GetMutRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+//void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,int**CurrentNodeNucSequence)
+//{
+//
+//      GetRates(NodeIndex,site_codon,CurrentNodeNucSequence);
 
-}
+//    PartialSubRate[NodeIndex] = GetSubRate(NodeIndex,site_codon);
+//    PartialMutRate[NodeIndex] = GetMutRate(NodeIndex,site_codon);
+//    PartialSubRateNonSyn[NodeIndex] = GetSubRateNonSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+//    PartialMutRateNonSyn[NodeIndex] = GetMutRateNonSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+//    PartialSubRateSyn[NodeIndex] = GetSubRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+//    PartialMutRateSyn[NodeIndex] = GetMutRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+
+//}
 
 void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,int**CurrentNodeNucSequence)
 {
@@ -166,7 +169,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
             site_codon_start =  site_codon - 1 ;
         }
 
-        GetRates(NodeIndex, site_codon, CurrentNodeNucSequence);
+
         deltaTotalSubRate -= GetPartialSubRate(NodeIndex);
         deltaTotalMutRate -= GetPartialMutRate(NodeIndex);
         deltaTotalSubRateNonSyn -= GetPartialSubRateNonSyn(NodeIndex);
@@ -625,7 +628,7 @@ double SiteInterSubMatrix::GetSubRate(int NodeIndex, int site_codon)
     return sum;
 }
 
-void SiteInterSubMatrix::GetRates(int NodeIndex, int site_codon,int** CurrentNodeNucSequence)
+void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,int** CurrentNodeNucSequence)
 {
     int verbose = lparam->verbose;
     double sum  = 0.0;
@@ -702,12 +705,12 @@ void SiteInterSubMatrix::GetRates(int NodeIndex, int site_codon,int** CurrentNod
                 //IF nucposFrom[codonPos] == nucTo set prob to 0
                 ////
 
-                PartialSubRate[NodeIndex] -= SubRate;
-                PartialMutRate[NodeIndex] -= MutRate;
-                PartialSubRateNonSyn[NodeIndex] -= SubRateNonSyn;
-                PartialMutRateNonSyn[NodeIndex] -= MutRateNonSyn;
-                PartialSubRateSyn[NodeIndex] -= SubRateSyn;
-                PartialMutRateSyn[NodeIndex] -= MutRateSyn;
+                PartialSubRate[NodeIndex] += SubRate;
+                PartialMutRate[NodeIndex] += MutRate;
+                PartialSubRateNonSyn[NodeIndex] += SubRateNonSyn;
+                PartialMutRateNonSyn[NodeIndex] += MutRateNonSyn;
+                PartialSubRateSyn[NodeIndex] += SubRateSyn;
+                PartialMutRateSyn[NodeIndex] += MutRateSyn;
 
 
             }

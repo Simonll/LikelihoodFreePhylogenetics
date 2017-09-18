@@ -70,7 +70,7 @@ public:
 
 
     //Getters
-    void GetRates(int NodeIndex, int site_codon,int**CurrentNodeNucSequence);
+
 
     double GetSubRate(int NodeIndex, int site_codon);
     double GetMutRate(int NodeIndex, int site_codon);
@@ -88,7 +88,7 @@ public:
     //Setters
     void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);
     void findCodonContext(int NodeIndex, int site_nuc,int nucFrom, int nucTo, int &pos1From, int &pos2From, int &pos3From, int &pos1To, int &pos2To, int &pos3To,int** CurrentNodeNucSequence);
-    void ComputePartialRates(int NnodeIndex, int site_codon,int**CurrentNodeNucSequence);
+    void ComputePartialRates(int NodeIndex, int site_codon,int** CurrentNodeNucSequence);
     void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon,int**CurrentNodeNucSequence);
     int testCpGcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
     int testTpAcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
