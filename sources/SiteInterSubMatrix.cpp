@@ -644,10 +644,19 @@ void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,int**
         if (site_codon > 0)
         {
             site_codon_start =  site_codon - 1 ;
+
         }
 
     }
 
+
+
+    PartialSubRate[NodeIndex] = 0.0;
+    PartialMutRate[NodeIndex] = 0.0;
+    PartialSubRateNonSyn[NodeIndex] = 0.0;
+    PartialMutRateNonSyn[NodeIndex] = 0.0;
+    PartialSubRateSyn[NodeIndex] = 0.0;
+    PartialMutRateSyn[NodeIndex] = 0.0;
 
 
     int* nucposFrom = new int[3];
@@ -695,7 +704,7 @@ void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,int**
                         else
                         {
 
-                           SubRateSyn = submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+                            SubRateSyn = submatrixTreeSim[NodeIndex][site_nuc][nucTo];
                             MutRateSyn = mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
                         }
                     }
@@ -716,6 +725,9 @@ void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,int**
             }
         }
     }
+
+    delete [] nucposFrom;
+    delete [] nucposTo;
 
 
 
