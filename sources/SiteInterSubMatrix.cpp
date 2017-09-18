@@ -30,6 +30,12 @@ SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam)
     TotalSubRateSyn = new double[lparam->refTree->GetNnode()];
     TotalMutRateSyn = new double[lparam->refTree->GetNnode()];
 
+    PartialSubRate = new double[lparam->refTree->GetNnode()];
+    PartialMutRate = new double[lparam->refTree->GetNnode()];
+    PartialSubRateNonSyn = new double[lparam->refTree->GetNnode()];
+    PartialMutRateNonSyn = new double[lparam->refTree->GetNnode()];
+    PartialSubRateSyn = new double[lparam->refTree->GetNnode()];
+    PartialMutRateSyn = new double[lparam->refTree->GetNnode()];
 
 }
 
@@ -53,6 +59,14 @@ void SiteInterSubMatrix::resetSubMatrix()
         TotalSubRateNonSyn[node] = 0.0;
         TotalMutRateSyn[node] = 0.0;
         TotalSubRateSyn[node] = 0.0;
+
+        PartialMutRate[node] = 0.0;
+        PartialSubRate[node] = 0.0;
+        PartialMutRateNonSyn[node] = 0.0;
+        PartialSubRateNonSyn[node] = 0.0;
+        PartialMutRateSyn[node] = 0.0;
+        PartialSubRateSyn[node] = 0.0;
+
 
         for (int site_nuc = 0 ; site_nuc < lparam->Nsite_nuc ; site_nuc ++ )
         {
@@ -109,6 +123,17 @@ int  SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite, int innucF
 
 }
 
+void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,int**CurrentNodeNucSequence)
+{
+    PartialSubRate[NodeIndex] = GetSubRate(NodeIndex,site_codon);
+    PartialMutRate[NodeIndex] = GetMutRate(NodeIndex,site_codon);
+    PartialSubRateNonSyn[NodeIndex] = GetSubRateNonSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+    PartialMutRateNonSyn[NodeIndex] = GetMutRateNonSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+    PartialSubRateSyn[NodeIndex] = GetSubRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+    PartialMutRateSyn[NodeIndex] = GetMutRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+
+}
+
 void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,int**CurrentNodeNucSequence)
 {
     bool whole = false;
@@ -139,12 +164,12 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
             site_codon_start =  site_codon - 1 ;
         }
 
-        deltaTotalSub -= GetSubRate(NodeIndex,site_codon);
-        deltaTotalMut -= GetMutRate(NodeIndex,site_codon);
-        deltaTotalSubNonSyn -= GetSubRateNonSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
-        deltaTotalMutNonSyn -= GetMutRateNonSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
-        deltaTotalSubSyn -= GetSubRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
-        deltaTotalMutSyn -= GetMutRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
+        deltaTotalSub -= GetPartialSubRate(NodeIndex);
+        deltaTotalMut -= GetPartialMutRate(NodeIndex);
+        deltaTotalSubNonSyn -= GetPartialSubRateNonSyn(NodeIndex);
+        deltaTotalMutNonSyn -= GetPartialMutRateNonSyn(NodeIndex);
+        deltaTotalSubSyn -= GetPartialSubRateSyn(NodeIndex);
+        deltaTotalMutSyn -= GetPartialMutRateSyn(NodeIndex);
 
     }
 
@@ -635,30 +660,29 @@ double SiteInterSubMatrix::GetSubRateNonSyn(int NodeIndex, int site_codon,int** 
             for (int nucTo = 0; nucTo < 4; nucTo++)
             {
                 if (nucposFrom[codonPos] != nucTo)
-                {
                     nucposTo[codonPos] = nucTo;
 
-                    if(lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1], nucposTo[2]))
+                if(lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1], nucposTo[2]))
+                {
+
+                    int codonFrom = lparam->codonstatespace->GetCodonFromDNA(nucposFrom[0], nucposFrom[1], nucposFrom[2]);
+                    int codonTo = lparam->codonstatespace->GetCodonFromDNA(nucposTo[0], nucposTo[1], nucposTo[2]);
+
+                    if (!lparam->codonstatespace->Synonymous(codonFrom,codonTo))
                     {
 
-                        int codonFrom = lparam->codonstatespace->GetCodonFromDNA(nucposFrom[0], nucposFrom[1], nucposFrom[2]);
-                        int codonTo = lparam->codonstatespace->GetCodonFromDNA(nucposTo[0], nucposTo[1], nucposTo[2]);
-
-                        if (!lparam->codonstatespace->Synonymous(codonFrom,codonTo))
-                        {
-
-                            sum += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
-
-                        }
+                        sum += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
 
                     }
 
                 }
 
             }
-        }
 
+        }
     }
+
+
 
     delete [] nucposFrom;
     delete [] nucposTo;
@@ -778,26 +802,26 @@ double SiteInterSubMatrix::GetMutRateNonSyn(int NodeIndex, int site_codon,int** 
             int site_nuc =  site_nuc_start+codonPos;
             for (int nucTo = 0; nucTo < 4; nucTo++)
             {
-                if (nucposFrom[codonPos] != nucTo)
-                {
-                    nucposTo[codonPos] = nucTo;
+////                if (nucposFrom[codonPos] != nucTo)
+////                {
+                nucposTo[codonPos] = nucTo;
 
-                    if(lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1], nucposTo[2]))
+                if(lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1], nucposTo[2]))
+                {
+
+                    int codonFrom = lparam->codonstatespace->GetCodonFromDNA(nucposFrom[0], nucposFrom[1], nucposFrom[2]);
+                    int codonTo = lparam->codonstatespace->GetCodonFromDNA(nucposTo[0], nucposTo[1], nucposTo[2]);
+
+                    if (!lparam->codonstatespace->Synonymous(codonFrom,codonTo))
                     {
 
-                        int codonFrom = lparam->codonstatespace->GetCodonFromDNA(nucposFrom[0], nucposFrom[1], nucposFrom[2]);
-                        int codonTo = lparam->codonstatespace->GetCodonFromDNA(nucposTo[0], nucposTo[1], nucposTo[2]);
-
-                        if (!lparam->codonstatespace->Synonymous(codonFrom,codonTo))
-                        {
-
-                            sum += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
-
-                        }
+                        sum += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
 
                     }
 
                 }
+
+////                }
 
             }
         }

@@ -53,6 +53,13 @@ public:
     double* TotalSubRateSyn;
     double* TotalMutRateSyn;
 
+    double* PartialSubRate;
+    double* PartialMutRate;
+    double* PartialSubRateNonSyn;
+    double* PartialMutRateNonSyn;
+    double* PartialSubRateSyn;
+    double* PartialMutRateSyn;
+
 
     //parameters
     LocalParameters* lparam;
@@ -79,6 +86,7 @@ public:
     //Setters
     void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);
     void findCodonContext(int NodeIndex, int site_nuc,int nucFrom, int nucTo, int &pos1From, int &pos2From, int &pos3From, int &pos1To, int &pos2To, int &pos3To,int** CurrentNodeNucSequence);
+    void ComputePartialRates(int NnodeIndex, int site_codon,int**CurrentNodeNucSequence);
     void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon,int**CurrentNodeNucSequence);
     int testCpGcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
     int testTpAcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
@@ -86,7 +94,9 @@ public:
     void resetSubMatrix();
     void transfertNodeMatrix(int sourceNodeIndex, int sinkNodeIndex, int site_nuc);
 
-
+////
+    // Getters TotalRates
+    ////
 
     double GetTotalMutRate(int NodeIndex)
     {
@@ -124,6 +134,48 @@ public:
 
         return TotalSubRateSyn[NodeIndex];
     }
+
+    ////
+    // Getters PartialRates
+    ////
+
+    double GetPartialMutRate(int NodeIndex)
+    {
+
+        return  PartialMutRate[NodeIndex];
+    }
+
+    double GetPartialSubRate(int NodeIndex)
+    {
+
+        return  PartialSubRate[NodeIndex];
+    }
+
+
+    double GetPartialMutRateNonSyn(int NodeIndex)
+    {
+
+        return  PartialMutRateNonSyn[NodeIndex];
+    }
+
+    double GetPartialSubRateNonSyn(int NodeIndex)
+    {
+
+        return  PartialSubRateNonSyn[NodeIndex];
+    }
+
+    double GetPartialMutRateSyn(int NodeIndex)
+    {
+
+        return  PartialMutRateSyn[NodeIndex];
+    }
+
+    double GetPartialSubRateSyn(int NodeIndex)
+    {
+
+        return  PartialSubRateSyn[NodeIndex];
+    }
+
 
 
     double GetSubRate(int NodeIndex, int site_nuc, int nucTo)

@@ -643,6 +643,7 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo)
     //The evolving sequence is updated here
 
 
+
     CurrentNodeNucSequence[NodeIndex][site_nuc] =  nucTo;
     CurrentNodeCodonSequence[NodeIndex][site_codon] = codonTo[1];
 
@@ -766,6 +767,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
             {
                 cerr << "CRS3\n";
             }
+            submatrix->ComputePartialRates(FromNodeIndex, site_codon,CurrentNodeNucSequence);
             RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo) ;
             if (verbose)
             {
@@ -882,7 +884,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
             {
                 cerr << "CRS7\n";
             }
-
+            submatrix->ComputePartialRates(FromNodeIndex, site_codon,CurrentNodeNucSequence);
             RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo) ;
 
             if (verbose)
@@ -970,7 +972,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
             //cerr << submatrix[FromNodeIndex][site_nuc][nucTo] << "\n";
             int site_codon = int(site_nuc/3);
 
-
+            submatrix->ComputePartialRates(FromNodeIndex, site_codon,CurrentNodeNucSequence);
             RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo) ;
             submatrix->UpdateSubMatrixTreeSim(FromNodeIndex,site_codon,CurrentNodeNucSequence);
             //submatrix->UpdateSubMatrixTreeSim(FromNodeIndex,-1,CurrentNodeNucSequence);
