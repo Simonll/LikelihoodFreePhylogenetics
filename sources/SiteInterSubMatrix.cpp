@@ -166,6 +166,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
             site_codon_start =  site_codon - 1 ;
         }
 
+        GetRates(NodeIndex, site_codon, CurrentNodeNucSequence);
         deltaTotalSubRate -= GetPartialSubRate(NodeIndex);
         deltaTotalMutRate -= GetPartialMutRate(NodeIndex);
         deltaTotalSubRateNonSyn -= GetPartialSubRateNonSyn(NodeIndex);
@@ -622,6 +623,99 @@ double SiteInterSubMatrix::GetSubRate(int NodeIndex, int site_codon)
     }
     //TotalSub[NodeIndex] = sum;
     return sum;
+}
+
+void SiteInterSubMatrix::GetRates(int NodeIndex, int site_codon,int** CurrentNodeNucSequence)
+{
+    int verbose = lparam->verbose;
+    double sum  = 0.0;
+    int site_codon_start = 0 ;
+    int site_codon_end = lparam->Nsite_codon;
+
+    if (site_codon > -1)
+    {
+        if (site_codon < lparam->Nsite_codon-2)
+        {
+            site_codon_end = site_codon + 2;
+        }
+        if (site_codon > 0)
+        {
+            site_codon_start =  site_codon - 1 ;
+        }
+
+    }
+
+
+
+    int* nucposFrom = new int[3];
+    int* nucposTo = new int[3];
+    for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end ; site_codon_i++)
+    {
+
+        int site_nuc_start = (site_codon_i * 3);  // site_codon to site_nuc
+        for (int codonPos = 0; codonPos < 3; codonPos++)
+        {
+            nucposFrom[codonPos] = CurrentNodeNucSequence[NodeIndex][site_nuc_start+codonPos];
+            nucposTo[codonPos] = CurrentNodeNucSequence[NodeIndex][site_nuc_start+codonPos];
+        }
+
+        for ( int codonPos = 0; codonPos < 3; codonPos++ )   // for each nucleotide codon postions [0,2] we will be computing adjacent nucleotide.
+        {
+            int site_nuc =  site_nuc_start+codonPos;
+            for (int nucTo = 0; nucTo < 4; nucTo++)
+            {
+
+                double  MutRate = 0.0;
+                double  SubRate = 0.0;
+                double  MutRateNonSyn = 0.0;
+                double  SubRateNonSyn = 0.0;
+                double  MutRateSyn = 0.0;
+                double  SubRateSyn = 0.0;
+
+                if (nucposFrom[codonPos] != nucTo)
+                {
+                    nucposTo[codonPos] = nucTo;
+                    int codonFrom = lparam->codonstatespace->GetCodonFromDNA(nucposFrom[0], nucposFrom[1], nucposFrom[2]);
+                    int codonTo = lparam->codonstatespace->GetCodonFromDNA(nucposTo[0], nucposTo[1], nucposTo[2]);
+                    if(!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1], nucposTo[2]))
+                    {
+
+                        SubRate = submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+                        MutRate = mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+
+                        if (!lparam->codonstatespace->Synonymous(codonFrom,codonTo))
+                        {
+
+                            SubRateNonSyn = submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+                            MutRateNonSyn = mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+                        }
+                        else
+                        {
+
+                           SubRateSyn = submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+                            MutRateSyn = mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+                        }
+                    }
+                    nucposTo[codonPos]  = nucposFrom[codonPos];
+                }
+                ////
+                //IF nucposFrom[codonPos] == nucTo set prob to 0
+                ////
+
+                PartialSubRate[NodeIndex] -= SubRate;
+                PartialMutRate[NodeIndex] -= MutRate;
+                PartialSubRateNonSyn[NodeIndex] -= SubRateNonSyn;
+                PartialMutRateNonSyn[NodeIndex] -= MutRateNonSyn;
+                PartialSubRateSyn[NodeIndex] -= SubRateSyn;
+                PartialMutRateSyn[NodeIndex] -= MutRateSyn;
+
+
+            }
+        }
+    }
+
+
+
 }
 
 double SiteInterSubMatrix::GetSubRateNonSyn(int NodeIndex, int site_codon,int** CurrentNodeNucSequence)

@@ -70,6 +70,8 @@ public:
 
 
     //Getters
+    void GetRates(int NodeIndex, int site_codon,int**CurrentNodeNucSequence);
+
     double GetSubRate(int NodeIndex, int site_codon);
     double GetMutRate(int NodeIndex, int site_codon);
 
@@ -94,7 +96,7 @@ public:
     void resetSubMatrix();
     void transfertNodeMatrix(int sourceNodeIndex, int sinkNodeIndex, int site_nuc);
 
-////
+    ////
     // Getters TotalRates
     ////
 
