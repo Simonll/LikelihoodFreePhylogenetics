@@ -1270,7 +1270,7 @@ int main(int argc, char* argv[])
                         cerr << " debug7.2\n";
                     }
                     post->registerNewSimulation(
-                        point,
+                        lparam->GetPointID(),
                         lparam->GetCurrentParameters(),
                         lparam->GetCurrentSummaries(),
                         lparam->GetCurrentAccessorySummaries(),

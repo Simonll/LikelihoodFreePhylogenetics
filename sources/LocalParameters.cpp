@@ -123,6 +123,8 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->lambda_TpA = 1.0;
     this->lambdaCA = 1.0;
     this->lambdaTG = 1.0;
+    this->lambda_CpG_GpG = 1.0;
+    this->wR_CHQW = 1.0;
     this->fixNsite = 0;
     this->fixlambda_TBL = 1;
     this->fixlambda_omega = 1;
@@ -139,7 +141,8 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->fixts = 1;
     this->fixrr = 1;
     this->fixss = 1;
-    this->fixwR = 1;
+    this->fixwR_CHQW = 1;
+    this->fixlambda_CpG_GpG = 1;
     this->rooted = 0;
     this->fixroot = -1;
     this->randomseed = -1;
@@ -168,10 +171,8 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->lambda_CpG_prior = "log20Unif";
     this->lambda_TpA_prior = "log20Unif";
     this->lambda_omega_prior = "log3Unif";
-
-
-
-
+    this->lambda_CpG_GpG_prior = "log10Unif";
+    this->wR_CHQW_prior = "log10Unif";
 
 
     this->nucrrnr = new double*[this->Nnucp];
@@ -804,6 +805,19 @@ void LocalParameters::readLocalInstructions()
             iss >> s;
             this->lambda_TpA_prior = s;
             cerr << "prior TpA " << this->lambda_TpA_prior << "\n";
+
+        }
+        else if (s == "-freelambdaCpG_GpG")
+        {
+            this->fixlambda_CpG_GpG = 0;
+            cerr << "freelambdaCpG_GpG\n";
+
+        }
+        else if (s == "-priorlambdaCpG_GpG")
+        {
+            iss >> s;
+            this->lambda_CpG_GpG_prior = s;
+            cerr << "prior CpG " << this->lambda_CpG_GpG_prior << "\n";
 
         }
         else if (s == "-freelambdaomega")

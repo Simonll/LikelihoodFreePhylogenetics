@@ -61,6 +61,7 @@ public:
     double** dicodon_usage;
     double** diaa_usage;
     double* codon_usage;
+    double* fcodon_usage;
     double* codon_usage_wonR;
     double* aa_usage;
     double* aa_usage_wonR;

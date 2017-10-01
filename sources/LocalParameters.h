@@ -136,12 +136,12 @@ public:
     double **ssaaprofiles;
     double *codonprofile;
     int *alloc;
-    double lambda_TBL, lambda_omega, lambda_CpG, lambdaTG, lambdaCA, lambda_TpA, MutationNormFactor, MutationNormFactor1, MutationNormFactor2;
+    double lambda_TBL, lambda_omega, lambda_CpG, lambdaTG, lambdaCA, lambda_TpA, MutationNormFactor, MutationNormFactor1, MutationNormFactor2, wR_CHQW, lambda_CpG_GpG;
     double* muBranch;
-    int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss, fixwR;
+    int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss, fixwR_CHQW, fixlambda_CpG_GpG;
     int MCMCpointID;
 
-    string lambda_TBL_prior, lambda_CpG_prior, lambda_TpA_prior, lambda_omega_prior;
+    string lambda_TBL_prior, lambda_CpG_prior, lambda_TpA_prior, lambda_omega_prior, lambda_CpG_GpG_prior, wR_CHQW_prior;
 
     std::vector<double> summariesRealData;
     std::vector<double> accessorysummariesRealData;

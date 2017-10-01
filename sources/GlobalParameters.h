@@ -45,8 +45,8 @@ public:
     static constexpr double TOOLARGENEGATIVE = -500;
 
 
-    static const int NSummaries = 718;
-    static const int NParam = 26;
+    static const int NSummaries = 782;
+    static const int NParam = 27;
     static const int NEvoStats = 1368;
     static const int NSiteSpecificEvoStats = 2;
 
@@ -54,8 +54,10 @@ public:
     const string listParam[NParam] = {"chainID","root","lambda","lambda_CpG","lambda_TpA","lambdaTG","lambdaCA","lambda_TBL", "lambda_omega",
                                       "nucsA", "nucsC", "nucsG","nucsT",
                                       "nucrrAC","nucrrAG","nucrrAT","nucrrCA","nucrrCG","nucrrCT","nucrrGA","nucrrGC","nucrrGT","nucrrTA","nucrrTC","nucrrTG",
-                                      "wR"
+                                      "wR_CHQW","lambda_CpG_GpG"
                                      };
+
+
 
     const string listSummaries[NSummaries] =
     {
@@ -75,6 +77,10 @@ public:
         "TTT","TTC","TTA","TTG","TCT","TCC","TCA","TCG","TAT","TAC","TAA","TAG","TGT","TGC","TGA","TGG","CTT","CTC","CTA","CTG","CCT","CCC","CCA","CCG","CAT",
         "CAC","CAA","CAG","CGT","CGC","CGA","CGG","ATT","ATC","ATA","ATG","ACT","ACC","ACA","ACG","AAT","AAC","AAA","AAG","AGT","AGC","AGA","AGG","GTT","GTC",
         "GTA","GTG","GCT","GCC","GCA","GCG","GAT","GAC","GAA","GAG","GGT","GGC","GGA","GGG",
+        "fTTT","fTTC","fTTA","fTTG","fTCT","fTCC","fTCA","fTCG","fTAT","fTAC","fTAA","fTAG","fTGT","fTGC","fTGA","fTGG","fCTT","fCTC","fCTA","fCTG","fCCT","fCCC","fCCA","fCCG","fCAT",
+        "fCAC","fCAA","fCAG","fCGT","fCGC","fCGA","fCGG","fATT","fATC","fATA","fATG","fACT","fACC","fACA","fACG","fAAT","fAAC","fAAA","fAAG","fAGT","fAGC","fAGA","fAGG","fGTT","fGTC",
+        "fGTA","fGTG","fGCT","fGCC","fGCA","fGCG","fGAT","fGAC","fGAA","fGAG","fGGT","fGGC","fGGA","fGGG",
+
         "A","C","D","E","F","G","H","I","K","L","M","N","P","Q","R","S","T","V","W","Y",
         "nucsitecomphet","nuc1sitecomphet","nuc2sitecomphet","nuc3sitecomphet","nuctaxacomphet","nuc1taxacomphet","nuc2taxacomphet","nuc3taxacomphet","codonsitecomphet","codontaxacomphet","aasitecomphet","aataxacomphet",
         "mNuc","vNuc","mNuc1","vNuc1","mNuc2","vNuc2","mNuc3","vNuc3","mCodon","vCodon","mAA","vAA","mAAwonR","vAAwonR",

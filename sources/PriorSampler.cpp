@@ -30,10 +30,13 @@ void PriorSampler::sample()
     if(lparam->fixlambda_omega != 1)
     {
 
-        if (lparam->lambda_omega_prior == "log2Unif") {
+        if (lparam->lambda_omega_prior == "log2Unif")
+        {
             lparam->lambda_omega = logNUnif(2);
 
-        } else if (lparam->lambda_omega_prior == "log3Unif"){
+        }
+        else if (lparam->lambda_omega_prior == "log3Unif")
+        {
             lparam->lambda_omega = logNUnif(3);
         }
 
@@ -43,10 +46,13 @@ void PriorSampler::sample()
     if(lparam->fixlambda_TBL != 1)
     {
 
-        if (lparam->lambda_TBL_prior == "log2Unif") {
+        if (lparam->lambda_TBL_prior == "log2Unif")
+        {
             lparam->lambda_TBL = logNUnif(2);
 
-        } else if (lparam->lambda_TBL_prior == "log3Unif"){
+        }
+        else if (lparam->lambda_TBL_prior == "log3Unif")
+        {
             lparam->lambda_TBL = logNUnif(3);
         }
 
@@ -59,21 +65,49 @@ void PriorSampler::sample()
     if(lparam->fixlambda_CpG != 1)
     {
 
-        if (lparam->lambda_CpG_prior == "log10Unif") {
+        if (lparam->lambda_CpG_prior == "log10Unif")
+        {
             lparam->lambda_CpG = logNUnif(10);
 
-        } else if (lparam->lambda_CpG_prior == "log20Unif"){
+        }
+        else if (lparam->lambda_CpG_prior == "log20Unif")
+        {
             lparam->lambda_CpG = logNUnif(20);
 
-        } else if (lparam->lambda_CpG_prior == "log50Unif"){
+        }
+        else if (lparam->lambda_CpG_prior == "log50Unif")
+        {
             lparam->lambda_CpG = logNUnif(50);
 
-        } else if (lparam->lambda_CpG_prior == "log100Unif"){
+        }
+        else if (lparam->lambda_CpG_prior == "log100Unif")
+        {
             lparam->lambda_CpG = logNUnif(100);
         }
+    }
 
+    if(lparam->fixlambda_CpG_GpG != 1)
+    {
 
+        if (lparam->lambda_CpG_GpG_prior == "log10Unif")
+        {
+            lparam->lambda_CpG_GpG = logNUnif(10);
 
+        }
+        else if (lparam->lambda_CpG_GpG_prior == "log20Unif")
+        {
+            lparam->lambda_CpG_GpG = logNUnif(20);
+
+        }
+        else if (lparam->lambda_CpG_GpG_prior == "log50Unif")
+        {
+            lparam->lambda_CpG_GpG = logNUnif(50);
+
+        }
+        else if (lparam->lambda_CpG_GpG_prior == "log100Unif")
+        {
+            lparam->lambda_CpG_GpG = logNUnif(100);
+        }
 
     }
 
@@ -81,18 +115,25 @@ void PriorSampler::sample()
     if(lparam->fixlambda_TpA != 1)
     {
 
-       if (lparam->lambda_TpA_prior == "log10Unif") {
-           lparam->lambda_TpA = logNUnif(10);
+        if (lparam->lambda_TpA_prior == "log10Unif")
+        {
+            lparam->lambda_TpA = logNUnif(10);
 
-       } else if (lparam->lambda_TpA_prior == "log20Unif"){
-           lparam->lambda_TpA = logNUnif(20);
+        }
+        else if (lparam->lambda_TpA_prior == "log20Unif")
+        {
+            lparam->lambda_TpA = logNUnif(20);
 
-       } else if (lparam->lambda_TpA_prior == "log50Unif"){
-           lparam->lambda_TpA = logNUnif(50);
+        }
+        else if (lparam->lambda_TpA_prior == "log50Unif")
+        {
+            lparam->lambda_TpA = logNUnif(50);
 
-       } else if (lparam->lambda_TpA_prior == "log100Unif"){
-           lparam->lambda_TpA = logNUnif(100);
-       }
+        }
+        else if (lparam->lambda_TpA_prior == "log100Unif")
+        {
+            lparam->lambda_TpA = logNUnif(100);
+        }
 
 
     }
@@ -786,11 +827,11 @@ void PriorSampler::sample()
         //gtnr[3][3] = 0.0; //tt
 
     }
-    if (lparam->fixwR != 1)
+    if (lparam->fixwR_CHQW != 1)
     {
         if (lparam->verbose)
         {
-            cerr << "freewR\n";
+            cerr << "freewR_CHQW\n";
         }
 
         int CGA = lparam->codonstatespace->GetState("CGA");

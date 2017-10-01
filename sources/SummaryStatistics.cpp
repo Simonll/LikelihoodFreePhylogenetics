@@ -15,8 +15,13 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     aa_usage = new double [lparam->Nstate_aa];
     aa_usage_wonR = new double [lparam->Nstate_aa];
     codon_usage = new double [lparam->Nstate_codon];
+    fcodon_usage = new double [lparam->Nstate_codon];
     codon_usage_wonR = new double [lparam->Nstate_codon];
 
+
+    ////
+    //Adding pseudo-code
+    ////
     for (int nuc = 0 ; nuc <lparam->Nnucp; nuc++)
     {
         nuc_usage[nuc] = 1.0;
@@ -33,6 +38,7 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
 
     for (int codon =0 ; codon < lparam->Nstate_codon ; codon++)
     {
+        fcodon_usage[codon] = 1.0;
         codon_usage[codon] = 1.0;
         codon_usage_wonR[codon] = 1.0;
     }
@@ -230,6 +236,7 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
     aa_usage = new double [ldata->Nstate_aa];
     aa_usage_wonR = new double [ldata->Nstate_aa];
     codon_usage = new double [ldata->Nstate_codon];
+    fcodon_usage = new double [ldata->Nstate_codon];
     codon_usage_wonR = new double [ldata->Nstate_codon];
     for (int nuc = 0 ; nuc <ldata->Nnucp; nuc++)
     {
