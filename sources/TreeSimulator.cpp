@@ -773,12 +773,12 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
             {
                 cerr << "CRS4\n";
             }
-            submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,CurrentNodeNucSequence);
+            //submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,CurrentNodeNucSequence);
             if (verbose)
             {
                 cerr << "CRS5\n";
             }
-            //submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, -1,CurrentNodeNucSequence);
+            submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, -1,CurrentNodeNucSequence);
             rate = submatrix->GetTotalSubRate(FromNodeIndex);
             //cerr << "Sub " << rate << "\n";
             if (lparam->model == "FMutSelSimu")
