@@ -164,14 +164,14 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
 // else loop over site_codon-1 to site_codon+1: 3 codons to take CpG into account, which is in fact the worst case.
     if (!whole)
     {
-//        if (site_codon < lparam->Nsite_codon-2)
-//        {
-//            site_codon_end = site_codon + 2;
-//        }
-//        if (site_codon > 0)
-//        {
-//            site_codon_start =  site_codon - 1 ;
-//        }
+        if (site_codon < lparam->Nsite_codon-2)
+        {
+            site_codon_end = site_codon + 2;
+        }
+        if (site_codon > 0)
+        {
+            site_codon_start =  site_codon - 1 ;
+        }
 
 
         deltaTotalSubRate -= GetPartialSubRate(NodeIndex);
