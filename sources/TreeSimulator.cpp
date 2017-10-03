@@ -697,7 +697,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
 
         if (verbose)
         {
-            cerr << "CRS1.1\n";
+            cerr << "TreeSimulator::ComputeRecursiveSimulation1.1\n";
         }
         ////
         // IF is ROOT
@@ -717,7 +717,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
 
         if (verbose)
         {
-            cerr << "CRS2\n";
+            cerr << "TreeSimulator::ComputeRecursiveSimulation2\n";
             cerr << time << "\n" << blength << "\n";
             cerr << submatrix->GetTotalMutRate(FromNodeIndex) << "\n" << submatrix->GetTotalMutRateNonSyn(FromNodeIndex) << "\n" << submatrix->GetTotalMutRateSyn(FromNodeIndex) << "\n";
             cerr << submatrix->GetTotalSubRate(FromNodeIndex) << "\n" << submatrix->GetTotalSubRateNonSyn(FromNodeIndex) << "\n" << submatrix->GetTotalSubRateSyn(FromNodeIndex) << "\n";
@@ -765,20 +765,20 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
             int site_codon = int(site_nuc/3);
             if (verbose)
             {
-                cerr << "CRS3\n";
+                cerr << "TreeSimulator::ComputeRecursiveSimulation3\n";
             }
             submatrix->ComputePartialRates(FromNodeIndex, site_codon,CurrentNodeNucSequence);
             RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo) ;
             if (verbose)
             {
-                cerr << "CRS4\n";
+                cerr << "TreeSimulator::ComputeRecursiveSimulation4\n";
             }
-            //submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,CurrentNodeNucSequence);
+            submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,CurrentNodeNucSequence);
             if (verbose)
             {
-                cerr << "CRS5\n";
+                cerr << "TreeSimulator::ComputeRecursiveSimulation5\n";
             }
-            submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, -1,CurrentNodeNucSequence);
+            //submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, -1,CurrentNodeNucSequence);
             rate = submatrix->GetTotalSubRate(FromNodeIndex);
             //cerr << "Sub " << rate << "\n";
             if (lparam->model == "FMutSelSimu")
@@ -795,7 +795,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
 
         if (verbose)
         {
-            cerr << "CRS5.1\n";
+            cerr << "TreeSimulator::ComputeRecursiveSimulation5.1\n";
         }
 
 //        rootBranchEvoStats->MutRate[1][0] = submatrix->GetTotalMutRate(FromNodeIndex);
