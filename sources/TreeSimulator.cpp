@@ -703,12 +703,12 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
         // IF is ROOT
         ////
 
-        rootBranchEvoStats->MutRate[0][0] = submatrix->GetTotalMutRate(FromNodeIndex);
-        rootBranchEvoStats->MutRate[0][1] = submatrix->GetTotalMutRateNonSyn(FromNodeIndex);
-        rootBranchEvoStats->MutRate[0][2] = submatrix->GetTotalMutRateSyn(FromNodeIndex);
-        rootBranchEvoStats->SubRate[0][0] = submatrix->GetTotalSubRate(FromNodeIndex);
-        rootBranchEvoStats->SubRate[0][1] = submatrix->GetTotalSubRateNonSyn(FromNodeIndex);
-        rootBranchEvoStats->SubRate[0][2] = submatrix->GetTotalSubRateSyn(FromNodeIndex);
+//        rootBranchEvoStats->MutRate[0][0] = submatrix->GetTotalMutRate(FromNodeIndex);
+//        rootBranchEvoStats->MutRate[0][1] = submatrix->GetTotalMutRateNonSyn(FromNodeIndex);
+//        rootBranchEvoStats->MutRate[0][2] = submatrix->GetTotalMutRateSyn(FromNodeIndex);
+//        rootBranchEvoStats->SubRate[0][0] = submatrix->GetTotalSubRate(FromNodeIndex);
+//        rootBranchEvoStats->SubRate[0][1] = submatrix->GetTotalSubRateNonSyn(FromNodeIndex);
+//        rootBranchEvoStats->SubRate[0][2] = submatrix->GetTotalSubRateSyn(FromNodeIndex);
 
 
         time = (lparam->rnd->sExpo()) /rate;
@@ -798,12 +798,12 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
             cerr << "CRS5.1\n";
         }
 
-        rootBranchEvoStats->MutRate[1][0] = submatrix->GetTotalMutRate(FromNodeIndex);
-        rootBranchEvoStats->MutRate[1][1] = submatrix->GetTotalMutRateNonSyn(FromNodeIndex);
-        rootBranchEvoStats->MutRate[1][2] = submatrix->GetTotalMutRateSyn(FromNodeIndex);
-        rootBranchEvoStats->SubRate[1][0] = submatrix->GetTotalSubRate(FromNodeIndex);
-        rootBranchEvoStats->SubRate[1][1] = submatrix->GetTotalSubRateNonSyn(FromNodeIndex);
-        rootBranchEvoStats->SubRate[1][2] = submatrix->GetTotalSubRateSyn(FromNodeIndex);
+//        rootBranchEvoStats->MutRate[1][0] = submatrix->GetTotalMutRate(FromNodeIndex);
+//        rootBranchEvoStats->MutRate[1][1] = submatrix->GetTotalMutRateNonSyn(FromNodeIndex);
+//        rootBranchEvoStats->MutRate[1][2] = submatrix->GetTotalMutRateSyn(FromNodeIndex);
+//        rootBranchEvoStats->SubRate[1][0] = submatrix->GetTotalSubRate(FromNodeIndex);
+//        rootBranchEvoStats->SubRate[1][1] = submatrix->GetTotalSubRateNonSyn(FromNodeIndex);
+//        rootBranchEvoStats->SubRate[1][2] = submatrix->GetTotalSubRateSyn(FromNodeIndex);
 
         for (Link* link = from->Next(); link != from; link = link->Next())
         {
