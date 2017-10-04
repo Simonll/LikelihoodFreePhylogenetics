@@ -81,6 +81,20 @@ void SiteInterSubMatrix::resetSubMatrix()
 
 }
 
+int  SiteInterSubMatrix::testGpTcontext(int inNnodeIndex, int insite, int innucFrom, int innucTo,int**CurrentNodeNucSequence)
+{
+// if insite is one before end seq and  cur_insite = G and cur_insite+1 = T and G goes to T then GpTHyp
+
+
+    if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] == 2 && CurrentNodeNucSequence[inNnodeIndex][insite+1] == 3) && innucFrom == 2 && innucTo == 3)
+    {
+        return 1; // TpT
+    }
+    else
+    {
+        return -1;
+    }
+}
 
 
 
@@ -246,7 +260,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
 
                         int CpGcont = testCpGcontext(NodeIndex,site_nuc, nucposFrom[codonPos], nucposTo[codonPos],CurrentNodeNucSequence);
                         int TpAcont = testTpAcontext(NodeIndex,site_nuc, nucposFrom[codonPos], nucposTo[codonPos],CurrentNodeNucSequence);
-
+                        int GpTcont = testGpTcontext(NodeIndex,site_nuc, nucposFrom[codonPos], nucposTo[codonPos],CurrentNodeNucSequence);
                         if (CpGcont == 1 || CpGcont == 2)
                         {
                             m *=  lparam->lambda_CpG;
@@ -259,6 +273,10 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                         if (TpAcont == 1 || TpAcont == 2)
                         {
                             m *=  lparam->lambda_TpA;
+                        }
+                        if (GpTcont == 1)
+                        {
+                            m *=  lparam->lambda_GpT;
                         }
 
 
@@ -273,6 +291,8 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
 
 
                         MutRate *= lparam->lambda_TBL;
+
+
                         if (!lparam->codonstatespace->Synonymous(codonFrom,codonTo))
                         {
                             S = log(lparam->ssaaprofiles[lparam->alloc[site_codon_i]][lparam->codonstatespace->Translation(codonTo)] /

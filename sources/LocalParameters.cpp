@@ -120,6 +120,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->lambda_TBL = 1.0;
     this->lambda_omega = 1.0;
     this->lambda_CpG = 1.0;
+    this->lambda_GpT = 1.0;
     this->lambda_TpA = 1.0;
     this->lambdaCA = 1.0;
     this->lambdaTG = 1.0;
@@ -168,9 +169,10 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->isdata = false;
     this->iscodon = false;
     this->lambda_TBL_prior = "log2Unif";
-    this->lambda_CpG_prior = "log20Unif";
-    this->lambda_TpA_prior = "log20Unif";
-    this->lambda_omega_prior = "log3Unif";
+    this->lambda_CpG_prior = "log10Unif";
+    this->lambda_GpT_prior = "log10Unif";
+    this->lambda_TpA_prior = "log10Unif";
+    this->lambda_omega_prior = "log2Unif";
     this->lambda_CpG_GpG_prior = "log10Unif";
     this->wR_CHQW_prior = "log10Unif";
 
@@ -787,6 +789,19 @@ void LocalParameters::readLocalInstructions()
             cerr << "freelambdaCpG\n";
 
         }
+        else if (s == "-freelambdaGpT")
+        {
+            this->fixlambda_GpT = 0;
+            cerr << "freelambdaGpT\n";
+
+        }
+        else if (s == "-priorlambdaGpT")
+        {
+            iss >> s;
+            this->lambda_GpT_prior = s;
+            cerr << "prior GpT " << this->lambda_GpT_prior << "\n";
+
+        }
         else if (s == "-priorlambdaCpG")
         {
             iss >> s;
@@ -817,7 +832,7 @@ void LocalParameters::readLocalInstructions()
         {
             iss >> s;
             this->lambda_CpG_GpG_prior = s;
-            cerr << "prior CpG " << this->lambda_CpG_GpG_prior << "\n";
+            cerr << "prior CpG_GpG" << this->lambda_CpG_GpG_prior << "\n";
 
         }
         else if (s == "-freelambdaomega")
@@ -1134,6 +1149,10 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         {
             this->lambda_CpG = posterior[it][param_i];
         }
+        else if(arrParam[param_i]  == "lambda_GpT")
+        {
+            this->lambda_GpT = posterior[it][param_i];
+        }
         else if(arrParam[param_i]  == "lambda_TpA")
         {
             this->lambda_TpA = posterior[it][param_i];
@@ -1344,6 +1363,10 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         else if(arrParam[param_i]  == "lambda_CpG")
         {
             cur_param.push_back(this->lambda_CpG);
+        }
+        else if(arrParam[param_i]  == "lambda_GpT")
+        {
+            cur_param.push_back(this->lambda_GpT);
         }
         else if(arrParam[param_i]  == "lambda_CpG_GpG")
         {

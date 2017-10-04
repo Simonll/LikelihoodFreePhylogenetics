@@ -149,7 +149,31 @@ void PriorSampler::sample()
 
 
     }
+  if(lparam->fixlambda_GpT != 1)
+    {
 
+        if (lparam->lambda_GpT_prior == "log10Unif")
+        {
+            lparam->lambda_GpT = logNUnif(10);
+
+        }
+        else if (lparam->lambda_GpT_prior == "log20Unif")
+        {
+            lparam->lambda_GpT = logNUnif(20);
+
+        }
+        else if (lparam->lambda_GpT_prior == "log50Unif")
+        {
+            lparam->lambda_GpT = logNUnif(50);
+
+        }
+        else if (lparam->lambda_GpT_prior == "log100Unif")
+        {
+            lparam->lambda_GpT = logNUnif(100);
+        }
+
+
+    }
 
     if (lparam->fixrr != 1)
     {

@@ -90,6 +90,7 @@ public:
     void findCodonContext(int NodeIndex, int site_nuc,int nucFrom, int nucTo, int &pos1From, int &pos2From, int &pos3From, int &pos1To, int &pos2To, int &pos3To,int** CurrentNodeNucSequence);
     void ComputePartialRates(int NodeIndex, int site_codon,int** CurrentNodeNucSequence);
     void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon,int**CurrentNodeNucSequence);
+    int testGpTcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
     int testCpGcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
     int testTpAcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
     int testContextDinuc(int NodeIndex, int site_nuc, int* context, int nucTo, int**CurrentNodeNucSequence);
