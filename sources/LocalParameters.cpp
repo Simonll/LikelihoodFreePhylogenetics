@@ -1138,6 +1138,10 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         {
             this->lambda_TpA = posterior[it][param_i];
         }
+        else if(arrParam[param_i]  == "lambda_CpG_GpG")
+        {
+            this->lambda_CpG_GpG = posterior[it][param_i];
+        }
         else if (arrParam[param_i]  == "lambdaTG")
         {
             this->lambdaTG = posterior[it][param_i];
@@ -1340,6 +1344,10 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         else if(arrParam[param_i]  == "lambda_CpG")
         {
             cur_param.push_back(this->lambda_CpG);
+        }
+        else if(arrParam[param_i]  == "lambda_CpG_GpG")
+        {
+            cur_param.push_back(this->lambda_CpG_GpG);
         }
         else if(arrParam[param_i]  == "lambda_TpA")
         {
