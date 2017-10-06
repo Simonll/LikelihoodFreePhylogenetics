@@ -537,10 +537,10 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["dinucGG"] = &SummaryStatistics::GetDinucGG;
     GetSummariesMap["dinucGT"] = &SummaryStatistics::GetDinucGT;
 
-    GetSummariesMap["dinucTA"] = &SummaryStatistics::GetDinucGA;
-    GetSummariesMap["dinucTC"] = &SummaryStatistics::GetDinucGC;
-    GetSummariesMap["dinucTG"] = &SummaryStatistics::GetDinucGG;
-    GetSummariesMap["dinucTT"] = &SummaryStatistics::GetDinucGT;
+    GetSummariesMap["dinucTA"] = &SummaryStatistics::GetDinucTA;
+    GetSummariesMap["dinucTC"] = &SummaryStatistics::GetDinucTC;
+    GetSummariesMap["dinucTG"] = &SummaryStatistics::GetDinucTG;
+    GetSummariesMap["dinucTT"] = &SummaryStatistics::GetDinucTT;
 
     GetSummariesMap["dinuc12AA"] = &SummaryStatistics::GetDinuc12AA;
     GetSummariesMap["dinuc12AC"] = &SummaryStatistics::GetDinuc12AC;
@@ -557,10 +557,10 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["dinuc12GG"] = &SummaryStatistics::GetDinuc12GG;
     GetSummariesMap["dinuc12GT"] = &SummaryStatistics::GetDinuc12GT;
 
-    GetSummariesMap["dinuc12TA"] = &SummaryStatistics::GetDinuc12GA;
-    GetSummariesMap["dinuc12TC"] = &SummaryStatistics::GetDinuc12GC;
-    GetSummariesMap["dinuc12TG"] = &SummaryStatistics::GetDinuc12GG;
-    GetSummariesMap["dinuc12TT"] = &SummaryStatistics::GetDinuc12GT;
+    GetSummariesMap["dinuc12TA"] = &SummaryStatistics::GetDinuc12TA;
+    GetSummariesMap["dinuc12TC"] = &SummaryStatistics::GetDinuc12TC;
+    GetSummariesMap["dinuc12TG"] = &SummaryStatistics::GetDinuc12TG;
+    GetSummariesMap["dinuc12TT"] = &SummaryStatistics::GetDinuc12TT;
 
 
     GetSummariesMap["dinuc23AA"] = &SummaryStatistics::GetDinuc23AA;
@@ -578,10 +578,10 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["dinuc23GG"] = &SummaryStatistics::GetDinuc23GG;
     GetSummariesMap["dinuc23GT"] = &SummaryStatistics::GetDinuc23GT;
 
-    GetSummariesMap["dinuc23TA"] = &SummaryStatistics::GetDinuc23GA;
-    GetSummariesMap["dinuc23TC"] = &SummaryStatistics::GetDinuc23GC;
-    GetSummariesMap["dinuc23TG"] = &SummaryStatistics::GetDinuc23GG;
-    GetSummariesMap["dinuc23TT"] = &SummaryStatistics::GetDinuc23GT;
+    GetSummariesMap["dinuc23TA"] = &SummaryStatistics::GetDinuc23TA;
+    GetSummariesMap["dinuc23TC"] = &SummaryStatistics::GetDinuc23TC;
+    GetSummariesMap["dinuc23TG"] = &SummaryStatistics::GetDinuc23TG;
+    GetSummariesMap["dinuc23TT"] = &SummaryStatistics::GetDinuc23TT;
 
 
     GetSummariesMap["dinuc31AA"] = &SummaryStatistics::GetDinuc31AA;
@@ -599,10 +599,10 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["dinuc31GG"] = &SummaryStatistics::GetDinuc31GG;
     GetSummariesMap["dinuc31GT"] = &SummaryStatistics::GetDinuc31GT;
 
-    GetSummariesMap["dinuc31TA"] = &SummaryStatistics::GetDinuc31GA;
-    GetSummariesMap["dinuc31TC"] = &SummaryStatistics::GetDinuc31GC;
-    GetSummariesMap["dinuc31TG"] = &SummaryStatistics::GetDinuc31GG;
-    GetSummariesMap["dinuc31TT"] = &SummaryStatistics::GetDinuc31GT;
+    GetSummariesMap["dinuc31TA"] = &SummaryStatistics::GetDinuc31TA;
+    GetSummariesMap["dinuc31TC"] = &SummaryStatistics::GetDinuc31TC;
+    GetSummariesMap["dinuc31TG"] = &SummaryStatistics::GetDinuc31TG;
+    GetSummariesMap["dinuc31TT"] = &SummaryStatistics::GetDinuc31TT;
 
 
     GetSummariesMap["A"] = &SummaryStatistics::GetA;
