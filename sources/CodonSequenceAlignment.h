@@ -32,8 +32,10 @@ class CodonSequenceAlignment : public SequenceAlignment
 
 public:
 
+
     CodonSequenceAlignment(CodonSequenceAlignment* from) : SequenceAlignment((SequenceAlignment*) from) {}
     CodonSequenceAlignment(CodonSequenceAlignment* from, int** indata);
+    CodonSequenceAlignment(CodonSequenceAlignment* from, int Ntaxa,  int** indata);
     CodonSequenceAlignment(SequenceAlignment* from, bool force_stops = false,GeneticCodeType type = Universal);
 
     ~CodonSequenceAlignment() {}

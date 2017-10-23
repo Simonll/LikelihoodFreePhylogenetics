@@ -154,6 +154,7 @@ public:
     void computeSummariesFromData();
     void computeSummaries();
     void computeSummaries(int** curent_nodeleaf_sequence_codon);
+    void computeSummariesAncestralSequence(int*** CurrentAncestralCodonSequence);
     void GetRealStat();
 //        std::vector<double> ReadRealStat(string inrealstat) {
 //            std::vector<double> cur_real_statistics;

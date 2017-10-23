@@ -26,6 +26,43 @@ using namespace std;
 #include "CodonSequenceAlignment.h"
 // #include "Exception.h"
 
+
+//new TaxonSet(SpeciesNames,Ntaxa);
+
+//Ancestral Sequence
+CodonSequenceAlignment::CodonSequenceAlignment(CodonSequenceAlignment* from,int Ntaxa,  int** indata_codon)
+{
+
+    Nsite = from->GetNsite(); // Nsite_codon
+    this->Ntaxa = Ntaxa;
+    statespace = from->GetStateSpace();
+    string * SpeciesNames = new string[Ntaxa];
+    SpeciesNames[0] = "Seq0";
+    taxset = new TaxonSet(SpeciesNames,Ntaxa);
+
+    //cerr << "Nsite : " << Nsite << "Ntaxa : " << Ntaxa << "\n";
+
+    Data = new int*[Ntaxa];
+    for (int i=0; i<Ntaxa; i++)
+    {
+        Data[i] = new int[Nsite];
+        for (int j=0; j<Nsite; j++)
+        {
+            if(from->GetState(i,j) == -1)
+            {
+                Data[i][j] = -1;
+            }
+            else
+            {
+                Data[i][j] = indata_codon [i][j];
+            }
+        }
+    }
+    BKData = 0;
+
+}
+
+
 CodonSequenceAlignment::CodonSequenceAlignment(CodonSequenceAlignment* from, int** indata_codon)
 {
 

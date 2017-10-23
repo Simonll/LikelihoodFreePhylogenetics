@@ -747,42 +747,58 @@ int main(int argc, char* argv[])
 
                             }
 
-                        }
-
-
-                        if(post3->Niter < 10000000  && post3->Nrun == 10000000 )
-                        {
-
-                            post3->registerNewSimulation(
-                                lparam[l]->MCMCpointID,
-                                lparam[l]->GetCurrentParameters(),
-                                lparam[l]->GetCurrentSummaries(),
-                                lparam[l]->GetCurrentAccessorySummaries(),
-                                lparam[l]->GetCurrentAncEvoStats(),
-                                lparam[l]->GetCurrentEvoStats(),
-                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                lparam[l]->GetCurrentDistances(),
-                                lparam[l]->GetCurrentWeights()
-                            );
-
-
-                            if (post3->Niter % post3->threshold == 0)
+                            if (post3->Niter == 100000)
                             {
 
-                                ofstream dist_os3((gparam->output+"-10M.post").c_str(),OUT);
-                                post3->writeHeader(dist_os3);
-                                post3->writePosterior(dist_os3);
-                                dist_os3.close();
 
-                                ofstream monitor_os3((gparam->output+"-10M.monitor").c_str(),OUT);
-                                post3->writeMonitorPosterior(monitor_os3);
-                                monitor_os3.close();
+                                ofstream dist_os1((gparam->output+"-100K.post").c_str(),OUT);
+                                post3->writeHeader(dist_os1);
+                                post3->writePosterior(dist_os1);
+                                dist_os1.close();
 
+                                ofstream monitor_os1((gparam->output+"-100K.monitor").c_str(),OUT);
+                                post3->writeMonitorPosterior(monitor_os1);
+                                monitor_os1.close();
 
 
                             }
 
                         }
+
+
+//                        if(post3->Niter < 10000000  && post3->Nrun == 10000000 )
+//                        {
+//
+//                            post3->registerNewSimulation(
+//                                lparam[l]->MCMCpointID,
+//                                lparam[l]->GetCurrentParameters(),
+//                                lparam[l]->GetCurrentSummaries(),
+//                                lparam[l]->GetCurrentAccessorySummaries(),
+//                                lparam[l]->GetCurrentAncEvoStats(),
+//                                lparam[l]->GetCurrentEvoStats(),
+//                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+//                                lparam[l]->GetCurrentDistances(),
+//                                lparam[l]->GetCurrentWeights()
+//                            );
+//
+//
+//                            if (post3->Niter % post3->threshold == 0)
+//                            {
+//
+//                                ofstream dist_os3((gparam->output+"-10M.post").c_str(),OUT);
+//                                post3->writeHeader(dist_os3);
+//                                post3->writePosterior(dist_os3);
+//                                dist_os3.close();
+//
+//                                ofstream monitor_os3((gparam->output+"-10M.monitor").c_str(),OUT);
+//                                post3->writeMonitorPosterior(monitor_os3);
+//                                monitor_os3.close();
+//
+//
+//
+//                            }
+//
+//                        }
 
                     }
                 }

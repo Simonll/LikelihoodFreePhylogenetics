@@ -141,6 +141,7 @@ public:
     std::vector<double> accessorysummariesRealData;
     std::vector<double> summariesSimulatedData;
     std::vector<double> accessorysummariesSimulatedData;
+    std::vector<double> summariesAncestralData;
     std::vector<double> evostats;
     std::vector<double> ancevostats;
     std::vector<double> sitespecificevostats;

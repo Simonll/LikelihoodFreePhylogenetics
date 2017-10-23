@@ -1241,7 +1241,156 @@ SummaryStatistics::~SummaryStatistics()
 
 //}
 
+void SummaryStatistics::computeSummariesAncestralSequence(int*** CurrentAncestralCodonSequence)
+{
 
+    int verbose = lparam->verbose;
+
+    lparam->summariesAncestralData.clear();
+    lparam->summariesAncestralData.shrink_to_fit();
+
+    codon_bool = false;
+    dinuc_bool = false;
+    dinuc12_bool = false;
+    dinuc23_bool = false;
+    dinuc31_bool = false;
+    aa_bool = false;
+    aa_wonR_bool = false;
+    dicodon_bool = false;
+    diaa_bool = false;
+    nuc_bool = false;
+    nuc1_bool = false;
+    nuc2_bool = false;
+    nuc3_bool = false;
+    nuc_meandiff_bool = false;
+    nuc1_meandiff_bool = false;
+    nuc2_meandiff_bool = false;
+    nuc3_meandiff_bool = false;
+    codon_meandiff_bool = false;
+    aa_meandiff_bool = false;
+    aa_wonR_meandiff_bool = false;
+    CGNAGR_bool = false;
+    nuc_pairwise_bool = false;
+    nuc1_pairwise_bool = false;
+    nuc2_pairwise_bool = false;
+    nuc3_pairwise_bool = false;
+    aa_pairwise_bool = false;
+    dinucCpG_pairwise_bool = false;
+    nuc_site_comphet_bool = false;
+    nuc1_site_comphet_bool = false;
+    nuc2_site_comphet_bool = false;
+    nuc3_site_comphet_bool = false;
+    nuc_taxa_comphet_bool = false;
+    nuc1_taxa_comphet_bool = false;
+    nuc2_taxa_comphet_bool = false;
+    nuc3_taxa_comphet_bool = false;
+    codon_site_comphet_bool = false;
+    codon_taxa_comphet_bool = false;
+    aa_site_comphet_bool = false;
+    aa_taxa_comphet_bool = false;
+
+
+    int anc_i = 0;
+    CodonSequenceAlignment* simulation = new CodonSequenceAlignment(lparam->codondata,CurrentAncestralCodonSequence[anc_i]);
+
+    if(verbose)
+    {
+        cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)1\n";
+    }
+    string* arrSummaries = new string[lparam->NusedSummaries];
+    for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
+    {
+        auto it = lparam->mapUsedSummaries.find(lparam->listSummaries[i_summary]);
+        if(it != lparam->mapUsedSummaries.end() && it->second != -1)
+        {
+            arrSummaries[it->second] = it->first;
+        }
+    }
+
+    if(verbose)
+    {
+        cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)2\n";
+    }
+    for(unsigned int i_summary = 0 ; i_summary < lparam->NusedSummaries; i_summary++)
+    {
+        auto it = GetSummariesMap.find(arrSummaries[i_summary]);
+        if (it != GetSummariesMap.end())
+        {
+            funcpt f = GetSummariesMap[arrSummaries[i_summary]];
+            double s = (this->*f)(simulation);
+
+            if (s < lparam->TOOSMALL || isinf(s))
+            {
+                s = lparam->TOOSMALL;
+            }
+
+            if (lparam->transformation == "log2")
+            {
+                s = log2(s);
+            }
+            else if (lparam->transformation == "log10")
+            {
+                s = log10(s);
+            }
+
+
+            lparam->summariesSimulatedData.push_back(s);
+        }
+    }
+    if(verbose)
+    {
+        cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)3\n";
+    }
+    string* arrAccSummaries = new string[lparam->NusedAccessorySummaries];
+    for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
+    {
+        auto it = lparam->mapUsedAccessorySummaries.find(lparam->listSummaries[i_summary]);
+        if(it != lparam->mapUsedAccessorySummaries.end() && it->second != -1)
+        {
+            arrAccSummaries[it->second] = it->first;
+        }
+    }
+
+    if(verbose)
+    {
+        cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)4\n";
+    }
+    for(unsigned int i_summary = 0 ; i_summary < lparam->NusedAccessorySummaries; i_summary++)
+    {
+        auto it = GetSummariesMap.find(arrAccSummaries[i_summary]);
+        if (it != GetSummariesMap.end())
+        {
+            funcpt f = GetSummariesMap[arrAccSummaries[i_summary]];
+            double s = (this->*f)(simulation);
+
+            if (s < lparam->TOOSMALL || isinf(s))
+            {
+                s = lparam->TOOSMALL;
+            }
+
+            if (lparam->transformation == "log2")
+            {
+                s = log2(s);
+            }
+            else if (lparam->transformation == "log10")
+            {
+                s = log10(s);
+            }
+
+
+            lparam->accessorysummariesSimulatedData.push_back(s);
+        }
+    }
+
+
+    delete simulation;
+    delete [] arrAccSummaries;
+    delete [] arrSummaries;
+    if(verbose)
+    {
+        cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)5\n";
+    }
+}
 
 
 void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
