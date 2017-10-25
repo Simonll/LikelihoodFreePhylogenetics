@@ -828,6 +828,10 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
 
             time += (lparam->rnd->sExpo()) /rate;
 
+            if (verbose)
+            {
+                cerr << "TreeSimulator::ComputeRecursiveSimulation5.0 " << interval << "\n" ;
+            }
             if (time>IntervalLength*interval)
             {
                 GetSampleAncestralCodonSequence(FromNodeIndex,interval);
