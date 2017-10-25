@@ -32,6 +32,13 @@ GlobalParameters::GlobalParameters(string model, string controlfile)
         mapUsedParam[listParam[i]] = -1;
     }
 
+    cerr << "Constructing mapUsedAncSummaries\n";
+    for (unsigned int i = 0 ; i <  this->NSummaries; i++ )
+    {
+        mapUsedAncSummaries[listSummaries[i]] = -1;
+    }
+
+
     cerr << "Constructing mapUsedSummaries\n";
     for (unsigned int i = 0 ; i <  this->NSummaries; i++ )
     {
@@ -176,7 +183,7 @@ void GlobalParameters::readInstructions()
                 else if (w != "#ANCSUMMARIES")
                 {
 
-                    cerr << "Undefined summary " << w << "\n";
+                    cerr << "Undefined ancestral summary " << w << "\n";
                     exit(0);
 
                 }
