@@ -570,7 +570,7 @@ int main(int argc, char* argv[])
                         cerr << "debug20\n";
                     }
 
-                    for (int interval_i = 0 ; interval_i < 10; interval_i++)
+                    for (int interval_i = 0 ; interval_i < 11; interval_i++)
                     {
                         ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
                     }
@@ -905,7 +905,7 @@ int main(int argc, char* argv[])
             ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
 
 
-            ss->computeSummariesAncestralSequence(simulator->CurrentAncestralCodonSequence[9]);
+            ss->computeSummariesAncestralSequence(simulator->CurrentAncestralCodonSequence[10]);
             ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str());
             if (post->Niter == 0)
             {
