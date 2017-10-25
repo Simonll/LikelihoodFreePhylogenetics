@@ -910,7 +910,7 @@ int main(int argc, char* argv[])
             if (post->Niter == 0)
             {
                 ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), OUT);
-                bool headers = true
+                bool headers = true;
                 lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
                 AncestralDataSummaries_os.close();
             }
@@ -918,7 +918,7 @@ int main(int argc, char* argv[])
 
             {
                 ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), APPEND);
-                bool headers = false
+                bool headers = false;
                 lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
                 AncestralDataSummaries_os.close();
             }
