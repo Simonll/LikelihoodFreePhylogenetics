@@ -906,18 +906,24 @@ int main(int argc, char* argv[])
 
 
             ss->computeSummariesAncestralSequence(simulator->CurrentAncestralCodonSequence[10]);
-            ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str());
+
             if (post->Niter == 0)
             {
-                lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,true);
+                ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), OUT);
+                bool headers = true
+                lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
+                AncestralDataSummaries_os.close();
             }
             else
 
             {
-                lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,false);
+                ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), APPEND);
+                bool headers = false
+                lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
+                AncestralDataSummaries_os.close();
             }
 
-            AncestralDataSummaries_os.close();
+
 
 
 

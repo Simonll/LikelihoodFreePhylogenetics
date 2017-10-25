@@ -156,7 +156,7 @@ public:
 
     // Writers
     void writeRealDataSummaries(ofstream&os,bool headers= true);
-    void writeAncestralDataSummaries(ofstream&os,bool headers= true);
+    void writeAncestralDataSummaries(ofstream&os,bool headers);
     void writeParam(ofstream& os);
 
 
