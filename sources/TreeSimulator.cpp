@@ -28,6 +28,14 @@ TreeSimulator::TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submat
     }
 
 
+    CurrentAncestralCodonSequence = new int**[10];
+    for (int point_i = 0 ; point_i < 10 ; point_i ++)
+    {
+        CurrentAncestralCodonSequence[point_i] = new int *[1];
+        CurrentAncestralCodonSequence[point_i][0] = new int [lparam->Nsite_codon];
+    }
+
+
 }
 
 TreeSimulator::~TreeSimulator()
@@ -79,6 +87,22 @@ void TreeSimulator::resetSimulator()
             }
         }
     }
+
+    if(verbose)
+    {
+        cerr << "resetSimulator3\n";
+    }
+
+    for (int point_i = 0 ; point_i < 10 ; point_i ++)
+    {
+
+        for(int site_codon = 0 ; site_codon < lparam->Nsite_codon; site_codon++)
+        {
+            CurrentAncestralCodonSequence[point_i][0][site_codon] = -2;
+        }
+    }
+
+
 }
 
 void TreeSimulator::GetNewSimulatedCodonAlignment()
@@ -273,10 +297,10 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo)
     {
         rootBranchEvoStats->Nsub++;
         //rootBranchEvoStats->ssNsub[site_codon]++;
-         if(lparam->codonstatespace->Synonymous(codonFrom[1],codonTo[1]))
-            {
-                rootBranchEvoStats->Nsynsub++;
-            }
+        if(lparam->codonstatespace->Synonymous(codonFrom[1],codonTo[1]))
+        {
+            rootBranchEvoStats->Nsynsub++;
+        }
 
 
         if (CodonPos == 0)
@@ -691,6 +715,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
         double blength = 0.0;
 
 
+
         rate = submatrix->GetTotalSubRate(FromNodeIndex);
         //cerr << "Sub " << rate << "\n";
         if (lparam->model == "FMutSelSimu")
@@ -719,7 +744,8 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
         time = (lparam->rnd->sExpo()) /rate;
 
         blength = lparam->rootlength;
-
+        double IntervalLength = blength/10;
+        int interval = 0;
         if (verbose)
         {
             cerr << "TreeSimulator::ComputeRecursiveSimulation2\n";
@@ -727,8 +753,15 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
             cerr << submatrix->GetTotalMutRate(FromNodeIndex) << "\n" << submatrix->GetTotalMutRateNonSyn(FromNodeIndex) << "\n" << submatrix->GetTotalMutRateSyn(FromNodeIndex) << "\n";
             cerr << submatrix->GetTotalSubRate(FromNodeIndex) << "\n" << submatrix->GetTotalSubRateNonSyn(FromNodeIndex) << "\n" << submatrix->GetTotalSubRateSyn(FromNodeIndex) << "\n";
         }
+
+
+        GetSampleAncestralCodonSequence(FromNodeIndex,interval);
+        interval ++;
         while (time < blength)
         {
+
+
+
             double u = lparam->rnd->Uniform() * submatrix->GetTotalSubRate(FromNodeIndex);
             int site_nuc = 0;
             int nucTo = 0;
@@ -795,6 +828,11 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
 
             time += (lparam->rnd->sExpo()) /rate;
 
+            if (time>IntervalLength*interval)
+            {
+                GetSampleAncestralCodonSequence(FromNodeIndex,interval);
+                interval ++;
+            }
 
         }
 
@@ -1023,7 +1061,16 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
 
 }
 
+void TreeSimulator::GetSampleAncestralCodonSequence(int FromNodeIndex,int interval)
+{
 
+    for(int site_codon = 0 ; site_codon < lparam->Nsite_codon ; site_codon++)
+    {
+        CurrentAncestralCodonSequence[interval][0][site_codon] = CurrentNodeCodonSequence[FromNodeIndex][site_codon];
+
+    }
+
+}
 
 
 void TreeSimulator::WriteAncestral()

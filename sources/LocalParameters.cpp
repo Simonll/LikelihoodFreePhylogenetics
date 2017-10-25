@@ -96,12 +96,14 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->NusedEvoAncStats = gparam->NusedEvoAncStats;
     this->NusedParam = gparam->NusedParam;
     this->NusedSummaries = gparam->NusedSummaries;
+    this->NusedAncSummaries = gparam->NusedAncSummaries;
     this->NusedAccessorySummaries = gparam->NusedAccessorySummaries;
     this->Ngenes = gparam->Ngenes;
 
 
     this->mapUsedParam.insert(gparam->mapUsedParam.begin(),gparam->mapUsedParam.end());
     this->mapUsedSummaries.insert(gparam->mapUsedSummaries.begin(),gparam->mapUsedSummaries.end());
+    this->mapUsedAncSummaries.insert(gparam->mapUsedAncSummaries.begin(),gparam->mapUsedAncSummaries.end());
     this->mapUsedAccessorySummaries.insert(gparam->mapUsedAccessorySummaries.begin(),gparam->mapUsedAccessorySummaries.end());
     this->mapUsedEvoStats.insert(gparam->mapUsedEvoStats.begin(),gparam->mapUsedEvoStats.end());
     this->mapUsedSiteSpecificEvoStats.insert(gparam->mapUsedSiteSpecificEvoStats.begin(),gparam->mapUsedSiteSpecificEvoStats.end());
@@ -2529,6 +2531,7 @@ int LocalParameters::GetPointID()
 {
     return MCMCpointID;
 }
+
 void LocalParameters::writeRealDataSummaries(ofstream&os, bool headers)
 {
     string* arrSummaries = new string[NusedSummaries];
@@ -2583,5 +2586,58 @@ void LocalParameters::writeRealDataSummaries(ofstream&os, bool headers)
 
 }
 
+void LocalParameters::writeAncestralDataSummaries(ofstream&os, bool headers)
+{
+    string* arrSummaries = new string[NusedAncSummaries];
+    for(unsigned int summary_i = 0 ; summary_i < NSummaries; summary_i++)
+    {
+        auto it = mapUsedAncSummaries.find(listSummaries[summary_i]);
+        if(it != mapUsedAncSummaries.end() )
+        {
+            if(it->second != -1)
+            {
+                arrSummaries[it->second] = it->first;
+
+            }
+
+        }
+    }
+
+    if (headers)
+    {
+        for(unsigned int summary_i = 0 ; summary_i < NusedAncSummaries; summary_i++)
+        {
+
+            if (summary_i < NusedAncSummaries-1)
+            {
+                os << arrSummaries[summary_i]  << "\t";
+
+            }
+            else
+            {
+                os << arrSummaries[summary_i] << "\n";
+
+            }
+        }
+    }
+
+    for(unsigned int summary_i = 0 ; summary_i < NusedAncSummaries; summary_i++)
+    {
+
+        if (summary_i < NusedAncSummaries-1)
+        {
+            os << summariesAncestralData[summary_i]  << "\t";
+
+        }
+        else
+        {
+            os << summariesAncestralData[summary_i] << "\n";
+
+        }
+    }
+
+    delete [] arrSummaries;
+
+}
 
 

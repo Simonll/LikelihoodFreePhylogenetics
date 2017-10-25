@@ -570,6 +570,16 @@ int main(int argc, char* argv[])
                         cerr << "debug20\n";
                     }
 
+                    for (int interval_i = 0 ; interval_i < 10; interval_i++)
+                    {
+                        ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
+                    }
+
+
+                    {
+                        cerr << "debug20.1\n";
+                    }
+
                     ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
                     if(gparam->verbose)
                     {
@@ -862,10 +872,10 @@ int main(int argc, char* argv[])
         }
         AncestralSequence* ancestraseq = new AncestralSequence(lparam);
 
-        cerr << "debug9\n";
+
         TreeSimulator* simulator = new TreeSimulator(lparam,submatrix,ancestraseq);
 
-        cerr << "debug10\n";
+
         ofstream lparam_os ((gparam->output+".inputparam").c_str());
         lparam->writeParam(lparam_os);
         lparam_os.close();
@@ -893,6 +903,37 @@ int main(int argc, char* argv[])
                 cerr << "debug13\n";
             }
             ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
+
+
+            ss->computeSummariesAncestralSequence(simulator->CurrentAncestralCodonSequence[9]);
+            ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str());
+            if (post->Niter == 0)
+            {
+                lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,true);
+            }
+            else
+
+            {
+                lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,false);
+            }
+
+            AncestralDataSummaries_os.close();
+
+
+
+//            for (int interval_i = 0 ; interval_i < 10; interval_i++)
+//            {
+//                ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
+//                ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str());
+//                if (i == 0)
+//                {
+//                    lparam->writeAncestralDataSummaries(AncestralDataSummaries_os);
+//                }else
+//                {
+//                    lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,false);
+//                }
+//                AncestralDataSummaries_os.close();
+//            }
 
             if(gparam->verbose)
             {

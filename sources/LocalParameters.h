@@ -71,6 +71,7 @@ public:
 
     std::map<string,int> mapUsedParam;
     std::map<string,int> mapUsedSummaries;
+    std::map<string,int> mapUsedAncSummaries;
     std::map<string,int> mapUsedAccessorySummaries;
     std::map<string,int> mapUsedEvoStats;
     std::map<string,int> mapUsedEvoAncStats;
@@ -81,6 +82,7 @@ public:
     int NusedEvoAncStats;
     int NusedParam;
     int NusedSummaries;
+    int NusedAncSummaries;
     int NusedAccessorySummaries;
     int Ngenes;
 
@@ -154,6 +156,7 @@ public:
 
     // Writers
     void writeRealDataSummaries(ofstream&os,bool headers= true);
+    void writeAncestralDataSummaries(ofstream&os,bool headers= true);
     void writeParam(ofstream& os);
 
 

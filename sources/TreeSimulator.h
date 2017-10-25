@@ -48,6 +48,7 @@ public:
 
 
     //Simulating along a tree
+    int*** CurrentAncestralCodonSequence;
     int** CurrentNodeCodonSequence;
     int** CurrentNodeNucSequence;
     int** CurrentLeafNodeNucSequence;
@@ -80,9 +81,10 @@ public:
     //Setters
     void SetAncestralSequence();
 
+
     //Getters
     void GetNewSimulatedCodonAlignment();
-
+    void GetSampleAncestralCodonSequence(int FromNodeIndex,int interval);
 
 
     TreeSimulator(LocalParameters* lparam,SiteInterSubMatrix* submatrix,AncestralSequence* ancestralseq);

@@ -151,6 +151,41 @@ void GlobalParameters::readInstructions()
             cerr << "#ACCSUMMARIES " << NusedAccessorySummaries << "\n";
 
         }
+
+        ///
+        ///
+        ///
+
+        else if(!line.empty() && line.substr(0,13) == "#ANCSUMMARIES")
+        {
+            istringstream iss(line);
+            string w;
+            int k = 0 ;
+            while(iss >> w)
+
+            {
+
+                auto it = mapUsedAncSummaries.find(w);
+                if (it != mapUsedAncSummaries.end())
+                {
+
+                    it->second = k;
+                    k++;
+
+                }
+                else if (w != "#ANCSUMMARIES")
+                {
+
+                    cerr << "Undefined summary " << w << "\n";
+                    exit(0);
+
+                }
+
+            }
+            NusedAncSummaries = k;
+            cerr << "#ANCSUMMARIES " << NusedAncSummaries << "\n";
+
+        }
         else if(!line.empty() && line.substr(0,6) == "#PARAM")
         {
             istringstream iss(line);

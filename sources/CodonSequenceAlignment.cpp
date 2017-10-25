@@ -30,7 +30,7 @@ using namespace std;
 //new TaxonSet(SpeciesNames,Ntaxa);
 
 //Ancestral Sequence
-CodonSequenceAlignment::CodonSequenceAlignment(CodonSequenceAlignment* from,int Ntaxa,  int** indata_codon)
+CodonSequenceAlignment::CodonSequenceAlignment(CodonSequenceAlignment* from, int Ntaxa,  int** indata_codon)
 {
 
     Nsite = from->GetNsite(); // Nsite_codon
