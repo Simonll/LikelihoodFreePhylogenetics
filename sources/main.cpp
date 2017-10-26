@@ -80,6 +80,7 @@ int main(int argc, char* argv[])
         cerr << "-m < stats | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP |MAP100CodonMutSelFinitePPChecks | MAP100CodonMutSelSBDPPPChecks > <controlfile>\n";
         cerr << "###########################\n";
         cerr << "#SUMMARIES\n";
+        cerr << "#ANCSUMMARIES\n";
         cerr << "#ACCSUMMARIES\n";
         cerr << "#PARAM\n";
         cerr << "#SSMAP\n";

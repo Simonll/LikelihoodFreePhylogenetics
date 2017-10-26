@@ -1433,7 +1433,7 @@ public:
         double entropy = 0.0;
         for (int codon_i = 0 ; codon_i < GetCodonStateSpace()->GetNstate(); codon_i++)
         {
-        entropy -= stat_container[codon_i] * log2(stat_container[codon_i]);
+            entropy -= stat_container[codon_i] * log2(stat_container[codon_i]);
 
         }
 

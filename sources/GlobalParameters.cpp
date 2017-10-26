@@ -338,7 +338,7 @@ void GlobalParameters::readInstructions()
             cerr << "\n";
 
         }
-        else if (!line.empty() && line.substr(0,5) == "#TRANS")
+        else if (!line.empty() && line.substr(0,6) == "#TRANS")
         {
             istringstream iss(line);
             string w;

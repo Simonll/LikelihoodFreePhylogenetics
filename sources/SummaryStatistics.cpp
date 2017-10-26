@@ -1324,15 +1324,7 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
                 s = lparam->TOOSMALL;
             }
 
-            if (lparam->transformation == "log2")
-            {
-                s = log2(s);
-            }
-            else if (lparam->transformation == "log10")
-            {
-                s = log10(s);
-            }
-
+            s = transformSummaryStatistics(s);
 
             lparam->summariesAncestralData.push_back(s);
         }
@@ -1433,14 +1425,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
                 s = lparam->TOOSMALL;
             }
 
-            if (lparam->transformation == "log2")
-            {
-                s = log2(s);
-            }
-            else if (lparam->transformation == "log10")
-            {
-                s = log10(s);
-            }
+            s = transformSummaryStatistics(s);
 
 
             lparam->summariesSimulatedData.push_back(s);
@@ -1477,14 +1462,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
                 s = lparam->TOOSMALL;
             }
 
-            if (lparam->transformation == "log2")
-            {
-                s = log2(s);
-            }
-            else if (lparam->transformation == "log10")
-            {
-                s = log10(s);
-            }
+            s = transformSummaryStatistics(s);
 
 
             lparam->accessorysummariesSimulatedData.push_back(s);
@@ -1577,17 +1555,7 @@ void SummaryStatistics::computeSummaries()
                 s = lparam->TOOSMALL;
             }
 
-
-
-            if (lparam->transformation == "log2")
-            {
-                s = log2(s);
-            }
-            else if (lparam->transformation == "log10")
-            {
-                s = log10(s);
-            }
-
+            s = transformSummaryStatistics(s);
 
             lparam->summariesRealData.push_back(s);
         }
@@ -1619,17 +1587,7 @@ void SummaryStatistics::computeSummaries()
                 s = lparam->TOOSMALL;
             }
 
-
-
-            if (lparam->transformation == "log2")
-            {
-                s = log2(s);
-            }
-            else if (lparam->transformation == "log10")
-            {
-                s = log10(s);
-            }
-
+            s = transformSummaryStatistics(s);
 
             lparam->accessorysummariesRealData.push_back(s);
         }
@@ -1714,14 +1672,7 @@ void SummaryStatistics::computeSummariesFromData()
                 s = ldata->TOOSMALL;
             }
 
-            if (lparam->transformation == "log2")
-            {
-                s = log2(s);
-            }
-            else if (lparam->transformation == "log10")
-            {
-                s = log10(s);
-            }
+            s = transformSummaryStatistics(s);
 
             ldata->summariesRealData.push_back(s);
         }
@@ -1731,7 +1682,26 @@ void SummaryStatistics::computeSummariesFromData()
 }
 
 
+double SummaryStatistics::transformSummaryStatistics(double s)
+{
 
+    if (lparam->transformation == "log2")
+    {
+        s = log2(s);
+    }
+
+    else if (lparam->transformation == "log10")
+    {
+        s = log10(s);
+    } else if (lparam->transformation == "no")
+
+    {
+
+    }
+
+    return s;
+
+}
 
 
 
