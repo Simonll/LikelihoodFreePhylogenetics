@@ -866,8 +866,6 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
         }
     }
 
-
-
     delete [] ppp;
     delete [] mean;
     delete [] var;

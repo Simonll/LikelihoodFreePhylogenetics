@@ -1193,7 +1193,7 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["diaaYV"]=&SummaryStatistics::GetDIAA_YV;
     GetSummariesMap["diaaYW"]=&SummaryStatistics::GetDIAA_YW;
     GetSummariesMap["diaaYY"]=&SummaryStatistics::GetDIAA_YY;
-
+    GetSummariesMap["RSCUentropy"] =&SummaryStatistics::GetRSCUentropy;
 
 }
 
@@ -1287,6 +1287,8 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
     codon_taxa_comphet_bool = false;
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
+    RSCUentropy_bool = false;
+
 
 
     CodonSequenceAlignment* simulation = new CodonSequenceAlignment(lparam->codondata, 1, CurrentAncestralCodonSequence);
@@ -1396,6 +1398,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
     codon_taxa_comphet_bool = false;
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
+    RSCUentropy_bool = false;
 
     CodonSequenceAlignment* simulation = new CodonSequenceAlignment(lparam->codondata,CurrentNodeLeafCodonSequence);
 
@@ -1547,6 +1550,7 @@ void SummaryStatistics::computeSummaries()
     codon_taxa_comphet_bool = false;
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
+    RSCUentropy_bool = false;
 
     string* arrSummaries = new string[lparam->NusedSummaries];
     for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
@@ -1680,6 +1684,7 @@ void SummaryStatistics::computeSummariesFromData()
     codon_taxa_comphet_bool = false;
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
+    RSCUentropy_bool = false;
 
 
 

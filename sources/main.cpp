@@ -1356,9 +1356,9 @@ int main(int argc, char* argv[])
             post->writePosterior(dist_os);
             dist_os.close();
 
-//            ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
-//            post->writePosteriorPredictivePvalues(ppp_os);
-//            ppp_os.close();
+            ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
+            post->writePosteriorPredictivePvalues(ppp_os);
+            ppp_os.close();
 
 
         }

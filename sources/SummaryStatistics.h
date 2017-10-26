@@ -96,6 +96,7 @@ public:
     double codon_taxa_comphet;
     double aa_site_comphet;
     double aa_taxa_comphet;
+    double RSCUentropy;
 
 
     bool codon_bool;
@@ -138,6 +139,7 @@ public:
     bool codon_taxa_comphet_bool;
     bool aa_site_comphet_bool;
     bool aa_taxa_comphet_bool;
+    bool RSCUentropy_bool;
 
 
     //Constructors
@@ -6769,6 +6771,15 @@ private:
         return diaa_usage[19][19];
     }
 
+    double GetRSCUentropy(CodonSequenceAlignment* codondata)
+    {
+        if(!RSCUentropy_bool)
+        {
+            codondata->RSCUEntropy(RSCUentropy);
+            RSCUentropy_bool = true;
+        }
+
+    }
 
 
 

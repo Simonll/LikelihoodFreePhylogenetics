@@ -1388,6 +1388,59 @@ public:
     }
 
 
+    void RSCUEntropy(double stat)
+    {
+
+        double* stat_container = new double[GetCodonStateSpace()->GetNstate()];
+
+        int tot = GetCodonStateSpace()->GetNstate();
+        for ( int codon  = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon ++ )
+        {
+            stat_container[codon] = 1.0 ;
+        }
+        for (int taxa = 0; taxa < Ntaxa; taxa++)
+        {
+            for (int site_codon = 0; site_codon < Nsite; site_codon++)
+            {
+                int state = Data[taxa][site_codon]; //GetState(taxa,site_codon);
+                if(state != unknown)
+                {
+                    stat_container[state]++;
+                    tot ++ ;
+                }
+            }
+        }
+        for (int aa = 0 ; aa < Naa ; aa++)
+        {
+            int aa_tot = 0;
+            for (int codon = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon++)
+            {
+                if (aa == GetCodonStateSpace()->Translation(codon))
+                {
+                    aa_tot += stat_container[codon];
+                }
+            }
+            for (int codon = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon++)
+            {
+                if (aa == GetCodonStateSpace()->Translation(codon))
+                {
+                    stat_container[codon]/=aa_tot;
+                }
+            }
+
+        }
+
+        double entropy = 0.0;
+        for (int codon_i = 0 ; codon_i < GetCodonStateSpace()->GetNstate(); codon_i++)
+        {
+        entropy -= stat_container[codon_i] * log2(stat_container[codon_i]);
+
+        }
+
+        stat  = entropy;
+        delete [] stat_container;
+    }
+
     void CodonUsagePerAA(double* stat_container)
     {
         int tot = GetCodonStateSpace()->GetNstate();
