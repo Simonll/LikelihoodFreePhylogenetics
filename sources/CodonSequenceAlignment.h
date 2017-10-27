@@ -1388,7 +1388,7 @@ public:
     }
 
 
-    void RSCUEntropy(double stat)
+    double RSCUEntropy()
     {
 
         double* stat_container = new double[GetCodonStateSpace()->GetNstate()];
@@ -1437,8 +1437,10 @@ public:
 
         }
 
-        stat  = entropy;
+
         delete [] stat_container;
+
+        return entropy;
     }
 
     void CodonUsagePerAA(double* stat_container)

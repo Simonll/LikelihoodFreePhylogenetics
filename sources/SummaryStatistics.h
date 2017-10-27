@@ -6776,7 +6776,7 @@ private:
     {
         if(!RSCUentropy_bool)
         {
-            codondata->RSCUEntropy(RSCUentropy);
+            RSCUentropy = codondata->RSCUEntropy();
             RSCUentropy_bool = true;
         }
 

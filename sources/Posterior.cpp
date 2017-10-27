@@ -878,7 +878,163 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
 
 }
 
+void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<double>summariesRealData)
+{
 
+
+    unsigned int pop_size = population_t.size();
+    int k =0 ;
+    if (NusedSummaries > 0)
+    {
+        string* arrSummaries = new string[this->NusedSummaries];
+        for(unsigned int summary_i = 0 ; summary_i < this->NSummaries; summary_i++)
+        {
+            auto it = mapUsedSummaries.find(this->listSummaries[summary_i]);
+            if(it != mapUsedSummaries.end() )
+            {
+                if(it->second != -1)
+                {
+                    arrSummaries[it->second] = it->first;
+
+                }
+
+            }
+
+        }
+
+
+        for(unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+        {
+            if(k == 0 )
+            {
+                os << arrSummaries[summary_i];
+                k = 1;
+            }
+            else
+            {
+                os << "\t" << arrSummaries[summary_i];
+            }
+
+        }
+        os << "\n";
+    }
+
+
+
+    int n = 0;
+
+
+
+    double* ppp  = new double[this->NusedSummaries];
+    double* mean = new double[this->NusedSummaries];
+    double* var  = new double[this->NusedSummaries];
+    double* a  = new double[this->NusedSummaries];
+    double* b  = new double[this->NusedSummaries];
+    double* K  = new double[this->NusedSummaries];
+
+    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    {
+        ppp[summary_i] = 0.0;
+        mean[summary_i] = 0.0;
+        var[summary_i] = 0.0;
+        a[summary_i] = 0.0;
+        b[summary_i] = 0.0;
+        K[summary_i] = std::get<summariesGetter>(population_t[0])[summary_i]; //const for shifted data
+    }
+
+    for (unsigned int simu_i = 0 ; simu_i < pop_size; simu_i++ )
+    {
+        for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+        {
+
+
+            if(std::get<summariesGetter>(population_t[simu_i])[summary_i] < summariesRealData[summary_i])
+            {
+                ppp[summary_i]+=1;
+            }
+
+            mean[summary_i]+=std::get<summariesGetter>(population_t[simu_i])[summary_i];
+            a[summary_i] +=  std::get<summariesGetter>(population_t[simu_i])[summary_i] - K[summary_i];
+            b[summary_i] +=  (std::get<summariesGetter>(population_t[simu_i])[summary_i] - K[summary_i]) * (std::get<summariesGetter>(population_t[simu_i])[summary_i] - K[summary_i]);
+
+        }
+    }
+
+
+    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    {
+        mean[summary_i] /= pop_size;
+        var[summary_i]  =  (b[summary_i]  - (a[summary_i]*a[summary_i])/pop_size)/(pop_size);
+
+    }
+
+
+
+    //posterior predictive p-values (ppp)
+    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    {
+
+        ppp[summary_i] /= pop_size;
+
+        if(summary_i < this->NusedSummaries-1)
+        {
+            os << ppp[summary_i] << "\t";
+        }
+        else
+        {
+            os << ppp[summary_i] << "\n";
+        }
+
+    }
+
+    //means
+    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    {
+        if(summary_i < this->NusedSummaries-1)
+        {
+            os << mean[summary_i] << "\t";
+        }
+        else
+        {
+            os << mean[summary_i] << "\n";
+        }
+    }
+
+    //variances
+    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    {
+        if(summary_i < this->NusedSummaries-1)
+        {
+            os << var[summary_i] << "\t";
+        }
+        else
+        {
+            os << var[summary_i] << "\n";
+        }
+    }
+
+    //z-scores
+    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    {
+        if(summary_i < this->NusedSummaries-1)
+        {
+            os <<  (summariesRealData[summary_i])-mean[summary_i] / sqrt(var[summary_i]) << "\t";
+        }
+        else
+        {
+            os <<  (summariesRealData[summary_i])-mean[summary_i] / sqrt(var[summary_i]) << "\n";
+        }
+    }
+
+    delete [] ppp;
+    delete [] mean;
+    delete [] var;
+    delete [] a;
+    delete [] b;
+    delete [] K;
+
+
+}
 void Posterior::readMonitor(ifstream & is)
 {
 
