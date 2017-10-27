@@ -1436,6 +1436,7 @@ public:
             entropy -= stat_container[codon_i] * log2(stat_container[codon_i]);
 
         }
+        cerr << "RSCUentropy" << entropy << "\n";
 
 
         delete [] stat_container;
