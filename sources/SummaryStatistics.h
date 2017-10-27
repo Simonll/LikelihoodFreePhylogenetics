@@ -302,6 +302,18 @@ private:
     }
 
 
+    double GetRSCUentropy(CodonSequenceAlignment* codondata)
+    {
+        if(!RSCUentropy_bool)
+        {
+            RSCUentropy = codondata->RSCUEntropy();
+            cerr << "RSCUentropy " << RSCUentropy << "\n";
+            RSCUentropy_bool = true;
+        }
+
+    }
+
+
     /////////////////
     // codon_usage
     /////////////////
@@ -6772,16 +6784,7 @@ private:
         return diaa_usage[19][19];
     }
 
-    double GetRSCUentropy(CodonSequenceAlignment* codondata)
-    {
-        if(!RSCUentropy_bool)
-        {
-            RSCUentropy = codondata->RSCUEntropy();
-            cerr << "RSCUentropy " << RSCUentropy << "\n";
-            RSCUentropy_bool = true;
-        }
 
-    }
 
 
 
