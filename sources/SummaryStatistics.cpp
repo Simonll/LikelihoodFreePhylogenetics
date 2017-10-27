@@ -170,6 +170,7 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     codon_taxa_comphet = 0.0;
     aa_site_comphet = 0.0;
     aa_taxa_comphet = 0.0;
+    RSCUentropy = 0.0;
 
 
 
@@ -216,6 +217,7 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     codon_taxa_comphet_bool = false;
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
+    RSCUentropy_bool = false;
 
     MapFunctions();
 
@@ -383,8 +385,9 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
     codon_taxa_comphet = 0.0;
     aa_site_comphet = 0.0;
     aa_taxa_comphet = 0.0;
+    RSCUentropy = 0.0;
 
-    cerr << "AAA22\n";
+
 
 
     //ss.computeSummaries();
@@ -429,6 +432,7 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
     codon_taxa_comphet_bool = false;
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
+    RSCUentropy_bool = false;
 
     MapFunctions();
 
@@ -1193,7 +1197,7 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["diaaYV"]=&SummaryStatistics::GetDIAA_YV;
     GetSummariesMap["diaaYW"]=&SummaryStatistics::GetDIAA_YW;
     GetSummariesMap["diaaYY"]=&SummaryStatistics::GetDIAA_YY;
-    GetSummariesMap["RSCUentropy"] =&SummaryStatistics::GetRSCUentropy;
+    GetSummariesMap["RSCUentropy"]=&SummaryStatistics::GetRSCUentropy;
 
 }
 
