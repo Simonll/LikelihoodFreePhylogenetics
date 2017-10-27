@@ -1431,6 +1431,10 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
 
             s = transformSummaryStatistics(s);
 
+            if (arrSummaries[i_summary] == "RSCUentropy")
+            {
+                cerr << "RSCUentropy  " << s << "\n";
+            }
 
             lparam->summariesSimulatedData.push_back(s);
         }
