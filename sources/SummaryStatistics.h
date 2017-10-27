@@ -307,9 +307,9 @@ private:
         if(!RSCUentropy_bool)
         {
             RSCUentropy = codondata->RSCUEntropy();
-            cerr << "RSCUentropy " << RSCUentropy << "\n";
             RSCUentropy_bool = true;
         }
+        return RSCUentropy;
 
     }
 

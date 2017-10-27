@@ -1424,11 +1424,6 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
             funcpt f = GetSummariesMap[arrSummaries[i_summary]];
             double s = (this->*f)(simulation);
 
-            if (arrSummaries[i_summary] == "RSCUentropy")
-            {
-                cerr << "RSCUentropy   " << s << "\n";
-            }
-
 
             if (s < lparam->TOOSMALL || isinf(s))
             {
@@ -1437,10 +1432,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
 
             s = transformSummaryStatistics(s);
 
-            if (arrSummaries[i_summary] == "RSCUentropy")
-            {
-                cerr << "RSCUentropy  " << s << "\n";
-            }
+
 
             lparam->summariesSimulatedData.push_back(s);
         }
