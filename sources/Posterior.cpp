@@ -1018,11 +1018,11 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
     {
         if(summary_i < this->NusedSummaries-1)
         {
-            os <<  (summariesRealData[summary_i])-mean[summary_i] / sqrt(var[summary_i]) << "\t";
+            os <<  (summariesRealData[summary_i]-mean[summary_i]) / sqrt(var[summary_i]) << "\t";
         }
         else
         {
-            os <<  (summariesRealData[summary_i])-mean[summary_i] / sqrt(var[summary_i]) << "\n";
+            os <<  (summariesRealData[summary_i]-mean[summary_i]) / sqrt(var[summary_i]) << "\n";
         }
     }
 
