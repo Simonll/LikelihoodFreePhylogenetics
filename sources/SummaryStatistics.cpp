@@ -1693,11 +1693,8 @@ double SummaryStatistics::transformSummaryStatistics(double s)
     else if (lparam->transformation == "log10")
     {
         s = log10(s);
-    } else if (lparam->transformation == "no")
-
-    {
-
     }
+
 
     return s;
 

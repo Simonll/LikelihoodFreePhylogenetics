@@ -806,16 +806,18 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
     {
         for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
         {
-            sum2[summary_i] += (exp2(std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i])*exp2(std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i]));
-            sum3[summary_i] += exp2(std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i]);
+            sum2[summary_i] += (std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i])*(std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i]);
+            sum3[summary_i] += (std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i]);
         }
     }
 
     //posterior predictive p-values (ppp)
     for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
+
         var[summary_i] = (sum2[summary_i]-(sum3[summary_i]*sum3[summary_i])/pop_size)/(pop_size-1);
         ppp[summary_i] /= pop_size;
+
         if(summary_i < this->NusedSummaries-1)
         {
             os << ppp[summary_i] << "\t";
@@ -858,11 +860,11 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
     {
         if(summary_i < this->NusedSummaries-1)
         {
-            os <<  (exp2(summariesRealData[summary_i])-mean[summary_i] / sqrt(var[summary_i])) << "\t";
+            os <<  (summariesRealData[summary_i])-mean[summary_i] / sqrt(var[summary_i]) << "\t";
         }
         else
         {
-            os <<  (exp2(summariesRealData[summary_i])-mean[summary_i] / sqrt(var[summary_i])) << "\n";
+            os <<  (summariesRealData[summary_i])-mean[summary_i] / sqrt(var[summary_i]) << "\n";
         }
     }
 
