@@ -775,7 +775,7 @@ private:
             codondata->CodonUsagePerAA(codon_usage);
             codon_bool = true;
         }
-        return (double) codon_usage[codondata->GetCodonStateSpace()->GetState("TGC")];
+        return 0.0;//  codon_usage[codondata->GetCodonStateSpace()->GetState("TGC")];
     }
     double GetTGT(CodonSequenceAlignment* codondata)
     {
@@ -793,7 +793,7 @@ private:
             codondata->CodonUsagePerAA(codon_usage);
             codon_bool = true;
         }
-        return (double) codon_usage[codondata->GetCodonStateSpace()->GetState("TAG")];
+        return 0.0;//  codon_usage[codondata->GetCodonStateSpace()->GetState("TAG")];
     }
 
     double GetTAA(CodonSequenceAlignment* codondata)
@@ -803,7 +803,7 @@ private:
             codondata->CodonUsagePerAA(codon_usage);
             codon_bool = true;
         }
-        return (double) codon_usage[codondata->GetCodonStateSpace()->GetState("TAA")];
+        return 0.0;//  (double) codon_usage[codondata->GetCodonStateSpace()->GetState("TAA")];
     }
 
     double GetTAC(CodonSequenceAlignment* codondata)

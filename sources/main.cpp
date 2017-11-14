@@ -522,10 +522,10 @@ int main(int argc, char* argv[])
         cerr << post3->Niter << " on " << post3->Nrun << "\n";
 
         ifstream monitor_is((gparam->output+"-1M.monitor").c_str());
+        ifstream monitor_is_100K((gparam->output+"-100K.monitor").c_str());
         if(monitor_is)
         {
-//            post1->readMonitor(monitor_is);
-//            post2->readMonitor(monitor_is);
+
             post3->readMonitor(monitor_is);
             monitor_is.close();
 
@@ -535,10 +535,25 @@ int main(int argc, char* argv[])
                 cerr << "error: did not find posteriorfile"<< "\n";
                 exit(1);
             }
-//            post1->readPosterior(posterior_is);
-//            post2->readPosterior(posterior_is);
+
             post3->readPosterior(posterior_is);
             posterior_is.close();
+
+        }else if (monitor_is_100K) {
+
+            post3->readMonitor(monitor_is_100K);
+            monitor_is_100K.close();
+
+            ifstream posterior_is((gparam->output+"-100K.post").c_str());
+            if (!posterior_is)
+            {
+                cerr << "error: did not find posteriorfile"<< "\n";
+                exit(1);
+            }
+
+            post3->readPosterior(posterior_is);
+            posterior_is.close();
+
         }
 
         while(post3->Niter < post3->Nrun)
@@ -576,7 +591,7 @@ int main(int argc, char* argv[])
                         ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
                     }
 
-
+                    if(gparam->verbose)
                     {
                         cerr << "debug20.1\n";
                     }
@@ -592,9 +607,9 @@ int main(int argc, char* argv[])
 
 
 
+////////////
 
-
-                        if(post3->Niter < 100000 && post3->Nrun < 100)
+                        if(post3->Niter < 100000 && post3->Nrun < 100000)
                         {
 
                             post3->registerNewSimulation(
