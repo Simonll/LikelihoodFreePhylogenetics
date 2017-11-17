@@ -109,7 +109,7 @@ Posterior::Posterior(GlobalParameters* gparam)
 
 
 
-    population_t.reserve(this->threshold);
+    population_t.reserve(this->Nrun);
 
     empVar = new double [this->NusedParam];
     empMean = new double [this->NusedParam];
@@ -264,7 +264,7 @@ std::vector<std::vector<double>> Posterior::GetLocalWeights()
 void Posterior::writePosterior(ofstream&os)
 {
 
-    for (unsigned int simu_i = 0 ; simu_i < population_t.size(); simu_i++ )
+    for (unsigned int simu_i = 0 ; simu_i < this->threshold; simu_i++ )
     {
 
         //write chainID
@@ -1447,6 +1447,41 @@ void Posterior::GetEmpVar()
     delete [] sum1;
     delete [] sum2;
     delete [] sum3;
+
+}
+
+
+void Posterior::slaveToMaster(std::vector<std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>>> population_i){
+
+    population_t.insert(population_t.end(),population_i.begin(),population_i.end());
+
+}
+
+
+
+void Posterior::sortPopulation(){
+    if (!sorted)
+    {
+
+        std::sort(population_t.begin(), population_t.end(),
+                  [](const std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &left,
+                     const std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &right)
+        {
+            return std::get<distancesGetter>(left).back() < std::get<distancesGetter>(right).back();
+        }
+                 );
+        sorted = true;
+    }
+
+
+}
+
+void Posterior::slaveRegisterNewSimulation(int chainID, std::vector<double> param,std::vector<double> summaries,std::vector<double> accsummaries,std::vector<double> evoancstat,std::vector<double> evostat,std::vector<double> ssevostat,std::vector<double> distances, std::vector<double> weights)
+{
+
+    population_t.push_back(make_tuple(chainID,param,summaries,accsummaries,evoancstat, evostat,ssevostat,distances,weights));
+    Naccepted++;
+    this->Niter++;
 
 }
 
