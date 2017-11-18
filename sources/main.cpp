@@ -1027,7 +1027,7 @@ int main(int argc, char* argv[])
             omp_set_dynamic(0);
             omp_set_num_threads(gparam->Nthread);
 
-            #pragma omp for
+            #pragma omp parallel for
             for (int l = 0 ; l < Npoint; l++)
             {
 
