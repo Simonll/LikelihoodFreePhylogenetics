@@ -1021,64 +1021,65 @@ int main(int argc, char* argv[])
 
         int runTodo = int((postMaster->Nrun-postMaster->Niter)/Npoint);
         int run = 0;
-        while(run < runTodo)
-        {
+//        while(run < runTodo)
+//        {
             cerr << ".";
             omp_set_dynamic(0);
             omp_set_num_threads(gparam->Nthread);
 
-            #pragma omp parallel for
+            #pragma omp parallel for private(run) collapse(2)
             for (int l = 0 ; l < Npoint; l++)
             {
+                for (run  = 0; run < runTodo; run++)
 
-
-                if(gparam->verbose)
                 {
-                    cerr << "debug18\n";
+                    if(gparam->verbose)
+                    {
+                        cerr << "debug18\n";
+                    }
+                    sampler[l]->sample();
+
+                    if(gparam->verbose)
+                    {
+                        cerr << "debug19\n";
+                    }
+                    simulator[l]->GetNewSimulatedCodonAlignment();
+                    if(gparam->verbose)
+                    {
+                        cerr << "debug20\n";
+                    }
+
+                    for (int interval_i = 0 ; interval_i < 11; interval_i++)
+                    {
+                        ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
+                    }
+
+                    if(gparam->verbose)
+                    {
+                        cerr << "debug20.1\n";
+                    }
+
+                    ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
+                    if(gparam->verbose)
+                    {
+                        cerr << "debug21\n";
+                    }
+
+                    postSlave[l]->slaveRegisterNewSimulation(
+                        lparam[l]->MCMCpointID,
+                        lparam[l]->GetCurrentParameters(),
+                        lparam[l]->GetCurrentSummaries(),
+                        lparam[l]->GetCurrentAccessorySummaries(),
+                        lparam[l]->GetCurrentAncEvoStats(),
+                        lparam[l]->GetCurrentEvoStats(),
+                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                        lparam[l]->GetCurrentDistances(),
+                        lparam[l]->GetCurrentWeights()
+                    );
                 }
-                sampler[l]->sample();
+//          }
 
-                if(gparam->verbose)
-                {
-                    cerr << "debug19\n";
-                }
-                simulator[l]->GetNewSimulatedCodonAlignment();
-                if(gparam->verbose)
-                {
-                    cerr << "debug20\n";
-                }
-
-                for (int interval_i = 0 ; interval_i < 11; interval_i++)
-                {
-                    ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
-                }
-
-                if(gparam->verbose)
-                {
-                    cerr << "debug20.1\n";
-                }
-
-                ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
-                if(gparam->verbose)
-                {
-                    cerr << "debug21\n";
-                }
-
-                postSlave[l]->slaveRegisterNewSimulation(
-                    lparam[l]->MCMCpointID,
-                    lparam[l]->GetCurrentParameters(),
-                    lparam[l]->GetCurrentSummaries(),
-                    lparam[l]->GetCurrentAccessorySummaries(),
-                    lparam[l]->GetCurrentAncEvoStats(),
-                    lparam[l]->GetCurrentEvoStats(),
-                    lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                    lparam[l]->GetCurrentDistances(),
-                    lparam[l]->GetCurrentWeights()
-                );
-
-            }
-
-            run++;
+//            run++;
 
         }
 
