@@ -524,7 +524,7 @@ int main(int argc, char* argv[])
         ifstream monitor_is_100K((gparam->output+"-100K.monitor").c_str());
         if(monitor_is)
         {
-            cerr << "monitor 100K\n";
+            cerr << "monitor 1M\n";
             post3->readMonitor(monitor_is);
             monitor_is.close();
 

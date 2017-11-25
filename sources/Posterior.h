@@ -154,10 +154,7 @@ public:
 
     void SetNsite(int i);
 
-    void incNiter()
-    {
-        this->Niter++;
-    }
+
 
 
     int GetSize()
