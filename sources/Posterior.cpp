@@ -1051,6 +1051,8 @@ void Posterior::readMonitor(ifstream & is)
     {
         istringstream iss(line);
         iss >> this->Niter;
+        iss >> this->Naccepted;
+        cerr << "Niter "  << this->Niter << " " << "Naccepted " << this->Naccepted << "\n";
 
     }
     else
@@ -1059,18 +1061,7 @@ void Posterior::readMonitor(ifstream & is)
         cerr << "Monitor file is empty " << "\n";
     }
 
-    std::getline(is, line);
-    if(!line.empty())
-    {
-        istringstream iss(line);
-        iss >> this->Naccepted;
 
-    }
-    else
-    {
-        this->Naccepted = 0;
-        cerr << "Monitor file is empty " << "\n";
-    }
 }
 
 void Posterior::writeMonitorPosterior(ofstream& os)
