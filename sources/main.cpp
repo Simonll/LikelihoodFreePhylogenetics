@@ -518,8 +518,7 @@ int main(int argc, char* argv[])
 
         }
 
-        cerr << "The simulation process started\n";
-        cerr << post3->Niter << " on " << post3->Nrun << "\n";
+
 
         ifstream monitor_is((gparam->output+"-1M.monitor").c_str());
         ifstream monitor_is_100K((gparam->output+"-100K.monitor").c_str());
@@ -555,6 +554,9 @@ int main(int argc, char* argv[])
             posterior_is.close();
 
         }
+
+        cerr << "The simulation process started\n";
+        cerr << post3->Niter << " on " << post3->Nrun << "\n";G
 
         while(post3->Niter < post3->Nrun)
         {
@@ -1023,7 +1025,7 @@ int main(int argc, char* argv[])
         int run = 0;
 //        while(run < runTodo)
 //        {
-            cerr << ".";
+
             omp_set_dynamic(0);
             omp_set_num_threads(gparam->Nthread);
 
@@ -1076,6 +1078,8 @@ int main(int argc, char* argv[])
                         lparam[l]->GetCurrentDistances(),
                         lparam[l]->GetCurrentWeights()
                     );
+
+                    cerr << ".";
                 }
 //          }
 

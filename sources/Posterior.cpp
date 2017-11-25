@@ -699,7 +699,7 @@ void Posterior::readPosterior(ifstream& is)
 
                 }
             }
-            cerr << "registring\n";
+
             std::vector<double> tmp;
             registerNewSimulation(
                 chainID,
@@ -712,13 +712,13 @@ void Posterior::readPosterior(ifstream& is)
                 cur_distances,
                 tmp
             );
-            cerr << "registring\n";
+
         }
 
 
     }
 
-    cerr << "posterior registred\n";
+
 }
 
 void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double>summariesRealData)
