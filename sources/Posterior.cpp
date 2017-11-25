@@ -1049,9 +1049,11 @@ void Posterior::readMonitor(ifstream & is)
     std::getline(is, line);
     if(!line.empty())
     {
-        istringstream iss(line);
-        iss >> this->Niter;
-        iss >> this->Naccepted;
+        istringstream iss1(line);
+        iss1 >> this->Niter;
+        std::getline(is, line);
+        istringstream iss2(line);
+        iss2 >> this->Naccepted;
         cerr << "Niter "  << this->Niter << " " << "Naccepted " << this->Naccepted << "\n";
 
     }

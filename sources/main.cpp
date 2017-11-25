@@ -538,6 +538,8 @@ int main(int argc, char* argv[])
             post3->readPosterior(posterior_is);
             posterior_is.close();
 
+            cerr << post3->Niter << " on " << post3->Nrun << "\n";
+
         }else if (monitor_is_100K) {
 
             post3->readMonitor(monitor_is_100K);
@@ -553,10 +555,12 @@ int main(int argc, char* argv[])
             post3->readPosterior(posterior_is);
             posterior_is.close();
 
+            cerr << post3->Niter << " on " << post3->Nrun << "\n";
+
         }
 
         cerr << "The simulation process started\n";
-        cerr << post3->Niter << " on " << post3->Nrun << "\n";
+
 
         while(post3->Niter < post3->Nrun)
         {
