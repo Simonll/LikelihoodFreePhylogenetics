@@ -524,7 +524,7 @@ int main(int argc, char* argv[])
         ifstream monitor_is_100K((gparam->output+"-100K.monitor").c_str());
         if(monitor_is)
         {
-
+            cerr << "monitor 100K\n";
             post3->readMonitor(monitor_is);
             monitor_is.close();
 
@@ -541,7 +541,7 @@ int main(int argc, char* argv[])
             cerr << post3->Niter << " on " << post3->Nrun << "\n";
 
         }else if (monitor_is_100K) {
-
+            cerr << "monitor 100K\n";
             post3->readMonitor(monitor_is_100K);
             monitor_is_100K.close();
 

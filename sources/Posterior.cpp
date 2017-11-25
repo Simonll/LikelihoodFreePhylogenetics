@@ -1037,13 +1037,8 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
 }
 void Posterior::readMonitor(ifstream & is)
 {
-
-
-
     is.clear();                 // clear fail and eof bits
     is.seekg(0, std::ios::beg);
-
-
 
     string line;
     std::getline(is, line);
