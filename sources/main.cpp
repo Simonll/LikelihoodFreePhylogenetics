@@ -556,7 +556,7 @@ int main(int argc, char* argv[])
         }
 
         cerr << "The simulation process started\n";
-        cerr << post3->Niter << " on " << post3->Nrun << "\n";G
+        cerr << post3->Niter << " on " << post3->Nrun << "\n";
 
         while(post3->Niter < post3->Nrun)
         {
