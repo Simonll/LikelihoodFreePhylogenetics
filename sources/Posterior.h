@@ -152,6 +152,18 @@ public:
         std::vector<double> weights
     );
 
+    void registerOldSimulation(
+        int chainID,
+        std::vector<double> param,
+        std::vector<double> summaries,
+        std::vector<double> accsummaries,
+        std::vector<double> ancevostat,
+        std::vector<double> evostat,
+        std::vector<double> ssevostat,
+        std::vector<double> distances,
+        std::vector<double> weights
+    );
+
     void SetNsite(int i);
 
 

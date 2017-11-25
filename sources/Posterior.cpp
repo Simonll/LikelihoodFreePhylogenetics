@@ -430,13 +430,7 @@ void Posterior::readPosterior(ifstream& is)
     is.clear();                 // clear fail and eof bits
     is.seekg(0, std::ios::beg);
     int verbose = 0;
-
-
-
     //check correspondence between control file and posterior file
-
-
-
     if(verbose)
     {
         cerr << "readPosterior NusedParam"<< this->NusedParam << "\n";
@@ -489,7 +483,7 @@ void Posterior::readPosterior(ifstream& is)
         }
         for(int v = 0 ; v < this->NusedParam; v++)
         {
-            cerr << arr[v] << "\n";
+            cerr << "P " << arr[v] << "\n";
         }
         delete[] arr;
     }
@@ -545,10 +539,13 @@ void Posterior::readPosterior(ifstream& is)
 
         }
 
-        for(int v = 0 ; v < this->NusedSummaries+1; v++)
+        for(int v = 0 ; v < this->NusedSummaries; v++)
         {
-            cerr << arr[v] << "\n";
+            cerr << "S " <<  arr[v] << "\n";
+
         }
+        cerr << "D_sum " << arr[this->NusedSummaries] << "\n";
+
         delete[] arr;
     }
 
@@ -632,7 +629,7 @@ void Posterior::readPosterior(ifstream& is)
         }
         for(int v = 0 ; v < this->NusedEvoStats; v++)
         {
-            cerr << arr[v] << "\n";
+            cerr << "ES " << arr[v] << "\n";
         }
         delete[] arr;
     }
@@ -701,7 +698,7 @@ void Posterior::readPosterior(ifstream& is)
             }
 
             std::vector<double> tmp;
-            registerNewSimulation(
+            registerOldSimulation(
                 chainID,
                 cur_param,
                 cur_summaries,
@@ -1439,7 +1436,8 @@ void Posterior::GetEmpVar()
 }
 
 
-void Posterior::slaveToMaster(std::vector<std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>>> population_i){
+void Posterior::slaveToMaster(std::vector<std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>>> population_i)
+{
 
     population_t.insert(population_t.end(),population_i.begin(),population_i.end());
 
@@ -1447,7 +1445,8 @@ void Posterior::slaveToMaster(std::vector<std::tuple<int, std::vector<double>,st
 
 
 
-void Posterior::sortPopulation(){
+void Posterior::sortPopulation()
+{
     if (!sorted)
     {
 
@@ -1536,4 +1535,12 @@ void Posterior::registerNewSimulation(int chainID, std::vector<double> param,std
     }
     this->Niter++;
     //cerr << this->Niter << " ";
+}
+
+
+void Posterior::registerOldSimulation(int chainID, std::vector<double> param,std::vector<double> summaries,std::vector<double> accsummaries,std::vector<double> evoancstat,std::vector<double> evostat,std::vector<double> ssevostat,std::vector<double> distances, std::vector<double> weights)
+{
+
+    population_t.push_back(make_tuple(chainID,param,summaries,accsummaries,evoancstat, evostat,ssevostat,distances,weights));
+
 }
