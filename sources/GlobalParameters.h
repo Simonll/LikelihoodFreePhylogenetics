@@ -45,9 +45,9 @@ public:
     static constexpr double TOOLARGENEGATIVE = -500;
 
 
-    static const int NSummaries = 787;
+    static const int NSummaries = 775;
     static const int NParam = 28;
-    static const int NEvoStats = 1368;
+    static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
 
 
