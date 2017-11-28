@@ -171,7 +171,10 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     aa_site_comphet = 0.0;
     aa_taxa_comphet = 0.0;
     RSCUentropy = 0.0;
-
+    GC = 0.0;
+    GC1 = 0.0;
+    GC2 = 0.0;
+    GC3 = 0.0;
 
 
 
@@ -218,7 +221,10 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
     RSCUentropy_bool = false;
-
+    GC_bool = false;
+    GC1_bool = false;
+    GC2_bool = false;
+    GC3_bool = false;
     MapFunctions();
 
 
@@ -386,6 +392,11 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
     aa_site_comphet = 0.0;
     aa_taxa_comphet = 0.0;
     RSCUentropy = 0.0;
+    GC = 0.0;
+    GC1 = 0.0;
+    GC2 = 0.0;
+    GC3 = 0.0;
+
 
 
 
@@ -433,6 +444,10 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
     RSCUentropy_bool = false;
+    GC_bool = false;
+    GC1_bool = false;
+    GC2_bool = false;
+    GC3_bool = false;
 
     MapFunctions();
 
@@ -1198,6 +1213,10 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["diaaYW"]=&SummaryStatistics::GetDIAA_YW;
     GetSummariesMap["diaaYY"]=&SummaryStatistics::GetDIAA_YY;
     GetSummariesMap["RSCUentropy"]=&SummaryStatistics::GetRSCUentropy;
+    GetSummariesMap["GC"]=&SummaryStatistics::GetGC;
+    GetSummariesMap["GC1"]=&SummaryStatistics::GetGC;
+    GetSummariesMap["GC2"]=&SummaryStatistics::GetGC;
+    GetSummariesMap["GC3"]=&SummaryStatistics::GetGC;
 
 }
 
@@ -1292,7 +1311,10 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
     RSCUentropy_bool = false;
-
+    GC_bool = false;
+    GC1_bool = false;
+    GC2_bool = false;
+    GC3_bool = false;
 
 
     CodonSequenceAlignment* simulation = new CodonSequenceAlignment(lparam->codondata, 1, CurrentAncestralCodonSequence);
@@ -1395,6 +1417,10 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
     RSCUentropy_bool = false;
+    GC_bool = false;
+    GC1_bool = false;
+    GC2_bool = false;
+    GC3_bool = false;
 
     CodonSequenceAlignment* simulation = new CodonSequenceAlignment(lparam->codondata,CurrentNodeLeafCodonSequence);
 
@@ -1535,6 +1561,10 @@ void SummaryStatistics::computeSummaries()
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
     RSCUentropy_bool = false;
+    GC_bool = false;
+    GC1_bool = false;
+    GC2_bool = false;
+    GC3_bool = false;
 
     string* arrSummaries = new string[lparam->NusedSummaries];
     for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
@@ -1649,6 +1679,10 @@ void SummaryStatistics::computeSummariesFromData()
     aa_site_comphet_bool = false;
     aa_taxa_comphet_bool = false;
     RSCUentropy_bool = false;
+    GC_bool = false;
+    GC1_bool = false;
+    GC2_bool = false;
+    GC3_bool = false;
 
 
 

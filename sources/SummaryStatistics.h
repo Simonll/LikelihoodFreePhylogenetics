@@ -97,6 +97,7 @@ public:
     double aa_site_comphet;
     double aa_taxa_comphet;
     double RSCUentropy;
+    double GC, GC1, GC2, GC3;
 
 
     bool codon_bool;
@@ -140,7 +141,7 @@ public:
     bool aa_site_comphet_bool;
     bool aa_taxa_comphet_bool;
     bool RSCUentropy_bool;
-
+    bool GC_bool, GC1_bool, GC2_bool, GC3_bool;
 
     //Constructors
     SummaryStatistics(LocalParameters *lparam);
@@ -2574,6 +2575,54 @@ private:
         }
         return (double) nuc2_usage[3];
     }
+    /////////////////
+    // GC
+    /////////////////
+    double GetGC(CodonSequenceAlignment* codondata)
+    {
+        if(!GC_bool)
+        {
+            codondata->nuc_usage(nuc_usage);
+            nuc_bool = true;
+        }
+
+        return (double) (nuc_usage[1]+nuc_usage[2]);
+    }
+
+    double GetGC1(CodonSequenceAlignment* codondata)
+    {
+        if(!GC1_bool)
+        {
+            codondata->nuc1_usage(nuc1_usage);
+            nuc1_bool = true;
+        }
+
+        return (double) (nuc1_usage[1]+nuc1_usage[2]);
+    }
+
+    double GetGC2(CodonSequenceAlignment* codondata)
+    {
+        if(!GC2_bool)
+        {
+            codondata->nuc2_usage(nuc2_usage);
+            nuc2_bool = true;
+        }
+
+        return (double) (nuc2_usage[1]+nuc2_usage[2]);
+    }
+
+    double GetGC3(CodonSequenceAlignment* codondata)
+    {
+        if(!GC3_bool)
+        {
+            codondata->nuc3_usage(nuc3_usage);
+            nuc3_bool = true;
+        }
+
+        return (double) (nuc3_usage[1]+nuc3_usage[2]);
+    }
+
+
     /////////////////
     // nuc3
     /////////////////
