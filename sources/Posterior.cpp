@@ -109,7 +109,7 @@ Posterior::Posterior(GlobalParameters* gparam)
 
 
 
-    population_t.reserve(this->Nrun);
+    population_t.reserve(this->threshold);
 
     empVar = new double [this->NusedParam];
     empMean = new double [this->NusedParam];
