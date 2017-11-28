@@ -1214,9 +1214,9 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["diaaYY"]=&SummaryStatistics::GetDIAA_YY;
     GetSummariesMap["RSCUentropy"]=&SummaryStatistics::GetRSCUentropy;
     GetSummariesMap["GC"]=&SummaryStatistics::GetGC;
-    GetSummariesMap["GC1"]=&SummaryStatistics::GetGC;
-    GetSummariesMap["GC2"]=&SummaryStatistics::GetGC;
-    GetSummariesMap["GC3"]=&SummaryStatistics::GetGC;
+    GetSummariesMap["GC1"]=&SummaryStatistics::GetGC1;
+    GetSummariesMap["GC2"]=&SummaryStatistics::GetGC2;
+    GetSummariesMap["GC3"]=&SummaryStatistics::GetGC3;
 
 }
 
