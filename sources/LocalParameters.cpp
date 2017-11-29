@@ -2588,6 +2588,9 @@ void LocalParameters::writeRealDataSummaries(ofstream&os, bool headers)
 
 void LocalParameters::writeAncestralDataSummaries(ofstream&os, bool headers)
 {
+
+    // should be incorporated to populatio_t
+
     string* arrSummaries = new string[NusedAncSummaries];
     for(unsigned int summary_i = 0 ; summary_i < NSummaries; summary_i++)
     {

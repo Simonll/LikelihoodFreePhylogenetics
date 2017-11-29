@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         cerr << "\n";
         cerr << "version 1.0\n";
         cerr << "###########################\n";
-        cerr << "-m < stats | show | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP | MAP100CodonMutSelFinitePPChecks | MAP100CodonMutSelSBDPPPChecks > <controlfile>\n";
+        cerr << "-m < stats | show | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP | MAP100CodonMutSelFinitePPChecks | MAP100CodonMutSelSBDPPPChecks | <controlfile>\n";
         cerr << "###########################\n";
         cerr << "#SUMMARIES\n";
         cerr << "#ANCSUMMARIES\n";
@@ -542,7 +542,9 @@ int main(int argc, char* argv[])
 
             cerr << post3->Niter << " on " << post3->Nrun << "\n";
 
-        }else if (monitor_is_100K) {
+        }
+        else if (monitor_is_100K)
+        {
             cerr << "monitor 100K\n";
             post3->readMonitor(monitor_is_100K);
             monitor_is_100K.close();
@@ -1010,7 +1012,9 @@ int main(int argc, char* argv[])
             postMaster->readPosterior(posterior_is);
             posterior_is.close();
 
-        }else if (monitor_is_100K) {
+        }
+        else if (monitor_is_100K)
+        {
 
             postMaster->readMonitor(monitor_is_100K);
             monitor_is_100K.close();
@@ -1032,61 +1036,61 @@ int main(int argc, char* argv[])
 //        while(run < runTodo)
 //        {
 
-            omp_set_dynamic(0);
-            omp_set_num_threads(gparam->Nthread);
+        omp_set_dynamic(0);
+        omp_set_num_threads(gparam->Nthread);
 
-            #pragma omp parallel for private(run) collapse(2)
-            for (int l = 0 ; l < Npoint; l++)
+        #pragma omp parallel for private(run) collapse(2)
+        for (int l = 0 ; l < Npoint; l++)
+        {
+            for (run  = 0; run < runTodo; run++)
+
             {
-                for (run  = 0; run < runTodo; run++)
-
+                if(gparam->verbose)
                 {
-                    if(gparam->verbose)
-                    {
-                        cerr << "debug18\n";
-                    }
-                    sampler[l]->sample();
-
-                    if(gparam->verbose)
-                    {
-                        cerr << "debug19\n";
-                    }
-                    simulator[l]->GetNewSimulatedCodonAlignment();
-                    if(gparam->verbose)
-                    {
-                        cerr << "debug20\n";
-                    }
-
-                    for (int interval_i = 0 ; interval_i < 11; interval_i++)
-                    {
-                        ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
-                    }
-
-                    if(gparam->verbose)
-                    {
-                        cerr << "debug20.1\n";
-                    }
-
-                    ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
-                    if(gparam->verbose)
-                    {
-                        cerr << "debug21\n";
-                    }
-
-                    postSlave[l]->slaveRegisterNewSimulation(
-                        lparam[l]->MCMCpointID,
-                        lparam[l]->GetCurrentParameters(),
-                        lparam[l]->GetCurrentSummaries(),
-                        lparam[l]->GetCurrentAccessorySummaries(),
-                        lparam[l]->GetCurrentAncEvoStats(),
-                        lparam[l]->GetCurrentEvoStats(),
-                        lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                        lparam[l]->GetCurrentDistances(),
-                        lparam[l]->GetCurrentWeights()
-                    );
-
-                    cerr << ".";
+                    cerr << "debug18\n";
                 }
+                sampler[l]->sample();
+
+                if(gparam->verbose)
+                {
+                    cerr << "debug19\n";
+                }
+                simulator[l]->GetNewSimulatedCodonAlignment();
+                if(gparam->verbose)
+                {
+                    cerr << "debug20\n";
+                }
+
+                for (int interval_i = 0 ; interval_i < 11; interval_i++)
+                {
+                    ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
+                }
+
+                if(gparam->verbose)
+                {
+                    cerr << "debug20.1\n";
+                }
+
+                ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
+                if(gparam->verbose)
+                {
+                    cerr << "debug21\n";
+                }
+
+                postSlave[l]->slaveRegisterNewSimulation(
+                    lparam[l]->MCMCpointID,
+                    lparam[l]->GetCurrentParameters(),
+                    lparam[l]->GetCurrentSummaries(),
+                    lparam[l]->GetCurrentAccessorySummaries(),
+                    lparam[l]->GetCurrentAncEvoStats(),
+                    lparam[l]->GetCurrentEvoStats(),
+                    lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                    lparam[l]->GetCurrentDistances(),
+                    lparam[l]->GetCurrentWeights()
+                );
+
+                cerr << ".";
+            }
 //          }
 
 //            run++;
@@ -1325,6 +1329,24 @@ int main(int argc, char* argv[])
                 simulator->GetNewSimulatedCodonAlignment();
 
                 ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
+
+                ss->computeSummariesAncestralSequence(simulator->CurrentAncestralCodonSequence[10]);
+
+                if (post->Niter == 0)
+                {
+                    ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), OUT);
+                    bool headers = true;
+                    lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
+                    AncestralDataSummaries_os.close();
+                }
+                else
+                {
+                    ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), APPEND);
+                    bool headers = false;
+                    lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
+                    AncestralDataSummaries_os.close();
+                }
+
 
                 post->registerNewSimulation(
                     lparam->startPoint,
@@ -1631,6 +1653,26 @@ int main(int argc, char* argv[])
                     {
                         cerr << " debug7.2\n";
                     }
+
+                    ss->computeSummariesAncestralSequence(simulator->CurrentAncestralCodonSequence[10]);
+
+                    if (post->Niter == 0)
+                    {
+                        ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), OUT);
+                        bool headers = true;
+                        lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
+                        AncestralDataSummaries_os.close();
+                    }
+                    else
+
+                    {
+                        ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), APPEND);
+                        bool headers = false;
+                        lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
+                        AncestralDataSummaries_os.close();
+                    }
+
+
                     post->registerNewSimulation(
                         lparam->GetPointID(),
                         lparam->GetCurrentParameters(),
