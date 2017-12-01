@@ -1077,7 +1077,7 @@ std::vector<double> LocalParameters::GetCurrentDistances()
 
         cur_dist.push_back(dist);
     }
-    else if (this->distance == "normedEuclidian")
+    else if (this->distance == "normalized")
     {
 
         for (unsigned int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
@@ -1092,7 +1092,23 @@ std::vector<double> LocalParameters::GetCurrentDistances()
 
         cur_dist.push_back(dist);
 
+    } else if
+
+
+    (this->distance == "dist1")
+    {
+
+        for (unsigned int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
+        {
+
+            double sqdisc  = this->summariesRealData[i_summary] - summariesSimulatedData[i_summary];
+            dist += sqdisc;
+            cur_dist.push_back(sqdisc);
+        }
+
+        cur_dist.push_back(dist);
     }
+
     return cur_dist;
 
 }
