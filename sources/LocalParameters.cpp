@@ -1812,7 +1812,7 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i)
         exit(1);
     }
 
-    cerr << this->chain;
+    //cerr << this->chain;
 
     int j = 0;
     string tmp = "" ;
@@ -1956,7 +1956,7 @@ void LocalParameters::readChainCodonMutSelSBDP()
         exit(1);
     }
 
-    cerr << this->chain;
+    //cerr << this->chain;
 
     int j = 0;
     string tmp = "" ;
