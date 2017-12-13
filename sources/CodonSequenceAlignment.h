@@ -2232,60 +2232,64 @@ public:
 
     void aa_pairwise(int * invec)
     {
-        for (int i = 0 ; i < 190; i ++ )
-        {
-            invec[i] = 0;
-        }
 
-        int ** m = new int* [Naa] ;
-        for(int aa = 0 ; aa < Naa; aa ++ )
+        if (Ntaxa > 1)
         {
-            m[aa] = new int [Naa];
-        }
-
-        for(int aa1 = 0 ; aa1 < Naa; aa1 ++ )
-        {
-            for(int aa2 = 0 ; aa2 < Naa; aa2 ++ )
+            for (int i = 0 ; i < 190; i ++ )
             {
-                m[aa1][aa2] = 0 ;
+                invec[i] = 0;
             }
-        }
 
-
-        for (int site_codon = 0; site_codon < Nsite; site_codon++)
-        {
-            for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+            int ** m = new int* [Naa] ;
+            for(int aa = 0 ; aa < Naa; aa ++ )
             {
-                for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+                m[aa] = new int [Naa];
+            }
+
+            for(int aa1 = 0 ; aa1 < Naa; aa1 ++ )
+            {
+                for(int aa2 = 0 ; aa2 < Naa; aa2 ++ )
                 {
-                    int state_seq1 = GetCodonStateSpace()->Translation(Data[taxa1][site_codon]); //GetState(taxa1,site_codon);
-                    int state_seq2 = GetCodonStateSpace()->Translation(Data[taxa2][site_codon]); //GetState(taxa2,site_codon);
-                    if(state_seq1 != unknown && state_seq2 != unknown && state_seq1 != state_seq2)
+                    m[aa1][aa2] = 0 ;
+                }
+            }
+
+
+
+            for (int site_codon = 0; site_codon < Nsite; site_codon++)
+            {
+                for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+                {
+                    for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                     {
-                        m[state_seq1][state_seq2]++;
-                        //cerr << state_seq1 << " " << state_seq2 << " " << GetCodonStateSpace()->Translation(state_seq1) << " " << GetCodonStateSpace()->Translation(state_seq2) << " "
-                        //<< GetCodonStateSpace()->Translation(GetState(taxa1,site_codon)) << " " << GetCodonStateSpace()->Translation(GetState(taxa2,site_codon)) << "\n";
+                        int state_seq1 = GetCodonStateSpace()->Translation(Data[taxa1][site_codon]); //GetState(taxa1,site_codon);
+                        int state_seq2 = GetCodonStateSpace()->Translation(Data[taxa2][site_codon]); //GetState(taxa2,site_codon);
+                        if(state_seq1 != unknown && state_seq2 != unknown && state_seq1 != state_seq2)
+                        {
+                            m[state_seq1][state_seq2]++;
+                            //cerr << state_seq1 << " " << state_seq2 << " " << GetCodonStateSpace()->Translation(state_seq1) << " " << GetCodonStateSpace()->Translation(state_seq2) << " "
+                            //<< GetCodonStateSpace()->Translation(GetState(taxa1,site_codon)) << " " << GetCodonStateSpace()->Translation(GetState(taxa2,site_codon)) << "\n";
+                        }
                     }
                 }
             }
-        }
-        int k = 0;
-        for(int aa1 = 0 ; aa1 < Naa-1; aa1 ++ )
-        {
-            for(int aa2 = aa1+1 ; aa2 < Naa; aa2 ++ )
+            int k = 0;
+            for(int aa1 = 0 ; aa1 < Naa-1; aa1 ++ )
             {
-                invec[k] = m[aa1][aa2]+m[aa2][aa1];
-                //cerr << invec[k] << " ";
-                k++;
+                for(int aa2 = aa1+1 ; aa2 < Naa; aa2 ++ )
+                {
+                    invec[k] = m[aa1][aa2]+m[aa2][aa1];
+                    //cerr << invec[k] << " ";
+                    k++;
+                }
             }
-        }
 
-        for(int aa = 0 ; aa < Naa; aa ++ )
-        {
-            delete [] m[aa];
+            for(int aa = 0 ; aa < Naa; aa ++ )
+            {
+                delete [] m[aa];
+            }
+            delete [] m;
         }
-        delete [] m;
-
     }
 
 
