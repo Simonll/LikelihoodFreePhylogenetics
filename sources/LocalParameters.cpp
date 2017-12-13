@@ -1940,7 +1940,7 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i)
 
     SetTreeStuff();
 
-    cerr << "Nnode : " << refTree->GetNnode() << "\n";
+    //cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
 
@@ -2084,7 +2084,7 @@ void LocalParameters::readChainCodonMutSelSBDP()
 
     SetTreeStuff();
 
-    cerr << "Nnode : " << refTree->GetNnode() << "\n";
+    //cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
 void LocalParameters::readChainCodonMutSelFinite(int it)
@@ -2254,7 +2254,7 @@ void LocalParameters::readChainCodonMutSelFinite(int it)
 
     SetTreeStuff();
 
-    cerr << "Nnode : " << refTree->GetNnode() << "\n";
+    //cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
 
@@ -2423,7 +2423,7 @@ void LocalParameters::readChainCodonMutSelFinite()
 
     SetTreeStuff();
 
-    cerr << "Nnode : " << refTree->GetNnode() << "\n";
+    //cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
 void LocalParameters::SetTreeStuff()
