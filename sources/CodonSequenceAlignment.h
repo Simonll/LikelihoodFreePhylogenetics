@@ -1162,7 +1162,9 @@ public:
 
     }
 
-    void codon_usage(double* stat_container)
+
+
+    void fcodon_usage(double* stat_container)
     {
         int tot = GetCodonStateSpace()->GetNstate();
         for ( int codon  = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon ++ )

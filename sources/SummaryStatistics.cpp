@@ -181,6 +181,7 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     //ss.computeSummaries();
 
     codon_bool = false;
+    fcodon_bool = false;
     codon_wonR_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
@@ -404,6 +405,7 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
     //ss.computeSummaries();
 
     codon_bool = false;
+    fcodon_bool = false;
     codon_wonR_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
@@ -731,6 +733,71 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["GGC"] = &SummaryStatistics::GetGGC;
     GetSummariesMap["GGA"] = &SummaryStatistics::GetGGA;
     GetSummariesMap["GGG"] = &SummaryStatistics::GetGGG;
+
+    GetSummariesMap["fTTT"] = &SummaryStatistics::GetfTTT;
+    GetSummariesMap["fTTC"] = &SummaryStatistics::GetfTTC;
+    GetSummariesMap["fTTA"] = &SummaryStatistics::GetfTTA;
+    GetSummariesMap["fTTG"] = &SummaryStatistics::GetfTTG;
+    GetSummariesMap["fTCT"] = &SummaryStatistics::GetfTCT;
+    GetSummariesMap["fTCC"] = &SummaryStatistics::GetfTCC;
+    GetSummariesMap["fTCA"] = &SummaryStatistics::GetfTCA;
+    GetSummariesMap["fTCG"] = &SummaryStatistics::GetfTCG;
+    GetSummariesMap["fTAT"] = &SummaryStatistics::GetfTAT;
+    GetSummariesMap["fTAC"] = &SummaryStatistics::GetfTAC;
+    GetSummariesMap["fTAA"] = &SummaryStatistics::GetfTAA;
+    GetSummariesMap["fTAG"] = &SummaryStatistics::GetfTAG;
+    GetSummariesMap["fTGT"] = &SummaryStatistics::GetfTGT;
+    GetSummariesMap["fTGC"] = &SummaryStatistics::GetfTGC;
+    GetSummariesMap["fTGA"] = &SummaryStatistics::GetfTGA;
+    GetSummariesMap["fTGG"] = &SummaryStatistics::GetfTGG;
+    GetSummariesMap["fCTT"] = &SummaryStatistics::GetfCTT;
+    GetSummariesMap["fCTC"] = &SummaryStatistics::GetfCTC;
+    GetSummariesMap["fCTA"] = &SummaryStatistics::GetfCTA;
+    GetSummariesMap["fCTG"] = &SummaryStatistics::GetfCTG;
+    GetSummariesMap["fCCT"] = &SummaryStatistics::GetfCCT;
+    GetSummariesMap["fCCC"] = &SummaryStatistics::GetfCCC;
+    GetSummariesMap["fCCA"] = &SummaryStatistics::GetfCCA;
+    GetSummariesMap["fCCG"] = &SummaryStatistics::GetfCCG;
+    GetSummariesMap["fCAT"] = &SummaryStatistics::GetfCAT;
+    GetSummariesMap["fCAC"] = &SummaryStatistics::GetfCAC;
+    GetSummariesMap["fCAA"] = &SummaryStatistics::GetfCAA;
+    GetSummariesMap["fCAG"] = &SummaryStatistics::GetfCAG;
+    GetSummariesMap["fCGT"] = &SummaryStatistics::GetfCGT;
+    GetSummariesMap["fCGC"] = &SummaryStatistics::GetfCGC;
+    GetSummariesMap["fCGA"] = &SummaryStatistics::GetfCGA;
+    GetSummariesMap["fCGG"] = &SummaryStatistics::GetfCGG;
+    GetSummariesMap["fATT"] = &SummaryStatistics::GetfATT;
+    GetSummariesMap["fATC"] = &SummaryStatistics::GetfATC;
+    GetSummariesMap["fATA"] = &SummaryStatistics::GetfATA;
+    GetSummariesMap["fATG"] = &SummaryStatistics::GetfATG;
+    GetSummariesMap["fACT"] = &SummaryStatistics::GetfACT;
+    GetSummariesMap["fACC"] = &SummaryStatistics::GetfACC;
+    GetSummariesMap["fACA"] = &SummaryStatistics::GetfACA;
+    GetSummariesMap["fACG"] = &SummaryStatistics::GetfACG;
+    GetSummariesMap["fAAT"] = &SummaryStatistics::GetfAAT;
+    GetSummariesMap["fAAC"] = &SummaryStatistics::GetfAAC;
+    GetSummariesMap["fAAA"] = &SummaryStatistics::GetfAAA;
+    GetSummariesMap["fAAG"] = &SummaryStatistics::GetfAAG;
+    GetSummariesMap["fAGT"] = &SummaryStatistics::GetfAGT;
+    GetSummariesMap["fAGC"] = &SummaryStatistics::GetfAGC;
+    GetSummariesMap["fAGA"] = &SummaryStatistics::GetfAGA;
+    GetSummariesMap["fAGG"] = &SummaryStatistics::GetfAGG;
+    GetSummariesMap["fGTT"] = &SummaryStatistics::GetfGTT;
+    GetSummariesMap["fGTC"] = &SummaryStatistics::GetfGTC;
+    GetSummariesMap["fGTA"] = &SummaryStatistics::GetfGTA;
+    GetSummariesMap["fGTG"] = &SummaryStatistics::GetfGTG;
+    GetSummariesMap["fGCT"] = &SummaryStatistics::GetfGCT;
+    GetSummariesMap["fGCC"] = &SummaryStatistics::GetfGCC;
+    GetSummariesMap["fGCA"] = &SummaryStatistics::GetfGCA;
+    GetSummariesMap["fGCG"] = &SummaryStatistics::GetfGCG;
+    GetSummariesMap["fGAT"] = &SummaryStatistics::GetfGAT;
+    GetSummariesMap["fGAC"] = &SummaryStatistics::GetfGAC;
+    GetSummariesMap["fGAA"] = &SummaryStatistics::GetfGAA;
+    GetSummariesMap["fGAG"] = &SummaryStatistics::GetfGAG;
+    GetSummariesMap["fGGT"] = &SummaryStatistics::GetfGGT;
+    GetSummariesMap["fGGC"] = &SummaryStatistics::GetfGGC;
+    GetSummariesMap["fGGA"] = &SummaryStatistics::GetfGGA;
+    GetSummariesMap["fGGG"] = &SummaryStatistics::GetfGGG;
 
     GetSummariesMap["TTTwonR"] = &SummaryStatistics::GetTTTwonR;
     GetSummariesMap["TTCwonR"] = &SummaryStatistics::GetTTCwonR;
@@ -1217,6 +1284,8 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["GC1"]=&SummaryStatistics::GetGC1;
     GetSummariesMap["GC2"]=&SummaryStatistics::GetGC2;
     GetSummariesMap["GC3"]=&SummaryStatistics::GetGC3;
+    GetSummariesMap["Codonfentropy"]=&SummaryStatistics::GetCodonfentropy;
+    GetSummariesMap["AAentropy"]=&SummaryStatistics::GetAAentropy;
 
 }
 
@@ -1272,6 +1341,7 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
     lparam->summariesAncestralData.shrink_to_fit();
 
     codon_bool = false;
+    fcodon_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;
@@ -1315,6 +1385,7 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
     GC1_bool = false;
     GC2_bool = false;
     GC3_bool = false;
+
 
 
     CodonSequenceAlignment* simulation = new CodonSequenceAlignment(lparam->codondata, 1, CurrentAncestralCodonSequence);
@@ -1378,6 +1449,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
     lparam->accessorysummariesSimulatedData.shrink_to_fit();
 
     codon_bool = false;
+    fcodon_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;
@@ -1522,6 +1594,7 @@ void SummaryStatistics::computeSummaries()
     lparam->accessorysummariesRealData.shrink_to_fit();
 
     codon_bool = false;
+    fcodon_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;
@@ -1640,6 +1713,7 @@ void SummaryStatistics::computeSummariesFromData()
     ldata->summariesRealData.shrink_to_fit();
 
     codon_bool = false;
+    fcodon_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;

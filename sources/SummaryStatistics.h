@@ -101,6 +101,7 @@ public:
 
 
     bool codon_bool;
+    bool fcodon_bool;
     bool codon_wonR_bool;
     bool dinuc_bool;
     bool dinuc12_bool;
@@ -305,12 +306,66 @@ private:
 
     double GetRSCUentropy(CodonSequenceAlignment* codondata)
     {
-        if(!RSCUentropy_bool)
+
+        if(!codon_bool)
         {
-            RSCUentropy = codondata->RSCUEntropy();
-            RSCUentropy_bool = true;
+            codondata->CodonUsagePerAA(codon_usage);
+            codon_bool = true;
         }
-        return RSCUentropy;
+
+        double H = 0.0;
+
+        for (int i = 0 ; i < codondata->GetCodonStateSpace()->GetNstate(); i++)
+        {
+            H -= codon_usage[i] * log2(codon_usage[i]);
+
+        }
+
+        return H;
+
+
+//        if(!RSCUentropy_bool)
+//        {
+//            RSCUentropy = codondata->RSCUEntropy();
+//            RSCUentropy_bool = true;
+//        }
+//        return RSCUentropy;
+
+    }
+
+    double GetCodonfentropy(CodonSequenceAlignment* codondata)
+    {
+        if(!fcodon_bool)
+        {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+        }
+        double H = 0.0;
+        for (int i = 0 ; i < codondata->GetCodonStateSpace()->GetNstate(); i++)
+        {
+            H -= fcodon_usage[i] * log2(fcodon_usage[i]);
+
+        }
+
+        return H;
+
+    }
+
+    double GetAAentropy(CodonSequenceAlignment* codondata)
+    {
+        if(!aa_bool)
+        {
+           codondata->aa_usage(aa_usage);
+           aa_bool = true;
+        }
+        double H = 0.0;
+        for (int i = 0; i < codondata->GetCodonStateSpace()->GetNstate(); i++)
+        {
+            H -= aa_usage[i] * log2(aa_usage[i]);
+
+        }
+
+        return H;
 
     }
 
@@ -901,6 +956,595 @@ private:
         }
         return (double) codon_usage[codondata->GetCodonStateSpace()->GetState("TTT")];
     }
+
+
+
+
+   double GetfGGG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GGG")];
+   }
+   double GetfGGA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GGA")];
+   }
+   double GetfGGC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GGC")];
+   }
+   double GetfGGT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GGT")];
+   }
+   double GetfGAG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GAG")];
+   }
+   double GetfGAA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GAA")];
+   }
+   double GetfGAC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GAC")];
+   }
+   double GetfGAT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GAT")];
+   }
+   double GetfGCG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GCG")];
+   }
+   double GetfGCA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GCA")];
+   }
+   double GetfGCC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GCC")];
+   }
+   double GetfGCT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GCT")];
+   }
+   double GetfGTG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GTG")];
+   }
+   double GetfGTA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GTA")];
+   }
+   double GetfGTC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GTC")];
+   }
+   double GetfGTT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("GTT")];
+   }
+   double GetfAGG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("AGG")];
+   }
+   double GetfAGA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("AGA")];
+   }
+   double GetfAGC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("AGC")];
+   }
+   double GetfAGT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("AGT")];
+   }
+   double GetfAAG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("AAG")];
+   }
+   double GetfAAA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("AAA")];
+   }
+   double GetfAAC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("AAC")];
+   }
+   double GetfAAT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("AAT")];
+   }
+   double GetfACG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("ACG")];
+   }
+   double GetfACA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("ACA")];
+   }
+   double GetfACC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("ACC")];
+   }
+   double GetfACT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("ACT")];
+   }
+   double GetfATG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("ATG")];
+   }
+   double GetfATA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("ATA")];
+   }
+   double GetfATC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("ATC")];
+   }
+   double GetfATT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("ATT")];
+   }
+   double GetfCGG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CGG")];
+   }
+   double GetfCGA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CGA")];
+   }
+   double GetfCGC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CGC")];
+   }
+   double GetfCGT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CGT")];
+   }
+   double GetfCAG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CAG")];
+   }
+   double GetfCAA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CAA")];
+   }
+   double GetfCAC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CAC")];
+   }
+   double GetfCAT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CAT")];
+   }
+   double GetfCCG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CCG")];
+   }
+   double GetfCCA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CCA")];
+   }
+   double GetfCCC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CCC")];
+   }
+   double GetfCCT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CCT")];
+   }
+   double GetfCTG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CTG")];
+   }
+   double GetfCTA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CTA")];
+   }
+   double GetfCTC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CTC")];
+   }
+   double GetfCTT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("CTT")];
+   }
+   double GetfTGG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TGG")];
+   }
+   double GetfTGA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TGA")];
+   }
+   double GetfTGC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return 0.0;//  fcodon_usage[codondata->GetCodonStateSpace()->GetState("TGC")];
+   }
+   double GetfTGT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TGT")];
+   }
+   double GetfTAG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return 0.0;//  fcodon_usage[codondata->GetCodonStateSpace()->GetState("TAG")];
+   }
+
+   double GetfTAA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return 0.0;//  (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TAA")];
+   }
+
+   double GetfTAC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TAC")];
+   }
+
+   double GetfTAT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TAT")];
+   }
+   double GetfTCG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TCG")];
+   }
+
+   double GetfTCA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TCA")];
+   }
+   double GetfTCC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TCC")];
+   }
+   double GetfTCT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TCT")];
+   }
+
+   double GetfTTG(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TTG")];
+   }
+
+   double GetfTTA(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TTA")];
+   }
+   double GetfTTC(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TTC")];
+   }
+   double GetfTTT(CodonSequenceAlignment* codondata)
+   {
+       if(!codon_bool)
+       {
+           codondata->fcodon_usage(fcodon_usage);
+           codon_bool = true;
+       }
+       return (double) fcodon_usage[codondata->GetCodonStateSpace()->GetState("TTT")];
+   }
+
+
+
 
 
 
