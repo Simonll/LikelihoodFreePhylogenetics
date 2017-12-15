@@ -359,7 +359,7 @@ private:
            aa_bool = true;
         }
         double H = 0.0;
-        for (int i = 0; i < codondata->GetCodonStateSpace()->GetNstate(); i++)
+        for (int i = 0; i < Naa; i++)
         {
             H -= aa_usage[i] * log2(aa_usage[i]);
 
