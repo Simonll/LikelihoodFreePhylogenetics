@@ -1164,7 +1164,7 @@ public:
 
 
 
-    void fcodon_usage(double* stat_container)
+    void relativeCodonFrequency(double* stat_container)
     {
         int tot = GetCodonStateSpace()->GetNstate();
         for ( int codon  = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon ++ )
@@ -1445,7 +1445,7 @@ public:
         return entropy;
     }
 
-    void CodonUsagePerAA(double* stat_container)
+    void RSCU(double* stat_container)
     {
         int tot = GetCodonStateSpace()->GetNstate();
         for ( int codon  = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon ++ )
@@ -1725,7 +1725,7 @@ public:
     }
 
 
-    void aa_usage(double* stat_container)
+    void relativeAAFrequency(double* stat_container)
     {
         int tot = 20;
         for ( int aa = 0 ; aa < Naa; aa ++ )

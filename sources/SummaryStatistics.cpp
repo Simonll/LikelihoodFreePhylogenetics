@@ -12,10 +12,10 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     nuc1_usage = new double [lparam->Nnucp];
     nuc2_usage = new double [lparam->Nnucp];
     nuc3_usage = new double [lparam->Nnucp];
-    aa_usage = new double [lparam->Nstate_aa];
+    relativeAAFrequency = new double [lparam->Nstate_aa];
     aa_usage_wonR = new double [lparam->Nstate_aa];
-    codon_usage = new double [lparam->Nstate_codon];
-    fcodon_usage = new double [lparam->Nstate_codon];
+    RSCU = new double [lparam->Nstate_codon];
+    relativeCodonFrequency = new double [lparam->Nstate_codon];
     codon_usage_wonR = new double [lparam->Nstate_codon];
 
 
@@ -32,14 +32,14 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
 
     for (int aa =0 ; aa < lparam->Nstate_aa ; aa++)
     {
-        aa_usage[aa] = 1.0;
+        relativeAAFrequency[aa] = 1.0;
         aa_usage_wonR[aa] = 1.0;
     }
 
     for (int codon =0 ; codon < lparam->Nstate_codon ; codon++)
     {
-        fcodon_usage[codon] = 1.0;
-        codon_usage[codon] = 1.0;
+        relativeCodonFrequency[codon] = 1.0;
+        RSCU[codon] = 1.0;
         codon_usage_wonR[codon] = 1.0;
     }
 
@@ -180,14 +180,14 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
 
     //ss.computeSummaries();
 
-    codon_bool = false;
-    fcodon_bool = false;
+    RSCU_bool = false;
+    relativeCodonFrequency_bool = false;
     codon_wonR_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;
     dinuc31_bool = false;
-    aa_bool = false;
+    relativeAAFrequency_bool = false;
     aa_wonR_bool = false;
     dicodon_bool = false;
     diaa_bool = false;
@@ -242,10 +242,10 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
     nuc1_usage = new double [ldata->Nnucp];
     nuc2_usage = new double [ldata->Nnucp];
     nuc3_usage = new double [ldata->Nnucp];
-    aa_usage = new double [ldata->Nstate_aa];
+    relativeAAFrequency = new double [ldata->Nstate_aa];
     aa_usage_wonR = new double [ldata->Nstate_aa];
-    codon_usage = new double [ldata->Nstate_codon];
-    fcodon_usage = new double [ldata->Nstate_codon];
+    RSCU = new double [ldata->Nstate_codon];
+    relativeCodonFrequency = new double [ldata->Nstate_codon];
     codon_usage_wonR = new double [ldata->Nstate_codon];
     for (int nuc = 0 ; nuc <ldata->Nnucp; nuc++)
     {
@@ -257,13 +257,13 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
 
     for (int aa =0 ; aa < ldata->Nstate_aa ; aa++)
     {
-        aa_usage[aa] = 1.0;
+        relativeAAFrequency[aa] = 1.0;
         aa_usage_wonR[aa] = 1.0;
     }
 
     for (int codon =0 ; codon < ldata->Nstate_codon ; codon++)
     {
-        codon_usage[codon] = 1.0;
+        RSCU[codon] = 1.0;
         codon_usage_wonR[codon] = 1.0;
     }
 
@@ -404,14 +404,14 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
 
     //ss.computeSummaries();
 
-    codon_bool = false;
-    fcodon_bool = false;
+    RSCU_bool = false;
+    relativeCodonFrequency_bool = false;
     codon_wonR_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;
     dinuc31_bool = false;
-    aa_bool = false;
+    relativeAAFrequency_bool = false;
     aa_wonR_bool = false;
     dicodon_bool = false;
     diaa_bool = false;
@@ -1284,8 +1284,11 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["GC1"]=&SummaryStatistics::GetGC1;
     GetSummariesMap["GC2"]=&SummaryStatistics::GetGC2;
     GetSummariesMap["GC3"]=&SummaryStatistics::GetGC3;
-    GetSummariesMap["Codonfentropy"]=&SummaryStatistics::GetCodonfentropy;
+    GetSummariesMap["Codonfentropy"]=&SummaryStatistics::GetRelativeCodonFrequencyEntropy;
     GetSummariesMap["AAentropy"]=&SummaryStatistics::GetAAentropy;
+    GetSummariesMap["CGNonAGR"]=&SummaryStatistics::GetCGNonAGR;
+    GetSummariesMap["CHQWonR"]=&SummaryStatistics::GetCHQWonR;
+    GetSummariesMap["VMLonATPS"]=&SummaryStatistics::GetVMLonATPS;
 
 }
 
@@ -1306,7 +1309,7 @@ SummaryStatistics::~SummaryStatistics()
     delete [] dinuc31_usage;
     delete [] dicodon_usage;
     delete [] diaa_usage;
-    delete [] aa_usage;
+    delete [] relativeAAFrequency;
     delete [] aa_usage_wonR;
     delete [] CGNAGR;
     delete [] nuc_usage;
@@ -1340,13 +1343,13 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
     lparam->summariesAncestralData.clear();
     lparam->summariesAncestralData.shrink_to_fit();
 
-    codon_bool = false;
-    fcodon_bool = false;
+    RSCU_bool = false;
+    relativeCodonFrequency_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;
     dinuc31_bool = false;
-    aa_bool = false;
+    relativeAAFrequency_bool = false;
     aa_wonR_bool = false;
     dicodon_bool = false;
     diaa_bool = false;
@@ -1448,13 +1451,13 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
     lparam->accessorysummariesSimulatedData.clear();
     lparam->accessorysummariesSimulatedData.shrink_to_fit();
 
-    codon_bool = false;
-    fcodon_bool = false;
+    RSCU_bool = false;
+    relativeCodonFrequency_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;
     dinuc31_bool = false;
-    aa_bool = false;
+    relativeAAFrequency_bool = false;
     aa_wonR_bool = false;
     dicodon_bool = false;
     diaa_bool = false;
@@ -1593,13 +1596,13 @@ void SummaryStatistics::computeSummaries()
     lparam->accessorysummariesRealData.clear();
     lparam->accessorysummariesRealData.shrink_to_fit();
 
-    codon_bool = false;
-    fcodon_bool = false;
+    RSCU_bool = false;
+    relativeCodonFrequency_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;
     dinuc31_bool = false;
-    aa_bool = false;
+    relativeAAFrequency_bool = false;
     aa_wonR_bool = false;
     dicodon_bool = false;
     diaa_bool = false;
@@ -1712,13 +1715,13 @@ void SummaryStatistics::computeSummariesFromData()
     ldata->summariesRealData.clear();
     ldata->summariesRealData.shrink_to_fit();
 
-    codon_bool = false;
-    fcodon_bool = false;
+    RSCU_bool = false;
+    relativeCodonFrequency_bool = false;
     dinuc_bool = false;
     dinuc12_bool = false;
     dinuc23_bool = false;
     dinuc31_bool = false;
-    aa_bool = false;
+    relativeAAFrequency_bool = false;
     aa_wonR_bool = false;
     dicodon_bool = false;
     diaa_bool = false;
