@@ -417,7 +417,7 @@ private:
     }
 
 
-    double GetVMLonATPS(CodonSequenceAlignment* codondata)
+    double GetLMVonAPST(CodonSequenceAlignment* codondata)
     {
         if(!relativeAAFrequency_bool)
         {

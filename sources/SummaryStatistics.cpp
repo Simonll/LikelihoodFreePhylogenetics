@@ -1288,7 +1288,7 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["AAentropy"]=&SummaryStatistics::GetAAentropy;
     GetSummariesMap["CGNonAGR"]=&SummaryStatistics::GetCGNonAGR;
     GetSummariesMap["CHQWonR"]=&SummaryStatistics::GetCHQWonR;
-    GetSummariesMap["VMLonATPS"]=&SummaryStatistics::GetVMLonATPS;
+    GetSummariesMap["LMVonAPST"]=&SummaryStatistics::GetLMVonAPST;
 
 }
 
