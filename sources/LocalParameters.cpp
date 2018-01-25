@@ -324,6 +324,12 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->Ntaxa        = this->codondata->GetNtaxa();
     this->Nstate_codon = this->codondata->GetNstate();
 
+    if (this->Nsite_codon >4999)
+    {
+        cerr << "number of sites too large >=5000: " << this->Nsite_codon  <<"\n";
+        exit(0);
+    }
+
     this->codonprofile = new double [this->Nstate_codon];
     for (int i = 0 ; i < this->Nstate_codon; i++)
     {

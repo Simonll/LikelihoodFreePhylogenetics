@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         cerr << "\n";
         cerr << "version 1.0\n";
         cerr << "###########################\n";
-        cerr << "-m < stats | show | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP | MAP100CodonMutSelFinitePPChecks | MAP100CodonMutSelSBDPPPChecks | <controlfile>\n";
+        cerr << "-m < stats | show | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP | CodonMutSelFinitePPred | CodonMutSelSBDPPPred > <controlfile>\n";
         cerr << "###########################\n";
         cerr << "#SUMMARIES\n";
         cerr << "#ANCSUMMARIES\n";
