@@ -149,7 +149,7 @@ void PriorSampler::sample()
 
 
     }
-  if(lparam->fixlambda_GpT != 1)
+    if(lparam->fixlambda_GpT != 1)
     {
 
         if (lparam->lambda_GpT_prior == "log10Unif")
@@ -236,7 +236,7 @@ void PriorSampler::sample()
 
     }
 
-    if (lparam->fixkappa != 1)
+    else if (lparam->fixkappa != 1)
     {
         if (lparam->verbose)
         {
@@ -297,7 +297,7 @@ void PriorSampler::sample()
 
     }
 
-    if (lparam->fixhky != 1)
+    else if (lparam->fixhky != 1)
     {
         if (lparam->verbose)
         {
@@ -374,7 +374,7 @@ void PriorSampler::sample()
         //gtnr[3][3] = 0.0; //tt
     }
 
-    if (lparam->fixstat != 1)
+    else if (lparam->fixstat != 1)
     {
         if (lparam->verbose)
         {
@@ -416,7 +416,7 @@ void PriorSampler::sample()
 
     }
 
-    if (lparam->fixtr != 1)
+    else if (lparam->fixtr != 1)
     {
         if (lparam->verbose)
         {
@@ -491,7 +491,7 @@ void PriorSampler::sample()
 
     }
 
-    if (lparam->fixts != 1)
+    else  if (lparam->fixts != 1)
     {
         if (lparam->verbose)
         {
@@ -565,7 +565,7 @@ void PriorSampler::sample()
         //gtnr[3][3] = 0.0; //tt
 
     }
-    if (lparam->fixgtr != 1)
+    else if (lparam->fixgtr != 1)
     {
         if (lparam->verbose)
         {
@@ -640,7 +640,7 @@ void PriorSampler::sample()
 
     }
 
-    if (lparam->fixgtr2 == 0)
+    else if (lparam->fixgtr2 == 0)
     {
         if (lparam->verbose)
         {
@@ -715,7 +715,7 @@ void PriorSampler::sample()
 
     }
 
-    if (lparam->fixss != 1)
+    else if (lparam->fixss != 1)
     {
         if (lparam->verbose)
         {
@@ -790,7 +790,7 @@ void PriorSampler::sample()
 
     }
 
-    if (lparam->fixgtnr != 1)
+    else if (lparam->fixgtnr != 1)
     {
         if (lparam->verbose)
         {

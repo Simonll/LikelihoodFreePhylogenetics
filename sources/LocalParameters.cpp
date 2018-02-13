@@ -1016,42 +1016,89 @@ void LocalParameters::SetTree()
 void LocalParameters::SetRootBetweenInAndOutGroup()
 {
 
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup1\n";
+
     outgroupLink = refTree->GetLCA(taxa_a,taxa_b);
     branchLengthBetweenInAndOutGroup = atof(outgroupLink->GetBranch()->GetName().c_str());
 
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup2\n";
     branchToOutGroup = outgroupLink->GetBranch();
 
     newnode->SetName("1");
 
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup3\n";
     newnode->SetIndex(refTree->GetNnode());
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup4\n";
 
     // set linkToIngroup
 
     outgroupLink->Out()->SetBranch(branchToInGroup);
 
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup5\n";
     // set newlink
 
     newlink->SetBranch(branchToInGroup);
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup6\n";
     newlink->SetNode(newnode);
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup7\n";
     newlink->SetOut(outgroupLink->Out());
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup8\n";
     newlink->SetNext(newnext);
 
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup9\n";
     // set newnext
 
     newnext->SetBranch(branchToOutGroup);
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup10\n";
     newnext->SetNode(newnode);
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup11\n";
     newnext->SetOut(outgroupLink);
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup12\n";
     newnext->SetNext(newlink);
 
     // set outgroupLink
 
     outgroupLink->SetOut(newlink);
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup13\n";
     refTree->RootAt(newnext);
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup14\n";
     refTree->SetIndices();
 
     double branchLengthToOutGroup = branchLengthBetweenInAndOutGroup * percentFromOutGroup;
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup15\n";
     branchToInGroup->SetName(std::to_string(branchLengthBetweenInAndOutGroup-branchLengthToOutGroup));
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup16\n";
     branchToOutGroup->SetName(std::to_string(branchLengthToOutGroup));
+
+    if (verbose)
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup17\n";
 
     ofstream os ((this->output+".inputparam").c_str(),APPEND);
     refTree->Print(os);
