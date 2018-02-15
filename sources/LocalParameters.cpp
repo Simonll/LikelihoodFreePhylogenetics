@@ -1020,17 +1020,10 @@ void LocalParameters::SetRootBetweenInAndOutGroup()
         cerr << "LocalParameters::SetRootBetweenInAndOutGroup1\n";
 
     outgroupLink = refTree->GetLCA(taxa_a,taxa_b);
-<<<<<<< HEAD
         
     if (outgroupLink->isRoot())
         cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
-
-    else
-        cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 NotRoot\n";
-=======
-
-
->>>>>>> 5f14a994963df3d4718dd6ac24ecd77cc6d6dbe2
+        cerr << "redefine root position\n"; 
 
     branchLengthBetweenInAndOutGroup = atof(outgroupLink->GetBranch()->GetName().c_str());
 
