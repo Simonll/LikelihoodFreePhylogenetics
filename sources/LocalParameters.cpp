@@ -1020,6 +1020,13 @@ void LocalParameters::SetRootBetweenInAndOutGroup()
         cerr << "LocalParameters::SetRootBetweenInAndOutGroup1\n";
 
     outgroupLink = refTree->GetLCA(taxa_a,taxa_b);
+        
+    if (outgroupLink->isRoot())
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
+
+    else
+        cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 NotRoot\n";
+
     branchLengthBetweenInAndOutGroup = atof(outgroupLink->GetBranch()->GetName().c_str());
 
     if (verbose)
@@ -1913,9 +1920,11 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i)
     if(j == pt_i)
     {
         refTree = new Tree(is);
-
+        if (verbose)
+            cerr << "READCHAIN1\n"; 
         refTree->RegisterWith(taxonset, 0);
-
+        if (verbose)
+            cerr << "READCHAIN2\n"; 
 
         is >> tmp; // branchalpha
         is >> tmp; // branchbeta
