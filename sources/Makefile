@@ -7,7 +7,7 @@ SOURCES=main.cpp GlobalParameters.cpp TaxonSet.cpp Tree.cpp  Random.cpp  Sequenc
   Posterior.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=LFP
-PROGSDIR=../bin/Debug
+PROGSDIR=../data
 
 all: $(SOURCES) $(EXECUTABLE)
 

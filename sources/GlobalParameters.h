@@ -49,13 +49,30 @@ public:
     static const int NParam = 28;
     static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
+    static const int NDistances = 3; 
+    static const int NTransformations = 3; 
+    static const int NCodes = 3; 
 
+    const string listCodes[NCodes] = {
+        "Universal","MtMam","MtInv"
 
-    const string listParam[NParam] = {"chainID","root","lambda","lambda_CpG","lambda_TpA","lambdaTG","lambdaCA","lambda_TBL", "lambda_omega",
+    };  
+
+    const string listTransformtations[NTransformations] = {
+        "none","log2","log10"
+    };
+
+    const string listDistances[NDistances] = {
+        "Euclidian","dist1","normalized"
+
+    };
+
+    const string listParam[NParam] = 
+    {"chainID","root","lambda","lambda_CpG","lambda_TpA","lambdaTG","lambdaCA","lambda_TBL", "lambda_omega",
                                       "nucsA", "nucsC", "nucsG","nucsT",
                                       "nucrrAC","nucrrAG","nucrrAT","nucrrCA","nucrrCG","nucrrCT","nucrrGA","nucrrGC","nucrrGT","nucrrTA","nucrrTC","nucrrTG",
                                       "wR_CHQW","lambda_CpG_GpG","lambda_GpT"
-                                     };
+    };
 
 
 
@@ -158,6 +175,7 @@ public:
     void readInstructions();
 
     GlobalParameters(string model, string controlfile);
+    GlobalParameters(); 
     virtual ~GlobalParameters();
 
 protected:

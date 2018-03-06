@@ -74,7 +74,7 @@ GlobalParameters::GlobalParameters(string model, string controlfile)
 
 
 }
-
+GlobalParameters::GlobalParameters(){} 
 GlobalParameters::~GlobalParameters()
 {
     //dtor
@@ -506,11 +506,12 @@ void GlobalParameters::readInstructions()
         }
         else if (!line.empty() && line.substr(0,11) == "#LOCALPARAM")
         {
+             // localcontrolfile should be a list so different localcontrolfile could be tested
             cerr << "### LOCALPARAM ### \n";
             localcontrolfile = line;
 
         }
-        /////////////////////////
+        
     }
     is.close();
 

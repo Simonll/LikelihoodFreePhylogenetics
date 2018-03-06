@@ -127,6 +127,31 @@ int main(int argc, char* argv[])
 
     }
 
+    else if (model == "show")
+    {
+        GlobalParameters* gparam = new GlobalParameters(); 
+        cerr << "#PARAMETERS\n";
+        for (auto i : gparam->listParam)
+            cerr << i << "\t"; 
+        cerr << "\n";
+        cerr << "#SUMMARY\n";
+        for (auto i : gparam->listSummaries)
+            cerr << i << "\t"; 
+        cerr << "\n";
+        cerr << "#EVOLSTATS\n";
+        for (auto i : gparam->listEvoStats)
+            cerr << i << "\t"; 
+        cerr << "\n";
+        cerr << "#DIST\n";
+        for (auto i : gparam->listDistances)
+            cerr << i << "\t"; 
+        cerr << "\n";
+        cerr << "#TRANS\n";
+        for (auto i : gparam->listTransformtations)
+            cerr << i << "\t"; 
+        cerr << "\n";
+
+    }
 
     else if (model == "CodonMutSelFiniteABC")
     {

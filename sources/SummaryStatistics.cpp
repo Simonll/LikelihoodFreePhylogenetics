@@ -1801,7 +1801,7 @@ void SummaryStatistics::computeSummariesFromData()
 
 double SummaryStatistics::transformSummaryStatistics(double s)
 {
-
+    
     if (lparam->transformation == "log2")
     {
         s = log2(s);
