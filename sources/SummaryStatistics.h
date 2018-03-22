@@ -3668,7 +3668,7 @@ private:
             aa_pairwise_bool10 = true;
         }
         
-        return static_cast<double>(cur);
+        return (double) cur;
     }
 
     double GetpwAA30(CodonSequenceAlignment* codondata)
@@ -3680,7 +3680,7 @@ private:
             aa_pairwise_bool30 = true;
         }
         
-        return static_cast<double>(cur);
+        return (double) cur;
     }
 
     double GetpwAA50(CodonSequenceAlignment* codondata)
@@ -3692,7 +3692,7 @@ private:
             aa_pairwise_bool50 = true;
         }
         
-        return static_cast<double>(cur);
+        return (double) cur;
     }
 
     /////////////////
