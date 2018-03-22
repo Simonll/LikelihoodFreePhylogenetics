@@ -2313,7 +2313,8 @@ public:
 
         int size = (int) vec_ac.size() * 0.10;
         
-        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all = 0 ; 
+        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = 0; 
         
         for (int i = 0 ; i < size; i++)
         {
@@ -2413,7 +2414,8 @@ public:
 
         int size = (int) vec_ac.size() * 0.30;
         
-        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all = 0 ; 
+        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = 0;
         
         for (int i = 0 ; i < size; i++)
         {
@@ -2514,7 +2516,8 @@ public:
 
         int size = (int) vec_ac.size() * 0.50;
         
-        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all = 0 ; 
+        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = 0;
         
         for (int i = 0 ; i < size; i++)
         {
@@ -2628,7 +2631,8 @@ public:
 
         int size = (int) vec_ac.size() * 0.10;
         
-        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all = 0 ; 
+        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = 0;
         
         for (int i = 0 ; i < size; i++)
         {
@@ -2740,7 +2744,8 @@ public:
 
         int size = (int) vec_ac.size() * 0.30;
         
-        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all = 0 ; 
+        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = 0;
         
         for (int i = 0 ; i < size; i++)
         {
@@ -2852,7 +2857,8 @@ public:
 
         int size = (int) vec_ac.size() * 0.50;
         
-        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all = 0 ; 
+        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = 0;
         
         for (int i = 0 ; i < size; i++)
         {
