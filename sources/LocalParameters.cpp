@@ -645,7 +645,7 @@ void LocalParameters::readLocalInstructions()
             iss >> s;
             this->fitCpG = atof(s.c_str());
             this->fixfitCpG = 1;
-            cerr << "fixfitCpG X" << this->fitCpG << "\n";
+            cerr << "fixfitCpG " << this->fitCpG << "\n";
 
         }
         else if (s == "-freefitCpG")
@@ -659,7 +659,7 @@ void LocalParameters::readLocalInstructions()
             iss >> s;
             this->lambda_TBL = atof(s.c_str());
             this->fixlambda_TBL = 1;
-            cerr << "fix TBL X" << this->lambda_TBL << "\n";
+            cerr << "fix TBL " << this->lambda_TBL << "\n";
 
         }
         else if (s == "-freelambdaTBL")
@@ -680,7 +680,7 @@ void LocalParameters::readLocalInstructions()
             iss >> s;
             this->lambda_omega = atof(s.c_str());
             this->fixlambda_omega = 1;
-            cerr << "fix omega X" << this->lambda_omega << "\n";
+            cerr << "fix lambdaomega " << this->lambda_omega << "\n";
 
         }
         else if (s =="-omega")
@@ -688,7 +688,7 @@ void LocalParameters::readLocalInstructions()
             iss >> s;
             this->omega = atof(s.c_str());
             this->fixomega = 1;
-            cerr << "fix omega X" << this->omega << "\n";
+            cerr << "fix omega " << this->omega << "\n";
 
         }
         else if (s == "-freelambdaomega")

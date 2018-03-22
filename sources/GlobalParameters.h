@@ -45,7 +45,7 @@ public:
     static constexpr double TOOLARGENEGATIVE = -500;
 
 
-    static const int NSummaries = 780;
+    static const int NSummaries = 801;
     static const int NParam = 29;
     static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
@@ -82,6 +82,10 @@ public:
         "pw1AC","pw1AG","pw1AT","pw1CG","pw1CT","pw1GT",
         "pw2AC","pw2AG","pw2AT","pw2CG","pw2CT","pw2GT",
         "pw3AC","pw3AG","pw3AT","pw3CG","pw3CT","pw3GT",
+        "pwAC10","pwAG10","pwAT10","pwCG10","pwCT10","pwGT10",
+        "pwAC30","pwAG30","pwAT30","pwCG30","pwCT30","pwGT30",
+        "pwAC50","pwAG50","pwAT50","pwCG50","pwCT50","pwGT50",
+        "pwAA10","pwAA30","pwAA50",
         "pwAA","pwCpGTpG","pwCpGCpA","pwApGTpG",
         "nucA","nucC","nucG","nucT",
         "nuc1A","nuc1C","nuc1G","nuc1T",
@@ -97,7 +101,6 @@ public:
         "fTTT","fTTC","fTTA","fTTG","fTCT","fTCC","fTCA","fTCG","fTAT","fTAC","fTAA","fTAG","fTGT","fTGC","fTGA","fTGG","fCTT","fCTC","fCTA","fCTG","fCCT","fCCC","fCCA","fCCG","fCAT",
         "fCAC","fCAA","fCAG","fCGT","fCGC","fCGA","fCGG","fATT","fATC","fATA","fATG","fACT","fACC","fACA","fACG","fAAT","fAAC","fAAA","fAAG","fAGT","fAGC","fAGA","fAGG","fGTT","fGTC",
         "fGTA","fGTG","fGCT","fGCC","fGCA","fGCG","fGAT","fGAC","fGAA","fGAG","fGGT","fGGC","fGGA","fGGG",
-
         "A","C","D","E","F","G","H","I","K","L","M","N","P","Q","R","S","T","V","W","Y",
         "nucsitecomphet","nuc1sitecomphet","nuc2sitecomphet","nuc3sitecomphet","nuctaxacomphet","nuc1taxacomphet","nuc2taxacomphet","nuc3taxacomphet","codonsitecomphet","codontaxacomphet","aasitecomphet","aataxacomphet",
         "mNuc","vNuc","mNuc1","vNuc1","mNuc2","vNuc2","mNuc3","vNuc3","mCodon","vCodon","mAA","vAA","mAAwonR","vAAwonR",
@@ -106,7 +109,6 @@ public:
         "TTTwonR","TTCwonR","TTAwonR","TTGwonR","TCTwonR","TCCwonR","TCAwonR","TCGwonR","TATwonR","TACwonR","TAAwonR","TAGwonR","TGTwonR","TGCwonR","TGAwonR","TGGwonR","CTTwonR","CTCwonR","CTAwonR","CTGwonR","CCTwonR","CCCwonR","CCAwonR","CCGwonR","CATwonR",
         "CACwonR","CAAwonR","CAGwonR","CGTwonR","CGCwonR","CGAwonR","CGGwonR","ATTwonR","ATCwonR","ATAwonR","ATGwonR","ACTwonR","ACCwonR","ACAwonR","ACGwonR","AATwonR","AACwonR","AAAwonR","AAGwonR","AGTwonR","AGCwonR","AGAwonR","AGGwonR","GTTwonR","GTCwonR",
         "GTAwonR","GTGwonR","GCTwonR","GCCwonR","GCAwonR","GCGwonR","GATwonR","GACwonR","GAAwonR","GAGwonR","GGTwonR","GGCwonR","GGAwonR","GGGwonR",
-
         "diaaAA","diaaAC","diaaAD","diaaAE","diaaAF","diaaAG","diaaAH","diaaAI","diaaAK","diaaAL","diaaAM","diaaAN","diaaAP","diaaAQ","diaaAR","diaaAS","diaaAT","diaaAV","diaaAW","diaaAY","diaaCA","diaaCC","diaaCD","diaaCE","diaaCF","diaaCG","diaaCH","diaaCI","diaaCK","diaaCL","diaaCM","diaaCN","diaaCP","diaaCQ","diaaCR","diaaCS","diaaCT","diaaCV","diaaCW","diaaCY","diaaDA","diaaDC","diaaDD","diaaDE","diaaDF","diaaDG","diaaDH","diaaDI","diaaDK","diaaDL","diaaDM","diaaDN","diaaDP","diaaDQ","diaaDR","diaaDS","diaaDT","diaaDV","diaaDW","diaaDY","diaaEA","diaaEC","diaaED","diaaEE","diaaEF","diaaEG","diaaEH","diaaEI","diaaEK","diaaEL","diaaEM","diaaEN","diaaEP","diaaEQ","diaaER","diaaES","diaaET","diaaEV","diaaEW","diaaEY","diaaFA","diaaFC","diaaFD","diaaFE","diaaFF","diaaFG","diaaFH","diaaFI","diaaFK","diaaFL","diaaFM","diaaFN","diaaFP","diaaFQ","diaaFR","diaaFS","diaaFT","diaaFV","diaaFW","diaaFY","diaaGA","diaaGC","diaaGD","diaaGE","diaaGF","diaaGG","diaaGH","diaaGI","diaaGK","diaaGL","diaaGM","diaaGN","diaaGP","diaaGQ","diaaGR","diaaGS","diaaGT","diaaGV","diaaGW","diaaGY","diaaHA","diaaHC","diaaHD","diaaHE","diaaHF","diaaHG","diaaHH","diaaHI","diaaHK","diaaHL","diaaHM","diaaHN","diaaHP","diaaHQ","diaaHR","diaaHS","diaaHT","diaaHV","diaaHW","diaaHY","diaaIA","diaaIC","diaaID","diaaIE","diaaIF","diaaIG","diaaIH","diaaII","diaaIK","diaaIL","diaaIM","diaaIN","diaaIP","diaaIQ","diaaIR","diaaIS","diaaIT","diaaIV","diaaIW","diaaIY","diaaKA","diaaKC","diaaKD","diaaKE","diaaKF","diaaKG","diaaKH","diaaKI","diaaKK","diaaKL","diaaKM",
         "diaaKN","diaaKP","diaaKQ","diaaKR","diaaKS","diaaKT","diaaKV","diaaKW","diaaKY","diaaLA","diaaLC","diaaLD","diaaLE","diaaLF","diaaLG","diaaLH","diaaLI","diaaLK","diaaLL","diaaLM","diaaLN","diaaLP","diaaLQ","diaaLR","diaaLS","diaaLT","diaaLV","diaaLW","diaaLY","diaaMA","diaaMC","diaaMD","diaaME","diaaMF","diaaMG","diaaMH","diaaMI","diaaMK","diaaML","diaaMM","diaaMN","diaaMP","diaaMQ","diaaMR","diaaMS","diaaMT","diaaMV","diaaMW","diaaMY","diaaNA","diaaNC","diaaND","diaaNE","diaaNF","diaaNG","diaaNH","diaaNI","diaaNK","diaaNL","diaaNM","diaaNN","diaaNP","diaaNQ","diaaNR","diaaNS","diaaNT","diaaNV","diaaNW","diaaNY","diaaPA","diaaPC","diaaPD","diaaPE","diaaPF","diaaPG","diaaPH","diaaPI","diaaPK","diaaPL","diaaPM","diaaPN","diaaPP","diaaPQ","diaaPR","diaaPS","diaaPT","diaaPV","diaaPW","diaaPY","diaaQA","diaaQC","diaaQD","diaaQE","diaaQF","diaaQG","diaaQH","diaaQI","diaaQK","diaaQL","diaaQM","diaaQN","diaaQP","diaaQQ","diaaQR","diaaQS","diaaQT","diaaQV","diaaQW","diaaQY","diaaRA","diaaRC","diaaRD","diaaRE","diaaRF","diaaRG","diaaRH","diaaRI","diaaRK","diaaRL","diaaRM","diaaRN","diaaRP","diaaRQ","diaaRR","diaaRS","diaaRT","diaaRV","diaaRW","diaaRY","diaaSA","diaaSC","diaaSD","diaaSE","diaaSF","diaaSG","diaaSH","diaaSI","diaaSK","diaaSL","diaaSM","diaaSN","diaaSP","diaaSQ","diaaSR","diaaSS","diaaST","diaaSV","diaaSW","diaaSY","diaaTA","diaaTC","diaaTD","diaaTE","diaaTF","diaaTG","diaaTH","diaaTI","diaaTK","diaaTL","diaaTM","diaaTN","diaaTP","diaaTQ","diaaTR","diaaTS","diaaTT","diaaTV","diaaTW","diaaTY","diaaVA","diaaVC",
         "diaaVD","diaaVE","diaaVF","diaaVG","diaaVH","diaaVI","diaaVK","diaaVL","diaaVM","diaaVN","diaaVP","diaaVQ","diaaVR","diaaVS","diaaVT","diaaVV","diaaVW","diaaVY","diaaWA","diaaWC","diaaWD","diaaWE","diaaWF","diaaWG","diaaWH","diaaWI","diaaWK","diaaWL","diaaWM","diaaWN","diaaWP","diaaWQ","diaaWR","diaaWS","diaaWT","diaaWV","diaaWW","diaaWY","diaaYA","diaaYC","diaaYD","diaaYE","diaaYF","diaaYG","diaaYH","diaaYI","diaaYK","diaaYL","diaaYM","diaaYN","diaaYP","diaaYQ","diaaYR","diaaYS","diaaYT","diaaYV","diaaYW","diaaYY",

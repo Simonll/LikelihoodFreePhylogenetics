@@ -466,6 +466,27 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["pwCT"] = &SummaryStatistics::GetpwCT;
     GetSummariesMap["pwGT"] = &SummaryStatistics::GetpwGT;
 
+    GetSummariesMap["pwAC10"] = &SummaryStatistics::GetpwAC10;
+    GetSummariesMap["pwAG10"] = &SummaryStatistics::GetpwAG10;
+    GetSummariesMap["pwAT10"] = &SummaryStatistics::GetpwAT10;
+    GetSummariesMap["pwCG10"] = &SummaryStatistics::GetpwCG10;
+    GetSummariesMap["pwCT10"] = &SummaryStatistics::GetpwCT10;
+    GetSummariesMap["pwGT10"] = &SummaryStatistics::GetpwGT10;
+
+    GetSummariesMap["pwAC30"] = &SummaryStatistics::GetpwAC30;
+    GetSummariesMap["pwAG30"] = &SummaryStatistics::GetpwAG30;
+    GetSummariesMap["pwAT30"] = &SummaryStatistics::GetpwAT30;
+    GetSummariesMap["pwCG30"] = &SummaryStatistics::GetpwCG30;
+    GetSummariesMap["pwCT30"] = &SummaryStatistics::GetpwCT30;
+    GetSummariesMap["pwGT30"] = &SummaryStatistics::GetpwGT30;
+
+    GetSummariesMap["pwAC50"] = &SummaryStatistics::GetpwAC50;
+    GetSummariesMap["pwAG50"] = &SummaryStatistics::GetpwAG50;
+    GetSummariesMap["pwAT50"] = &SummaryStatistics::GetpwAT50;
+    GetSummariesMap["pwCG50"] = &SummaryStatistics::GetpwCG50;
+    GetSummariesMap["pwCT50"] = &SummaryStatistics::GetpwCT50;
+    GetSummariesMap["pwGT50"] = &SummaryStatistics::GetpwGT50;
+
     GetSummariesMap["pw1AC"] = &SummaryStatistics::Getpw1AC;
     GetSummariesMap["pw1AG"] = &SummaryStatistics::Getpw1AG;
     GetSummariesMap["pw1AT"] = &SummaryStatistics::Getpw1AT;
@@ -488,6 +509,9 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["pw3GT"] = &SummaryStatistics::Getpw3GT;
 
     GetSummariesMap["pwAA"]  = &SummaryStatistics::GetpwAA;
+    GetSummariesMap["pwAA10"]  = &SummaryStatistics::GetpwAA10;
+    GetSummariesMap["pwAA30"]  = &SummaryStatistics::GetpwAA30;
+    GetSummariesMap["pwAA50"]  = &SummaryStatistics::GetpwAA50;
 
     GetSummariesMap["pwCpGTpG"]  = &SummaryStatistics::GetdinucCpG_TpG;
     GetSummariesMap["pwCpGCpA"]  = &SummaryStatistics::GetdinucCpG_CpA;
@@ -1324,11 +1348,19 @@ SummaryStatistics::~SummaryStatistics()
     delete [] aa_meandiff;
     delete [] aa_wonR_meandiff;
     delete [] nuc_pairwise;
+    delete [] nuc_pairwise10;
+    delete [] nuc_pairwise30;
+    delete [] nuc_pairwise50;
     delete [] nuc1_pairwise;
     delete [] nuc2_pairwise;
     delete [] nuc3_pairwise;
+    delete [] nuc3_pairwise10;
+    delete [] nuc3_pairwise30;
+    delete [] nuc3_pairwise50;
     delete [] aa_pairwise;
-
+    delete [] aa_pairwise10;
+    delete [] aa_pairwise30;
+    delete [] aa_pairwise50;
 
 }
 
@@ -1366,10 +1398,19 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
     aa_wonR_meandiff_bool = false;
     CGNAGR_bool = false;
     nuc_pairwise_bool = false;
+    nuc_pairwise_bool10 = false;
+    nuc_pairwise_bool30 = false;
+    nuc_pairwise_bool50 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
+    nuc3_pairwise_bool10 = false;
+    nuc3_pairwise_bool30 = false;
+    nuc3_pairwise_bool50 = false;
     aa_pairwise_bool = false;
+    aa_pairwise_bool10 = false;
+    aa_pairwise_bool30 = false;
+    aa_pairwise_bool50 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
@@ -1474,10 +1515,19 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
     aa_wonR_meandiff_bool = false;
     CGNAGR_bool = false;
     nuc_pairwise_bool = false;
+    nuc_pairwise_bool10 = false;
+    nuc_pairwise_bool30 = false;
+    nuc_pairwise_bool50 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
+    nuc3_pairwise_bool10 = false;
+    nuc3_pairwise_bool30 = false;
+    nuc3_pairwise_bool50 = false;
     aa_pairwise_bool = false;
+    aa_pairwise_bool10 = false;
+    aa_pairwise_bool30 = false;
+    aa_pairwise_bool50 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
@@ -1619,10 +1669,19 @@ void SummaryStatistics::computeSummaries()
     aa_wonR_meandiff_bool = false;
     CGNAGR_bool =false ;
     nuc_pairwise_bool = false;
+    nuc_pairwise_bool10 = false;
+    nuc_pairwise_bool30 = false;
+    nuc_pairwise_bool50 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
+    nuc3_pairwise_bool10 = false;
+    nuc3_pairwise_bool30 = false;
+    nuc3_pairwise_bool50 = false;
     aa_pairwise_bool = false;
+    aa_pairwise_bool10 = false;
+    aa_pairwise_bool30 = false;
+    aa_pairwise_bool50 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
@@ -1738,10 +1797,19 @@ void SummaryStatistics::computeSummariesFromData()
     aa_wonR_meandiff_bool = false;
     CGNAGR_bool = false ;
     nuc_pairwise_bool = false;
+    nuc_pairwise_bool10 = false;
+    nuc_pairwise_bool30 = false;
+    nuc_pairwise_bool50 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
+    nuc3_pairwise_bool10 = false;
+    nuc3_pairwise_bool30 = false;
+    nuc3_pairwise_bool50 = false;
     aa_pairwise_bool = false;
+    aa_pairwise_bool10 = false;
+    aa_pairwise_bool30 = false;
+    aa_pairwise_bool50 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
@@ -1810,6 +1878,10 @@ double SummaryStatistics::transformSummaryStatistics(double s)
     else if (lparam->transformation == "log10")
     {
         s = log10(s);
+    }
+    else if (lparam->transformation == "ln")
+    {
+        s = log(s);
     }
 
 

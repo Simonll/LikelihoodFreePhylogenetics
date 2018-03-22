@@ -78,10 +78,19 @@ public:
     double* aa_wonR_meandiff;
     double* CGNAGR;
     int* nuc_pairwise;
+    int* nuc_pairwise10;
+    int* nuc_pairwise30;
+    int* nuc_pairwise50;
     int* nuc1_pairwise;
     int* nuc2_pairwise;
     int* nuc3_pairwise;
+    int* nuc3_pairwise10;
+    int* nuc3_pairwise30;
+    int* nuc3_pairwise50;
     int* aa_pairwise;
+    int* aa_pairwise10;
+    int* aa_pairwise30;
+    int* aa_pairwise50;
     int* dinucCpG_pairwise;
 
     double nuc_site_comphet;
@@ -124,10 +133,19 @@ public:
     bool aa_wonR_meandiff_bool;
     bool CGNAGR_bool;
     bool nuc_pairwise_bool;
+    bool nuc_pairwise_bool10;
+    bool nuc_pairwise_bool30;
+    bool nuc_pairwise_bool50;
     bool nuc1_pairwise_bool;
     bool nuc2_pairwise_bool;
     bool nuc3_pairwise_bool;
+    bool nuc3_pairwise_bool10;
+    bool nuc3_pairwise_bool30;
+    bool nuc3_pairwise_bool50;
     bool aa_pairwise_bool;
+    bool aa_pairwise_bool10;
+    bool aa_pairwise_bool30;
+    bool aa_pairwise_bool50;
     bool dinucCpG_pairwise_bool;
     bool nuc_site_comphet_bool;
     bool nuc1_site_comphet_bool;
@@ -3641,8 +3659,41 @@ private:
         return sum;
     }
 
+    double GetpwAA10(CodonSequenceAlignment* codondata)
+    {
+        int cur ; 
+        if(!aa_pairwise_bool10)
+        {
+            cur = codondata->aa_pairwise10();
+            aa_pairwise_bool10 = true;
+        }
+        
+        return static_cast<double>(cur);
+    }
 
+    double GetpwAA30(CodonSequenceAlignment* codondata)
+    {
+        int cur ; 
+        if(!aa_pairwise_bool30)
+        {
+            cur = codondata->aa_pairwise30();
+            aa_pairwise_bool30 = true;
+        }
+        
+        return static_cast<double>(cur);
+    }
 
+    double GetpwAA50(CodonSequenceAlignment* codondata)
+    {
+        int cur ; 
+        if(!aa_pairwise_bool50)
+        {
+            cur = codondata->aa_pairwise50();
+            aa_pairwise_bool50 = true;
+        }
+        
+        return static_cast<double>(cur);
+    }
 
     /////////////////
     // nuc3_pairwise
@@ -3652,30 +3703,30 @@ private:
     {
         if(!nuc3_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc3_pairwise);
+            codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return (double) nuc3_pairwise[5];
+        return static_cast<double>(nuc3_pairwise[5]);
     }
 
     double Getpw3CT(CodonSequenceAlignment* codondata)
     {
         if(!nuc3_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc3_pairwise);
+            codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return (double) nuc3_pairwise[4];
+        return static_cast<double>(nuc3_pairwise[4]);
     }
 
     double Getpw3CG(CodonSequenceAlignment* codondata)
     {
         if(!nuc3_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc3_pairwise);
+            codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return (double) nuc3_pairwise[3];
+        return static_cast<double>(nuc3_pairwise[3]);
     }
 
 
@@ -3683,20 +3734,20 @@ private:
     {
         if(!nuc3_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc3_pairwise);
+            codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return (double) nuc3_pairwise[2];
+        return static_cast<double>(nuc3_pairwise[2]);
     }
 
     double Getpw3AG(CodonSequenceAlignment* codondata)
     {
         if(!nuc3_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc3_pairwise);
+            codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return (double) nuc3_pairwise[1];
+        return static_cast<double>(nuc3_pairwise[1]);
     }
 
 
@@ -3704,11 +3755,13 @@ private:
     {
         if(!nuc3_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc3_pairwise);
+            codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return (double) nuc3_pairwise[0];
+        return static_cast<double>(nuc3_pairwise[0]);
     }
+
+
 
     /////////////////
     // nuc2_pairwise
@@ -3718,7 +3771,7 @@ private:
     {
         if(!nuc2_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc2_pairwise);
+            codondata->nuc2_pairwise(nuc2_pairwise);
             nuc2_pairwise_bool = true;
         }
         return (double) nuc2_pairwise[5];
@@ -3728,7 +3781,7 @@ private:
     {
         if(!nuc2_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc2_pairwise);
+            codondata->nuc2_pairwise(nuc2_pairwise);
             nuc2_pairwise_bool = true;
         }
         return (double) nuc2_pairwise[4];
@@ -3738,7 +3791,7 @@ private:
     {
         if(!nuc2_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc2_pairwise);
+            codondata->nuc2_pairwise(nuc2_pairwise);
             nuc2_pairwise_bool = true;
         }
         return (double) nuc2_pairwise[3];
@@ -3749,7 +3802,7 @@ private:
     {
         if(!nuc2_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc2_pairwise);
+            codondata->nuc2_pairwise(nuc2_pairwise);
             nuc2_pairwise_bool = true;
         }
         return (double) nuc2_pairwise[2];
@@ -3759,7 +3812,7 @@ private:
     {
         if(!nuc2_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc2_pairwise);
+            codondata->nuc2_pairwise(nuc2_pairwise);
             nuc2_pairwise_bool = true;
         }
         return (double) nuc2_pairwise[1];
@@ -3770,7 +3823,7 @@ private:
     {
         if(!nuc2_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc2_pairwise);
+            codondata->nuc2_pairwise(nuc2_pairwise);
             nuc2_pairwise_bool = true;
         }
         return (double) nuc2_pairwise[0];
@@ -3784,7 +3837,7 @@ private:
     {
         if(!nuc1_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc1_pairwise);
+            codondata->nuc1_pairwise(nuc1_pairwise);
             nuc1_pairwise_bool = true;
         }
         return (double) nuc1_pairwise[5];
@@ -3794,7 +3847,7 @@ private:
     {
         if(!nuc1_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc1_pairwise);
+            codondata->nuc1_pairwise(nuc1_pairwise);
             nuc1_pairwise_bool = true;
         }
         return (double) nuc1_pairwise[4];
@@ -3804,7 +3857,7 @@ private:
     {
         if(!nuc1_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc1_pairwise);
+            codondata->nuc1_pairwise(nuc1_pairwise);
             nuc1_pairwise_bool = true;
         }
         return (double) nuc1_pairwise[3];
@@ -3815,7 +3868,7 @@ private:
     {
         if(!nuc1_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc1_pairwise);
+            codondata->nuc1_pairwise(nuc1_pairwise);
             nuc1_pairwise_bool = true;
         }
         return (double) nuc1_pairwise[2];
@@ -3825,7 +3878,7 @@ private:
     {
         if(!nuc1_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc1_pairwise);
+            codondata->nuc1_pairwise(nuc1_pairwise);
             nuc1_pairwise_bool = true;
         }
         return (double) nuc1_pairwise[1];
@@ -3836,7 +3889,7 @@ private:
     {
         if(!nuc1_pairwise_bool)
         {
-            codondata->nuc_pairwise(nuc1_pairwise);
+            codondata->nuc1_pairwise(nuc1_pairwise);
             nuc1_pairwise_bool = true;
         }
         return (double) nuc1_pairwise[0];
@@ -3909,6 +3962,204 @@ private:
         }
         return (double) nuc_pairwise[0];
     }
+
+
+    double GetpwGT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool10)
+        {
+            codondata->nuc_pairwise10(nuc_pairwise10);
+            nuc_pairwise_bool10 = true;
+        }
+        return static_cast<double>(nuc_pairwise10[5]);
+    }
+
+    double GetpwCT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool10)
+        {
+            codondata->nuc_pairwise10(nuc_pairwise10);
+            nuc_pairwise_bool10 = true;
+        }
+        return static_cast<double>(nuc_pairwise10[4]);
+    }
+
+    double GetpwCG10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool10)
+        {
+            codondata->nuc_pairwise10(nuc_pairwise10);
+            nuc_pairwise_bool10 = true;
+        }
+        return static_cast<double>(nuc_pairwise10[3]);
+    }
+
+
+    double GetpwAT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool10)
+        {
+            codondata->nuc_pairwise10(nuc_pairwise10);
+            nuc_pairwise_bool10 = true;
+        }
+        return static_cast<double>(nuc_pairwise10[2]);
+    }
+
+    double GetpwAG10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool10)
+        {
+            codondata->nuc_pairwise10(nuc_pairwise10);
+            nuc_pairwise_bool10 = true;
+        }
+        return static_cast<double>(nuc_pairwise10[1]);
+    }
+
+
+    double GetpwAC10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool10)
+        {
+            codondata->nuc_pairwise10(nuc_pairwise10);
+            nuc_pairwise_bool10 = true;
+        }
+        return static_cast<double>(nuc_pairwise10[0]);
+    }
+
+
+    double GetpwGT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool30)
+        {
+            codondata->nuc_pairwise30(nuc_pairwise30);
+            nuc_pairwise_bool30 = true;
+        }
+        return static_cast<double>(nuc_pairwise30[5]);
+    }
+
+    double GetpwCT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool30)
+        {
+            codondata->nuc_pairwise30(nuc_pairwise30);
+            nuc_pairwise_bool30 = true;
+        }
+        return static_cast<double>(nuc_pairwise30[4]);
+    }
+
+    double GetpwCG30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool30)
+        {
+            codondata->nuc_pairwise30(nuc_pairwise30);
+            nuc_pairwise_bool30 = true;
+        }
+        return static_cast<double>(nuc_pairwise30[3]);
+    }
+
+
+    double GetpwAT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool30)
+        {
+            codondata->nuc_pairwise30(nuc_pairwise30);
+            nuc_pairwise_bool30 = true;
+        }
+        return static_cast<double>(nuc_pairwise30[2]);
+    }
+
+    double GetpwAG30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool30)
+        {
+            codondata->nuc_pairwise30(nuc_pairwise30);
+            nuc_pairwise_bool30 = true;
+        }
+        return static_cast<double>(nuc_pairwise30[1]);
+    }
+
+
+    double GetpwAC30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool30)
+        {
+            codondata->nuc_pairwise30(nuc_pairwise30);
+            nuc_pairwise_bool30 = true;
+        }
+        return static_cast<double>(nuc_pairwise30[0]);
+    }
+
+
+    double GetpwGT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool50)
+        {
+            codondata->nuc_pairwise50(nuc_pairwise50);
+            nuc_pairwise_bool50 = true;
+        }
+        return static_cast<double>(nuc_pairwise50[5]);
+    }
+
+    double GetpwCT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool50)
+        {
+            codondata->nuc_pairwise50(nuc_pairwise50);
+            nuc_pairwise_bool50 = true;
+        }
+        return static_cast<double>(nuc_pairwise50[4]);
+    }
+
+    double GetpwCG50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool50)
+        {
+            codondata->nuc_pairwise50(nuc_pairwise50);
+            nuc_pairwise_bool50 = true;
+        }
+        return static_cast<double>(nuc_pairwise50[3]);
+    }
+
+
+    double GetpwAT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool50)
+        {
+            codondata->nuc_pairwise50(nuc_pairwise50);
+            nuc_pairwise_bool50 = true;
+        }
+        return static_cast<double>(nuc_pairwise50[2]);
+    }
+
+    double GetpwAG50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool50)
+        {
+            codondata->nuc_pairwise50(nuc_pairwise50);
+            nuc_pairwise_bool50 = true;
+        }
+        return static_cast<double>(nuc_pairwise50[1]);
+    }
+
+
+    double GetpwAC50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool50)
+        {
+            codondata->nuc_pairwise50(nuc_pairwise50);
+            nuc_pairwise_bool50 = true;
+        }
+        return static_cast<double>(nuc_pairwise50[0]);
+    }
+
+
+
+
+
+//
+//
+//
+
 
 
     double GetCGNAGRcgnconst(CodonSequenceAlignment* codondata)
