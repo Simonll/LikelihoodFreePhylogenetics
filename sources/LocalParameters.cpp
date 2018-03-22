@@ -129,6 +129,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->lambda_CpG_GpG = 1.0;
     this->wR_CHQW = 1.0;
     this->fixNsite = 0;
+    this->fitCpG = 0.5;
     this->fixlambda_TBL = 1;
     this->fixlambda_omega = 1;
     this->fixlambda_CpG = 1;

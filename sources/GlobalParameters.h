@@ -46,7 +46,7 @@ public:
 
 
     static const int NSummaries = 780;
-    static const int NParam = 28;
+    static const int NParam = 29;
     static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
     static const int NDistances = 3; 
@@ -71,7 +71,7 @@ public:
     {"chainID","root","lambda","lambda_CpG","lambda_TpA","lambdaTG","lambdaCA","lambda_TBL", "lambda_omega",
                                       "nucsA", "nucsC", "nucsG","nucsT",
                                       "nucrrAC","nucrrAG","nucrrAT","nucrrCA","nucrrCG","nucrrCT","nucrrGA","nucrrGC","nucrrGT","nucrrTA","nucrrTC","nucrrTG",
-                                      "wR_CHQW","lambda_CpG_GpG","lambda_GpT"
+                                      "wR_CHQW","lambda_CpG_GpG","lambda_GpT","fitCpG"
     };
 
 

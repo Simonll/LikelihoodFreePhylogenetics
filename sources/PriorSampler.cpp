@@ -29,7 +29,14 @@ void PriorSampler::sample()
         lparam->wR_CHQW = lparam->rnd->Uniform();
     }
 
-
+    if (lparam->fixfitCpG !=1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freefitCpG\n";
+        }
+        lparam->fitCpG = lparam->rnd->Uniform();
+    }
 
     if (lparam->fixroot == 0)
     {
