@@ -1483,7 +1483,7 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
 
 void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
 {
-
+    
     int verbose = lparam->verbose;
 
     lparam->summariesSimulatedData.clear();
@@ -1491,7 +1491,10 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
 
     lparam->accessorysummariesSimulatedData.clear();
     lparam->accessorysummariesSimulatedData.shrink_to_fit();
-
+    if(verbose)
+    {
+        cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)1\n";
+    }
     RSCU_bool = false;
     relativeCodonFrequency_bool = false;
     dinuc_bool = false;
@@ -1551,7 +1554,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
 
     if(verbose)
     {
-        cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)1\n";
+        cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)\n";
     }
     string* arrSummaries = new string[lparam->NusedSummaries];
     for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
