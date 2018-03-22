@@ -197,7 +197,42 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam)
     GetEvoStatMap["gtnrTC"] = &EvolHistStatistics::GetGTNR_TC;
     GetEvoStatMap["gtnrTG"] = &EvolHistStatistics::GetGTNR_TG;
     GetEvoStatMap["gtnrTT"] = &EvolHistStatistics::GetGTNR_TT;
-    GetEvoStatMap["gtnr1AA"]=&EvolHistStatistics::GetGTNR_AA;
+    
+    GetEvoStatMap["gtnrSAA"] = &EvolHistStatistics::GetGTNRSyn_AA;
+    GetEvoStatMap["gtnrSAC"] = &EvolHistStatistics::GetGTNRSyn_AC;
+    GetEvoStatMap["gtnrSAG"] = &EvolHistStatistics::GetGTNRSyn_AG;
+    GetEvoStatMap["gtnrSAT"] = &EvolHistStatistics::GetGTNRSyn_AT;
+    GetEvoStatMap["gtnrSCA"] = &EvolHistStatistics::GetGTNRSyn_CA;
+    GetEvoStatMap["gtnrSCC"] = &EvolHistStatistics::GetGTNRSyn_CC;
+    GetEvoStatMap["gtnrSCG"] = &EvolHistStatistics::GetGTNRSyn_CG;
+    GetEvoStatMap["gtnrSCT"] = &EvolHistStatistics::GetGTNRSyn_CT;
+    GetEvoStatMap["gtnrSGA"] = &EvolHistStatistics::GetGTNRSyn_GA;
+    GetEvoStatMap["gtnrSGC"] = &EvolHistStatistics::GetGTNRSyn_GC;
+    GetEvoStatMap["gtnrSGG"] = &EvolHistStatistics::GetGTNRSyn_GG;
+    GetEvoStatMap["gtnrSGT"] = &EvolHistStatistics::GetGTNRSyn_GT;
+    GetEvoStatMap["gtnrSTA"] = &EvolHistStatistics::GetGTNRSyn_TA;
+    GetEvoStatMap["gtnrSTC"] = &EvolHistStatistics::GetGTNRSyn_TC;
+    GetEvoStatMap["gtnrSTG"] = &EvolHistStatistics::GetGTNRSyn_TG;
+    GetEvoStatMap["gtnrSTT"] = &EvolHistStatistics::GetGTNRSyn_TT;
+   
+    GetEvoStatMap["gtnrNSAA"] = &EvolHistStatistics::GetGTNRNSyn_AA;
+    GetEvoStatMap["gtnrNSAC"] = &EvolHistStatistics::GetGTNRNSyn_AC;
+    GetEvoStatMap["gtnrNSAG"] = &EvolHistStatistics::GetGTNRNSyn_AG;
+    GetEvoStatMap["gtnrNSAT"] = &EvolHistStatistics::GetGTNRNSyn_AT;
+    GetEvoStatMap["gtnrNSCA"] = &EvolHistStatistics::GetGTNRNSyn_CA;
+    GetEvoStatMap["gtnrNSCC"] = &EvolHistStatistics::GetGTNRNSyn_CC;
+    GetEvoStatMap["gtnrNSCG"] = &EvolHistStatistics::GetGTNRNSyn_CG;
+    GetEvoStatMap["gtnrNSCT"] = &EvolHistStatistics::GetGTNRNSyn_CT;
+    GetEvoStatMap["gtnrNSGA"] = &EvolHistStatistics::GetGTNRNSyn_GA;
+    GetEvoStatMap["gtnrNSGC"] = &EvolHistStatistics::GetGTNRNSyn_GC;
+    GetEvoStatMap["gtnrNSGG"] = &EvolHistStatistics::GetGTNRNSyn_GG;
+    GetEvoStatMap["gtnrNSGT"] = &EvolHistStatistics::GetGTNRNSyn_GT;
+    GetEvoStatMap["gtnrNSTA"] = &EvolHistStatistics::GetGTNRNSyn_TA;
+    GetEvoStatMap["gtnrNSTC"] = &EvolHistStatistics::GetGTNRNSyn_TC;
+    GetEvoStatMap["gtnrNSTG"] = &EvolHistStatistics::GetGTNRNSyn_TG;
+    GetEvoStatMap["gtnrNSTT"] = &EvolHistStatistics::GetGTNRNSyn_TT;
+
+    GetEvoStatMap["gtnr1AA"]=&EvolHistStatistics::GetGTNR1_AA;
     GetEvoStatMap["gtnr1AC"]=&EvolHistStatistics::GetGTNR1_AC;
     GetEvoStatMap["gtnr1AG"]=&EvolHistStatistics::GetGTNR1_AG;
     GetEvoStatMap["gtnr1AT"]=&EvolHistStatistics::GetGTNR1_AT;
@@ -213,6 +248,8 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam)
     GetEvoStatMap["gtnr1TC"]=&EvolHistStatistics::GetGTNR1_TC;
     GetEvoStatMap["gtnr1TG"]=&EvolHistStatistics::GetGTNR1_TG;
     GetEvoStatMap["gtnr1TT"]=&EvolHistStatistics::GetGTNR1_TT;
+    
+    GetEvoStatMap["gtnr2AA"]=&EvolHistStatistics::GetGTNR2_AA;
     GetEvoStatMap["gtnr2AC"]=&EvolHistStatistics::GetGTNR2_AC;
     GetEvoStatMap["gtnr2AG"]=&EvolHistStatistics::GetGTNR2_AG;
     GetEvoStatMap["gtnr2AT"]=&EvolHistStatistics::GetGTNR2_AT;
@@ -227,7 +264,9 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam)
     GetEvoStatMap["gtnr2TA"]=&EvolHistStatistics::GetGTNR2_TA;
     GetEvoStatMap["gtnr2TC"]=&EvolHistStatistics::GetGTNR2_TC;
     GetEvoStatMap["gtnr2TG"]=&EvolHistStatistics::GetGTNR2_TG;
+
     GetEvoStatMap["gtnr2TT"]=&EvolHistStatistics::GetGTNR2_TT;
+    GetEvoStatMap["gtnr3AA"]=&EvolHistStatistics::GetGTNR3_AA;
     GetEvoStatMap["gtnr3AC"]=&EvolHistStatistics::GetGTNR3_AC;
     GetEvoStatMap["gtnr3AG"]=&EvolHistStatistics::GetGTNR3_AG;
     GetEvoStatMap["gtnr3AT"]=&EvolHistStatistics::GetGTNR3_AT;
@@ -243,6 +282,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam)
     GetEvoStatMap["gtnr3TC"]=&EvolHistStatistics::GetGTNR3_TC;
     GetEvoStatMap["gtnr3TG"]=&EvolHistStatistics::GetGTNR3_TG;
     GetEvoStatMap["gtnr3TT"]=&EvolHistStatistics::GetGTNR3_TT;
+    
     GetEvoStatMap["dinucAAAA"] = &EvolHistStatistics::GetDinuc_AAAA;
     GetEvoStatMap["dinucAAAC"] = &EvolHistStatistics::GetDinuc_AAAC;
     GetEvoStatMap["dinucAAAG"] = &EvolHistStatistics::GetDinuc_AAAG;
