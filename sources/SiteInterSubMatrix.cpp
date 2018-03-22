@@ -96,28 +96,48 @@ int  SiteInterSubMatrix::testGpTcontext(int inNnodeIndex, int insite, int innucF
     }
 }
 
-
-
 int  SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite, int innucFrom, int innucTo,int**CurrentNodeNucSequence)
 {
-// if insite is one before end seq and  cur_insite = C and cur_insite+1 = G and C goes to T then CpGHyp
-// if insite is one after start seq and  cur_insite = G and cur_insite-1 = G and G goes to A then CpGHyp
-
-    if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] == 1 && CurrentNodeNucSequence[inNnodeIndex][insite+1] == 2) && innucFrom == 1 && innucTo == 3)
+    // from {C}pG to NpG
+    // if insite is one before end seq and  cur_insite = C and cur_insite+1 = G and C goes to T
+    if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] == 1 && CurrentNodeNucSequence[inNnodeIndex][insite+1] == 2))
+        if(innucFrom == 1 && innucTo == 3)
+        {
+            return 1; // TpG
+        }
+        else if (innucFrom == 1 && innucTo == 2)
+        {
+            return 3; // GpG
+        }
+        else 
+        {
+            return 9; 
+        }
+    // from Cp{G} to CpN
+    // if insite is one after start seq and cur_insite-1 = C and cur_insite = G and G goes to A   
+    else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite-1] == 1 && CurrentNodeNucSequence[inNnodeIndex][insite] == 2))
+        if (innucFrom == 2 && innucTo == 0)
+        {
+            return 2; // CpA
+        }
+        else 
+        {
+            return 9; 
+        }    
+    //from {A|G|T}pG to CpG
+    else if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] != 1 && CurrentNodeNucSequence[inNnodeIndex][insite+1] == 2) && (innucFrom != 1 && innucTo == 1)) 
     {
-        return 1; // TpG
+        return -9; 
     }
-    else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite] == 2 && CurrentNodeNucSequence[inNnodeIndex][insite-1] == 1) && innucFrom == 2 && innucTo == 0)
+    //from Cp{C|A|T} to CpG 
+    else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite-1] == 1 && CurrentNodeNucSequence[inNnodeIndex][insite] != 2) && (innucFrom != 2 && innucTo == 2))
     {
-        return 2; // CpA
+        return -9;
     }
-    else if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] == 1 && CurrentNodeNucSequence[inNnodeIndex][insite+1] == 2) && innucFrom == 1 && innucTo == 2)
-    {
-        return 3; // GpG
-    }
+    // non-CpG context
     else
     {
-        return -1;
+        return 0;
     }
 }
 
@@ -220,6 +240,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
             for (int nucTo = 0; nucTo < 4; nucTo++)
             {
                 double  S = 0.0;
+                double  SCpG = 0.0;
                 double  MutRate = 0.0;
                 double  SubRate = 0.0;
 //                double  MutRateNonSyn = 0.0;
@@ -300,6 +321,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                                     lparam->codonprofile[codonTo] /
                                     lparam->codonprofile[codonFrom]);
 
+                        
 
                             SubRate = MutRate * lparam->lambda_omega *  lparam->omega;
                             //MutRateNonSyn = MutRate;
@@ -313,6 +335,17 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                             //MutRateSyn = MutRate;
                             //SubRateSyn = MutRate;
 
+                        }
+
+                        if(CpGcont > 0)
+                        {
+                            SCpG = log((1.0-lparam->fitCpG) / lparam->fitCpG); 
+                            S += SCpG; 
+                        }
+                        else if (CpGcont < 0)
+                        {
+                            SCpG = log(lparam->fitCpG / (1.0 - lparam->fitCpG)); 
+                            S += SCpG; 
                         }
 
                         //NUMERICAL SECURITY
@@ -389,10 +422,10 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                 submatrixTreeSim[NodeIndex][site_nuc][nucTo] = SubRate;
 
 //              cerr << "MutRate" << submatrix_mut[inNodeIndex][site_nuc][nucTo] << "\n";
-                if (lparam->opt == 3)
+                /* if (lparam->opt == 3)
                 {
                     submatrixTreeSim[NodeIndex][site_nuc][nucTo] = MutRate;
-                }
+                } */
 
             }
         }
@@ -417,10 +450,10 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
 //        TotalMutRateSyn[NodeIndex] += deltaTotalMutRateSyn;
     }
 
-    if (lparam->opt == 3)
+    /* if (lparam->opt == 3)
     {
         TotalSubRate[NodeIndex] = TotalMutRate[NodeIndex];
-    }
+    } */
 
     delete [] nucposFrom;
     delete [] nucposTo;

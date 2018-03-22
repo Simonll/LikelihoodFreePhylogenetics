@@ -149,9 +149,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->rooted = 0;
     this->fixroot = -1;
     this->randomseed = -1;
-    this->opt = 1;
-    this->optCpG = 1;
-    this->optTpA = 1;
     this->rootlength = 10.0;
     this->Nsite_codon = 1000;
     this->Nsite_nuc = 3*this->Nsite_codon;
@@ -642,12 +639,39 @@ void LocalParameters::readLocalInstructions()
             cerr << ((this->fixroot ==0)? "freeroot " : "fixroot ") << this->taxa_a  << " " << this->taxa_b << "\n";
 
         }
+        else if (s =="-fitCpG")
+        {
+            iss >> s;
+            this->fitCpG = atof(s.c_str());
+            this->fixfitCpG = 1;
+            cerr << "fixfitCpG X" << this->fitCpG << "\n";
+
+        }
+        else if (s == "-freefitCpG")
+        {
+            this->fixfitCpG = 0;
+            cerr << "free fitCpG\n";
+
+        }
         else if (s =="-lambdaTBL")
         {
             iss >> s;
             this->lambda_TBL = atof(s.c_str());
             this->fixlambda_TBL = 1;
             cerr << "fix TBL X" << this->lambda_TBL << "\n";
+
+        }
+        else if (s == "-freelambdaTBL")
+        {
+            this->fixlambda_TBL = 0;
+            cerr << "free TBL\n";
+
+        }
+        else if (s == "-priorlambdaTBL")
+        {
+            iss >> s;
+            this->lambda_TBL_prior = s;
+            cerr << "prior TBL " << this->lambda_TBL_prior << "\n";
 
         }
         else if (s =="-lambdaOmega")
@@ -666,20 +690,19 @@ void LocalParameters::readLocalInstructions()
             cerr << "fix omega X" << this->omega << "\n";
 
         }
-        else if (s == "-freelambdaTBL")
+        else if (s == "-freelambdaomega")
         {
-            this->fixlambda_TBL = 0;
-            cerr << "free TBL\n";
+            this->fixlambda_omega = 0;
+            cerr << "freelambdaomega\n";
 
         }
-        else if (s == "-priorlambdaTBL")
+        else if (s == "-priorlambdaomega")
         {
             iss >> s;
-            this->lambda_TBL_prior = s;
-            cerr << "prior TBL " << this->lambda_TBL_prior << "\n";
+            this->lambda_omega_prior = s;
+            cerr << "prior omega " << this->lambda_omega_prior << "\n";
 
         }
-
         else if (s =="-lambdaCpG" || s == "-fixlambdaCpG")
         {
             iss >> s;
@@ -843,19 +866,6 @@ void LocalParameters::readLocalInstructions()
             cerr << "prior CpG_GpG" << this->lambda_CpG_GpG_prior << "\n";
 
         }
-        else if (s == "-freelambdaomega")
-        {
-            this->fixlambda_omega = 0;
-            cerr << "freelambdaomega\n";
-
-        }
-        else if (s == "-priorlambdaomega")
-        {
-            iss >> s;
-            this->lambda_omega_prior = s;
-            cerr << "prior omega " << this->lambda_omega_prior << "\n";
-
-        }
         else if (s =="-freegtnr")
         {
             this->fixgtnr = 0;
@@ -910,34 +920,7 @@ void LocalParameters::readLocalInstructions()
             this->rootlength = atof(s.c_str());
             cerr << "rootlength" << this->rootlength <<"\n";
 
-        }
-        else if (s =="-opt1")
-        {
-            this->opt = 1;
-
-        }
-        else if (s =="-opt2")
-        {
-            this->opt = 2;
-
-        }
-        else if (s =="-opt3")
-        {
-            this->opt = 3;
-
-        }
-        else if (s =="-optCpG")
-        {
-            iss >> s;
-            this->optCpG = atoi(s.c_str());
-
-        }
-        else if (s =="-optTpA")
-        {
-            iss >> s;
-            this->optTpA = atoi(s.c_str());
-
-        }
+        }      
         else if (s =="-tofasta" || s =="-tophylip")
         {
             this->tofasta = 1;
@@ -966,51 +949,31 @@ void LocalParameters::readLocalInstructions()
             cerr << "fixNsite " << this->Nsite_codon << " " << this->Nsite_nuc << "\n";
 
         }
-
-
     }
-
-
-
-
-
-
 }
 
 void LocalParameters::SetRootLCA()
 {
-
     outgroupLink = refTree->GetLCA(taxa_a,taxa_b);
     refTree->RootAt(outgroupLink);
     refTree->SetIndices();
-
 }
 
 void LocalParameters::SetTree()
 {
-
     if (this->fixroot == 1 )
     {
-
         SetRootBetweenInAndOutGroup();
-
     }
     else if (this->fixroot == 0)
     {
-
         percentFromOutGroup = rnd->Uniform();
         SetRootBetweenInAndOutGroup();
-
-
     }
     else if (this->rooted == 1)
     {
-
         SetRootLCA();
-
     }
-
-
 }
 
 void LocalParameters::SetRootBetweenInAndOutGroup()
@@ -1112,14 +1075,11 @@ void LocalParameters::SetRootBetweenInAndOutGroup()
 
 }
 
-
-
 std::vector<double> LocalParameters::GetCurrentDistances()
 {
-
     std::vector<double> cur_dist;
     double dist = 0.0 ;
-
+    //squared Euclidian
     if (this->distance == "Euclidian")
     {
 
@@ -1220,6 +1180,10 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         else if(arrParam[param_i]  == "lambda")
         {
             this->lambda_CpG = posterior[it][param_i];
+        }
+        else if(arrParam[param_i]  == "fitCpG")
+        {
+            this->fitCpG = posterior[it][param_i];
         }
         else if(arrParam[param_i]  == "lambda_CpG")
         {
@@ -1432,6 +1396,10 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         {
             cur_param.push_back(this->percentFromOutGroup);
         }
+        else if(arrParam[param_i]  == "fitCpG")
+        {
+            cur_param.push_back(this->fitCpG);
+        }
         else if(arrParam[param_i]  == "lambda")
         {
             cur_param.push_back(this->lambda_CpG);
@@ -1550,7 +1518,6 @@ void LocalParameters::writeParam(ofstream& os)
     os << fixlambda_TpA << "\t" <<lambda_TpA << "\n";
     os << fixgtr << "\t" << fixgtr1 << "\t" << fixgtr2 << "\n";
     os << fixroot << "\n";
-    os << optCpG << "\t" << optTpA << "\n";
     os << rootlength << "\n";
     os << "#####\n";
 

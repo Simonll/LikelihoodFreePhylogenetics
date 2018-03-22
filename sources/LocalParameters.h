@@ -107,18 +107,10 @@ public:
     Random* rnd;
 
     bool iscodon, isdata;
-    int optCpG, opt, optTpA;
     std::map <int,int> gtrMap;
     int gtr1NodeIndex;
     int gtr2NodeIndex;
     double rootlength, percentFromOutGroup, branchLengthBetweenInAndOutGroup ;
-
-
-    struct params
-    {
-
-
-    };
 
     int Nsite_codon, Nsite_nuc, Ntaxa, Nstate_codon, startPoint, endPoint, everyPoint, tofasta, Nrep;
     string controlfile, code, chain, posteriorfile, taxa_a, taxa_b,taxa_gtr1_a, taxa_gtr1_b, taxa_gtr1_c, taxa_gtr2_a, taxa_gtr2_b,taxa_gtr2_c, distance, transformation;
@@ -132,9 +124,9 @@ public:
     double **ssaaprofiles;
     double *codonprofile;
     int *alloc;
-    double lambda_TBL, lambda_omega, lambda_CpG, lambdaTG, lambdaCA, lambda_TpA, MutationNormFactor, MutationNormFactor1, MutationNormFactor2, wR_CHQW, lambda_CpG_GpG, lambda_GpT;
+    double lambda_TBL, lambda_omega, lambda_CpG, lambdaTG, lambdaCA, lambda_TpA, MutationNormFactor, MutationNormFactor1, MutationNormFactor2, wR_CHQW, lambda_CpG_GpG, lambda_GpT,fitCpG;
     double* muBranch;
-    int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss, fixwR_CHQW, fixlambda_CpG_GpG, fixlambda_GpT;
+    int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss, fixwR_CHQW, fixlambda_CpG_GpG, fixlambda_GpT, fixfitCpG;
     int MCMCpointID;
 
     string lambda_TBL_prior, lambda_CpG_prior, lambda_TpA_prior, lambda_omega_prior, lambda_CpG_GpG_prior, wR_CHQW_prior, lambda_GpT_prior;
@@ -158,8 +150,6 @@ public:
     void writeRealDataSummaries(ofstream&os,bool headers= true);
     void writeAncestralDataSummaries(ofstream&os,bool headers);
     void writeParam(ofstream& os);
-
-
 
     void tobstats(ofstream& os);
     void tobstats(ofstream& os,const Link* from);
@@ -217,7 +207,7 @@ public:
     double GetGTNR(int i, int j)
     {
         double norm = GetRateGTNR();
-        return ((this->nucp[j] * this->nucrrnr[i][j])/norm);
+        return ((this->nucrrnr[i][j])/norm);
     }
 
     double GetGTR(int i, int j )
@@ -241,6 +231,10 @@ public:
 
     double GetRateGTNR()
     {
+        if (getrate)
+        {
+            return MutationNormFactor; 
+        }
         double norm = 0.0;
         for (int i=0; i<4; i++)
         {
@@ -248,11 +242,13 @@ public:
             {
                 if (i!=j)
                 {
-                    norm += this->nucp[i] * this->nucp[j] * this->nucrrnr[i][j];
+                    norm += this->nucrrnr[i][j];
                 }
             }
         }
-        return norm * 3;
+        getrate = true;
+        MutationNormFactor = 2 * (norm * 3);
+        return MutationNormFactor;
     }
 
     double GetRate()
@@ -266,15 +262,13 @@ public:
         {
             for (int j=i+1; j<4; j++)
             {
-                //norm += nucp[i] * nucp[j] * nucrr[GetNucRRIndex(i,j)];
-                norm += this->nucp[i] * this->nucp[j] * this->nucrrnr[i][j];
-                //cerr << this->nucp[i] << " " << this->nucp[j] << " " << this->nucrrnr[i][j] << " " << norm << "\n";
+                norm += this->nucp[i] * this->nucp[j] * this->nucrrnr[i][j];   
             }
         }
         // 2 for the symetry of the matrix??, and 3 for the number of codon positons
         getrate = true;
         MutationNormFactor = 2 * (norm * 3);
-        return   MutationNormFactor;
+        return MutationNormFactor;
     }
 
 
