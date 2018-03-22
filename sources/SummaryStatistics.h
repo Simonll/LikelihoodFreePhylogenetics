@@ -3661,7 +3661,7 @@ private:
 
     double GetpwAA10(CodonSequenceAlignment* codondata)
     {
-        int cur ; 
+        int cur = 0; 
         if(!aa_pairwise_bool10)
         {
             cur = codondata->aa_pairwise10();
@@ -3673,7 +3673,7 @@ private:
 
     double GetpwAA30(CodonSequenceAlignment* codondata)
     {
-        int cur ; 
+        int cur = 0; 
         if(!aa_pairwise_bool30)
         {
             cur = codondata->aa_pairwise30();
@@ -3685,7 +3685,7 @@ private:
 
     double GetpwAA50(CodonSequenceAlignment* codondata)
     {
-        int cur ; 
+        int cur = 0; 
         if(!aa_pairwise_bool50)
         {
             cur = codondata->aa_pairwise50();

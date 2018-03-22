@@ -1280,7 +1280,7 @@ public:
 
     void CodonUsagePerAAwonR(double* stat_container)
     {
-        int tot = GetCodonStateSpace()->GetNstate();
+        //int tot = GetCodonStateSpace()->GetNstate();
         for ( int codon  = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon ++ )
         {
             stat_container[codon] = 1.0 ;
@@ -2518,7 +2518,7 @@ public:
         
         int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all; 
         sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = 0;
-        
+
         for (int i = 0 ; i < size; i++)
         {
             sum_ac += vec_ac[i];
