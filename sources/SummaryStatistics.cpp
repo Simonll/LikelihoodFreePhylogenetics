@@ -129,16 +129,28 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     }
 
     nuc_pairwise = new int [7];
+    nuc_pairwise10 = new int [7];
+    nuc_pairwise30 = new int [7];
+    nuc_pairwise50 = new int [7];
     nuc1_pairwise = new int [7];
     nuc2_pairwise = new int [7];
     nuc3_pairwise = new int [7];
+    nuc3_pairwise10 = new int [7];
+    nuc3_pairwise30 = new int [7];
+    nuc3_pairwise50 = new int [7];
 
     for (int i = 0 ; i < 7 ; i++)
     {
         nuc_pairwise[i] = 0;
+        nuc_pairwise10[i] = 0;
+        nuc_pairwise30[i] = 0;
+        nuc_pairwise50[i] = 0;
         nuc1_pairwise[i] = 0;
         nuc2_pairwise[i] = 0;
         nuc3_pairwise[i] = 0;
+        nuc3_pairwise10[i] = 0;
+        nuc3_pairwise30[i] = 0;
+        nuc3_pairwise50[i] = 0;
     }
 
     aa_pairwise = new int [190];
@@ -204,10 +216,19 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     aa_wonR_meandiff_bool = false;
     CGNAGR_bool = false;
     nuc_pairwise_bool = false;
+    nuc_pairwise_bool10 = false;
+    nuc_pairwise_bool30 = false;
+    nuc_pairwise_bool50 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
+    nuc3_pairwise_bool10 = false;
+    nuc3_pairwise_bool30 = false;
+    nuc3_pairwise_bool50 = false;
     aa_pairwise_bool = false;
+    aa_pairwise_bool10 = false;
+    aa_pairwise_bool30 = false;
+    aa_pairwise_bool50 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
@@ -351,16 +372,29 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
 
     }
     nuc_pairwise = new int [7];
+    nuc_pairwise10 = new int [7];
+    nuc_pairwise30 = new int [7];
+    nuc_pairwise50 = new int [7];
     nuc1_pairwise = new int [7];
     nuc2_pairwise = new int [7];
     nuc3_pairwise = new int [7];
+    nuc3_pairwise10 = new int [7];
+    nuc3_pairwise30 = new int [7];
+    nuc3_pairwise50 = new int [7];
 
     for (int i = 0 ; i < 7 ; i++)
     {
         nuc_pairwise[i] = 0;
+        nuc_pairwise10[i] = 0;
+        nuc_pairwise30[i] = 0;
+        nuc_pairwise50[i] = 0;
+
         nuc1_pairwise[i] = 0;
         nuc2_pairwise[i] = 0;
         nuc3_pairwise[i] = 0;
+        nuc3_pairwise10[i] = 0;
+        nuc3_pairwise30[i] = 0;
+        nuc3_pairwise50[i] = 0;
     }
 
     aa_pairwise = new int [190];
