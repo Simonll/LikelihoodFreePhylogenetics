@@ -2253,8 +2253,8 @@ public:
         {
             for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
-                double ac,ag,at,cg,ct,gt,all,ts, tv; 
-                ac = ag = at = cg = ct = gt = all = ts = tv = 0;
+                double ac,ag,at,cg,ct,gt,all,ts,tv,cons; 
+                ac = ag = at = cg = ct = gt = all = ts = tv = cons = 0;
                 for (int site_codon = 0; site_codon < Nsite; site_codon++)
                 {
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
@@ -2289,10 +2289,14 @@ public:
                             {
                                 gt++;
                             }
+                            else if (posa == posb)
+                            {
+                                cons++; 
+                            }
                         }
                     }
                 }
-                all = ac + ag + at + cg + ct + gt ; 
+                all = ac + ag + at + cg + ct + gt +cons; 
                 ts = ag + ct; 
                 tv = ac + at + cg + gt; 
                 double p = ts / all;
