@@ -2299,7 +2299,7 @@ public:
                     vec_cg.push_back(cg);
                     vec_ct.push_back(ct);
                     vec_gt.push_back(gt);
-                    vec_gt.push_back(all);
+                    vec_all.push_back(all);
                 }
 
             }
@@ -2402,7 +2402,7 @@ public:
                     vec_cg.push_back(cg);
                     vec_ct.push_back(ct);
                     vec_gt.push_back(gt);
-                    vec_gt.push_back(all);
+                    vec_all.push_back(all);
                 }
 
             }
@@ -2471,8 +2471,8 @@ public:
                     {
                         for (int i = 0; i < 3; i++)
                         {
-                            int posa = GetCodonStateSpace()->GetCodonPosition(2,state_seq1);
-                            int posb = GetCodonStateSpace()->GetCodonPosition(2,state_seq2);
+                            int posa = GetCodonStateSpace()->GetCodonPosition(i,state_seq1);
+                            int posb = GetCodonStateSpace()->GetCodonPosition(i,state_seq2);
                             if ((posa == 0 && posb == 1 ) || (posa == 1 && posb == 0))  // ca_ac
                             {
                                 ac++;
@@ -2506,7 +2506,7 @@ public:
                     vec_cg.push_back(cg);
                     vec_ct.push_back(ct);
                     vec_gt.push_back(gt);
-                    vec_gt.push_back(all);
+                    vec_all.push_back(all);
                 }
 
             }
@@ -2579,38 +2579,26 @@ public:
                         int posb = GetCodonStateSpace()->GetCodonPosition(2,state_seq2);
                         if ((posa == 0 && posb == 1 ) || (posa == 1 && posb == 0))  // ca_ac
                         {
-                            invec[0]++;
-                            invec[6]++;
                             ac++;
                         }
                         else if ((posa == 0 && posb == 2) || (posa == 2 && posb == 0) )    //ag_ga
                         {
-                            invec[1]++;
-                            invec[6]++;
                             ag++;
                         }
                         else if ((posa == 0 && posb == 3 ) || (posa == 3 && posb == 0))    //at_ta
                         {
-                            invec[2]++;
-                            invec[6]++;
                             at++;
                         }
                         else if ((posa == 1 && posb == 2 ) || (posa == 2 && posb == 1))    //cg_gc
                         {
-                            invec[3]++;
-                            invec[6]++;
                             cg++;
                         }
                         else if ( (posa == 1 && posb == 3) || (posa == 3 && posb == 1))    //ct_tc
                         {
-                            invec[4]++;
-                            invec[6]++;
                             ct++;
                         }
                         else if ((posa == 3 && posb == 2 ) || (posa == 2 && posb == 3))    //gt_tg
                         {
-                            invec[5]++;
-                            invec[6]++;
                             gt++;
                         }
                     }
@@ -2621,7 +2609,7 @@ public:
                     vec_cg.push_back(cg);
                     vec_ct.push_back(ct);
                     vec_gt.push_back(gt);
-                    vec_gt.push_back(all);
+                    vec_all.push_back(all);
                 }
 
             }
@@ -2692,38 +2680,26 @@ public:
                         int posb = GetCodonStateSpace()->GetCodonPosition(2,state_seq2);
                         if ((posa == 0 && posb == 1 ) || (posa == 1 && posb == 0))  // ca_ac
                         {
-                            invec[0]++;
-                            invec[6]++;
                             ac++;
                         }
                         else if ((posa == 0 && posb == 2) || (posa == 2 && posb == 0) )    //ag_ga
                         {
-                            invec[1]++;
-                            invec[6]++;
                             ag++;
                         }
                         else if ((posa == 0 && posb == 3 ) || (posa == 3 && posb == 0))    //at_ta
                         {
-                            invec[2]++;
-                            invec[6]++;
                             at++;
                         }
                         else if ((posa == 1 && posb == 2 ) || (posa == 2 && posb == 1))    //cg_gc
                         {
-                            invec[3]++;
-                            invec[6]++;
                             cg++;
                         }
                         else if ( (posa == 1 && posb == 3) || (posa == 3 && posb == 1))    //ct_tc
                         {
-                            invec[4]++;
-                            invec[6]++;
                             ct++;
                         }
                         else if ((posa == 3 && posb == 2 ) || (posa == 2 && posb == 3))    //gt_tg
                         {
-                            invec[5]++;
-                            invec[6]++;
                             gt++;
                         }
                     }
@@ -2734,7 +2710,7 @@ public:
                     vec_cg.push_back(cg);
                     vec_ct.push_back(ct);
                     vec_gt.push_back(gt);
-                    vec_gt.push_back(all);
+                    vec_all.push_back(all);
                 }
 
             }
@@ -2805,38 +2781,26 @@ public:
                         int posb = GetCodonStateSpace()->GetCodonPosition(2,state_seq2);
                         if ((posa == 0 && posb == 1 ) || (posa == 1 && posb == 0))  // ca_ac
                         {
-                            invec[0]++;
-                            invec[6]++;
                             ac++;
                         }
                         else if ((posa == 0 && posb == 2) || (posa == 2 && posb == 0) )    //ag_ga
                         {
-                            invec[1]++;
-                            invec[6]++;
                             ag++;
                         }
                         else if ((posa == 0 && posb == 3 ) || (posa == 3 && posb == 0))    //at_ta
                         {
-                            invec[2]++;
-                            invec[6]++;
                             at++;
                         }
                         else if ((posa == 1 && posb == 2 ) || (posa == 2 && posb == 1))    //cg_gc
                         {
-                            invec[3]++;
-                            invec[6]++;
                             cg++;
                         }
                         else if ( (posa == 1 && posb == 3) || (posa == 3 && posb == 1))    //ct_tc
                         {
-                            invec[4]++;
-                            invec[6]++;
                             ct++;
                         }
                         else if ((posa == 3 && posb == 2 ) || (posa == 2 && posb == 3))    //gt_tg
                         {
-                            invec[5]++;
-                            invec[6]++;
                             gt++;
                         }
                     }
@@ -2847,7 +2811,7 @@ public:
                     vec_cg.push_back(cg);
                     vec_ct.push_back(ct);
                     vec_gt.push_back(gt);
-                    vec_gt.push_back(all);
+                    vec_all.push_back(all);
                 }
 
             }
