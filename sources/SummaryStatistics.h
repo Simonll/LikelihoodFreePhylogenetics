@@ -78,7 +78,7 @@ public:
     double* aa_wonR_meandiff;
     double* CGNAGR;
     int* nuc_pairwise;
-    int* nuc_pairwise10;
+    double* nuc_pairwise10;
     int* nuc_pairwise30;
     int* nuc_pairwise50;
     int* nuc1_pairwise;
@@ -3963,6 +3963,15 @@ private:
         return (double) nuc_pairwise[0];
     }
 
+    double GetK80nuc10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool10)
+        {
+            codondata->nuc_pairwise10(nuc_pairwise10);
+            nuc_pairwise_bool10 = true;
+        }
+        return nuc_pairwise10[6];
+    }
 
     double GetpwGT10(CodonSequenceAlignment* codondata)
     {
@@ -3971,7 +3980,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return (double) nuc_pairwise10[5];
+        return nuc_pairwise10[5];
     }
 
     double GetpwCT10(CodonSequenceAlignment* codondata)
@@ -3981,7 +3990,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return (double)nuc_pairwise10[4];
+        return nuc_pairwise10[4];
     }
 
     double GetpwCG10(CodonSequenceAlignment* codondata)
@@ -3991,7 +4000,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return (double)nuc_pairwise10[3];
+        return nuc_pairwise10[3];
     }
 
 
@@ -4002,7 +4011,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return (double) nuc_pairwise10[2];
+        return nuc_pairwise10[2];
     }
 
     double GetpwAG10(CodonSequenceAlignment* codondata)
@@ -4012,7 +4021,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return (double) nuc_pairwise10[1];
+        return nuc_pairwise10[1];
     }
 
 
@@ -4023,7 +4032,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return (double) nuc_pairwise10[0];
+        return nuc_pairwise10[0];
     }
 
 

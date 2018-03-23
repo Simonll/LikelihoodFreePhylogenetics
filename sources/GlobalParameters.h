@@ -45,7 +45,7 @@ public:
     static constexpr double TOOLARGENEGATIVE = -500;
 
 
-    static const int NSummaries = 801;
+    static const int NSummaries = 805;
     static const int NParam = 29;
     static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
@@ -82,10 +82,10 @@ public:
         "pw1AC","pw1AG","pw1AT","pw1CG","pw1CT","pw1GT",
         "pw2AC","pw2AG","pw2AT","pw2CG","pw2CT","pw2GT",
         "pw3AC","pw3AG","pw3AT","pw3CG","pw3CT","pw3GT",
-        "pwAC10","pwAG10","pwAT10","pwCG10","pwCT10","pwGT10",
-        "pwAC30","pwAG30","pwAT30","pwCG30","pwCT30","pwGT30",
-        "pwAC50","pwAG50","pwAT50","pwCG50","pwCT50","pwGT50",
-        "pwAA10","pwAA30","pwAA50",
+        "pwAC10","pwAG10","pwAT10","pwCG10","pwCT10","pwGT10","K80nuc10",
+        "pwAC30","pwAG30","pwAT30","pwCG30","pwCT30","pwGT30","K80nuc30",
+        "pwAC50","pwAG50","pwAT50","pwCG50","pwCT50","pwGT50","K80nuc50",
+        "pwAA10","pwAA30","pwAA50","K80aa10",
         "pwAA","pwCpGTpG","pwCpGCpA","pwApGTpG",
         "nucA","nucC","nucG","nucT",
         "nuc1A","nuc1C","nuc1G","nuc1T",

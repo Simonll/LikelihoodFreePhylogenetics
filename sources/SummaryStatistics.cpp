@@ -129,7 +129,7 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     }
 
     nuc_pairwise = new int [7];
-    nuc_pairwise10 = new int [7];
+    nuc_pairwise10 = new double [7];
     nuc_pairwise30 = new int [7];
     nuc_pairwise50 = new int [7];
     nuc1_pairwise = new int [7];
@@ -372,7 +372,7 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
 
     }
     nuc_pairwise = new int [7];
-    nuc_pairwise10 = new int [7];
+    nuc_pairwise10 = new double [7];
     nuc_pairwise30 = new int [7];
     nuc_pairwise50 = new int [7];
     nuc1_pairwise = new int [7];
@@ -500,6 +500,7 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["pwCT"] = &SummaryStatistics::GetpwCT;
     GetSummariesMap["pwGT"] = &SummaryStatistics::GetpwGT;
 
+    GetSummariesMap["K80nuc10"] = &SummaryStatistics::GetK80nuc10;
     GetSummariesMap["pwAC10"] = &SummaryStatistics::GetpwAC10;
     GetSummariesMap["pwAG10"] = &SummaryStatistics::GetpwAG10;
     GetSummariesMap["pwAT10"] = &SummaryStatistics::GetpwAT10;

@@ -2233,28 +2233,28 @@ public:
         }
     }
 
-    void nuc_pairwise10(int* invec)
+    void nuc_pairwise10(double* invec)
     {
         for (int i = 0 ; i < 7; i ++ )
         {
             invec[i] = 0 ;
         }
 
-        std::vector<int> vec_ac;
-        std::vector<int> vec_ag; 
-        std::vector<int> vec_at; 
-        std::vector<int> vec_cg; 
-        std::vector<int> vec_ct; 
-        std::vector<int> vec_gt; 
-        std::vector<int> vec_all; 
-
+        std::vector<double> vec_ac;
+        std::vector<double> vec_ag; 
+        std::vector<double> vec_at; 
+        std::vector<double> vec_cg; 
+        std::vector<double> vec_ct; 
+        std::vector<double> vec_gt; 
+        std::vector<double> vec_all;
+        std::vector<double> vec_d; 
         
         for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
         {
             for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
-                int ac,ag,at,cg,ct,gt,all; 
-                ac = ag = at = cg = ct = gt = all = 0;
+                double ac,ag,at,cg,ct,gt,all,ts, tv; 
+                ac = ag = at = cg = ct = gt = all = ts = tv = 0;
                 for (int site_codon = 0; site_codon < Nsite; site_codon++)
                 {
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
@@ -2293,6 +2293,11 @@ public:
                     }
                 }
                 all = ac + ag + at + cg + ct + gt ; 
+                ts = ag + ct; 
+                tv = ac +at + cg + gt; 
+                double p = tv / all; 
+                double q = ts / all;
+                double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
                 vec_ac.push_back(ac); 
                 vec_ag.push_back(ag);
                 vec_at.push_back(at);
@@ -2300,6 +2305,8 @@ public:
                 vec_ct.push_back(ct);
                 vec_gt.push_back(gt);
                 vec_all.push_back(all);
+                vec_d.push_back(d_kimura);
+
             }
         }
 
@@ -2310,11 +2317,12 @@ public:
         std::sort(vec_ct.begin(),vec_ct.end()); 
         std::sort(vec_gt.begin(),vec_gt.end()); 
         std::sort(vec_all.begin(),vec_all.end()); 
+        std::sort(vec_d.begin(),vec_d.end()); 
 
         int size = (int) vec_ac.size() * 0.10;
         
-        int sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all; 
-        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = 0; 
+        double sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all,sum_d_kimura; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = sum_d_kimura = 0; 
         
         for (int i = 0 ; i < size; i++)
         {
@@ -2325,6 +2333,7 @@ public:
             sum_ct += vec_ct[i];
             sum_gt += vec_gt[i];
             sum_all += vec_all[i];
+            sum_d_kimura += vec_d[i];
         }
         invec[0] = sum_ac;
         invec[1] = sum_ag;
@@ -2332,7 +2341,7 @@ public:
         invec[3] = sum_cg;
         invec[4] = sum_ct;
         invec[5] = sum_gt;
-        invec[6] = sum_all;
+        invec[6] = sum_d_kimura;
     }
 
     void nuc_pairwise30(int* invec)
