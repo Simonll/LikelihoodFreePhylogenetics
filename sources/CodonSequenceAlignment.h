@@ -2294,9 +2294,9 @@ public:
                 }
                 all = ac + ag + at + cg + ct + gt ; 
                 ts = ag + ct; 
-                tv = ac +at + cg + gt; 
-                double p = tv / all; 
-                double q = ts / all;
+                tv = ac + at + cg + gt; 
+                double p = ts / all;
+                double q = tv / all; 
                 double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
                 vec_ac.push_back(ac); 
                 vec_ag.push_back(ag);
