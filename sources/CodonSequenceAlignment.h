@@ -2255,7 +2255,9 @@ public:
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
 
-                    int ac,ag,at,cg,ct,gt,all = 0; 
+                    int ac,ag,at,cg,ct,gt,all; 
+                    ac = ag = at = cg = ct = gt = all = 0;
+
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
                     if(state_seq1 != unknown && state_seq2 != unknown)
@@ -2356,7 +2358,9 @@ public:
             {
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
-                    int ac,ag,at,cg,ct,gt,all = 0; 
+                    int ac,ag,at,cg,ct,gt,all; 
+                    ac = ag = at = cg = ct = gt = all = 0;
+
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
                     if(state_seq1 != unknown && state_seq2 != unknown)
@@ -2458,7 +2462,9 @@ public:
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
                     
-                    int ac,ag,at,cg,ct,gt,all = 0; 
+                    int ac,ag,at,cg,ct,gt,all; 
+                    ac = ag = at = cg = ct = gt = all = 0;
+
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
                     if(state_seq1 != unknown && state_seq2 != unknown)
@@ -2562,8 +2568,8 @@ public:
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
 
-                    int ac,ag,at,cg,ct,gt,all = 0; 
-
+                    int ac,ag,at,cg,ct,gt,all; 
+                    ac = ag = at = cg = ct = gt = all = 0;
 
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
@@ -2675,8 +2681,8 @@ public:
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
 
-                    int ac,ag,at,cg,ct,gt,all = 0; 
-
+                    int ac,ag,at,cg,ct,gt,all; 
+                    ac = ag = at = cg = ct = gt = all = 0;
 
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
@@ -2788,8 +2794,8 @@ public:
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
 
-                    int ac,ag,at,cg,ct,gt,all = 0; 
-
+                    int ac,ag,at,cg,ct,gt,all; 
+                    ac = ag = at = cg = ct = gt = all = 0;
 
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
