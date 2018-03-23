@@ -1485,7 +1485,9 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
 {
     
     int verbose = lparam->verbose;
-
+    {
+        cerr << "SummaryStatistics::computeSummaries\n";
+    }
     lparam->summariesSimulatedData.clear();
     lparam->summariesSimulatedData.shrink_to_fit();
 
@@ -1493,7 +1495,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
     lparam->accessorysummariesSimulatedData.shrink_to_fit();
     if(verbose)
     {
-        cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)1\n";
+        cerr << "clear\n";
     }
     RSCU_bool = false;
     relativeCodonFrequency_bool = false;

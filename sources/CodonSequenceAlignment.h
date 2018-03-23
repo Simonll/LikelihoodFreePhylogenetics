@@ -2233,7 +2233,7 @@ public:
         }
     }
 
-        void nuc_pairwise10(int* invec)
+    void nuc_pairwise10(int* invec)
     {
         for (int i = 0 ; i < 7; i ++ )
         {
