@@ -114,7 +114,9 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->randomseed = -1;
     this->rnd = new Random(randomseed);
     this->MutationNormFactor = this->MutationNormFactor1 = this->MutationNormFactor2 =  1;
-    this->getrate = this->getrate = this->getrate = false;
+    this->getrate = false;
+    this->getrate1 = false; 
+    this->getrate2 = false; 
 
     //default parameters values
     this->percentFromOutGroup = -1.0;

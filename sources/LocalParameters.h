@@ -115,7 +115,9 @@ public:
     int Nsite_codon, Nsite_nuc, Ntaxa, Nstate_codon, startPoint, endPoint, everyPoint, tofasta, Nrep;
     string controlfile, code, chain, posteriorfile, taxa_a, taxa_b,taxa_gtr1_a, taxa_gtr1_b, taxa_gtr1_c, taxa_gtr2_a, taxa_gtr2_b,taxa_gtr2_c, distance, transformation;
 
-    bool getrate, getrate1, getrate2;
+    bool getrate;
+    bool getrate1;
+    bool getrate2;
 
     double omega;
     double *nucp, *nucrr, *nucp1, *nucrr1, *nucp2, *nucrr2; // 6 param

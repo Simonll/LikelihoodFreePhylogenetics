@@ -178,7 +178,7 @@ int  SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite, int innucF
 void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,int**CurrentNodeNucSequence)
 {
 
-    int verbose = lparam->verbose;
+    //int verbose = lparam->verbose;
     bool whole = false;
     if (site_codon == -1)
     {

@@ -1519,6 +1519,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
 {
     
     int verbose = lparam->verbose;
+    if(verbose)
     {
         cerr << "SummaryStatistics::computeSummaries\n";
     }

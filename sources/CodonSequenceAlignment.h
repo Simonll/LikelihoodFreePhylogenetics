@@ -1287,14 +1287,14 @@ public:
         }
 
 
-        int CCT = GetCodonStateSpace()->GetState("CCT"); // P
-        int CCC = GetCodonStateSpace()->GetState("CCC"); // P
-        int CCA = GetCodonStateSpace()->GetState("CCA"); // P
-        int CCG = GetCodonStateSpace()->GetState("CCG"); // P
+    //    int CCT = GetCodonStateSpace()->GetState("CCT"); // P
+    //    int CCC = GetCodonStateSpace()->GetState("CCC"); // P
+    //    int CCA = GetCodonStateSpace()->GetState("CCA"); // P
+    //    int CCG = GetCodonStateSpace()->GetState("CCG"); // P
 
-        int CTT = GetCodonStateSpace()->GetState("CTT"); // L
-        int CTC = GetCodonStateSpace()->GetState("CTC"); // L
-        int CTA = GetCodonStateSpace()->GetState("CTA"); // L
+    //    int CTT = GetCodonStateSpace()->GetState("CTT"); // L
+    //    int CTC = GetCodonStateSpace()->GetState("CTC"); // L
+    //    int CTA = GetCodonStateSpace()->GetState("CTA"); // L
         int CTG = GetCodonStateSpace()->GetState("CTG"); // L
 
         int TGG = GetCodonStateSpace()->GetState("TGG"); // W
@@ -1302,14 +1302,14 @@ public:
         int TCT = GetCodonStateSpace()->GetState("TCT"); // C
         int TGC = GetCodonStateSpace()->GetState("TGC"); // C
 
-        int CAT = GetCodonStateSpace()->GetState("CAT"); // H
+    //    int CAT = GetCodonStateSpace()->GetState("CAT"); // H
         int CAC = GetCodonStateSpace()->GetState("CAC"); // H
 
         int CAA = GetCodonStateSpace()->GetState("CAA"); // Q
         int CAG = GetCodonStateSpace()->GetState("CAG"); // Q
 
-        int AGT = GetCodonStateSpace()->GetState("AGT"); // S
-        int AGC = GetCodonStateSpace()->GetState("AGC"); // S
+    //    int AGT = GetCodonStateSpace()->GetState("AGT"); // S
+    //    int AGC = GetCodonStateSpace()->GetState("AGC"); // S
 
         int CGT = GetCodonStateSpace()->GetState("CGT"); // R
         int CGC = GetCodonStateSpace()->GetState("CGC"); // R
@@ -1531,14 +1531,14 @@ public:
 
     void   aa_meandiff_wonr(double* stat_container)
     {
-        int CCT = GetCodonStateSpace()->GetState("CCT"); // P
-        int CCC = GetCodonStateSpace()->GetState("CCC"); // P
-        int CCA = GetCodonStateSpace()->GetState("CCA"); // P
-        int CCG = GetCodonStateSpace()->GetState("CCG"); // P
+    //    int CCT = GetCodonStateSpace()->GetState("CCT"); // P
+    //    int CCC = GetCodonStateSpace()->GetState("CCC"); // P
+    //    int CCA = GetCodonStateSpace()->GetState("CCA"); // P
+    //    int CCG = GetCodonStateSpace()->GetState("CCG"); // P
 
-        int CTT = GetCodonStateSpace()->GetState("CTT"); // L
-        int CTC = GetCodonStateSpace()->GetState("CTC"); // L
-        int CTA = GetCodonStateSpace()->GetState("CTA"); // L
+    //    int CTT = GetCodonStateSpace()->GetState("CTT"); // L
+    //    int CTC = GetCodonStateSpace()->GetState("CTC"); // L
+    //    int CTA = GetCodonStateSpace()->GetState("CTA"); // L
         int CTG = GetCodonStateSpace()->GetState("CTG"); // L
 
         int TGG = GetCodonStateSpace()->GetState("TGG"); // W
@@ -1546,14 +1546,14 @@ public:
         int TCT = GetCodonStateSpace()->GetState("TCT"); // C
         int TGC = GetCodonStateSpace()->GetState("TGC"); // C
 
-        int CAT = GetCodonStateSpace()->GetState("CAT"); // H
+    //    int CAT = GetCodonStateSpace()->GetState("CAT"); // H
         int CAC = GetCodonStateSpace()->GetState("CAC"); // H
 
         int CAA = GetCodonStateSpace()->GetState("CAA"); // Q
         int CAG = GetCodonStateSpace()->GetState("CAG"); // Q
 
-        int AGT = GetCodonStateSpace()->GetState("AGT"); // S
-        int AGC = GetCodonStateSpace()->GetState("AGC"); // S
+    //    int AGT = GetCodonStateSpace()->GetState("AGT"); // S
+    //    int AGC = GetCodonStateSpace()->GetState("AGC"); // S
 
         int CGT = GetCodonStateSpace()->GetState("CGT"); // R
         int CGC = GetCodonStateSpace()->GetState("CGC"); // R
@@ -1756,14 +1756,14 @@ public:
 
     void aa_usage_wonr(double* stat_container)
     {
-        int CCT = GetCodonStateSpace()->GetState("CCT"); // P
-        int CCC = GetCodonStateSpace()->GetState("CCC"); // P
-        int CCA = GetCodonStateSpace()->GetState("CCA"); // P
-        int CCG = GetCodonStateSpace()->GetState("CCG"); // P
+    //    int CCT = GetCodonStateSpace()->GetState("CCT"); // P
+    //    int CCC = GetCodonStateSpace()->GetState("CCC"); // P
+    //    int CCA = GetCodonStateSpace()->GetState("CCA"); // P
+    //    int CCG = GetCodonStateSpace()->GetState("CCG"); // P
 
-        int CTT = GetCodonStateSpace()->GetState("CTT"); // L
-        int CTC = GetCodonStateSpace()->GetState("CTC"); // L
-        int CTA = GetCodonStateSpace()->GetState("CTA"); // L
+    //    int CTT = GetCodonStateSpace()->GetState("CTT"); // L
+    //    int CTC = GetCodonStateSpace()->GetState("CTC"); // L
+    //    int CTA = GetCodonStateSpace()->GetState("CTA"); // L
         int CTG = GetCodonStateSpace()->GetState("CTG"); // L
 
         int TGG = GetCodonStateSpace()->GetState("TGG"); // W
@@ -1771,14 +1771,14 @@ public:
         int TCT = GetCodonStateSpace()->GetState("TCT"); // C
         int TGC = GetCodonStateSpace()->GetState("TGC"); // C
 
-        int CAT = GetCodonStateSpace()->GetState("CAT"); // H
+    //   int CAT = GetCodonStateSpace()->GetState("CAT"); // H
         int CAC = GetCodonStateSpace()->GetState("CAC"); // H
 
         int CAA = GetCodonStateSpace()->GetState("CAA"); // Q
         int CAG = GetCodonStateSpace()->GetState("CAG"); // Q
 
-        int AGT = GetCodonStateSpace()->GetState("AGT"); // S
-        int AGC = GetCodonStateSpace()->GetState("AGC"); // S
+    //    int AGT = GetCodonStateSpace()->GetState("AGT"); // S
+    //    int AGC = GetCodonStateSpace()->GetState("AGC"); // S
 
         int CGT = GetCodonStateSpace()->GetState("CGT"); // R
         int CGC = GetCodonStateSpace()->GetState("CGC"); // R
@@ -1789,7 +1789,7 @@ public:
         int AGG = GetCodonStateSpace()->GetState("AGG"); // R
 
 
-        int tot = 20;
+    //    int tot = 20;
         for ( int aa = 0 ; aa < Naa; aa ++ )
         {
             stat_container[aa] = 1.0;
@@ -1890,7 +1890,7 @@ public:
 
     }
 
-    void dNdS_paiwise(int* invec)
+    void dNdS_pairwise(int* invec)
     {
         for(int i = 0 ; i < 2; i++)
         {
@@ -2248,13 +2248,13 @@ public:
         std::vector<int> vec_gt; 
         std::vector<int> vec_all; 
 
-        for (int site_codon = 0; site_codon < Nsite; site_codon++)
+        
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
         {
-            for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
-                for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
                 {
-
                     int ac,ag,at,cg,ct,gt,all; 
                     ac = ag = at = cg = ct = gt = all = 0;
 
@@ -2561,13 +2561,13 @@ public:
         std::vector<int> vec_gt; 
         std::vector<int> vec_all; 
 
-        for (int site_codon = 0; site_codon < Nsite; site_codon++)
+        
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
         {
-            for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
-                for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
-                {
-
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
+                {   
                     int ac,ag,at,cg,ct,gt,all; 
                     ac = ag = at = cg = ct = gt = all = 0;
 
@@ -2662,13 +2662,13 @@ public:
         std::vector<int> vec_gt; 
         std::vector<int> vec_all; 
 
-        for (int site_codon = 0; site_codon < Nsite; site_codon++)
+       
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
         {
-            for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
-                for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
-                {
-
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
+                {       
                     int ac,ag,at,cg,ct,gt,all; 
                     ac = ag = at = cg = ct = gt = all = 0;
 
@@ -2763,13 +2763,13 @@ public:
         std::vector<int> vec_gt; 
         std::vector<int> vec_all; 
 
-        for (int site_codon = 0; site_codon < Nsite; site_codon++)
+        
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
         {
-            for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
-                for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
-                {
-
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
+                {   
                     int ac,ag,at,cg,ct,gt,all; 
                     ac = ag = at = cg = ct = gt = all = 0;
 
@@ -2856,12 +2856,14 @@ public:
 
         if (Ntaxa > 1)
         {
-            for (int site_codon = 0; site_codon < Nsite; site_codon++)
+            
+            for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
             {
-                for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+                for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
-                    for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+                    for (int site_codon = 0; site_codon < Nsite; site_codon++)
                     {
+
                         int aa = 0; 
 
                         int state_seq1 = GetCodonStateSpace()->Translation(Data[taxa1][site_codon]); //GetState(taxa1,site_codon);
@@ -2891,11 +2893,12 @@ public:
 
         if (Ntaxa > 1)
         {
-            for (int site_codon = 0; site_codon < Nsite; site_codon++)
+            
+            for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
             {
-                for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+                for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
-                    for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+                    for (int site_codon = 0; site_codon < Nsite; site_codon++)
                     {
                         int aa = 0; 
 
@@ -2925,11 +2928,12 @@ public:
         std::vector<int> vec_aa; 
         if (Ntaxa > 1)
         {
-            for (int site_codon = 0; site_codon < Nsite; site_codon++)
+            
+            for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
             {
-                for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+                for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
-                    for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+                    for (int site_codon = 0; site_codon < Nsite; site_codon++)
                     {
                         int aa = 0; 
 
