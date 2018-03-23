@@ -2296,12 +2296,13 @@ public:
                         }
                     }
                 }
-                all = ac + ag + at + cg + ct + gt +cons; 
+                all = ac + ag + at + cg + ct + gt + cons; 
                 ts = ag + ct; 
                 tv = ac + at + cg + gt; 
                 double p = ts / all;
                 double q = tv / all; 
-                double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
+                double d_K80 = -0.5*log((1-2*p-q)*sqrt(1-2*q));
+                //double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
                 vec_ac.push_back(ac); 
                 vec_ag.push_back(ag);
                 vec_at.push_back(at);
@@ -2309,7 +2310,7 @@ public:
                 vec_ct.push_back(ct);
                 vec_gt.push_back(gt);
                 vec_all.push_back(all);
-                vec_d.push_back(d_kimura);
+                vec_d.push_back(d_K80);
 
             }
         }
