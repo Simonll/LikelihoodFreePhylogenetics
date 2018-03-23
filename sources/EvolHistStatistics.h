@@ -115,6 +115,7 @@ public:
                 k++;
             }
         }
+        return k;
 
     }
 

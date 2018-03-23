@@ -331,7 +331,7 @@ void GlobalParameters::readInstructions()
             }
             this->Ngenes = k;
             cerr << "#GENES\t" << this->Ngenes << "\n";
-            for (int i = 0 ; i < this->listGenes.size(); i++)
+            for (int i = 0 ; i < (int) this->listGenes.size(); i++)
             {
                 cerr << this->listGenes[i] << "\t";
             }
@@ -387,7 +387,7 @@ void GlobalParameters::readInstructions()
 
             }
 
-            if (this->Ntaxa != this->listSpecies.size())
+            if (this->Ntaxa != (int) this->listSpecies.size())
             {
                 cerr << "Error the number of taxa does not match the list species size\n";
                 exit(0);

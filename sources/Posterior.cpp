@@ -113,7 +113,7 @@ Posterior::Posterior(GlobalParameters* gparam)
 
     empVar = new double [this->NusedParam];
     empMean = new double [this->NusedParam];
-    for (unsigned int i = 0 ; i < this->NusedParam; i++)
+    for (int i = 0 ; i < this->NusedParam; i++)
     {
         empVar[i] = 1.0;
         empMean[i] = 1.0;
@@ -138,10 +138,10 @@ std::vector<std::vector<double>> Posterior::GetPartialDistances()
 
     std::vector<std::vector<double>> X;
 
-    for (unsigned int simu_i = 0 ; simu_i < population_t.size(); simu_i++ )
+    for (int simu_i = 0 ; simu_i < (int) population_t.size(); simu_i++ )
     {
         std::vector<double> X_i;
-        for (unsigned int distance_i = 0 ; distance_i < NusedSummaries+1; distance_i++)
+        for (int distance_i = 0 ; distance_i < NusedSummaries+1; distance_i++)
         {
             if (distance_i == 0)
             {
@@ -169,7 +169,7 @@ std::vector<std::vector<double>> Posterior::GetPartialDistancesT()
     for (int distance_i = 0 ; distance_i < NusedSummaries+1; distance_i++)
     {
         std::vector<double> X_Ti;
-        for (unsigned int simu_i = 0 ; simu_i < population_t.size(); simu_i++ )
+        for (int simu_i = 0 ; simu_i < (int) population_t.size(); simu_i++ )
         {
             if (distance_i == 0)
             {
@@ -196,7 +196,7 @@ std::vector<std::vector<double>> Posterior::GetTheta()
 
     std::vector<std::vector<double> > theta;
 
-    for (unsigned int simu_i = 0 ; simu_i < population_t.size(); simu_i++ )
+    for (int simu_i = 0 ; simu_i < (int) population_t.size(); simu_i++ )
     {
 
         theta.push_back(std::get<paramGetter>(population_t[simu_i]));
@@ -226,7 +226,7 @@ std::vector<double> Posterior::GetWeights()
     double max_ = std::get<distancesGetter>(population_t[population_t.size()-1])[NusedSummaries];
 
 
-    for (unsigned int simu_i = 0 ; simu_i < population_t.size(); simu_i++ )
+    for (int simu_i = 0 ; simu_i < (int) population_t.size(); simu_i++ )
     {
         W.push_back(GetEpanechnikov(std::get<distancesGetter>(population_t[simu_i])[NusedSummaries],max_));
 
@@ -241,15 +241,15 @@ std::vector<std::vector<double>> Posterior::GetLocalWeights()
     std::vector<std::vector<double>> W;
 
     double* max_ = new double[NusedSummaries];
-    for (unsigned int distance_i = 0 ; distance_i < NusedSummaries; distance_i++)
+    for (int distance_i = 0 ; distance_i < NusedSummaries; distance_i++)
     {
         max_[distance_i] = std::get<distancesGetter>(population_t[population_t.size()-1])[distance_i];
     }
 
-    for (unsigned int simu_i = 0 ; simu_i < population_t.size(); simu_i++ )
+    for (int simu_i = 0 ; simu_i < (int) population_t.size(); simu_i++ )
     {
         std::vector<double> W_i;
-        for (unsigned int distance_i = 0 ; distance_i < NusedSummaries; distance_i++)
+        for (int distance_i = 0 ; distance_i < NusedSummaries; distance_i++)
         {
             W_i.push_back(GetEpanechnikov(std::get<distancesGetter>(population_t[simu_i])[distance_i],max_[distance_i]));
         }
@@ -264,7 +264,7 @@ std::vector<std::vector<double>> Posterior::GetLocalWeights()
 void Posterior::writePosterior(ofstream&os)
 {
 
-    for (unsigned int simu_i = 0 ; simu_i < this->threshold; simu_i++ )
+    for (int simu_i = 0 ; simu_i < this->threshold; simu_i++ )
     {
 
         //write chainID
@@ -273,7 +273,7 @@ void Posterior::writePosterior(ofstream&os)
         //write parameters
         if (this->NusedParam > 0)
         {
-            for (unsigned int param_i = 0 ; param_i < std::get<paramGetter>(population_t[simu_i]).size(); param_i++)
+            for (int param_i = 0 ; param_i < (int) std::get<paramGetter>(population_t[simu_i]).size(); param_i++)
             {
                 os << std::get<paramGetter>(population_t[simu_i])[param_i] << "\t";
             }
@@ -281,7 +281,7 @@ void Posterior::writePosterior(ofstream&os)
         //write summaries
         if (this->NusedSummaries > 0)
         {
-            for (unsigned int summary_i = 0 ; summary_i < std::get<summariesGetter>(population_t[simu_i]).size(); summary_i++)
+            for (int summary_i = 0 ; summary_i < (int) std::get<summariesGetter>(population_t[simu_i]).size(); summary_i++)
             {
                 os << std::get<summariesGetter>(population_t[simu_i])[summary_i] << "\t";
             }
@@ -413,7 +413,7 @@ void Posterior::readPosterior(string posteriorfile)
             double w;
             std::vector <double> cur_param;
 
-            for (unsigned int param_i = 0; param_i < NusedParam; param_i++)
+            for (int param_i = 0; param_i < NusedParam; param_i++)
             {
                 iss >> w;
                 cur_param.push_back(w);
@@ -722,12 +722,12 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
 {
 
 
-    unsigned int pop_size = population_t.size();
+    int pop_size = (int) population_t.size();
     int k =0 ;
     if (NusedSummaries > 0)
     {
         string* arrSummaries = new string[this->NusedSummaries];
-        for(unsigned int summary_i = 0 ; summary_i < this->NSummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < this->NSummaries; summary_i++)
         {
             auto it = mapUsedSummaries.find(this->listSummaries[summary_i]);
             if(it != mapUsedSummaries.end() )
@@ -743,7 +743,7 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
         }
 
 
-        for(unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
         {
             if(k == 0 )
             {
@@ -770,7 +770,7 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
     double* sum2  = new double[this->NusedSummaries];
     double* sum3  = new double[this->NusedSummaries];
 
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         ppp[summary_i] = 0.0;
         mean[summary_i] = 0.0;
@@ -780,9 +780,9 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
         sum3[summary_i] = 0.0;
     }
 
-    for (unsigned int simu_i = 0 ; simu_i < pop_size; simu_i++ )
+    for (int simu_i = 0 ; simu_i < pop_size; simu_i++ )
     {
-        for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+        for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
         {
             if(std::get<summariesGetter>(population_t[simu_i])[summary_i] < summariesRealData[summary_i])
             {
@@ -793,15 +793,15 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
     }
 
 
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         mean[summary_i] = sum1[summary_i]/pop_size;
 
     }
 
-    for (unsigned int simu_i = 0 ; simu_i < pop_size; simu_i++ )
+    for (int simu_i = 0 ; simu_i < pop_size; simu_i++ )
     {
-        for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+        for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
         {
             sum2[summary_i] += (std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i])*(std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i]);
             sum3[summary_i] += (std::get<summariesGetter>(population_t[simu_i])[summary_i]-mean[summary_i]);
@@ -809,7 +809,7 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
     }
 
     //posterior predictive p-values (ppp)
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
 
         var[summary_i] = (sum2[summary_i]-(sum3[summary_i]*sum3[summary_i])/pop_size)/(pop_size-1);
@@ -827,7 +827,7 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
     }
 
     //means
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         if(summary_i < this->NusedSummaries-1)
         {
@@ -840,7 +840,7 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
     }
 
     //variances
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         if(summary_i < this->NusedSummaries-1)
         {
@@ -853,7 +853,7 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
     }
 
     //z-scores
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         if(summary_i < this->NusedSummaries-1)
         {
@@ -879,12 +879,12 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
 {
 
 
-    unsigned int pop_size = population_t.size();
+    int pop_size = (int) population_t.size();
     int k =0 ;
     if (NusedSummaries > 0)
     {
         string* arrSummaries = new string[this->NusedSummaries];
-        for(unsigned int summary_i = 0 ; summary_i < this->NSummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < this->NSummaries; summary_i++)
         {
             auto it = mapUsedSummaries.find(this->listSummaries[summary_i]);
             if(it != mapUsedSummaries.end() )
@@ -900,7 +900,7 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
         }
 
 
-        for(unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
         {
             if(k == 0 )
             {
@@ -916,12 +916,6 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
         os << "\n";
     }
 
-
-
-    int n = 0;
-
-
-
     double* ppp  = new double[this->NusedSummaries];
     double* mean = new double[this->NusedSummaries];
     double* var  = new double[this->NusedSummaries];
@@ -929,7 +923,7 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
     double* b  = new double[this->NusedSummaries];
     double* K  = new double[this->NusedSummaries];
 
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         ppp[summary_i] = 0.0;
         mean[summary_i] = 0.0;
@@ -939,9 +933,9 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
         K[summary_i] = std::get<summariesGetter>(population_t[0])[summary_i]; //const for shifted data
     }
 
-    for (unsigned int simu_i = 0 ; simu_i < pop_size; simu_i++ )
+    for (int simu_i = 0 ; simu_i < pop_size; simu_i++ )
     {
-        for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+        for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
         {
 
 
@@ -958,7 +952,7 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
     }
 
 
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         mean[summary_i] /= pop_size;
         var[summary_i]  =  (b[summary_i]  - (a[summary_i]*a[summary_i])/pop_size)/(pop_size);
@@ -968,7 +962,7 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
 
 
     //posterior predictive p-values (ppp)
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
 
         ppp[summary_i] /= pop_size;
@@ -985,7 +979,7 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
     }
 
     //means
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         if(summary_i < this->NusedSummaries-1)
         {
@@ -998,7 +992,7 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
     }
 
     //variances
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         if(summary_i < this->NusedSummaries-1)
         {
@@ -1011,7 +1005,7 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
     }
 
     //z-scores
-    for (unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+    for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         if(summary_i < this->NusedSummaries-1)
         {
@@ -1093,7 +1087,7 @@ void Posterior::writeHeader(ofstream&os)
     if (this->NusedParam > 0)
     {
         string* arrParam = new string[this->NusedParam];
-        for (unsigned int param_i = 0 ; param_i < this->NParam ; param_i++)
+        for (int param_i = 0 ; param_i < this->NParam ; param_i++)
         {
             auto it = this->mapUsedParam.find(this->listParam[param_i]);
             if(it != this->mapUsedParam.end() )
@@ -1108,7 +1102,7 @@ void Posterior::writeHeader(ofstream&os)
 
         }
 
-        for (unsigned int param_i = 0 ; param_i < this->NusedParam ; param_i++)
+        for (int param_i = 0 ; param_i < this->NusedParam ; param_i++)
         {
             if(k == 0)
             {
@@ -1131,7 +1125,7 @@ void Posterior::writeHeader(ofstream&os)
     if (this->NusedSummaries > 0)
     {
         string* arrSummaries = new string[this->NusedSummaries];
-        for(unsigned int summary_i = 0 ; summary_i < this->NSummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < this->NSummaries; summary_i++)
         {
             auto it = this->mapUsedSummaries.find(this->listSummaries[summary_i]);
             if(it != this->mapUsedSummaries.end() )
@@ -1147,7 +1141,7 @@ void Posterior::writeHeader(ofstream&os)
         }
 
 
-        for(unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
         {
             if(k == 0 )
             {
@@ -1164,7 +1158,7 @@ void Posterior::writeHeader(ofstream&os)
         //write distance header
         if(this->OutPartialDistance)
         {
-            for(unsigned int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
+            for(int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
             {
                 if (k == 0)
                 {
@@ -1187,7 +1181,7 @@ void Posterior::writeHeader(ofstream&os)
     if (this->NusedAccessorySummaries > 0)
     {
         string* arrSummaries = new string[this->NusedAccessorySummaries];
-        for(unsigned int summary_i = 0 ; summary_i < this->NSummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < this->NSummaries; summary_i++)
         {
             auto it = this->mapUsedAccessorySummaries.find(this->listSummaries[summary_i]);
             if(it != this->mapUsedAccessorySummaries.end() )
@@ -1203,7 +1197,7 @@ void Posterior::writeHeader(ofstream&os)
         }
 
 
-        for(unsigned int summary_i = 0 ; summary_i < this->NusedAccessorySummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < this->NusedAccessorySummaries; summary_i++)
         {
             if(k == 0 )
             {
@@ -1231,7 +1225,7 @@ void Posterior::writeHeader(ofstream&os)
     if (this->NusedEvoAncStats > 0)
     {
         string* arrMapAnc = new string[this->NusedEvoAncStats];
-        for(unsigned int map_i = 0 ; map_i < this->NEvoStats; map_i++)
+        for(int map_i = 0 ; map_i < this->NEvoStats; map_i++)
         {
             auto it = this->mapUsedEvoAncStats.find(this->listEvoStats[map_i]);
             if(it != this->mapUsedEvoAncStats.end())
@@ -1246,7 +1240,7 @@ void Posterior::writeHeader(ofstream&os)
         }
 
 
-        for(unsigned int map_i = 0; map_i < NusedEvoAncStats; map_i++)
+        for(int map_i = 0; map_i < NusedEvoAncStats; map_i++)
         {
             if (k == 0)
             {
@@ -1271,7 +1265,7 @@ void Posterior::writeHeader(ofstream&os)
     if (this->NusedEvoStats > 0)
     {
         string* arrMap = new string[this->NusedEvoStats];
-        for(unsigned int map_i = 0 ; map_i < this->NEvoStats; map_i++)
+        for(int map_i = 0 ; map_i < this->NEvoStats; map_i++)
         {
             auto it = this->mapUsedEvoStats.find(this->listEvoStats[map_i]);
             if(it != this->mapUsedEvoStats.end())
@@ -1285,7 +1279,7 @@ void Posterior::writeHeader(ofstream&os)
         }
 
 
-        for(unsigned int map_i = 0; map_i < this->NusedEvoStats; map_i++)
+        for(int map_i = 0; map_i < this->NusedEvoStats; map_i++)
         {
             if (k == 0)
             {
@@ -1310,7 +1304,7 @@ void Posterior::writeHeader(ofstream&os)
     if (this->NusedSiteSpecificEvoStats > 0)
     {
         string* arrMap = new string [this->NusedSiteSpecificEvoStats];
-        for(unsigned int map_i = 0 ; map_i < this->NSiteSpecificEvoStats; map_i++)
+        for(int map_i = 0 ; map_i < this->NSiteSpecificEvoStats; map_i++)
         {
             auto it = this->mapUsedSiteSpecificEvoStats.find(this->listSiteSpecificEvoStats[map_i]);
             if(it != this->mapUsedSiteSpecificEvoStats.end())
@@ -1324,7 +1318,7 @@ void Posterior::writeHeader(ofstream&os)
         }
 
 
-        for(unsigned int map_i = 0; map_i < this->NusedSiteSpecificEvoStats; map_i++)
+        for(int map_i = 0; map_i < this->NusedSiteSpecificEvoStats; map_i++)
         {
             for (int bin_i = 0; bin_i < 100; bin_i++)
             {
@@ -1358,14 +1352,14 @@ void Posterior::SetNsite(int i)
 
 void Posterior::GetWeights(string kernel)
 {
-    unsigned int pop_size = population_t.size();
+    int pop_size = (int) population_t.size();
     if (kernel == "sNormal")
     {
 
-        for (unsigned int param_i = 0 ; param_i < NusedParam ; param_i++)
+        for (int param_i = 0 ; param_i < NusedParam ; param_i++)
         {
             double new_weight = 0.0;
-            for (unsigned int simu_i = 0 ; simu_i < pop_size; simu_i++)
+            for (int simu_i = 0 ; simu_i < pop_size; simu_i++)
             {
                 new_weight += std::get<weightsGetter>(population_t[simu_i])[param_i] * (std::get<paramGetter>(population_t[simu_i])[param_i]  + 2.0 * (empVar[param_i]) * rnd->sNormal());
 
@@ -1379,7 +1373,7 @@ void Posterior::GetWeights(string kernel)
 void Posterior::GetEmpVar()
 {
 
-    unsigned int pop_size = population_t.size();
+    int pop_size = (int) population_t.size();
 
 
     double* mean = new double[NusedParam];
@@ -1387,7 +1381,7 @@ void Posterior::GetEmpVar()
     double* sum2  = new double[NusedParam];
     double* sum3  = new double[NusedParam];
 
-    for (unsigned int param_i = 0 ; param_i < NusedParam; param_i++)
+    for (int param_i = 0 ; param_i < NusedParam; param_i++)
     {
         mean[param_i] = 0.0;
         sum1[param_i] = 0.0;
@@ -1395,24 +1389,24 @@ void Posterior::GetEmpVar()
         sum3[param_i] = 0.0;
     }
 
-    for (unsigned int simu_i = 0 ; simu_i < NusedParam; simu_i++ )
+    for (int simu_i = 0 ; simu_i < NusedParam; simu_i++ )
     {
-        for (unsigned int param_i = 0 ; param_i < NusedParam; param_i++)
+        for (int param_i = 0 ; param_i < NusedParam; param_i++)
         {
             sum1[param_i] += std::get<paramGetter>(population_t[simu_i])[param_i];
         }
     }
 
 
-    for (unsigned int param_i = 0 ; param_i < NusedParam; param_i++)
+    for (int param_i = 0 ; param_i < NusedParam; param_i++)
     {
         mean[param_i] = sum1[param_i]/pop_size;
         empMean[param_i] = mean[param_i];
     }
 
-    for (unsigned int simu_i = 0 ; simu_i < pop_size; simu_i++ )
+    for (int simu_i = 0 ; simu_i < pop_size; simu_i++ )
     {
-        for (unsigned int param_i = 0 ; param_i < NusedParam; param_i++)
+        for (int param_i = 0 ; param_i < NusedParam; param_i++)
         {
             //(x - K) * (x - K)
             sum2[param_i] += (std::get<paramGetter>(population_t[simu_i])[param_i]-mean[param_i])*(std::get<paramGetter>(population_t[simu_i])[param_i]-mean[param_i]);
@@ -1422,7 +1416,7 @@ void Posterior::GetEmpVar()
     }
 
 
-    for (unsigned int param_i = 0 ; param_i < NusedParam; param_i++)
+    for (int param_i = 0 ; param_i < NusedParam; param_i++)
     {
         // sum_sqr - (sum_ * sum_)/n)/(n - 1)
         empVar[param_i] = (sum2[param_i]-(sum3[param_i]*sum3[param_i])/pop_size)/(pop_size-1);
@@ -1486,7 +1480,7 @@ void Posterior::registerNewSimulation(int chainID, std::vector<double> param,std
         Naccepted++;
 
     }
-    else if(population_t.size() < (unsigned) threshold)
+    else if((int) population_t.size() < threshold)
     {
 
         //cerr << "POPULATION IS LESS THAN THRESHOLD" << " " << population_t.size() << " "<< Naccepted  << " "<< threshold << " \n";

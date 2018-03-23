@@ -1473,7 +1473,7 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
         cerr << "computeSummariesAncestralSequence(int** CurrentNodeLeafCodonSequence)1\n";
     }
     string* arrSummaries = new string[lparam->NusedAncSummaries];
-    for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
+    for (int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
     {
         auto it = lparam->mapUsedAncSummaries.find(lparam->listSummaries[i_summary]);
         if(it != lparam->mapUsedAncSummaries.end() && it->second != -1)
@@ -1486,7 +1486,7 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
     {
         cerr << "computeSummariesAncestralSequence(int** CurrentNodeLeafCodonSequence)2\n";
     }
-    for(unsigned int i_summary = 0 ; i_summary < lparam->NusedAncSummaries; i_summary++)
+    for(int i_summary = 0 ; i_summary < lparam->NusedAncSummaries; i_summary++)
     {
         auto it = GetSummariesMap.find(arrSummaries[i_summary]);
         if (it != GetSummariesMap.end())
@@ -1593,7 +1593,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
         cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)\n";
     }
     string* arrSummaries = new string[lparam->NusedSummaries];
-    for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
+    for (int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
     {
         auto it = lparam->mapUsedSummaries.find(lparam->listSummaries[i_summary]);
         if(it != lparam->mapUsedSummaries.end() && it->second != -1)
@@ -1606,7 +1606,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
     {
         cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)2\n";
     }
-    for(unsigned int i_summary = 0 ; i_summary < lparam->NusedSummaries; i_summary++)
+    for(int i_summary = 0 ; i_summary < lparam->NusedSummaries; i_summary++)
     {
         auto it = GetSummariesMap.find(arrSummaries[i_summary]);
         if (it != GetSummariesMap.end())
@@ -1632,7 +1632,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
         cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)3\n";
     }
     string* arrAccSummaries = new string[lparam->NusedAccessorySummaries];
-    for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
+    for (int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
     {
         auto it = lparam->mapUsedAccessorySummaries.find(lparam->listSummaries[i_summary]);
         if(it != lparam->mapUsedAccessorySummaries.end() && it->second != -1)
@@ -1645,7 +1645,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
     {
         cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)4\n";
     }
-    for(unsigned int i_summary = 0 ; i_summary < lparam->NusedAccessorySummaries; i_summary++)
+    for(int i_summary = 0 ; i_summary < lparam->NusedAccessorySummaries; i_summary++)
     {
         auto it = GetSummariesMap.find(arrAccSummaries[i_summary]);
         if (it != GetSummariesMap.end())
@@ -1741,7 +1741,7 @@ void SummaryStatistics::computeSummaries()
     GC3_bool = false;
 
     string* arrSummaries = new string[lparam->NusedSummaries];
-    for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
+    for (int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
     {
         auto it = lparam->mapUsedSummaries.find(lparam->listSummaries[i_summary]);
         if(it != lparam->mapUsedSummaries.end() && it->second != -1)
@@ -1751,7 +1751,7 @@ void SummaryStatistics::computeSummaries()
     }
 
 
-    for(unsigned int i_summary = 0 ; i_summary < lparam->NusedSummaries; i_summary++)
+    for(int i_summary = 0 ; i_summary < lparam->NusedSummaries; i_summary++)
     {
         auto it = GetSummariesMap.find(arrSummaries[i_summary]);
         if (it != GetSummariesMap.end())
@@ -1773,7 +1773,7 @@ void SummaryStatistics::computeSummaries()
 
 
     string* arrAccSummaries = new string[lparam->NusedAccessorySummaries];
-    for (unsigned int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
+    for (int i_summary = 0 ; i_summary < lparam->NSummaries ; i_summary++)
     {
         auto it = lparam->mapUsedAccessorySummaries.find(lparam->listSummaries[i_summary]);
         if(it != lparam->mapUsedAccessorySummaries.end() && it->second != -1)
@@ -1783,7 +1783,7 @@ void SummaryStatistics::computeSummaries()
     }
 
 
-    for(unsigned int i_summary = 0 ; i_summary < lparam->NusedAccessorySummaries; i_summary++)
+    for(int i_summary = 0 ; i_summary < lparam->NusedAccessorySummaries; i_summary++)
     {
         auto it = GetSummariesMap.find(arrAccSummaries[i_summary]);
         if (it != GetSummariesMap.end())
@@ -1871,7 +1871,7 @@ void SummaryStatistics::computeSummariesFromData()
 
 
     string* arrSummaries = new string[ldata->NusedSummaries];
-    for (unsigned int i_summary = 0 ; i_summary < ldata->NSummaries ; i_summary++)
+    for (int i_summary = 0 ; i_summary < ldata->NSummaries ; i_summary++)
     {
         auto it = ldata->mapUsedSummaries.find(ldata->listSummaries[i_summary]);
         if(it != ldata->mapUsedSummaries.end() && it->second != -1)
@@ -1882,7 +1882,7 @@ void SummaryStatistics::computeSummariesFromData()
 
 
 
-    for(unsigned int i_summary = 0 ; i_summary < ldata->NusedSummaries; i_summary++)
+    for(int i_summary = 0 ; i_summary < ldata->NusedSummaries; i_summary++)
     {
         auto it = GetSummariesMap.find(arrSummaries[i_summary]);
         if (it != GetSummariesMap.end())

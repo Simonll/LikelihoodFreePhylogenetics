@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
     {
 
         GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-        Posterior* post = new Posterior(gparam);
+        //Posterior* post = new Posterior(gparam);
 
         LocalData* ldata = new  LocalData(gparam);
         ldata->readLocalData(1);
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
         ofstream realDataSummaries_os ((ldata->output+".stats").c_str());
         int k = 1 ;
 
-        while (k < gparam->listGenes.size())
+        while (k < (int) gparam->listGenes.size())
         {
             cerr << "#########\n";
             cerr << k << "\n";
@@ -1596,7 +1596,7 @@ int main(int argc, char* argv[])
             cerr << "debug1\n";
         }
 
-        PriorSampler* sampler = new PriorSampler(lparam);
+        //PriorSampler* sampler = new PriorSampler(lparam);
 
         if(gparam->verbose)
         {

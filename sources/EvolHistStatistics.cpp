@@ -3400,7 +3400,7 @@ void EvolHistStatistics::GetSiteSpecificEvoStats()
     if (lparam->NusedSiteSpecificEvoStats > 0)
     {
         string* arrStats = new string[lparam->NusedSiteSpecificEvoStats];
-        for(unsigned int map_i = 0 ; map_i < lparam->NSiteSpecificEvoStats; map_i++)
+        for(int map_i = 0 ; map_i < lparam->NSiteSpecificEvoStats; map_i++)
         {
             auto it = lparam->mapUsedSiteSpecificEvoStats.find(lparam->listSiteSpecificEvoStats[map_i]);
             if(it != lparam->mapUsedSiteSpecificEvoStats.end())
@@ -3420,7 +3420,7 @@ void EvolHistStatistics::GetSiteSpecificEvoStats()
         }
 
 
-        for(unsigned int map_i = 0; map_i < lparam->NusedSiteSpecificEvoStats; map_i++)
+        for(int map_i = 0; map_i < lparam->NusedSiteSpecificEvoStats; map_i++)
         {
             if(verbose)
             {
@@ -3467,7 +3467,7 @@ void EvolHistStatistics::GetEvoAncStats()
     if (lparam->NusedEvoAncStats > 0)
     {
         string* arrStats = new string[lparam->NusedEvoAncStats];
-        for(unsigned int map_i = 0 ; map_i < lparam->NEvoStats; map_i++)
+        for(int map_i = 0 ; map_i < lparam->NEvoStats; map_i++)
         {
             auto it = lparam->mapUsedEvoAncStats.find(lparam->listEvoStats[map_i]);
             if(it != lparam->mapUsedEvoAncStats.end())
@@ -3484,7 +3484,7 @@ void EvolHistStatistics::GetEvoAncStats()
         {
             cerr << "GetEvoAncStats2\n";
         }
-        for(unsigned int map_i = 0; map_i < lparam->NusedEvoAncStats; map_i++)
+        for(int map_i = 0; map_i < lparam->NusedEvoAncStats; map_i++)
         {
             if(verbose)
             {
@@ -3520,7 +3520,7 @@ void EvolHistStatistics::GetEvoStats()
     if (lparam->NusedEvoStats > 0)
     {
         string* arrStats = new string[lparam->NusedEvoStats];
-        for(unsigned int map_i = 0 ; map_i < lparam->NEvoStats; map_i++)
+        for(int map_i = 0 ; map_i < lparam->NEvoStats; map_i++)
         {
             auto it = lparam->mapUsedEvoStats.find(lparam->listEvoStats[map_i]);
             if(it != lparam->mapUsedEvoStats.end())
@@ -3538,7 +3538,7 @@ void EvolHistStatistics::GetEvoStats()
         {
             cerr << "GetEvoStats2\n";
         }
-        for(unsigned int map_i = 0; map_i < lparam->NusedEvoStats; map_i++)
+        for(int map_i = 0; map_i < lparam->NusedEvoStats; map_i++)
         {
             if(verbose)
             {

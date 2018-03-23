@@ -167,7 +167,7 @@ void LocalData::toAli(ofstream &os, int** curent_nodeleaf_sequence_codon)
 void LocalData::writeRealDataSummaries(ofstream&os, bool headers)
 {
     string* arrSummaries = new string[NusedSummaries];
-    for(unsigned int summary_i = 0 ; summary_i < NSummaries; summary_i++)
+    for(int summary_i = 0 ; summary_i < NSummaries; summary_i++)
     {
         auto it = mapUsedSummaries.find(listSummaries[summary_i]);
         if(it != mapUsedSummaries.end() )
@@ -183,7 +183,7 @@ void LocalData::writeRealDataSummaries(ofstream&os, bool headers)
 
     if (headers)
     {
-        for(unsigned int summary_i = 0 ; summary_i < NusedSummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < NusedSummaries; summary_i++)
         {
 
             if (summary_i < NusedSummaries-1)
@@ -199,7 +199,7 @@ void LocalData::writeRealDataSummaries(ofstream&os, bool headers)
         }
     }
 
-    for(unsigned int summary_i = 0 ; summary_i < NusedSummaries; summary_i++)
+    for(int summary_i = 0 ; summary_i < NusedSummaries; summary_i++)
     {
 
         if (summary_i < NusedSummaries-1)

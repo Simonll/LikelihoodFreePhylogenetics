@@ -20,7 +20,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->Nsite_nuc = 3 * this->Nsite_codon;
 
 
-    if (gparam->listSpecies.size() > 0 && this->Ntaxa >0 && gparam->listSpecies.size() == this->Ntaxa)
+    if ((int) gparam->listSpecies.size() > 0 && this->Ntaxa >0 && (int) gparam->listSpecies.size() == this->Ntaxa)
     {
         this->listSpecies  = new string[this->Ntaxa];
         for (int i = 0 ; i < this->Ntaxa; i ++)
@@ -1084,7 +1084,7 @@ std::vector<double> LocalParameters::GetCurrentDistances()
     if (this->distance == "Euclidian")
     {
 
-        for (unsigned int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
+        for (int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
         {
 
             double sqdisc  = this->summariesRealData[i_summary] - summariesSimulatedData[i_summary];
@@ -1099,7 +1099,7 @@ std::vector<double> LocalParameters::GetCurrentDistances()
     else if (this->distance == "normalized")
     {
 
-        for (unsigned int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
+        for (int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
         {
 
             double sqdisc  = (this->summariesRealData[i_summary] - summariesSimulatedData[i_summary])/this->summariesRealData[i_summary];
@@ -1117,7 +1117,7 @@ std::vector<double> LocalParameters::GetCurrentDistances()
     (this->distance == "dist1")
     {
 
-        for (unsigned int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
+        for (int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
         {
 
             double sqdisc  = this->summariesRealData[i_summary] - summariesSimulatedData[i_summary];
@@ -1153,7 +1153,7 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
 {
 
     string* arrParam = new string[this->NusedParam];
-    for (unsigned int param_i = 0 ; param_i < this->NParam ; param_i++)
+    for (int param_i = 0 ; param_i < this->NParam ; param_i++)
     {
         auto it_ = this->mapUsedParam.find(this->listParam[param_i]);
         if(it_ != this->mapUsedParam.end() )
@@ -1166,7 +1166,7 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         }
     }
 
-    for (unsigned int param_i = 0 ; param_i < this->NusedParam ; param_i++)
+    for (int param_i = 0 ; param_i < this->NusedParam ; param_i++)
     {
         if (arrParam[param_i] == "chainID")
         {
@@ -1376,7 +1376,7 @@ std::vector<double> LocalParameters::GetCurrentAccessorySummaries()
 std::vector<double> LocalParameters::GetCurrentParameters()
 {
     string* arrParam = new string[this->NusedParam];
-    for (unsigned int param_i = 0 ; param_i < this->NParam ; param_i++)
+    for (int param_i = 0 ; param_i < this->NParam ; param_i++)
     {
         auto it = this->mapUsedParam.find(this->listParam[param_i]);
         if(it != this->mapUsedParam.end() )
@@ -1391,7 +1391,7 @@ std::vector<double> LocalParameters::GetCurrentParameters()
 
 
     std::vector<double> cur_param;
-    for (unsigned int param_i = 0 ; param_i < this->NusedParam; param_i++)
+    for (int param_i = 0 ; param_i < this->NusedParam; param_i++)
     {
         if (arrParam[param_i] == "root")
         {
@@ -2579,7 +2579,7 @@ int LocalParameters::GetPointID()
 void LocalParameters::writeRealDataSummaries(ofstream&os, bool headers)
 {
     string* arrSummaries = new string[NusedSummaries];
-    for(unsigned int summary_i = 0 ; summary_i < NSummaries; summary_i++)
+    for(int summary_i = 0 ; summary_i < NSummaries; summary_i++)
     {
         auto it = mapUsedSummaries.find(listSummaries[summary_i]);
         if(it != mapUsedSummaries.end() )
@@ -2595,7 +2595,7 @@ void LocalParameters::writeRealDataSummaries(ofstream&os, bool headers)
 
     if (headers)
     {
-        for(unsigned int summary_i = 0 ; summary_i < NusedSummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < NusedSummaries; summary_i++)
         {
 
             if (summary_i < NusedSummaries-1)
@@ -2611,7 +2611,7 @@ void LocalParameters::writeRealDataSummaries(ofstream&os, bool headers)
         }
     }
 
-    for(unsigned int summary_i = 0 ; summary_i < NusedSummaries; summary_i++)
+    for(int summary_i = 0 ; summary_i < NusedSummaries; summary_i++)
     {
 
         if (summary_i < NusedSummaries-1)
@@ -2636,7 +2636,7 @@ void LocalParameters::writeAncestralDataSummaries(ofstream&os, bool headers)
     // should be incorporated to populatio_t
 
     string* arrSummaries = new string[NusedAncSummaries];
-    for(unsigned int summary_i = 0 ; summary_i < NSummaries; summary_i++)
+    for(int summary_i = 0 ; summary_i < NSummaries; summary_i++)
     {
         auto it = mapUsedAncSummaries.find(listSummaries[summary_i]);
         if(it != mapUsedAncSummaries.end() )
@@ -2652,7 +2652,7 @@ void LocalParameters::writeAncestralDataSummaries(ofstream&os, bool headers)
 
     if (headers)
     {
-        for(unsigned int summary_i = 0 ; summary_i < NusedAncSummaries; summary_i++)
+        for(int summary_i = 0 ; summary_i < NusedAncSummaries; summary_i++)
         {
 
             if (summary_i < NusedAncSummaries-1)
@@ -2668,7 +2668,7 @@ void LocalParameters::writeAncestralDataSummaries(ofstream&os, bool headers)
         }
     }
 
-    for(unsigned int summary_i = 0 ; summary_i < NusedAncSummaries; summary_i++)
+    for(int summary_i = 0 ; summary_i < NusedAncSummaries; summary_i++)
     {
 
         if (summary_i < NusedAncSummaries-1)

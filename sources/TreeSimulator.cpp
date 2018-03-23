@@ -236,7 +236,7 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo)
         for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end ; site_codon_i++)
         {
 
-            int site_nuc_start = (site_codon_i * 3);  // site_codon to site_nuc
+           //int site_nuc_start = (site_codon_i * 3);  // site_codon to site_nuc
             for (int codonPos = 0; codonPos < 3; codonPos++)
             {
 

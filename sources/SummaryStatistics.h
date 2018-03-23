@@ -3706,7 +3706,7 @@ private:
             codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return static_cast<double>(nuc3_pairwise[5]);
+        return (double) nuc3_pairwise[5];
     }
 
     double Getpw3CT(CodonSequenceAlignment* codondata)
@@ -3716,7 +3716,7 @@ private:
             codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return static_cast<double>(nuc3_pairwise[4]);
+        return (double) nuc3_pairwise[4];
     }
 
     double Getpw3CG(CodonSequenceAlignment* codondata)
@@ -3726,7 +3726,7 @@ private:
             codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return static_cast<double>(nuc3_pairwise[3]);
+        return (double) nuc3_pairwise[3];
     }
 
 
@@ -3737,7 +3737,7 @@ private:
             codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return static_cast<double>(nuc3_pairwise[2]);
+        return (double) nuc3_pairwise[2];
     }
 
     double Getpw3AG(CodonSequenceAlignment* codondata)
@@ -3747,7 +3747,7 @@ private:
             codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return static_cast<double>(nuc3_pairwise[1]);
+        return (double) nuc3_pairwise[1];
     }
 
 
@@ -3758,7 +3758,7 @@ private:
             codondata->nuc3_pairwise(nuc3_pairwise);
             nuc3_pairwise_bool = true;
         }
-        return static_cast<double>(nuc3_pairwise[0]);
+        return (double) nuc3_pairwise[0];
     }
 
 
@@ -3971,7 +3971,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return static_cast<double>(nuc_pairwise10[5]);
+        return (double) nuc_pairwise10[5];
     }
 
     double GetpwCT10(CodonSequenceAlignment* codondata)
@@ -3981,7 +3981,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return static_cast<double>(nuc_pairwise10[4]);
+        return (double)nuc_pairwise10[4];
     }
 
     double GetpwCG10(CodonSequenceAlignment* codondata)
@@ -3991,7 +3991,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return static_cast<double>(nuc_pairwise10[3]);
+        return (double)nuc_pairwise10[3];
     }
 
 
@@ -4002,7 +4002,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return static_cast<double>(nuc_pairwise10[2]);
+        return (double) nuc_pairwise10[2];
     }
 
     double GetpwAG10(CodonSequenceAlignment* codondata)
@@ -4012,7 +4012,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return static_cast<double>(nuc_pairwise10[1]);
+        return (double) nuc_pairwise10[1];
     }
 
 
@@ -4023,7 +4023,7 @@ private:
             codondata->nuc_pairwise10(nuc_pairwise10);
             nuc_pairwise_bool10 = true;
         }
-        return static_cast<double>(nuc_pairwise10[0]);
+        return (double) nuc_pairwise10[0];
     }
 
 
@@ -4034,7 +4034,7 @@ private:
             codondata->nuc_pairwise30(nuc_pairwise30);
             nuc_pairwise_bool30 = true;
         }
-        return static_cast<double>(nuc_pairwise30[5]);
+        return (double) nuc_pairwise30[5];
     }
 
     double GetpwCT30(CodonSequenceAlignment* codondata)
@@ -4044,7 +4044,7 @@ private:
             codondata->nuc_pairwise30(nuc_pairwise30);
             nuc_pairwise_bool30 = true;
         }
-        return static_cast<double>(nuc_pairwise30[4]);
+        return (double) nuc_pairwise30[4];
     }
 
     double GetpwCG30(CodonSequenceAlignment* codondata)
@@ -4054,7 +4054,7 @@ private:
             codondata->nuc_pairwise30(nuc_pairwise30);
             nuc_pairwise_bool30 = true;
         }
-        return static_cast<double>(nuc_pairwise30[3]);
+        return (double) nuc_pairwise30[3];
     }
 
 
@@ -4065,7 +4065,7 @@ private:
             codondata->nuc_pairwise30(nuc_pairwise30);
             nuc_pairwise_bool30 = true;
         }
-        return static_cast<double>(nuc_pairwise30[2]);
+        return (double) nuc_pairwise30[2];
     }
 
     double GetpwAG30(CodonSequenceAlignment* codondata)
@@ -4075,7 +4075,7 @@ private:
             codondata->nuc_pairwise30(nuc_pairwise30);
             nuc_pairwise_bool30 = true;
         }
-        return static_cast<double>(nuc_pairwise30[1]);
+        return (double) nuc_pairwise30[1];
     }
 
 
@@ -4086,7 +4086,7 @@ private:
             codondata->nuc_pairwise30(nuc_pairwise30);
             nuc_pairwise_bool30 = true;
         }
-        return static_cast<double>(nuc_pairwise30[0]);
+        return (double) nuc_pairwise30[0];
     }
 
 
@@ -4097,7 +4097,7 @@ private:
             codondata->nuc_pairwise50(nuc_pairwise50);
             nuc_pairwise_bool50 = true;
         }
-        return static_cast<double>(nuc_pairwise50[5]);
+        return (double) nuc_pairwise50[5];
     }
 
     double GetpwCT50(CodonSequenceAlignment* codondata)
@@ -4107,7 +4107,7 @@ private:
             codondata->nuc_pairwise50(nuc_pairwise50);
             nuc_pairwise_bool50 = true;
         }
-        return static_cast<double>(nuc_pairwise50[4]);
+        return (double) nuc_pairwise50[4];
     }
 
     double GetpwCG50(CodonSequenceAlignment* codondata)
@@ -4117,7 +4117,7 @@ private:
             codondata->nuc_pairwise50(nuc_pairwise50);
             nuc_pairwise_bool50 = true;
         }
-        return static_cast<double>(nuc_pairwise50[3]);
+        return (double) nuc_pairwise50[3];
     }
 
 
@@ -4128,7 +4128,7 @@ private:
             codondata->nuc_pairwise50(nuc_pairwise50);
             nuc_pairwise_bool50 = true;
         }
-        return static_cast<double>(nuc_pairwise50[2]);
+        return (double) nuc_pairwise50[2];
     }
 
     double GetpwAG50(CodonSequenceAlignment* codondata)
@@ -4138,7 +4138,7 @@ private:
             codondata->nuc_pairwise50(nuc_pairwise50);
             nuc_pairwise_bool50 = true;
         }
-        return static_cast<double>(nuc_pairwise50[1]);
+        return (double) nuc_pairwise50[1];
     }
 
 
@@ -4149,7 +4149,7 @@ private:
             codondata->nuc_pairwise50(nuc_pairwise50);
             nuc_pairwise_bool50 = true;
         }
-        return static_cast<double>(nuc_pairwise50[0]);
+        return (double) nuc_pairwise50[0];
     }
 
 
