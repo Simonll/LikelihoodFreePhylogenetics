@@ -83,14 +83,14 @@ public:
     int* nuc_pairwise50;
     int* nuc1_pairwise;
     int* nuc2_pairwise;
-    int* nuc3_pairwise;
+    int* nuc3_pairwise;     
     int* nuc3_pairwise10;
     int* nuc3_pairwise30;
     int* nuc3_pairwise50;
     int* aa_pairwise;
-    int* aa_pairwise10;
+   /*  int* aa_pairwise10;
     int* aa_pairwise30;
-    int* aa_pairwise50;
+    int* aa_pairwise50; */
     int* dinucCpG_pairwise;
 
     double nuc_site_comphet;
