@@ -2253,11 +2253,10 @@ public:
         {
             for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
+                int ac,ag,at,cg,ct,gt,all; 
+                ac = ag = at = cg = ct = gt = all = 0;
                 for (int site_codon = 0; site_codon < Nsite; site_codon++)
                 {
-                    int ac,ag,at,cg,ct,gt,all; 
-                    ac = ag = at = cg = ct = gt = all = 0;
-
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
                     if(state_seq1 != unknown && state_seq2 != unknown)
@@ -2292,16 +2291,15 @@ public:
                             }
                         }
                     }
-                    all = ac + ag + at + cg + ct + gt ; 
-                    vec_ac.push_back(ac); 
-                    vec_ag.push_back(ag);
-                    vec_at.push_back(at);
-                    vec_cg.push_back(cg);
-                    vec_ct.push_back(ct);
-                    vec_gt.push_back(gt);
-                    vec_all.push_back(all);
                 }
-
+                all = ac + ag + at + cg + ct + gt ; 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_all.push_back(all);
             }
         }
 
@@ -2351,16 +2349,15 @@ public:
         std::vector<int> vec_ct; 
         std::vector<int> vec_gt; 
         std::vector<int> vec_all; 
-
-        for (int site_codon = 0; site_codon < Nsite; site_codon++)
+        
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
         {
-            for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
-                for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+                int ac,ag,at,cg,ct,gt,all; 
+                ac = ag = at = cg = ct = gt = all = 0;
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
                 {
-                    int ac,ag,at,cg,ct,gt,all; 
-                    ac = ag = at = cg = ct = gt = all = 0;
-
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
                     if(state_seq1 != unknown && state_seq2 != unknown)
@@ -2395,16 +2392,15 @@ public:
                             }
                         }
                     }
-                    all = ac + ag + at + cg + ct + gt; 
-                    vec_ac.push_back(ac); 
-                    vec_ag.push_back(ag);
-                    vec_at.push_back(at);
-                    vec_cg.push_back(cg);
-                    vec_ct.push_back(ct);
-                    vec_gt.push_back(gt);
-                    vec_all.push_back(all);
                 }
-
+                all = ac + ag + at + cg + ct + gt; 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_all.push_back(all);
             }
         }
 
@@ -2455,16 +2451,15 @@ public:
         std::vector<int> vec_gt; 
         std::vector<int> vec_all; 
 
-        for (int site_codon = 0; site_codon < Nsite; site_codon++)
+    
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
         {
-            for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
-            {
-                for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+            {    
+                int ac,ag,at,cg,ct,gt,all; 
+                ac = ag = at = cg = ct = gt = all = 0;
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
                 {
-                    
-                    int ac,ag,at,cg,ct,gt,all; 
-                    ac = ag = at = cg = ct = gt = all = 0;
-
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
                     if(state_seq1 != unknown && state_seq2 != unknown)
@@ -2499,16 +2494,15 @@ public:
                             }
                         }
                     }
-                    all = ac + ag + at + cg + ct + gt ; 
-                    vec_ac.push_back(ac); 
-                    vec_ag.push_back(ag);
-                    vec_at.push_back(at);
-                    vec_cg.push_back(cg);
-                    vec_ct.push_back(ct);
-                    vec_gt.push_back(gt);
-                    vec_all.push_back(all);
                 }
-
+                all = ac + ag + at + cg + ct + gt ; 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_all.push_back(all);
             }
         }
 
@@ -2560,17 +2554,15 @@ public:
         std::vector<int> vec_ct; 
         std::vector<int> vec_gt; 
         std::vector<int> vec_all; 
-
         
         for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
         {
             for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
+                int ac,ag,at,cg,ct,gt,all; 
+                ac = ag = at = cg = ct = gt = all = 0;
                 for (int site_codon = 0; site_codon < Nsite; site_codon++)
                 {   
-                    int ac,ag,at,cg,ct,gt,all; 
-                    ac = ag = at = cg = ct = gt = all = 0;
-
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
                     if(state_seq1 != unknown && state_seq2 != unknown)
@@ -2602,16 +2594,15 @@ public:
                             gt++;
                         }
                     }
-                    all = ac + ag + at + cg + ct + gt ; 
-                    vec_ac.push_back(ac); 
-                    vec_ag.push_back(ag);
-                    vec_at.push_back(at);
-                    vec_cg.push_back(cg);
-                    vec_ct.push_back(ct);
-                    vec_gt.push_back(gt);
-                    vec_all.push_back(all);
                 }
-
+                all = ac + ag + at + cg + ct + gt ; 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_all.push_back(all);
             }
         }
 
@@ -2667,11 +2658,11 @@ public:
         {
             for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
+
+                int ac,ag,at,cg,ct,gt,all; 
+                ac = ag = at = cg = ct = gt = all = 0;
                 for (int site_codon = 0; site_codon < Nsite; site_codon++)
                 {       
-                    int ac,ag,at,cg,ct,gt,all; 
-                    ac = ag = at = cg = ct = gt = all = 0;
-
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
                     if(state_seq1 != unknown && state_seq2 != unknown)
@@ -2703,16 +2694,15 @@ public:
                             gt++;
                         }
                     }
-                    all = ac + ag + at + cg + ct + gt ; 
-                    vec_ac.push_back(ac); 
-                    vec_ag.push_back(ag);
-                    vec_at.push_back(at);
-                    vec_cg.push_back(cg);
-                    vec_ct.push_back(ct);
-                    vec_gt.push_back(gt);
-                    vec_all.push_back(all);
                 }
-
+                all = ac + ag + at + cg + ct + gt ; 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_all.push_back(all);
             }
         }
 
@@ -2768,10 +2758,11 @@ public:
         {
             for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
             {
+                int ac,ag,at,cg,ct,gt,all; 
+                ac = ag = at = cg = ct = gt = all = 0;
                 for (int site_codon = 0; site_codon < Nsite; site_codon++)
                 {   
-                    int ac,ag,at,cg,ct,gt,all; 
-                    ac = ag = at = cg = ct = gt = all = 0;
+                    
 
                     int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
                     int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
@@ -2804,15 +2795,15 @@ public:
                             gt++;
                         }
                     }
-                    all = ac + ag + at + cg + ct + gt ; 
-                    vec_ac.push_back(ac); 
-                    vec_ag.push_back(ag);
-                    vec_at.push_back(at);
-                    vec_cg.push_back(cg);
-                    vec_ct.push_back(ct);
-                    vec_gt.push_back(gt);
-                    vec_all.push_back(all);
                 }
+                all = ac + ag + at + cg + ct + gt ; 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_all.push_back(all);
 
             }
         }
@@ -2861,19 +2852,17 @@ public:
             {
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
+                    int aa = 0; 
                     for (int site_codon = 0; site_codon < Nsite; site_codon++)
                     {
-
-                        int aa = 0; 
-
                         int state_seq1 = GetCodonStateSpace()->Translation(Data[taxa1][site_codon]); //GetState(taxa1,site_codon);
                         int state_seq2 = GetCodonStateSpace()->Translation(Data[taxa2][site_codon]); //GetState(taxa2,site_codon);
                         if(state_seq1 != unknown && state_seq2 != unknown && state_seq1 != state_seq2)
                         {
                             aa+=1;                             
                         }
-                        vec_aa.push_back(aa); 
                     }
+                    vec_aa.push_back(aa); 
                 }
             }
         }
@@ -2898,18 +2887,17 @@ public:
             {
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
+                    int aa = 0; 
                     for (int site_codon = 0; site_codon < Nsite; site_codon++)
                     {
-                        int aa = 0; 
-
                         int state_seq1 = GetCodonStateSpace()->Translation(Data[taxa1][site_codon]); //GetState(taxa1,site_codon);
                         int state_seq2 = GetCodonStateSpace()->Translation(Data[taxa2][site_codon]); //GetState(taxa2,site_codon);
                         if(state_seq1 != unknown && state_seq2 != unknown && state_seq1 != state_seq2)
                         {
                             aa+=1;                             
                         }
-                        vec_aa.push_back(aa); 
                     }
+                    vec_aa.push_back(aa); 
                 }
             }
         }
@@ -2933,18 +2921,17 @@ public:
             {
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
+                    int aa = 0;
                     for (int site_codon = 0; site_codon < Nsite; site_codon++)
                     {
-                        int aa = 0; 
-
                         int state_seq1 = GetCodonStateSpace()->Translation(Data[taxa1][site_codon]); //GetState(taxa1,site_codon);
                         int state_seq2 = GetCodonStateSpace()->Translation(Data[taxa2][site_codon]); //GetState(taxa2,site_codon);
                         if(state_seq1 != unknown && state_seq2 != unknown && state_seq1 != state_seq2)
                         {
                             aa+=1;                             
                         }
-                        vec_aa.push_back(aa); 
                     }
+                    vec_aa.push_back(aa); 
                 }
             }
         }
