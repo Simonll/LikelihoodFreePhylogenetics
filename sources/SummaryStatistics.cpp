@@ -1397,9 +1397,10 @@ SummaryStatistics::~SummaryStatistics()
     delete [] nuc3_pairwise30;
     delete [] nuc3_pairwise50;
     delete [] aa_pairwise;
-   /*  delete [] aa_pairwise10;
+    delete [] aa_pairwise10;
     delete [] aa_pairwise30;
-    delete [] aa_pairwise50; */
+    delete [] aa_pairwise50;
+    delete [] aa_pairwise90;
 
 }
 
