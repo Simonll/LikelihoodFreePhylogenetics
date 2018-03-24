@@ -2649,7 +2649,7 @@ public:
         std::sort(vec_gt.begin(),vec_gt.end()); 
         std::sort(vec_d.begin(),vec_d.end()); 
 
-        int size = (int) vec_ac.size() * 0.90;
+        int size = (int) vec_ac.size() * 0.30;
         
         double sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all,sum_d_K80; 
         sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = sum_d_K80 = 0; 
@@ -2674,7 +2674,6 @@ public:
     }
 
 
-    
     double aa_pairwise10()
     {
         std::vector<int> vec_aa; 
@@ -2720,6 +2719,7 @@ public:
         }
         return sum; 
     }
+
 
     double aa_pairwise30()
     {
@@ -2767,6 +2767,7 @@ public:
         return sum; 
     }
 
+    
     double aa_pairwise50()
     {
         std::vector<int> vec_aa; 
