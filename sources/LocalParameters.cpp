@@ -44,7 +44,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     for (int param_i = 0; param_i < this->NParam; param_i++)
     {
         this->listParam[param_i] = gparam->listParam[param_i];
-
     }
 
     if(gparam->verbose)
@@ -57,7 +56,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     for (int summary_i = 0; summary_i < this->NSummaries; summary_i++)
     {
         this->listSummaries[summary_i] = gparam->listSummaries[summary_i];
-
     }
 
     if(gparam->verbose)
@@ -70,7 +68,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     for (int EvoStats_i = 0; EvoStats_i < this->NEvoStats; EvoStats_i++)
     {
         this->listEvoStats[EvoStats_i] = gparam->listEvoStats[EvoStats_i];
-
     }
 
     if(gparam->verbose)
@@ -83,7 +80,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     for (int EvoStats_i = 0; EvoStats_i < this->NSiteSpecificEvoStats; EvoStats_i++)
     {
         this->listSiteSpecificEvoStats[EvoStats_i] = gparam->listSiteSpecificEvoStats[EvoStats_i];
-
     }
 
     if(gparam->verbose)
@@ -100,7 +96,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->NusedAccessorySummaries = gparam->NusedAccessorySummaries;
     this->Ngenes = gparam->Ngenes;
 
-
     this->mapUsedParam.insert(gparam->mapUsedParam.begin(),gparam->mapUsedParam.end());
     this->mapUsedSummaries.insert(gparam->mapUsedSummaries.begin(),gparam->mapUsedSummaries.end());
     this->mapUsedAncSummaries.insert(gparam->mapUsedAncSummaries.begin(),gparam->mapUsedAncSummaries.end());
@@ -108,8 +103,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->mapUsedEvoStats.insert(gparam->mapUsedEvoStats.begin(),gparam->mapUsedEvoStats.end());
     this->mapUsedSiteSpecificEvoStats.insert(gparam->mapUsedSiteSpecificEvoStats.begin(),gparam->mapUsedSiteSpecificEvoStats.end());
     this->mapUsedEvoAncStats.insert(gparam->mapUsedEvoAncStats.begin(),gparam->mapUsedEvoAncStats.end());
-
-
 
     this->randomseed = -1;
     this->rnd = new Random(randomseed);
@@ -130,8 +123,10 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->lambdaTG = 1.0;
     this->lambda_CpG_GpG = 1.0;
     this->wR_CHQW = 1.0;
-    this->fixNsite = 0; 
     this->fitCpG = 0.5;
+    
+    //parameter switch
+    this->fixNsite = 0; 
     this->fixfitCpG = 1;
     this->fixlambda_TBL = 1;
     this->fixlambda_omega = 1;
@@ -178,7 +173,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->lambda_omega_prior = "log2Unif";
     this->lambda_CpG_GpG_prior = "log10Unif";
     this->wR_CHQW_prior = "log10Unif";
-
 
     this->nucrrnr = new double*[this->Nnucp];
     this->nucrrnr1 = new double*[this->Nnucp];
@@ -271,20 +265,15 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     }
     else
     {
-
         cerr << "no alignment found\n";
-
         if (this->Ntaxa > 0 && this->Nsite_nuc > 0 && this->listSpecies >0)
         {
-
-
             this->dnadata = new FileSequenceAlignment(this->Ntaxa, this->Nsite_nuc,this->listSpecies);
 
             if (this->iscodon)
             {
                 if(code == "Universal" )
                 {
-
                     cerr << "Universal\n";
                     this->codonstatespace =  new CodonStateSpace(Universal);
                     this->codondata  = new CodonSequenceAlignment(dnadata, true, Universal);
@@ -292,7 +281,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
                 }
                 else if (code == "MtMam")
                 {
-
                     cerr << "MtMam\n";
                     this->codonstatespace =  new CodonStateSpace(MtMam);
                     this->codondata  = new CodonSequenceAlignment(dnadata, true, MtMam);
@@ -300,12 +288,10 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
                 }
                 else if (code == "MtInv")
                 {
-
                     cerr << "MtInv\n";
                     this->codonstatespace =  new CodonStateSpace(MtInv);
                     this->codondata  = new CodonSequenceAlignment(dnadata, true, MtInv);
                     this->taxonset = this->codondata->GetTaxonSet();
-
                 }
                 else
                 {
@@ -316,9 +302,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
 
 
     }
-
-
-
 
     this->Nsite_codon  = this->codondata->GetNsite();
     this->Nsite_nuc    = this->Nsite_codon * 3;
@@ -1350,19 +1333,16 @@ std::vector<double> LocalParameters::GetCurrentWeights()
 std::vector<double> LocalParameters::GetCurrentEvoStats()
 {
     return evostats;
-
 }
 
 std::vector<double> LocalParameters::GetCurrentAncEvoStats()
 {
     return ancevostats;
-
 }
 
 std::vector<double> LocalParameters::GetCurrentSiteSpecificEvoStats()
 {
     return sitespecificevostats;
-
 }
 
 std::vector<double> LocalParameters::GetCurrentSummaries()
@@ -1524,7 +1504,6 @@ void LocalParameters::writeParam(ofstream& os)
     os << fixroot << "\n";
     os << rootlength << "\n";
     os << "#####\n";
-
 
     refTree->Print(os);
     os << "\n";

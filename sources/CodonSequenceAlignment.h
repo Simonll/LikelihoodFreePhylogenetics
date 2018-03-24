@@ -2677,15 +2677,12 @@ public:
     double aa_pairwise10()
     {
         std::vector<double> vec_aa; 
-
         if (Ntaxa > 1)
-        {
-            
+        {           
             for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
             {
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
-
                     //added a pseudocount
                     double aa = 1; 
                     double cons = 1;
@@ -2708,7 +2705,6 @@ public:
                     double freqVar = aa/(aa+cons);
                     double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
                     vec_aa.push_back(d_K80); 
-
                 }
             }
         }
@@ -2754,7 +2750,7 @@ public:
                         }   
                     }
                     double freqVar = aa/(aa+cons);
-                    double d_K80 = -log(1-freqVar-0.2*freqVar*freqVar);
+                    double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
                     vec_aa.push_back(d_K80); 
 
                 }
@@ -2802,7 +2798,7 @@ public:
                         }   
                     }
                     double freqVar = aa/(aa+cons);
-                    double d_K80 = -log(1-freqVar-0.2*freqVar*freqVar);
+                    double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
                     vec_aa.push_back(d_K80); 
 
                 }
@@ -2849,7 +2845,7 @@ public:
                         }   
                     }
                     double freqVar = aa/(aa+cons);
-                    double d_K80 = -log(1-freqVar-0.2*freqVar*freqVar);
+                    double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
                     vec_aa.push_back(d_K80); 
 
                 }
