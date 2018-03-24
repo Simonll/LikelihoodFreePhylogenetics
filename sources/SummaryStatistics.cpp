@@ -540,10 +540,10 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["pw3GT"] = &SummaryStatistics::Getpw3GT;
 
     GetSummariesMap["pwAA"]  = &SummaryStatistics::GetpwAA;
-    GetSummariesMap["pwAA10"]  = &SummaryStatistics::GetpwAA10;
-    GetSummariesMap["pwAA30"]  = &SummaryStatistics::GetpwAA30;
-    GetSummariesMap["pwAA50"]  = &SummaryStatistics::GetpwAA50;
-    GetSummariesMap["pwAA90"]  = &SummaryStatistics::GetpwAA90;
+    GetSummariesMap["K80aa10"]  = &SummaryStatistics::GetK80aa10;
+    GetSummariesMap["K80aa30"]  = &SummaryStatistics::GetK80aa30;
+    GetSummariesMap["K80aa50"]  = &SummaryStatistics::GetK80aa50;
+    GetSummariesMap["K80aa90"]  = &SummaryStatistics::GetK80aa90;
 
     GetSummariesMap["pwCpGTpG"]  = &SummaryStatistics::GetdinucCpG_TpG;
     GetSummariesMap["pwCpGCpA"]  = &SummaryStatistics::GetdinucCpG_CpA;

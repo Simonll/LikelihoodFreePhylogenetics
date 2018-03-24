@@ -45,7 +45,7 @@ public:
     static constexpr double TOOLARGENEGATIVE = -500;
 
 
-    static const int NSummaries = 816;
+    static const int NSummaries = 812;
     static const int NParam = 29;
     static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
@@ -86,7 +86,7 @@ public:
         "pwAC30","pwAG30","pwAT30","pwCG30","pwCT30","pwGT30","K80nuc30",
         "pwAC50","pwAG50","pwAT50","pwCG50","pwCT50","pwGT50","K80nuc50",
         "pwAC90","pwAG90","pwAT90","pwCG90","pwCT90","pwGT90","K80nuc90",
-        "pwAA10","pwAA30","pwAA50","pwAA90","K80aa10","K80aa30","K80aa50","K80aa90",
+        "K80aa10","K80aa30","K80aa50","K80aa90",
         "pwAA","pwCpGTpG","pwCpGCpA","pwApGTpG",
         "nucA","nucC","nucG","nucT",
         "nuc1A","nuc1C","nuc1G","nuc1T",

@@ -3660,7 +3660,7 @@ private:
         return sum;
     }
 
-    double GetpwAA10(CodonSequenceAlignment* codondata)
+    double GetK80aa10(CodonSequenceAlignment* codondata)
     {
         double cur = 0; 
         if(!aa_pairwise_bool10)
@@ -3672,7 +3672,7 @@ private:
         return cur;
     }
 
-    double GetpwAA30(CodonSequenceAlignment* codondata)
+    double GetK80aa30(CodonSequenceAlignment* codondata)
     {
         double cur = 0; 
         if(!aa_pairwise_bool30)
@@ -3684,7 +3684,7 @@ private:
         return cur;
     }
 
-    double GetpwAA50(CodonSequenceAlignment* codondata)
+    double GetK80aa50(CodonSequenceAlignment* codondata)
     {
         double cur = 0; 
         if(!aa_pairwise_bool50)
@@ -3696,7 +3696,7 @@ private:
         return cur;
     }
 
-    double GetpwAA90(CodonSequenceAlignment* codondata)
+    double GetK80aa90(CodonSequenceAlignment* codondata)
     {
         double cur = 0; 
         if(!aa_pairwise_bool90)
