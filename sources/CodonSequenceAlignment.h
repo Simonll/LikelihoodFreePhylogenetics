@@ -2702,9 +2702,18 @@ public:
                             }   
                         }   
                     }
-                    double freqVar = aa/(aa+cons);
-                    double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
-                    vec_aa.push_back(d_K80); 
+
+                    if (aa == 0)
+                    { 
+                        double d_K80 = 0;
+                        vec_aa.push_back(d_K80);
+                    }
+                    else
+                    {
+                        double freqVar = aa/(aa+cons);
+                        double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
+                        vec_aa.push_back(d_K80); 
+                    }
                 }
             }
         }
@@ -2749,9 +2758,17 @@ public:
                             }   
                         }   
                     }
-                    double freqVar = aa/(aa+cons);
-                    double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
-                    vec_aa.push_back(d_K80); 
+                    if (aa == 0)
+                    { 
+                        double d_K80 = 0;
+                        vec_aa.push_back(d_K80);
+                    }
+                    else
+                    {
+                        double freqVar = aa/(aa+cons);
+                        double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
+                        vec_aa.push_back(d_K80); 
+                    }
 
                 }
             }
@@ -2797,10 +2814,17 @@ public:
                             }   
                         }   
                     }
-                    double freqVar = aa/(aa+cons);
-                    double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
-                    vec_aa.push_back(d_K80); 
-
+                    if (aa == 0)
+                    { 
+                        double d_K80 = 0;
+                        vec_aa.push_back(d_K80);
+                    }
+                    else
+                    {
+                        double freqVar = aa/(aa+cons);
+                        double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
+                        vec_aa.push_back(d_K80); 
+                    }
                 }
             }
         }
@@ -2844,9 +2868,17 @@ public:
                             }   
                         }   
                     }
-                    double freqVar = aa/(aa+cons);
-                    double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
-                    vec_aa.push_back(d_K80); 
+                    if (aa == 0)
+                    { 
+                        double d_K80 = 0;
+                        vec_aa.push_back(d_K80);
+                    }
+                    else
+                    {
+                        double freqVar = aa/(aa+cons);
+                        double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
+                        vec_aa.push_back(d_K80); 
+                    }
 
                 }
             }

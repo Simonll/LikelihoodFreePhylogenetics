@@ -44,9 +44,6 @@ int main(int argc, char* argv[])
     string model = "";
     string controlfile = "";
 
-
-
-
     try
     {
         if(argc < 2)
@@ -124,7 +121,6 @@ int main(int argc, char* argv[])
 
         }
         realDataSummaries_os.close();
-
     }
 
     else if (model == "show")
