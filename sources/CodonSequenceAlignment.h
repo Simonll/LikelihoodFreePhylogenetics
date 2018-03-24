@@ -2676,7 +2676,7 @@ public:
 
     double aa_pairwise10()
     {
-        std::vector<int> vec_aa; 
+        std::vector<double> vec_aa; 
 
         if (Ntaxa > 1)
         {
@@ -2685,8 +2685,10 @@ public:
             {
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
-                    double aa = 0; 
-                    double cons = 0;
+
+                    //added a pseudocount
+                    double aa = 1; 
+                    double cons = 1;
                     for (int site_codon = 0; site_codon < Nsite; site_codon++)
                     {
                         int state_seq1 = GetCodonStateSpace()->Translation(Data[taxa1][site_codon]); //GetState(taxa1,site_codon);
@@ -2695,7 +2697,7 @@ public:
                         {
                             if (state_seq1 != state_seq2)
                             {
-                                aa+=1;                             
+                                aa++;                             
                             }
                             else 
                             {
@@ -2704,7 +2706,7 @@ public:
                         }   
                     }
                     double freqVar = aa/(aa+cons);
-                    double d_K80 = -log(1-freqVar-0.2*freqVar*freqVar);
+                    double d_K80 = -log(1-freqVar-0.2*(freqVar*freqVar));
                     vec_aa.push_back(d_K80); 
 
                 }
@@ -2723,7 +2725,7 @@ public:
 
     double aa_pairwise30()
     {
-        std::vector<int> vec_aa; 
+        std::vector<double> vec_aa; 
 
         if (Ntaxa > 1)
         {
@@ -2732,8 +2734,9 @@ public:
             {
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
-                    double aa = 0; 
-                    double cons = 0;
+                    //added a pseudocount
+                    double aa = 1; 
+                    double cons = 1;
                     for (int site_codon = 0; site_codon < Nsite; site_codon++)
                     {
                         int state_seq1 = GetCodonStateSpace()->Translation(Data[taxa1][site_codon]); //GetState(taxa1,site_codon);
@@ -2770,7 +2773,7 @@ public:
     
     double aa_pairwise50()
     {
-        std::vector<int> vec_aa; 
+        std::vector<double> vec_aa; 
 
         if (Ntaxa > 1)
         {
@@ -2779,8 +2782,9 @@ public:
             {
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
-                    double aa = 0; 
-                    double cons = 0;
+                    //added a pseudocount
+                    double aa = 1; 
+                    double cons = 1;
                     for (int site_codon = 0; site_codon < Nsite; site_codon++)
                     {
                         int state_seq1 = GetCodonStateSpace()->Translation(Data[taxa1][site_codon]); //GetState(taxa1,site_codon);
@@ -2789,7 +2793,7 @@ public:
                         {
                             if (state_seq1 != state_seq2)
                             {
-                                aa+=1;                             
+                                aa++;                             
                             }
                             else 
                             {
@@ -2816,7 +2820,7 @@ public:
 
     double aa_pairwise90()
     {
-        std::vector<int> vec_aa; 
+        std::vector<double> vec_aa; 
 
         if (Ntaxa > 1)
         {
@@ -2825,8 +2829,9 @@ public:
             {
                 for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
                 {
-                    double aa = 0; 
-                    double cons = 0;
+                    //added a pseudocount
+                    double aa = 1; 
+                    double cons = 1;
                     for (int site_codon = 0; site_codon < Nsite; site_codon++)
                     {
                         int state_seq1 = GetCodonStateSpace()->Translation(Data[taxa1][site_codon]); //GetState(taxa1,site_codon);
@@ -2835,7 +2840,7 @@ public:
                         {
                             if (state_seq1 != state_seq2)
                             {
-                                aa+=1;                             
+                                aa++;                             
                             }
                             else 
                             {

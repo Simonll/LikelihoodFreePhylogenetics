@@ -120,7 +120,7 @@ public:
     {
         "gtnrAA","gtnrAC","gtnrAG","gtnrAT","gtnrCA","gtnrCC","gtnrCG","gtnrCT","gtnrGA","gtnrGC","gtnrGG","gtnrGT","gtnrTA","gtnrTC","gtnrTG","gtnrTT",
         "gtnrSAA","gtnrSAC","gtnrSAG","gtnrSAT","gtnrSCA","gtnrSCC","gtnrSCG","gtnrSCT","gtnrSGA","gtnrSGC","gtnrSGG","gtnrSGT","gtnrSTA","gtnrSTC","gtnrSTG","gtnrSTT",
-        "gtnrSNAA","gtnrSNAC","gtnrSNAG","gtnrSNAT","gtnrSNCA","gtnrSNCC","gtnrSNCG","gtnrSNCT","gtnrSNGA","gtnrSNGC","gtnrSNGG","gtnrSNGT","gtnrSNTA","gtnrSNTC","gtnrSNTG","gtnrSNTT",
+        "gtnrNSAA","gtnrNSAC","gtnrNSAG","gtnrNSAT","gtnrNSCA","gtnrNSCC","gtnrNSCG","gtnrNSCT","gtnrNSGA","gtnrNSGC","gtnrNSGG","gtnrNSGT","gtnrNSTA","gtnrNSTC","gtnrNSTG","gtnrNSTT",
 
         "gtnr1AA","gtnr1AC","gtnr1AG","gtnr1AT","gtnr1CA","gtnr1CC","gtnr1CG","gtnr1CT","gtnr1GA","gtnr1GC","gtnr1GG","gtnr1GT","gtnr1TA","gtnr1TC","gtnr1TG","gtnr1TT",
         "gtnr2AA","gtnr2AC","gtnr2AG","gtnr2AT","gtnr2CA","gtnr2CC","gtnr2CG","gtnr2CT","gtnr2GA","gtnr2GC","gtnr2GG","gtnr2GT","gtnr2TA","gtnr2TC","gtnr2TG","gtnr2TT",
