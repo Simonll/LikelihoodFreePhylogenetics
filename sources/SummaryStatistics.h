@@ -81,16 +81,18 @@ public:
     double* nuc_pairwise10;
     double* nuc_pairwise30;
     double* nuc_pairwise50;
+    double* nuc_pairwise90;
     int* nuc1_pairwise;
     int* nuc2_pairwise;
     int* nuc3_pairwise;     
     int* nuc3_pairwise10;
     int* nuc3_pairwise30;
     int* nuc3_pairwise50;
-    int* aa_pairwise;
-   /*  int* aa_pairwise10;
-    int* aa_pairwise30;
-    int* aa_pairwise50; */
+    double* aa_pairwise;
+    double* aa_pairwise10;
+    double* aa_pairwise30;
+    double* aa_pairwise50;
+    double* aa_pairwise90;
     int* dinucCpG_pairwise;
 
     double nuc_site_comphet;
@@ -136,6 +138,7 @@ public:
     bool nuc_pairwise_bool10;
     bool nuc_pairwise_bool30;
     bool nuc_pairwise_bool50;
+    bool nuc_pairwise_bool90;
     bool nuc1_pairwise_bool;
     bool nuc2_pairwise_bool;
     bool nuc3_pairwise_bool;
@@ -146,6 +149,7 @@ public:
     bool aa_pairwise_bool10;
     bool aa_pairwise_bool30;
     bool aa_pairwise_bool50;
+    bool aa_pairwise_bool90;
     bool dinucCpG_pairwise_bool;
     bool nuc_site_comphet_bool;
     bool nuc1_site_comphet_bool;
@@ -3646,53 +3650,62 @@ private:
     /////////////////
     double GetpwAA(CodonSequenceAlignment* codondata)
     {
+        double sum = 0;
         if(!aa_pairwise_bool)
         {
-            codondata->aa_pairwise(aa_pairwise);
+            sum = codondata->aa_pairwise();
             aa_pairwise_bool = true;
         }
-        double sum = 0;
-        for (int i = 0 ; i < 190; i++)
-        {
-            sum += aa_pairwise[i];
-        }
+        
         return sum;
     }
 
     double GetpwAA10(CodonSequenceAlignment* codondata)
     {
-        int cur = 0; 
+        double cur = 0; 
         if(!aa_pairwise_bool10)
         {
             cur = codondata->aa_pairwise10();
             aa_pairwise_bool10 = true;
         }
         
-        return (double) cur;
+        return cur;
     }
 
     double GetpwAA30(CodonSequenceAlignment* codondata)
     {
-        int cur = 0; 
+        double cur = 0; 
         if(!aa_pairwise_bool30)
         {
             cur = codondata->aa_pairwise30();
             aa_pairwise_bool30 = true;
         }
         
-        return (double) cur;
+        return cur;
     }
 
     double GetpwAA50(CodonSequenceAlignment* codondata)
     {
-        int cur = 0; 
+        double cur = 0; 
         if(!aa_pairwise_bool50)
         {
             cur = codondata->aa_pairwise50();
             aa_pairwise_bool50 = true;
         }
         
-        return (double) cur;
+        return cur;
+    }
+
+    double GetpwAA90(CodonSequenceAlignment* codondata)
+    {
+        double cur = 0; 
+        if(!aa_pairwise_bool90)
+        {
+            cur = codondata->aa_pairwise90();
+            aa_pairwise_bool90 = true;
+        }
+        
+        return cur;
     }
 
     /////////////////
@@ -3993,6 +4006,16 @@ private:
         return nuc_pairwise50[6];
     }
 
+    double GetK80nuc90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool90)
+        {
+            codondata->nuc_pairwise90(nuc_pairwise90);
+            nuc_pairwise_bool90 = true;
+        }
+        return nuc_pairwise90[6];
+    }
+
     double GetpwGT10(CodonSequenceAlignment* codondata)
     {
         if(!nuc_pairwise_bool10)
@@ -4181,6 +4204,69 @@ private:
         return nuc_pairwise50[0];
     }
 
+
+
+    double GetpwGT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool90)
+        {
+            codondata->nuc_pairwise90(nuc_pairwise90);
+            nuc_pairwise_bool90 = true;
+        }
+        return nuc_pairwise90[5];
+    }
+
+    double GetpwCT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool90)
+        {
+            codondata->nuc_pairwise90(nuc_pairwise90);
+            nuc_pairwise_bool90 = true;
+        }
+        return nuc_pairwise90[4];
+    }
+
+    double GetpwCG90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool90)
+        {
+            codondata->nuc_pairwise90(nuc_pairwise90);
+            nuc_pairwise_bool90 = true;
+        }
+        return nuc_pairwise90[3];
+    }
+
+
+    double GetpwAT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool90)
+        {
+            codondata->nuc_pairwise90(nuc_pairwise90);
+            nuc_pairwise_bool90 = true;
+        }
+        return nuc_pairwise90[2];
+    }
+
+    double GetpwAG90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool90)
+        {
+            codondata->nuc_pairwise90(nuc_pairwise90);
+            nuc_pairwise_bool90 = true;
+        }
+        return nuc_pairwise90[1];
+    }
+
+
+    double GetpwAC90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool90)
+        {
+            codondata->nuc_pairwise90(nuc_pairwise90);
+            nuc_pairwise_bool90 = true;
+        }
+        return nuc_pairwise90[0];
+    }
 
 
 

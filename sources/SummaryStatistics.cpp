@@ -132,6 +132,7 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     nuc_pairwise10 = new double [7];
     nuc_pairwise30 = new double [7];
     nuc_pairwise50 = new double [7];
+    nuc_pairwise90 = new double [7];
     nuc1_pairwise = new int [7];
     nuc2_pairwise = new int [7];
     nuc3_pairwise = new int [7];
@@ -145,6 +146,7 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
         nuc_pairwise10[i] = 0;
         nuc_pairwise30[i] = 0;
         nuc_pairwise50[i] = 0;
+        nuc_pairwise90[i] = 0;
         nuc1_pairwise[i] = 0;
         nuc2_pairwise[i] = 0;
         nuc3_pairwise[i] = 0;
@@ -152,15 +154,6 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
         nuc3_pairwise30[i] = 0;
         nuc3_pairwise50[i] = 0;
     }
-
-    aa_pairwise = new int [190];
-
-    for (int i = 0 ; i < 190; i ++)
-    {
-        aa_pairwise[i] = 0 ;
-    }
-
-
 
     dinucCpG_pairwise = new int [4];
 
@@ -375,6 +368,7 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
     nuc_pairwise10 = new double [7];
     nuc_pairwise30 = new double [7];
     nuc_pairwise50 = new double [7];
+    nuc_pairwise90 = new double [7];
     nuc1_pairwise = new int [7];
     nuc2_pairwise = new int [7];
     nuc3_pairwise = new int [7];
@@ -388,6 +382,7 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
         nuc_pairwise10[i] = 0;
         nuc_pairwise30[i] = 0;
         nuc_pairwise50[i] = 0;
+        nuc_pairwise90[i] = 0;
 
         nuc1_pairwise[i] = 0;
         nuc2_pairwise[i] = 0;
@@ -396,15 +391,6 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
         nuc3_pairwise30[i] = 0;
         nuc3_pairwise50[i] = 0;
     }
-
-    aa_pairwise = new int [190];
-
-    for (int i = 0 ; i < 190; i ++)
-    {
-        aa_pairwise[i] = 0 ;
-    }
-
-
 
     dinucCpG_pairwise = new int [4];
 
@@ -524,6 +510,14 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["pwCT50"] = &SummaryStatistics::GetpwCT50;
     GetSummariesMap["pwGT50"] = &SummaryStatistics::GetpwGT50;
 
+    GetSummariesMap["K80nuc90"] = &SummaryStatistics::GetK80nuc90;
+    GetSummariesMap["pwAC90"] = &SummaryStatistics::GetpwAC90;
+    GetSummariesMap["pwAG90"] = &SummaryStatistics::GetpwAG90;
+    GetSummariesMap["pwAT90"] = &SummaryStatistics::GetpwAT90;
+    GetSummariesMap["pwCG90"] = &SummaryStatistics::GetpwCG90;
+    GetSummariesMap["pwCT90"] = &SummaryStatistics::GetpwCT90;
+    GetSummariesMap["pwGT90"] = &SummaryStatistics::GetpwGT90;
+
     GetSummariesMap["pw1AC"] = &SummaryStatistics::Getpw1AC;
     GetSummariesMap["pw1AG"] = &SummaryStatistics::Getpw1AG;
     GetSummariesMap["pw1AT"] = &SummaryStatistics::Getpw1AT;
@@ -549,11 +543,11 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["pwAA10"]  = &SummaryStatistics::GetpwAA10;
     GetSummariesMap["pwAA30"]  = &SummaryStatistics::GetpwAA30;
     GetSummariesMap["pwAA50"]  = &SummaryStatistics::GetpwAA50;
+    GetSummariesMap["pwAA90"]  = &SummaryStatistics::GetpwAA90;
 
     GetSummariesMap["pwCpGTpG"]  = &SummaryStatistics::GetdinucCpG_TpG;
     GetSummariesMap["pwCpGCpA"]  = &SummaryStatistics::GetdinucCpG_CpA;
     GetSummariesMap["pwApGTpG"]  = &SummaryStatistics::GetdinucApG_TpG;
-
 
     GetSummariesMap["mAA"]  = &SummaryStatistics::GetAAmean;
     GetSummariesMap["vAA"]  = &SummaryStatistics::GetAAvar;
@@ -570,10 +564,8 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["mNuc1"]  = &SummaryStatistics::GetNuc1mean;
     GetSummariesMap["vNuc1"]  = &SummaryStatistics::GetNuc1var;
 
-
     GetSummariesMap["mNuc2"]  = &SummaryStatistics::GetNuc2mean;
     GetSummariesMap["vNuc2"]  = &SummaryStatistics::GetNuc2var;
-
 
     GetSummariesMap["mNuc3"]  = &SummaryStatistics::GetNuc2mean;
     GetSummariesMap["vNuc3"]  = &SummaryStatistics::GetNuc2var;
@@ -582,7 +574,6 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["CGNAGRagrconst"]  = &SummaryStatistics::GetCGNAGRagrconst;
     GetSummariesMap["CGNAGRcgnvar"]  = &SummaryStatistics::GetCGNAGRcgnvar;
     GetSummariesMap["CGNAGRagrvar"]  = &SummaryStatistics::GetCGNAGRagrvar;
-
 
     GetSummariesMap["nucA"] = &SummaryStatistics::GetNucA;
     GetSummariesMap["nucC"] = &SummaryStatistics::GetNucC;
@@ -1388,6 +1379,7 @@ SummaryStatistics::~SummaryStatistics()
     delete [] nuc_pairwise10;
     delete [] nuc_pairwise30;
     delete [] nuc_pairwise50;
+    delete [] nuc_pairwise90;
     delete [] nuc1_pairwise;
     delete [] nuc2_pairwise;
     delete [] nuc3_pairwise;

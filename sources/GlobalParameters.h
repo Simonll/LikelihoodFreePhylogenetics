@@ -45,7 +45,7 @@ public:
     static constexpr double TOOLARGENEGATIVE = -500;
 
 
-    static const int NSummaries = 805;
+    static const int NSummaries = 816;
     static const int NParam = 29;
     static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
@@ -85,7 +85,8 @@ public:
         "pwAC10","pwAG10","pwAT10","pwCG10","pwCT10","pwGT10","K80nuc10",
         "pwAC30","pwAG30","pwAT30","pwCG30","pwCT30","pwGT30","K80nuc30",
         "pwAC50","pwAG50","pwAT50","pwCG50","pwCT50","pwGT50","K80nuc50",
-        "pwAA10","pwAA30","pwAA50","K80aa10",
+        "pwAC90","pwAG90","pwAT90","pwCG90","pwCT90","pwGT90","K80nuc90",
+        "pwAA10","pwAA30","pwAA50","pwAA90","K80aa10","K80aa30","K80aa50","K80aa90",
         "pwAA","pwCpGTpG","pwCpGCpA","pwApGTpG",
         "nucA","nucC","nucG","nucT",
         "nuc1A","nuc1C","nuc1G","nuc1T",
@@ -113,7 +114,6 @@ public:
         "diaaKN","diaaKP","diaaKQ","diaaKR","diaaKS","diaaKT","diaaKV","diaaKW","diaaKY","diaaLA","diaaLC","diaaLD","diaaLE","diaaLF","diaaLG","diaaLH","diaaLI","diaaLK","diaaLL","diaaLM","diaaLN","diaaLP","diaaLQ","diaaLR","diaaLS","diaaLT","diaaLV","diaaLW","diaaLY","diaaMA","diaaMC","diaaMD","diaaME","diaaMF","diaaMG","diaaMH","diaaMI","diaaMK","diaaML","diaaMM","diaaMN","diaaMP","diaaMQ","diaaMR","diaaMS","diaaMT","diaaMV","diaaMW","diaaMY","diaaNA","diaaNC","diaaND","diaaNE","diaaNF","diaaNG","diaaNH","diaaNI","diaaNK","diaaNL","diaaNM","diaaNN","diaaNP","diaaNQ","diaaNR","diaaNS","diaaNT","diaaNV","diaaNW","diaaNY","diaaPA","diaaPC","diaaPD","diaaPE","diaaPF","diaaPG","diaaPH","diaaPI","diaaPK","diaaPL","diaaPM","diaaPN","diaaPP","diaaPQ","diaaPR","diaaPS","diaaPT","diaaPV","diaaPW","diaaPY","diaaQA","diaaQC","diaaQD","diaaQE","diaaQF","diaaQG","diaaQH","diaaQI","diaaQK","diaaQL","diaaQM","diaaQN","diaaQP","diaaQQ","diaaQR","diaaQS","diaaQT","diaaQV","diaaQW","diaaQY","diaaRA","diaaRC","diaaRD","diaaRE","diaaRF","diaaRG","diaaRH","diaaRI","diaaRK","diaaRL","diaaRM","diaaRN","diaaRP","diaaRQ","diaaRR","diaaRS","diaaRT","diaaRV","diaaRW","diaaRY","diaaSA","diaaSC","diaaSD","diaaSE","diaaSF","diaaSG","diaaSH","diaaSI","diaaSK","diaaSL","diaaSM","diaaSN","diaaSP","diaaSQ","diaaSR","diaaSS","diaaST","diaaSV","diaaSW","diaaSY","diaaTA","diaaTC","diaaTD","diaaTE","diaaTF","diaaTG","diaaTH","diaaTI","diaaTK","diaaTL","diaaTM","diaaTN","diaaTP","diaaTQ","diaaTR","diaaTS","diaaTT","diaaTV","diaaTW","diaaTY","diaaVA","diaaVC",
         "diaaVD","diaaVE","diaaVF","diaaVG","diaaVH","diaaVI","diaaVK","diaaVL","diaaVM","diaaVN","diaaVP","diaaVQ","diaaVR","diaaVS","diaaVT","diaaVV","diaaVW","diaaVY","diaaWA","diaaWC","diaaWD","diaaWE","diaaWF","diaaWG","diaaWH","diaaWI","diaaWK","diaaWL","diaaWM","diaaWN","diaaWP","diaaWQ","diaaWR","diaaWS","diaaWT","diaaWV","diaaWW","diaaWY","diaaYA","diaaYC","diaaYD","diaaYE","diaaYF","diaaYG","diaaYH","diaaYI","diaaYK","diaaYL","diaaYM","diaaYN","diaaYP","diaaYQ","diaaYR","diaaYS","diaaYT","diaaYV","diaaYW","diaaYY",
         "RSCUentropy","GC","GC1","GC2","GC3","Codonfentropy","AAentropy","CGNonAGR","CHQWonR","LMVonAPST"
-
     };
 
     const string listEvoStats[NEvoStats] =
