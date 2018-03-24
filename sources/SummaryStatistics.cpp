@@ -212,6 +212,7 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     nuc_pairwise_bool10 = false;
     nuc_pairwise_bool30 = false;
     nuc_pairwise_bool50 = false;
+    nuc_pairwise_bool90 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
@@ -222,6 +223,7 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
     aa_pairwise_bool10 = false;
     aa_pairwise_bool30 = false;
     aa_pairwise_bool50 = false;
+    aa_pairwise_bool90 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
@@ -448,10 +450,18 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
     aa_wonR_meandiff_bool = false;
     CGNAGR_bool = false;
     nuc_pairwise_bool = false;
+    nuc_pairwise_bool10 = false;
+    nuc_pairwise_bool30 = false;
+    nuc_pairwise_bool50 = false;
+    nuc_pairwise_bool90 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
     aa_pairwise_bool = false;
+    aa_pairwise_bool10 = false;
+    aa_pairwise_bool30 = false;
+    aa_pairwise_bool50 = false;
+    aa_pairwise_bool90 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
@@ -1430,6 +1440,7 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
     nuc_pairwise_bool10 = false;
     nuc_pairwise_bool30 = false;
     nuc_pairwise_bool50 = false;
+    nuc_pairwise_bool90 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
@@ -1440,6 +1451,7 @@ void SummaryStatistics::computeSummariesAncestralSequence(int** CurrentAncestral
     aa_pairwise_bool10 = false;
     aa_pairwise_bool30 = false;
     aa_pairwise_bool50 = false;
+    aa_pairwise_bool90 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
@@ -1553,6 +1565,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
     nuc_pairwise_bool10 = false;
     nuc_pairwise_bool30 = false;
     nuc_pairwise_bool50 = false;
+    nuc_pairwise_bool90 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
@@ -1563,6 +1576,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence)
     aa_pairwise_bool10 = false;
     aa_pairwise_bool30 = false;
     aa_pairwise_bool50 = false;
+    aa_pairwise_bool90 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
@@ -1707,6 +1721,7 @@ void SummaryStatistics::computeSummaries()
     nuc_pairwise_bool10 = false;
     nuc_pairwise_bool30 = false;
     nuc_pairwise_bool50 = false;
+    nuc_pairwise_bool90 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
@@ -1717,6 +1732,7 @@ void SummaryStatistics::computeSummaries()
     aa_pairwise_bool10 = false;
     aa_pairwise_bool30 = false;
     aa_pairwise_bool50 = false;
+    aa_pairwise_bool90 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
@@ -1835,6 +1851,7 @@ void SummaryStatistics::computeSummariesFromData()
     nuc_pairwise_bool10 = false;
     nuc_pairwise_bool30 = false;
     nuc_pairwise_bool50 = false;
+    nuc_pairwise_bool90 = false;
     nuc1_pairwise_bool = false;
     nuc2_pairwise_bool = false;
     nuc3_pairwise_bool = false;
@@ -1845,6 +1862,7 @@ void SummaryStatistics::computeSummariesFromData()
     aa_pairwise_bool10 = false;
     aa_pairwise_bool30 = false;
     aa_pairwise_bool50 = false;
+    aa_pairwise_bool90 = false;
     dinucCpG_pairwise_bool = false;
     nuc_site_comphet_bool = false;
     nuc1_site_comphet_bool = false;
