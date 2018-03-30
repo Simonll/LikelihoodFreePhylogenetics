@@ -499,13 +499,13 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
 void SummaryStatistics::MapFunctions()
 {
     GetSummariesMap["pwts"] = &SummaryStatistics::Getpwts;
-    GetSummariesMap["pwtv"] = &SummaryStatistics::Getpwts;
+    GetSummariesMap["pwtv"] = &SummaryStatistics::Getpwtv;
     GetSummariesMap["pw1ts"] = &SummaryStatistics::Getpw1ts;
-    GetSummariesMap["pw1tv"] = &SummaryStatistics::Getpw1ts;
+    GetSummariesMap["pw1tv"] = &SummaryStatistics::Getpw1tv;
     GetSummariesMap["pw2ts"] = &SummaryStatistics::Getpw2ts;
-    GetSummariesMap["pw2tv"] = &SummaryStatistics::Getpw2ts;
+    GetSummariesMap["pw2tv"] = &SummaryStatistics::Getpw2tv;
     GetSummariesMap["pw3ts"] = &SummaryStatistics::Getpw3ts;
-    GetSummariesMap["pw3tv"] = &SummaryStatistics::Getpw3ts;
+    GetSummariesMap["pw3tv"] = &SummaryStatistics::Getpw3tv;
 
     GetSummariesMap["pwAC"] = &SummaryStatistics::GetpwAC;
     GetSummariesMap["pwAG"] = &SummaryStatistics::GetpwAG;
