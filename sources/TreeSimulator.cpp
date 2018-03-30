@@ -103,7 +103,7 @@ void TreeSimulator::resetSimulator()
         cerr << "resetSimulator3\n";
     }
 
-    for (int point_i = 0 ; point_i < 11 ; point_i ++)
+    for (int point_i = 0 ; point_i < lparam->Ninterval ; point_i ++)
     {
 
         for(int site_codon = 0 ; site_codon < lparam->Nsite_codon; site_codon++)
