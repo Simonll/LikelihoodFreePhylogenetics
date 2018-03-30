@@ -120,6 +120,8 @@ public:
     std::map <int,int> gtrMap;
     int gtr1NodeIndex;
     int gtr2NodeIndex;
+    int Ninterval;
+    int sampleAncSeq;
     double rootlength, percentFromOutGroup, branchLengthBetweenInAndOutGroup ;
 
     int Nsite_codon, Nsite_nuc, Ntaxa, Nstate_codon, startPoint, endPoint, everyPoint, tofasta, Nrep;

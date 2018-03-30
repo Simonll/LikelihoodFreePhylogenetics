@@ -498,6 +498,14 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
 
 void SummaryStatistics::MapFunctions()
 {
+    GetSummariesMap["pwts"] = &SummaryStatistics::Getpwts;
+    GetSummariesMap["pwtv"] = &SummaryStatistics::Getpwts;
+    GetSummariesMap["pw1ts"] = &SummaryStatistics::Getpw1ts;
+    GetSummariesMap["pw1tv"] = &SummaryStatistics::Getpw1ts;
+    GetSummariesMap["pw2ts"] = &SummaryStatistics::Getpw2ts;
+    GetSummariesMap["pw2tv"] = &SummaryStatistics::Getpw2ts;
+    GetSummariesMap["pw3ts"] = &SummaryStatistics::Getpw3ts;
+    GetSummariesMap["pw3tv"] = &SummaryStatistics::Getpw3ts;
 
     GetSummariesMap["pwAC"] = &SummaryStatistics::GetpwAC;
     GetSummariesMap["pwAG"] = &SummaryStatistics::GetpwAG;
@@ -1361,6 +1369,10 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["CGNonAGR"]=&SummaryStatistics::GetCGNonAGR;
     GetSummariesMap["CHQWonR"]=&SummaryStatistics::GetCHQWonR;
     GetSummariesMap["LMVonAPST"]=&SummaryStatistics::GetLMVonAPST;
+    GetSummariesMap["dinucentropy"]=&SummaryStatistics::GetDinucentropy;
+    GetSummariesMap["dinuc12entropy"]=&SummaryStatistics::GetDinuc12entropy;
+    GetSummariesMap["dinuc23entropy"]=&SummaryStatistics::GetDinuc23entropy;
+    GetSummariesMap["dinuc31entropy"]=&SummaryStatistics::GetDinuc31entropy;
 
 }
 

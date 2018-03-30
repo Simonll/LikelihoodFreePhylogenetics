@@ -159,6 +159,8 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->fixroot = -1;
     this->randomseed = -1;
     this->rootlength = 10.0;
+    this->Ninterval = (int) this->rootlength;
+    this->sampleAncSeq = 0;
     this->Nsite_codon = 1000;
     this->Nsite_nuc = 3*this->Nsite_codon;
     this->startPoint = 1;
@@ -1130,16 +1132,9 @@ std::vector<double> LocalParameters::GetCurrentDistances()
 
 void LocalParameters::SetBranchesLengthsBetweenInAndOutGroup()
 {
-    if (percentFromOutGroup >= 1.0 )
-    {
-        percentFromOutGroup = 0.9999999999;
-
-    }
-
     double branchLengthToOutGroup = branchLengthBetweenInAndOutGroup * percentFromOutGroup;
     branchToInGroup->SetName(std::to_string(branchLengthBetweenInAndOutGroup-branchLengthToOutGroup));
     branchToOutGroup->SetName(std::to_string(branchLengthToOutGroup));
-
 }
 
 
@@ -1172,6 +1167,12 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         else if (arrParam[param_i] == "root")
         {
             this->percentFromOutGroup = posterior[it][param_i];
+            if (percentFromOutGroup >= 1.0 )
+            {
+                cerr << "percentFromOutGroup > 1\n";
+                this->percentFromOutGroup = 0.9999999999;
+            }
+
             this->SetBranchesLengthsBetweenInAndOutGroup();
         }
         else if(arrParam[param_i]  == "lambda")
@@ -1181,6 +1182,14 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         else if(arrParam[param_i]  == "fitCpG")
         {
             this->fitCpG = posterior[it][param_i];
+            if (fitCpG >1)
+            {
+                this->fitCpG = 0.9999999999;
+            } 
+            else if (fitCpG < 0)
+            {
+                this->fitCpG = 0.0000000001;
+            }
         }
         else if(arrParam[param_i]  == "lambda_CpG")
         {

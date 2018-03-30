@@ -646,11 +646,7 @@ int main(int argc, char* argv[])
 
                     #pragma omp critical
                     {
-
-
-
-////////////
-
+                        
                         if(post3->Niter < 100000 && post3->Nrun < 100000)
                         {
 
@@ -665,31 +661,6 @@ int main(int argc, char* argv[])
                                 lparam[l]->GetCurrentDistances(),
                                 lparam[l]->GetCurrentWeights()
                             );
-
-//                            post2->registerNewSimulation(
-//                                lparam[l]->MCMCpointID,
-//                                lparam[l]->GetCurrentParameters(),
-//                                lparam[l]->GetCurrentSummaries(),
-//                                lparam[l]->GetCurrentAccessorySummaries(),
-//                                lparam[l]->GetCurrentAncEvoStats(),
-//                                lparam[l]->GetCurrentEvoStats(),
-//                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
-//                                lparam[l]->GetCurrentDistances(),
-//                                lparam[l]->GetCurrentWeights()
-//                            );
-//
-//                            post3->registerNewSimulation(
-//                                lparam[l]->MCMCpointID,
-//                                lparam[l]->GetCurrentParameters(),
-//                                lparam[l]->GetCurrentSummaries(),
-//                                lparam[l]->GetCurrentAccessorySummaries(),
-//                                lparam[l]->GetCurrentAncEvoStats(),
-//                                lparam[l]->GetCurrentEvoStats(),
-//                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
-//                                lparam[l]->GetCurrentDistances(),
-//                                lparam[l]->GetCurrentWeights()
-//                            );
-
 
                             if (post3->Niter % post3->threshold == 0)
                             {
@@ -714,31 +685,6 @@ int main(int argc, char* argv[])
 
                         if(post3->Niter < 100000 && post3->Nrun == 100000)
                         {
-
-//                            post1->registerNewSimulation(
-//                                lparam[l]->MCMCpointID,
-//                                lparam[l]->GetCurrentParameters(),
-//                                lparam[l]->GetCurrentSummaries(),
-//                                lparam[l]->GetCurrentAccessorySummaries(),
-//                                lparam[l]->GetCurrentAncEvoStats(),
-//                                lparam[l]->GetCurrentEvoStats(),
-//                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
-//                                lparam[l]->GetCurrentDistances(),
-//                                lparam[l]->GetCurrentWeights()
-//                            );
-//
-//                            post2->registerNewSimulation(
-//                                lparam[l]->MCMCpointID,
-//                                lparam[l]->GetCurrentParameters(),
-//                                lparam[l]->GetCurrentSummaries(),
-//                                lparam[l]->GetCurrentAccessorySummaries(),
-//                                lparam[l]->GetCurrentAncEvoStats(),
-//                                lparam[l]->GetCurrentEvoStats(),
-//                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
-//                                lparam[l]->GetCurrentDistances(),
-//                                lparam[l]->GetCurrentWeights()
-//                            );
-
                             post3->registerNewSimulation(
                                 lparam[l]->MCMCpointID,
                                 lparam[l]->GetCurrentParameters(),
@@ -751,10 +697,8 @@ int main(int argc, char* argv[])
                                 lparam[l]->GetCurrentWeights()
                             );
 
-
                             if (post3->Niter % post3->threshold == 0)
                             {
-
 
                                 ofstream dist_os1((gparam->output+"-100K.post").c_str(),OUT);
                                 post3->writeHeader(dist_os1);
@@ -765,28 +709,11 @@ int main(int argc, char* argv[])
                                 post3->writeMonitorPosterior(monitor_os1);
                                 monitor_os1.close();
 
-
                             }
-
-
-
                         }
 
                         if(post3->Niter < 1000000 && post3->Nrun == 1000000)
                         {
-
-//                            post2->registerNewSimulation(
-//                                lparam[l]->MCMCpointID,
-//                                lparam[l]->GetCurrentParameters(),
-//                                lparam[l]->GetCurrentSummaries(),
-//                                lparam[l]->GetCurrentAccessorySummaries(),
-//                                lparam[l]->GetCurrentAncEvoStats(),
-//                                lparam[l]->GetCurrentEvoStats(),
-//                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
-//                                lparam[l]->GetCurrentDistances(),
-//                                lparam[l]->GetCurrentWeights()
-//                            );
-
                             post3->registerNewSimulation(
                                 lparam[l]->MCMCpointID,
                                 lparam[l]->GetCurrentParameters(),
@@ -799,11 +726,8 @@ int main(int argc, char* argv[])
                                 lparam[l]->GetCurrentWeights()
                             );
 
-
                             if (post3->Niter % post3->threshold == 0)
                             {
-
-
                                 ofstream dist_os2((gparam->output+"-1M.post").c_str(),OUT);
                                 post3->writeHeader(dist_os2);
                                 post3->writePosterior(dist_os2);
@@ -817,8 +741,6 @@ int main(int argc, char* argv[])
 
                             if (post3->Niter == 100000)
                             {
-
-
                                 ofstream dist_os1((gparam->output+"-100K.post").c_str(),OUT);
                                 post3->writeHeader(dist_os1);
                                 post3->writePosterior(dist_os1);
@@ -827,57 +749,14 @@ int main(int argc, char* argv[])
                                 ofstream monitor_os1((gparam->output+"-100K.monitor").c_str(),OUT);
                                 post3->writeMonitorPosterior(monitor_os1);
                                 monitor_os1.close();
-
-
                             }
-
                         }
-
-
-//                        if(post3->Niter < 10000000  && post3->Nrun == 10000000 )
-//                        {
-//
-//                            post3->registerNewSimulation(
-//                                lparam[l]->MCMCpointID,
-//                                lparam[l]->GetCurrentParameters(),
-//                                lparam[l]->GetCurrentSummaries(),
-//                                lparam[l]->GetCurrentAccessorySummaries(),
-//                                lparam[l]->GetCurrentAncEvoStats(),
-//                                lparam[l]->GetCurrentEvoStats(),
-//                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
-//                                lparam[l]->GetCurrentDistances(),
-//                                lparam[l]->GetCurrentWeights()
-//                            );
-//
-//
-//                            if (post3->Niter % post3->threshold == 0)
-//                            {
-//
-//                                ofstream dist_os3((gparam->output+"-10M.post").c_str(),OUT);
-//                                post3->writeHeader(dist_os3);
-//                                post3->writePosterior(dist_os3);
-//                                dist_os3.close();
-//
-//                                ofstream monitor_os3((gparam->output+"-10M.monitor").c_str(),OUT);
-//                                post3->writeMonitorPosterior(monitor_os3);
-//                                monitor_os3.close();
-//
-//
-//
-//                            }
-//
-//                        }
-
                     }
                 }
-
             }
-
         }
-
         cerr << "End of the simulation process\n";
         exit(0);
-
     }
     else if (model == "CodonMutSelSBDPABC-v2")
     {
@@ -1129,7 +1008,6 @@ int main(int argc, char* argv[])
 
         }
 
-
         for (int l = 0 ; l < Npoint; l++)
         {
             postMaster->slaveToMaster(postSlave[l]->population_t);
@@ -1137,7 +1015,6 @@ int main(int argc, char* argv[])
         }
 
         postMaster->sortPopulation();
-
 
         ofstream dist_os2((gparam->output+"-1M.post").c_str(),OUT);
         postMaster->writeHeader(dist_os2);
@@ -1148,14 +1025,12 @@ int main(int argc, char* argv[])
 //        postMaster->writeMonitorPosterior(monitor_os2);
 //        monitor_os2.close();
 
-
         cerr << "End of the simulation process\n";
         exit(0);
 
     }
     else if (model == "FMutSelSimu")
     {
-
 
         GlobalParameters* gparam = new GlobalParameters(model, controlfile);
 
@@ -1255,24 +1130,6 @@ int main(int argc, char* argv[])
                 AncestralDataSummaries_os.close();
             }
 
-
-
-
-
-//            for (int interval_i = 0 ; interval_i < 10; interval_i++)
-//            {
-//                ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
-//                ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str());
-//                if (i == 0)
-//                {
-//                    lparam->writeAncestralDataSummaries(AncestralDataSummaries_os);
-//                }else
-//                {
-//                    lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,false);
-//                }
-//                AncestralDataSummaries_os.close();
-//            }
-
             if(gparam->verbose)
             {
                 cerr << "debug14\n";
@@ -1362,23 +1219,27 @@ int main(int argc, char* argv[])
 
                 ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
 
-                ss->computeSummariesAncestralSequence(simulator->CurrentAncestralCodonSequence[10]);
-
-                if (post->Niter == 0)
+                if (lparam->sampleAncSeq)
                 {
-                    ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), OUT);
-                    bool headers = true;
-                    lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
-                    AncestralDataSummaries_os.close();
-                }
-                else
-                {
-                    ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), APPEND);
-                    bool headers = false;
-                    lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
-                    AncestralDataSummaries_os.close();
-                }
+                    for (int sample_i = 0 ; sample_i < lparam->Ninterval; sample_i++){
+                        ss->computeSummariesAncestralSequence(simulator->CurrentAncestralCodonSequence[sample_i]);
 
+                        if (post->Niter == 0)
+                        {
+                            ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), OUT);
+                            bool headers = true;
+                            lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
+                            AncestralDataSummaries_os.close();
+                        }
+                        else
+                        {
+                            ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), APPEND);
+                            bool headers = false;
+                            lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
+                            AncestralDataSummaries_os.close();
+                        }
+                    }
+                }
 
                 post->registerNewSimulation(
                     lparam->startPoint,
@@ -1573,13 +1434,13 @@ int main(int argc, char* argv[])
 
         LocalParameters* lparam =  new LocalParameters(gparam);
 
-        if (model == "MutSelAACpGppchecksV2" || model == "CodonMutSelSBDPPPred")
+        if (model == "CodonMutSelSBDPPPred")
         {
 
             lparam->readChainCodonMutSelSBDP();
 
         }
-        else if (model == "FMutSelppchecksV2" || model == "CodonMutSelFinitePPred")
+        else if (model == "CodonMutSelFinitePPred")
         {
 
             lparam->readChainCodonMutSelFinite();
@@ -1643,10 +1504,10 @@ int main(int argc, char* argv[])
             int it = 0 ;
             while(it < post->threshold)
             {
-                int point = static_cast<int> (lparam->rnd->Uniform() * 999);
+                int point = static_cast<int> (lparam->rnd->Uniform() * post->posterior.size());
                 lparam->SetCurrentParametersFromPosterior(post->posterior,point);
-
-                if (model == "MutSelAACpGppchecksV2" || model == "CodonMutSelSBDPPPred")
+                
+                if (model == "CodonMutSelSBDPPPred")
                 {
                     if(gparam->verbose)
                     {
@@ -1655,7 +1516,7 @@ int main(int argc, char* argv[])
                     lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
 
                 }
-                else if (model == "FMutSelppchecksV2" || model == "CodonMutSelFinitePPred")
+                else if (model == "CodonMutSelFinitePPred")
                 {
                     if(gparam->verbose)
                     {
@@ -1738,7 +1599,6 @@ int main(int argc, char* argv[])
 
     }
     // end main
-
 }
 
 

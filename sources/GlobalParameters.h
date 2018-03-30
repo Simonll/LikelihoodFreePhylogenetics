@@ -55,7 +55,7 @@ public:
     static constexpr double TOOLARGENEGATIVE = -500;
 
 
-    static const int NSummaries = 812;
+    static const int NSummaries = 831;
     static const int NParam = 29;
     static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
@@ -88,14 +88,14 @@ public:
 
     const string listSummaries[NSummaries] =
     {
-        "pwAC","pwAG","pwAT","pwCG","pwCT","pwGT",
-        "pw1AC","pw1AG","pw1AT","pw1CG","pw1CT","pw1GT",
-        "pw2AC","pw2AG","pw2AT","pw2CG","pw2CT","pw2GT",
-        "pw3AC","pw3AG","pw3AT","pw3CG","pw3CT","pw3GT",
-        "pwAC10","pwAG10","pwAT10","pwCG10","pwCT10","pwGT10","K80nuc10",
-        "pwAC30","pwAG30","pwAT30","pwCG30","pwCT30","pwGT30","K80nuc30",
-        "pwAC50","pwAG50","pwAT50","pwCG50","pwCT50","pwGT50","K80nuc50",
-        "pwAC90","pwAG90","pwAT90","pwCG90","pwCT90","pwGT90","K80nuc90",
+        "pwAC","pwAG","pwAT","pwCG","pwCT","pwGT","pwts","pwtv",
+        "pw1AC","pw1AG","pw1AT","pw1CG","pw1CT","pw1GT","pw1ts","pw1tv",
+        "pw2AC","pw2AG","pw2AT","pw2CG","pw2CT","pw2GT","pw2ts","pw2tv",
+        "pw3AC","pw3AG","pw3AT","pw3CG","pw3CT","pw3GT","pw3ts","pw3tv",
+        "pwAC10","pwAG10","pwAT10","pwCG10","pwCT10","pwGT10","K80nuc10","pw10ts","pw10tv",
+        "pwAC30","pwAG30","pwAT30","pwCG30","pwCT30","pwGT30","K80nuc30","pw30ts","pw30tv",
+        "pwAC50","pwAG50","pwAT50","pwCG50","pwCT50","pwGT50","K80nuc50","pw50ts","pw50tv",
+        "pwAC90","pwAG90","pwAT90","pwCG90","pwCT90","pwGT90","K80nuc90","pw90ts","pw90tv",
         "K80aa10","K80aa30","K80aa50","K80aa90",
         "pwAA","pwCpGTpG","pwCpGCpA","pwApGTpG",
         "nucA","nucC","nucG","nucT",
@@ -123,7 +123,7 @@ public:
         "diaaAA","diaaAC","diaaAD","diaaAE","diaaAF","diaaAG","diaaAH","diaaAI","diaaAK","diaaAL","diaaAM","diaaAN","diaaAP","diaaAQ","diaaAR","diaaAS","diaaAT","diaaAV","diaaAW","diaaAY","diaaCA","diaaCC","diaaCD","diaaCE","diaaCF","diaaCG","diaaCH","diaaCI","diaaCK","diaaCL","diaaCM","diaaCN","diaaCP","diaaCQ","diaaCR","diaaCS","diaaCT","diaaCV","diaaCW","diaaCY","diaaDA","diaaDC","diaaDD","diaaDE","diaaDF","diaaDG","diaaDH","diaaDI","diaaDK","diaaDL","diaaDM","diaaDN","diaaDP","diaaDQ","diaaDR","diaaDS","diaaDT","diaaDV","diaaDW","diaaDY","diaaEA","diaaEC","diaaED","diaaEE","diaaEF","diaaEG","diaaEH","diaaEI","diaaEK","diaaEL","diaaEM","diaaEN","diaaEP","diaaEQ","diaaER","diaaES","diaaET","diaaEV","diaaEW","diaaEY","diaaFA","diaaFC","diaaFD","diaaFE","diaaFF","diaaFG","diaaFH","diaaFI","diaaFK","diaaFL","diaaFM","diaaFN","diaaFP","diaaFQ","diaaFR","diaaFS","diaaFT","diaaFV","diaaFW","diaaFY","diaaGA","diaaGC","diaaGD","diaaGE","diaaGF","diaaGG","diaaGH","diaaGI","diaaGK","diaaGL","diaaGM","diaaGN","diaaGP","diaaGQ","diaaGR","diaaGS","diaaGT","diaaGV","diaaGW","diaaGY","diaaHA","diaaHC","diaaHD","diaaHE","diaaHF","diaaHG","diaaHH","diaaHI","diaaHK","diaaHL","diaaHM","diaaHN","diaaHP","diaaHQ","diaaHR","diaaHS","diaaHT","diaaHV","diaaHW","diaaHY","diaaIA","diaaIC","diaaID","diaaIE","diaaIF","diaaIG","diaaIH","diaaII","diaaIK","diaaIL","diaaIM","diaaIN","diaaIP","diaaIQ","diaaIR","diaaIS","diaaIT","diaaIV","diaaIW","diaaIY","diaaKA","diaaKC","diaaKD","diaaKE","diaaKF","diaaKG","diaaKH","diaaKI","diaaKK","diaaKL","diaaKM",
         "diaaKN","diaaKP","diaaKQ","diaaKR","diaaKS","diaaKT","diaaKV","diaaKW","diaaKY","diaaLA","diaaLC","diaaLD","diaaLE","diaaLF","diaaLG","diaaLH","diaaLI","diaaLK","diaaLL","diaaLM","diaaLN","diaaLP","diaaLQ","diaaLR","diaaLS","diaaLT","diaaLV","diaaLW","diaaLY","diaaMA","diaaMC","diaaMD","diaaME","diaaMF","diaaMG","diaaMH","diaaMI","diaaMK","diaaML","diaaMM","diaaMN","diaaMP","diaaMQ","diaaMR","diaaMS","diaaMT","diaaMV","diaaMW","diaaMY","diaaNA","diaaNC","diaaND","diaaNE","diaaNF","diaaNG","diaaNH","diaaNI","diaaNK","diaaNL","diaaNM","diaaNN","diaaNP","diaaNQ","diaaNR","diaaNS","diaaNT","diaaNV","diaaNW","diaaNY","diaaPA","diaaPC","diaaPD","diaaPE","diaaPF","diaaPG","diaaPH","diaaPI","diaaPK","diaaPL","diaaPM","diaaPN","diaaPP","diaaPQ","diaaPR","diaaPS","diaaPT","diaaPV","diaaPW","diaaPY","diaaQA","diaaQC","diaaQD","diaaQE","diaaQF","diaaQG","diaaQH","diaaQI","diaaQK","diaaQL","diaaQM","diaaQN","diaaQP","diaaQQ","diaaQR","diaaQS","diaaQT","diaaQV","diaaQW","diaaQY","diaaRA","diaaRC","diaaRD","diaaRE","diaaRF","diaaRG","diaaRH","diaaRI","diaaRK","diaaRL","diaaRM","diaaRN","diaaRP","diaaRQ","diaaRR","diaaRS","diaaRT","diaaRV","diaaRW","diaaRY","diaaSA","diaaSC","diaaSD","diaaSE","diaaSF","diaaSG","diaaSH","diaaSI","diaaSK","diaaSL","diaaSM","diaaSN","diaaSP","diaaSQ","diaaSR","diaaSS","diaaST","diaaSV","diaaSW","diaaSY","diaaTA","diaaTC","diaaTD","diaaTE","diaaTF","diaaTG","diaaTH","diaaTI","diaaTK","diaaTL","diaaTM","diaaTN","diaaTP","diaaTQ","diaaTR","diaaTS","diaaTT","diaaTV","diaaTW","diaaTY","diaaVA","diaaVC",
         "diaaVD","diaaVE","diaaVF","diaaVG","diaaVH","diaaVI","diaaVK","diaaVL","diaaVM","diaaVN","diaaVP","diaaVQ","diaaVR","diaaVS","diaaVT","diaaVV","diaaVW","diaaVY","diaaWA","diaaWC","diaaWD","diaaWE","diaaWF","diaaWG","diaaWH","diaaWI","diaaWK","diaaWL","diaaWM","diaaWN","diaaWP","diaaWQ","diaaWR","diaaWS","diaaWT","diaaWV","diaaWW","diaaWY","diaaYA","diaaYC","diaaYD","diaaYE","diaaYF","diaaYG","diaaYH","diaaYI","diaaYK","diaaYL","diaaYM","diaaYN","diaaYP","diaaYQ","diaaYR","diaaYS","diaaYT","diaaYV","diaaYW","diaaYY",
-        "RSCUentropy","GC","GC1","GC2","GC3","Codonfentropy","AAentropy","CGNonAGR","CHQWonR","LMVonAPST"
+        "RSCUentropy","GC","GC1","GC2","GC3","Codonfentropy","AAentropy","CGNonAGR","CHQWonR","LMVonAPST","Dinuc12entropy","Dinuc23entropy","Dinuc31entropy"
     };
 
     const string listEvoStats[NEvoStats] =
