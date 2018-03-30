@@ -628,10 +628,10 @@ int main(int argc, char* argv[])
                         cerr << "debug20\n";
                     }
 
-                    for (int interval_i = 0 ; interval_i < 11; interval_i++)
+                    /* for (int interval_i = 0 ; interval_i < lparam[l]->Ninterval; interval_i++)
                     {
                         ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
-                    }
+                    } */
 
                     if(gparam->verbose)
                     {
