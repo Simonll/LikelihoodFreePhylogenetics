@@ -1448,9 +1448,11 @@ int main(int argc, char* argv[])
         }
 
 
+        /* 
         ofstream lparam_os ((gparam->output+".inputparam").c_str());
         lparam->writeParam(lparam_os);
         lparam_os.close();
+        */
 
         SummaryStatistics* ss = new SummaryStatistics(lparam);
         ss->computeSummaries();
@@ -1547,23 +1549,29 @@ int main(int argc, char* argv[])
                         cerr << " debug7.2\n";
                     }
 
-                    ss->computeSummariesAncestralSequence(simulator->CurrentAncestralCodonSequence[10]);
-
-                    if (post->Niter == 0)
+/* 
+                    for (int interval_i = 0 ; interval_i < lparam[l]->Ninterval; interval_i++)
                     {
-                        ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), OUT);
-                        bool headers = true;
-                        lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
-                        AncestralDataSummaries_os.close();
-                    }
-                    else
+                        ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
+                    
+                        if (post->Niter == 0)
+                        {
+                            ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), OUT);
+                            bool headers = true;
+                            lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
+                            AncestralDataSummaries_os.close();
+                        }
+                        else
 
-                    {
-                        ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), APPEND);
-                        bool headers = false;
-                        lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
-                        AncestralDataSummaries_os.close();
-                    }
+                        {
+                            ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), APPEND);
+                            bool headers = false;
+                            lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
+                            AncestralDataSummaries_os.close();
+                        }
+                        
+                    }                        
+ */
 
 
                     post->registerNewSimulation(
