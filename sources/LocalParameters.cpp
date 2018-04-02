@@ -805,7 +805,7 @@ void LocalParameters::readLocalInstructions()
             this->fixlambda_tstvTpA = 0; 
             cerr << "freelambdatstvCpG\n";
         }
-        else if (s == "-freelambdaCpG" or s == "-freelambdatsCpG")
+        else if (s == "-freelambdaCpG" || s == "-freelambdatsCpG")
         {
             this->fixlambda_CpG = 0;
             cerr << "freelambdatsCpG\n";
@@ -831,10 +831,10 @@ void LocalParameters::readLocalInstructions()
             cerr << "prior CpG " << this->lambda_CpG_prior << "\n";
 
         }
-        else if (s == "-freelambdaTpA")
+        else if (s == "-freelambdaTpA" || s == "-freelambdatsTpA")
         {
             this->fixlambda_TpA = 0;
-            cerr << "freelambdaTpA\n";
+            cerr << "freelambdatsTpA\n";
 
         }
         else if (s == "-priorlambdaTpA")
