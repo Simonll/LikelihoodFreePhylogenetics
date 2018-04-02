@@ -13,10 +13,7 @@ along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses
 
 PriorSampler::PriorSampler(LocalParameters* lparam)
 {
-
     this->lparam = lparam;
-
-
 }
 
 PriorSampler::~PriorSampler()
@@ -27,17 +24,14 @@ PriorSampler::~PriorSampler()
 
 void PriorSampler::sample()
 {
-
-
-    if (lparam->fixwR_CHQW != 1)
+/*     if (lparam->fixwR_CHQW != 1)
     {
         if (lparam->verbose)
         {
             cerr << "freewR_CHQW\n";
         }
-
         lparam->wR_CHQW = lparam->rnd->Uniform();
-    }
+    } */
 
     if (lparam->fixfitCpG !=1)
     {
@@ -48,37 +42,38 @@ void PriorSampler::sample()
         lparam->fitCpG = lparam->rnd->Uniform();
     }
 
+    if (lparam->fixfitTpA !=1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freefitTpA\n";
+        }
+        lparam->fitTpA = lparam->rnd->Uniform();
+    }
+
     if (lparam->fixroot == 0)
     {
-
         lparam->percentFromOutGroup = lparam->rnd->Uniform();
         lparam->SetBranchesLengthsBetweenInAndOutGroup();
-
     }
 
     if(lparam->fixlambda_omega != 1)
     {
-
         if (lparam->lambda_omega_prior == "log2Unif")
         {
             lparam->lambda_omega = logNUnif(2);
-
         }
         else if (lparam->lambda_omega_prior == "log3Unif")
         {
             lparam->lambda_omega = logNUnif(3);
         }
-
-
     }
 
     if(lparam->fixlambda_TBL != 1)
     {
-
         if (lparam->lambda_TBL_prior == "log2Unif")
         {
             lparam->lambda_TBL = logNUnif(2);
-
         }
         else if (lparam->lambda_TBL_prior == "log3Unif")
         {
@@ -91,59 +86,49 @@ void PriorSampler::sample()
 //                    }
     }
 
-    if(lparam->fixlambda_CpG != 1)
+    /* if(lparam->fixlambda_CpG != 1)
     {
-
         if (lparam->lambda_CpG_prior == "log10Unif")
         {
             lparam->lambda_CpG = logNUnif(10);
-
         }
         else if (lparam->lambda_CpG_prior == "log20Unif")
         {
             lparam->lambda_CpG = logNUnif(20);
-
         }
         else if (lparam->lambda_CpG_prior == "log50Unif")
         {
             lparam->lambda_CpG = logNUnif(50);
-
         }
         else if (lparam->lambda_CpG_prior == "log100Unif")
         {
             lparam->lambda_CpG = logNUnif(100);
         }
     }
-
-    if(lparam->fixlambda_CpG_GpG != 1)
+ */
+/*     if(lparam->fixlambda_CpG_GpG != 1)
     {
-
         if (lparam->lambda_CpG_GpG_prior == "log10Unif")
         {
             lparam->lambda_CpG_GpG = logNUnif(10);
-
         }
         else if (lparam->lambda_CpG_GpG_prior == "log20Unif")
         {
             lparam->lambda_CpG_GpG = logNUnif(20);
-
         }
         else if (lparam->lambda_CpG_GpG_prior == "log50Unif")
         {
             lparam->lambda_CpG_GpG = logNUnif(50);
-
         }
         else if (lparam->lambda_CpG_GpG_prior == "log100Unif")
         {
             lparam->lambda_CpG_GpG = logNUnif(100);
         }
-
     }
-
+ */
 
     if(lparam->fixlambda_TpA != 1)
     {
-
         if (lparam->lambda_TpA_prior == "log10Unif")
         {
             lparam->lambda_TpA = logNUnif(10);
@@ -163,10 +148,29 @@ void PriorSampler::sample()
         {
             lparam->lambda_TpA = logNUnif(100);
         }
-
-
     }
-    if(lparam->fixlambda_GpT != 1)
+
+    if(lparam->fixlambda_tvTpA != 1)
+    {
+        lparam->lambda_tvTpA = logNUnif(10);
+    }
+
+    if(lparam->fixlambda_tstvTpA != 1)
+    {
+        lparam->lambda_tstvTpA = logNUnif(10);
+    }
+
+    if(lparam->fixlambda_tvCpG != 1)
+    {
+        lparam->lambda_tvCpG = logNUnif(10);
+    }
+
+    if(lparam->fixlambda_tstvCpG != 1)
+    {
+        lparam->lambda_tstvCpG = logNUnif(10);
+    }
+
+/*     if(lparam->fixlambda_GpT != 1)
     {
 
         if (lparam->lambda_GpT_prior == "log10Unif")
@@ -190,7 +194,7 @@ void PriorSampler::sample()
         }
 
 
-    }
+    } */
 
     if (lparam->fixrr != 1)
     {
@@ -313,7 +317,6 @@ void PriorSampler::sample()
         //gtnr[3][3] = 0.0; //tt
 
     }
-
     else if (lparam->fixhky != 1)
     {
         if (lparam->verbose)
@@ -342,8 +345,6 @@ void PriorSampler::sample()
         lparam->nucrrnr[3][1] = lparam->nucrrnr[0][2]; //tc
         lparam->nucrrnr[3][2] = 1.0; //tg
         //nucrrnr[3][3] = 0.0; //tt
-
-
 
         double sum =  0.0 ;
         for (int nuc1 = 0 ; nuc1 < lparam->Nnucp; nuc1++)
@@ -390,13 +391,11 @@ void PriorSampler::sample()
         lparam->gtnr[3][2] = lparam->GetGTR(3,2); //tg
         //gtnr[3][3] = 0.0; //tt
     }
-
     else if (lparam->fixstat != 1)
     {
         if (lparam->verbose)
         {
             cerr << "freestat\n";
-
         }
         lparam->nucp[0] = lparam->rnd->sExpo();
         lparam->nucp[1] = lparam->rnd->sExpo();
@@ -881,7 +880,6 @@ void PriorSampler::sample()
         //gtnr[3][3] = 0.0; //tt
 
     }
-
 }
 
 

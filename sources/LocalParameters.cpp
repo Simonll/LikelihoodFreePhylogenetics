@@ -122,11 +122,15 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->getrate2 = false; 
 
     //default parameters values
-    this->percentFromOutGroup = -1.0;
+    this->percentFromOutGroup = 0.5;
     this->omega = 1.0;
     this->lambda_TBL = 1.0;
     this->lambda_omega = 1.0;
     this->lambda_CpG = 1.0;
+    this->lambda_tvCpG = 1.0;
+    this->lambda_tvTpA = 1.0;
+    this->lambda_tstvCpG = 1.0; 
+    this->lambda_tstvTpA = 1.0;
     this->lambda_GpT = 1.0;
     this->lambda_TpA = 1.0;
     this->lambdaCA = 1.0;
@@ -134,13 +138,19 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->lambda_CpG_GpG = 1.0;
     this->wR_CHQW = 1.0;
     this->fitCpG = 0.5;
+    this->fitTpA = 0.5;
     
     //parameter switch
     this->fixNsite = 0; 
     this->fixfitCpG = 1;
+    this->fixfitTpA = 1;
     this->fixlambda_TBL = 1;
     this->fixlambda_omega = 1;
     this->fixlambda_CpG = 1;
+    this->fixlambda_tvCpG = 1;
+    this->fixlambda_tvTpA = 1;
+    this->fixlambda_tstvCpG = 1;
+    this->fixlambda_tstvTpA = 1;
     this->fixlambda_TpA = 1;
     this->fixgtr = 1;
     this->fixgtr2 = -1;
@@ -201,7 +211,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
         this->gtnr2[i] = new double[this->Nnucp];
         this->nucrrnr2[i] = new double[this->Nnucp];
     }
-
     for (int i = 0; i < this->Nnucp; i++)
     {
         for (int j = 0; j < this->Nnucp; j++)
@@ -214,7 +223,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
             this->nucrrnr2[i][j] = 0.0;
         }
     }
-
     this->nucp = new double [this->Nnucp];
     this->nucp1 = new double [this->Nnucp];
     this->nucp2 = new double [this->Nnucp];
@@ -224,7 +232,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
         this->nucp1[i] = 0.0;
         this->nucp2[i] = 0.0;
     }
-
     this->nucrr = new double [this->Nnucrr];
     this->nucrr1 = new double [this->Nnucrr];
     this->nucrr2 = new double [this->Nnucrr];
@@ -240,14 +247,11 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     if (this->isdata)
     {
         cerr << "alignment found\n";
-
         this->dnadata = new FileSequenceAlignment((data).c_str(), 0, 0);
-
         if (this->iscodon)
         {
             if(code == "Universal" )
             {
-
                 cerr << "Universal\n";
                 this->codonstatespace =  new CodonStateSpace(Universal);
                 this->codondata  = new CodonSequenceAlignment(dnadata, true, Universal);
@@ -255,7 +259,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
             }
             else if (code == "MtMam")
             {
-
                 cerr << "MtMam\n";
                 this->codonstatespace =  new CodonStateSpace(MtMam);
                 this->codondata  = new CodonSequenceAlignment(dnadata, true, MtMam);
@@ -263,7 +266,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
             }
             else if (code == "MtInv")
             {
-
                 cerr << "MtInv\n";
                 this->codonstatespace =  new CodonStateSpace(MtInv);
                 this->codondata  = new CodonSequenceAlignment(dnadata, true, MtInv);
@@ -362,7 +364,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     cerr << "Ntaxa : " <<  this->Ntaxa << "\n";
     cerr << "Nstate_codon : " << this->Nstate_codon << "\n";
     cerr << "Rooted at " << this->taxa_a << " " << taxa_b  << "\n";
-
 }
 
 
@@ -413,7 +414,6 @@ void LocalParameters::GetGTR1()
             sum += this->nucrrnr1[nuc1][nuc2];
         }
     }
-
     for (int nuc1=0; nuc1<4; nuc1++)
     {
         for (int nuc2=0; nuc2<4; nuc2++)
@@ -423,9 +423,6 @@ void LocalParameters::GetGTR1()
     }
 
     this->getrate1 = false;
-
-
-
     double norm = 0.0;
     for (int i=0; i<4-1; i++)
     {
@@ -447,9 +444,6 @@ void LocalParameters::GetGTR1()
             this->gtnr1[i][j] = (this->nucp1[j] * this->nucrrnr1[i][j]) / MutationNormFactor1 ;
         }
     }
-
-
-
 }
 
 
@@ -465,8 +459,6 @@ void LocalParameters::GetGTR2()
     {
         this->nucp2[nuc1]/=sum;
     }
-
-
     //nucrrnr2[0][0]; //AA
     nucrrnr2[0][1] =  nucrr2[0]; //AC
     nucrrnr2[0][2] =  nucrr2[1]; //AG
@@ -483,7 +475,6 @@ void LocalParameters::GetGTR2()
     nucrrnr2[3][1] =  nucrr2[4]; //TC
     nucrrnr2[3][2] =  nucrr2[5]; //TG
     //nucrrnr2[3][3]; //TT
-
 
     sum = 0.0 ;
     for (int nuc1=0; nuc1<4-1; nuc1++)
@@ -525,8 +516,6 @@ void LocalParameters::GetGTR2()
             this->gtnr2[i][j] = (this->nucp2[j] * this->nucrrnr2[i][j]) / MutationNormFactor1 ;
         }
     }
-
-
 }
 
 void LocalParameters::readLocalInstructions()
@@ -549,54 +538,46 @@ void LocalParameters::readLocalInstructions()
             iss >> s;
             this->chain = s;
             cerr << "chain " << this->chain<< "\n";
-
         }
         else if (s == "-posterior")
         {
             iss >> s;
             this->posteriorfile = s;
             cerr << "posterior " << this->posteriorfile << "\n";
-
         }
         else if (s == "-start")
         {
             iss >> s;
             this->startPoint = atoi(s.c_str());
             cerr << "start " << this->startPoint<< "\n";
-
         }
         else if (s == "-until")
         {
             iss >> s;
             this->endPoint = atoi(s.c_str());
             cerr << "until " << this->endPoint<< "\n";
-
         }
         else if (s == "-every")
         {
             iss >> s ;
             this->everyPoint = atoi(s.c_str());
             cerr << "every " << this->everyPoint << "\n";
-
         }
         else if (s == "-rep")
         {
             iss >> s;
             this->Nrep = atoi(s.c_str());
             cerr << "Nreplicate " << this->Nrep << "\n";
-
         }
         else if (s =="-iscodon")
         {
             this->iscodon = true;
-
         }
         else if (s =="-code")
         {
             iss >> s;
             this->code = s;
             cerr << "code " << this->code << "\n";
-
         }
         else if (s =="-root")
         {
@@ -605,7 +586,6 @@ void LocalParameters::readLocalInstructions()
             this->taxa_a = s;
             iss >> s;
             this->taxa_b = s;
-
         }
         else if (s =="-fixroot")
         {
@@ -626,7 +606,6 @@ void LocalParameters::readLocalInstructions()
 
 
             cerr << ((this->fixroot ==0)? "randomroot " : "fixroot ") << this->taxa_a   << " " << this->taxa_b  << " " << this->percentFromOutGroup << "\n";
-
         }
         else if (s =="-freeroot")
         {
@@ -636,7 +615,6 @@ void LocalParameters::readLocalInstructions()
             iss >> s;
             this->taxa_b = s;
             cerr << ((this->fixroot ==0)? "freeroot " : "fixroot ") << this->taxa_a  << " " << this->taxa_b << "\n";
-
         }
         else if (s =="-fitCpG")
         {
@@ -644,13 +622,16 @@ void LocalParameters::readLocalInstructions()
             this->fitCpG = atof(s.c_str());
             this->fixfitCpG = 1;
             cerr << "fixfitCpG " << this->fitCpG << "\n";
-
         }
         else if (s == "-freefitCpG")
         {
             this->fixfitCpG = 0;
             cerr << "free fitCpG\n";
-
+        }
+        else if (s == "-freefitTpA")
+        {
+            this->fixfitTpA = 0;
+            cerr << "free fitTpA\n";
         }
         else if (s =="-lambdaTBL")
         {
@@ -671,7 +652,6 @@ void LocalParameters::readLocalInstructions()
             iss >> s;
             this->lambda_TBL_prior = s;
             cerr << "prior TBL " << this->lambda_TBL_prior << "\n";
-
         }
         else if (s =="-lambdaOmega")
         {
@@ -679,7 +659,6 @@ void LocalParameters::readLocalInstructions()
             this->lambda_omega = atof(s.c_str());
             this->fixlambda_omega = 1;
             cerr << "fix lambdaomega " << this->lambda_omega << "\n";
-
         }
         else if (s =="-omega")
         {
@@ -687,20 +666,17 @@ void LocalParameters::readLocalInstructions()
             this->omega = atof(s.c_str());
             this->fixomega = 1;
             cerr << "fix omega " << this->omega << "\n";
-
         }
         else if (s == "-freelambdaomega")
         {
             this->fixlambda_omega = 0;
             cerr << "freelambdaomega\n";
-
         }
         else if (s == "-priorlambdaomega")
         {
             iss >> s;
             this->lambda_omega_prior = s;
             cerr << "prior omega " << this->lambda_omega_prior << "\n";
-
         }
         else if (s =="-lambdaCpG" || s == "-fixlambdaCpG")
         {
@@ -708,7 +684,6 @@ void LocalParameters::readLocalInstructions()
             this->lambda_CpG = atof(s.c_str());
             this->fixlambda_CpG = 1;
             cerr << "fix lambda CpG " << this->lambda_CpG << "\n";
-
         }
         else if (s =="-fixgtr1")
         {
@@ -755,7 +730,6 @@ void LocalParameters::readLocalInstructions()
                 cerr << this->nucrr1[v] << "\t";
             }
             cerr << "\n";
-
         }
         else if (s =="-fixgtr2")
         {
@@ -803,7 +777,6 @@ void LocalParameters::readLocalInstructions()
                 cerr << this->nucrr2[v] << "\t";
             }
             cerr << "\n";
-
         }
         else if (s =="-lambdaTpA" || s == "-fixlambdaTpA")
         {
@@ -811,7 +784,26 @@ void LocalParameters::readLocalInstructions()
             this->lambda_TpA = atof(s.c_str());
             this->fixlambda_TpA = 1;
             cerr << "fix lambda TpA " << this->fixlambda_TpA << "\n";
-
+        }
+        else if (s == "-freelambdatvCpG")
+        {
+            this->fixlambda_tvCpG = 0; 
+            cerr << "freelambdaCpG\n";
+        }
+        else if (s == "-freelambdatvTpA")
+        {
+            this->fixlambda_tvTpA = 0; 
+            cerr << "freelambdaTpA\n";
+        }
+        else if (s == "-freelambdatstvCpG")
+        {
+            this->fixlambda_tstvCpG = 0; 
+            cerr << "freelambdatstvCpG\n";
+        }
+        else if (s == "-freelambdatstvTpA")
+        {
+            this->fixlambda_tstvTpA = 0; 
+            cerr << "freelambdatstvCpG\n";
         }
         else if (s == "-freelambdaCpG")
         {
@@ -946,7 +938,6 @@ void LocalParameters::readLocalInstructions()
             this->Nsite_codon = atoi(s.c_str());
             this->Nsite_nuc = this->Nsite_codon * 3;
             cerr << "fixNsite " << this->Nsite_codon << " " << this->Nsite_nuc << "\n";
-
         }
     }
 }
@@ -1070,8 +1061,6 @@ void LocalParameters::SetRootBetweenInAndOutGroup()
     ofstream os ((this->output+".inputparam").c_str(),APPEND);
     refTree->Print(os);
     os.close();
-
-
 }
 
 std::vector<double> LocalParameters::GetCurrentDistances()
@@ -1081,53 +1070,39 @@ std::vector<double> LocalParameters::GetCurrentDistances()
     //squared Euclidian
     if (this->distance == "Euclidian")
     {
-
         for (int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
         {
-
             double sqdisc  = this->summariesRealData[i_summary] - summariesSimulatedData[i_summary];
             sqdisc *= sqdisc ;
-
             dist += sqdisc;
             cur_dist.push_back(sqdisc);
         }
-
         cur_dist.push_back(dist);
     }
     else if (this->distance == "normalized")
     {
-
         for (int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
         {
-
             double sqdisc  = (this->summariesRealData[i_summary] - summariesSimulatedData[i_summary])/this->summariesRealData[i_summary];
             sqdisc *= sqdisc ;
-
             dist += sqdisc;
             cur_dist.push_back(sqdisc);
         }
-
         cur_dist.push_back(dist);
-
     } else if
 
 
     (this->distance == "dist1")
     {
-
         for (int i_summary = 0 ; i_summary < this->NusedSummaries; i_summary++)
         {
-
             double sqdisc  = this->summariesRealData[i_summary] - summariesSimulatedData[i_summary];
             dist += sqdisc;
             cur_dist.push_back(sqdisc);
         }
-
         cur_dist.push_back(dist);
     }
-
     return cur_dist;
-
 }
 
 void LocalParameters::SetBranchesLengthsBetweenInAndOutGroup()
@@ -1191,6 +1166,18 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
                 this->fitCpG = 0.0000000001;
             }
         }
+        else if(arrParam[param_i]  == "fitTpA")
+        {
+            this->fitTpA = posterior[it][param_i];
+            if (fitTpA >1)
+            {
+                this->fitTpA = 0.9999999999;
+            } 
+            else if (fitTpA < 0)
+            {
+                this->fitTpA = 0.0000000001;
+            }
+        }
         else if(arrParam[param_i]  == "lambda_CpG")
         {
             this->lambda_CpG = posterior[it][param_i];
@@ -1202,6 +1189,22 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         else if(arrParam[param_i]  == "lambda_TpA")
         {
             this->lambda_TpA = posterior[it][param_i];
+        }
+        else if(arrParam[param_i]  == "lambda_tvTpA")
+        {
+            this->lambda_tvTpA = posterior[it][param_i];
+        }
+        else if(arrParam[param_i]  == "lambda_tvCpG")
+        {
+            this->lambda_tvCpG = posterior[it][param_i];
+        }
+        else if(arrParam[param_i]  == "lambda_tstvTpA")
+        {
+            this->lambda_tstvTpA = posterior[it][param_i];
+        }
+        else if(arrParam[param_i]  == "lambda_tstvCpG")
+        {
+            this->lambda_tstvCpG = posterior[it][param_i];
         }
         else if(arrParam[param_i]  == "lambda_CpG_GpG")
         {
@@ -1390,8 +1393,6 @@ std::vector<double> LocalParameters::GetCurrentParameters()
             }
         }
     }
-
-
     std::vector<double> cur_param;
     for (int param_i = 0 ; param_i < this->NusedParam; param_i++)
     {
@@ -1402,6 +1403,10 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         else if(arrParam[param_i]  == "fitCpG")
         {
             cur_param.push_back(this->fitCpG);
+        }
+        else if(arrParam[param_i]  == "fitTpA")
+        {
+            cur_param.push_back(this->fitTpA);
         }
         else if(arrParam[param_i]  == "lambda")
         {
@@ -1422,6 +1427,22 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         else if(arrParam[param_i]  == "lambda_TpA")
         {
             cur_param.push_back(this->lambda_TpA);
+        }
+        else if(arrParam[param_i]  == "lambda_tvTpA")
+        {
+            cur_param.push_back(this->lambda_tvTpA);
+        }
+        else if(arrParam[param_i]  == "lambda_tvCpG")
+        {
+            cur_param.push_back(this->lambda_tvCpG);
+        }
+        else if(arrParam[param_i]  == "lambda_tstvTpA")
+        {
+            cur_param.push_back(this->lambda_tstvTpA);
+        }
+        else if(arrParam[param_i]  == "lambda_tstvCpG")
+        {
+            cur_param.push_back(this->lambda_tstvCpG);
         }
         else if (arrParam[param_i]  == "lambdaTG")
         {
@@ -2551,7 +2572,6 @@ void LocalParameters::toFasta(ofstream &os, int** curent_nodeleaf_sequence_codon
             os << codonstatespace->GetState(curent_nodeleaf_sequence_codon[taxa][site_codon]);
         }
         os << "\n";
-
     }
 }
 
@@ -2568,7 +2588,6 @@ void LocalParameters::toAli(ofstream &os, int** curent_nodeleaf_sequence_codon)
         os << "\n";
     }
     os << "\n";
-
 }
 
 
@@ -2588,7 +2607,6 @@ void LocalParameters::writeRealDataSummaries(ofstream&os, bool headers)
             if(it->second != -1)
             {
                 arrSummaries[it->second] = it->first;
-
             }
 
         }
@@ -2598,35 +2616,28 @@ void LocalParameters::writeRealDataSummaries(ofstream&os, bool headers)
     {
         for(int summary_i = 0 ; summary_i < NusedSummaries; summary_i++)
         {
-
             if (summary_i < NusedSummaries-1)
             {
                 os << arrSummaries[summary_i]  << "\t";
-
             }
             else
             {
                 os << arrSummaries[summary_i] << "\n";
-
             }
         }
     }
 
     for(int summary_i = 0 ; summary_i < NusedSummaries; summary_i++)
     {
-
         if (summary_i < NusedSummaries-1)
         {
             os << summariesRealData[summary_i]  << "\t";
-
         }
         else
         {
             os << summariesRealData[summary_i] << "\n";
-
         }
     }
-
     delete [] arrSummaries;
 
 }
@@ -2645,7 +2656,6 @@ void LocalParameters::writeAncestralDataSummaries(ofstream&os, bool headers)
             if(it->second != -1)
             {
                 arrSummaries[it->second] = it->first;
-
             }
 
         }
@@ -2655,32 +2665,26 @@ void LocalParameters::writeAncestralDataSummaries(ofstream&os, bool headers)
     {
         for(int summary_i = 0 ; summary_i < NusedAncSummaries; summary_i++)
         {
-
             if (summary_i < NusedAncSummaries-1)
             {
                 os << arrSummaries[summary_i]  << "\t";
-
             }
             else
             {
                 os << arrSummaries[summary_i] << "\n";
-
             }
         }
     }
 
     for(int summary_i = 0 ; summary_i < NusedAncSummaries; summary_i++)
     {
-
         if (summary_i < NusedAncSummaries-1)
         {
             os << summariesAncestralData[summary_i]  << "\t";
-
         }
         else
         {
             os << summariesAncestralData[summary_i] << "\n";
-
         }
     }
 

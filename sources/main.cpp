@@ -1424,14 +1424,11 @@ int main(int argc, char* argv[])
     }
     else if (model == "CodonMutSelFinitePPPred" || model == "CodonMutSelSBDPPPred")
     {
-
         // the chain pointS are extract from the posterior file according to chainID
         cerr << model  << "\n";
 
-
         GlobalParameters* gparam = new GlobalParameters(model, controlfile);
         Posterior* post = new Posterior(gparam);
-
         LocalParameters* lparam =  new LocalParameters(gparam);
 
         if (model == "CodonMutSelSBDPPPred")
@@ -1446,8 +1443,6 @@ int main(int argc, char* argv[])
             lparam->readChainCodonMutSelFinite();
 
         }
-
-
         /* 
         ofstream lparam_os ((gparam->output+".inputparam").c_str());
         lparam->writeParam(lparam_os);
@@ -1494,12 +1489,9 @@ int main(int argc, char* argv[])
         {
             cerr << "debug5\n";
         }
-
-
         post->readPosterior(lparam->posteriorfile);
 
         cerr << "The simulation process started\n";
-
         if (!post->posterior.empty())
         {
 
@@ -1541,19 +1533,15 @@ int main(int argc, char* argv[])
                     {
                         cerr <<" debug7.1\n";
                     }
-
                     ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-
                     if(gparam->verbose)
                     {
                         cerr << " debug7.2\n";
                     }
-
 /* 
                     for (int interval_i = 0 ; interval_i < lparam[l]->Ninterval; interval_i++)
                     {
                         ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
-                    
                         if (post->Niter == 0)
                         {
                             ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), OUT);
@@ -1562,18 +1550,14 @@ int main(int argc, char* argv[])
                             AncestralDataSummaries_os.close();
                         }
                         else
-
                         {
                             ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), APPEND);
                             bool headers = false;
                             lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
                             AncestralDataSummaries_os.close();
-                        }
-                        
+                        }                     
                     }                        
  */
-
-
                     post->registerNewSimulation(
                         lparam->GetPointID(),
                         lparam->GetCurrentParameters(),
@@ -1601,8 +1585,6 @@ int main(int argc, char* argv[])
             ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
             post->writePosteriorPredictiveStatistics(ppp_os,lparam->summariesRealData);
             ppp_os.close();
-
-
         }
 
     }
