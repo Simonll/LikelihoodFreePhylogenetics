@@ -86,7 +86,7 @@ void PriorSampler::sample()
 //                    }
     }
 
-    /* if(lparam->fixlambda_CpG != 1)
+    if(lparam->fixlambda_CpG != 1)
     {
         if (lparam->lambda_CpG_prior == "log10Unif")
         {
@@ -105,7 +105,7 @@ void PriorSampler::sample()
             lparam->lambda_CpG = logNUnif(100);
         }
     }
- */
+
 /*     if(lparam->fixlambda_CpG_GpG != 1)
     {
         if (lparam->lambda_CpG_GpG_prior == "log10Unif")
