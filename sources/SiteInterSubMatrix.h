@@ -103,6 +103,7 @@ public:
     int testGpTcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
     int testCpGcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
     int testTpAcontext(int NnodeIndex, int site, int nucFrom, int nucTo,int**CurrentNodeNucSequence);
+    int testGCPref(int innucFrom, int innucTo);
     int testContextDinuc(int NodeIndex, int site_nuc, int* context, int nucTo, int**CurrentNodeNucSequence);
     void resetSubMatrix();
     void transfertNodeMatrix(int sourceNodeIndex, int sinkNodeIndex, int site_nuc);

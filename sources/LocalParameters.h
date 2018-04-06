@@ -139,10 +139,10 @@ public:
     double *codonprofile;
     int *alloc;
     //param value
-    double lambda_TBL, lambda_omega, lambda_CpG, lambdaTG, lambdaCA, lambda_TpA, MutationNormFactor, MutationNormFactor1, MutationNormFactor2, wR_CHQW, lambda_CpG_GpG, lambda_GpT,fitCpG,fitTpA,lambda_tvCpG,lambda_tvTpA,lambda_tstvCpG,lambda_tstvTpA;
+    double lambda_TBL, lambda_omega, lambda_CpG, lambdaTG, lambdaCA, lambda_TpA, MutationNormFactor, MutationNormFactor1, MutationNormFactor2, wR_CHQW, lambda_CpG_GpG, lambda_GpT,fitCpG,fitTpA,lambda_tvCpG,lambda_tvTpA,lambda_tstvCpG,lambda_tstvTpA,fitGC;
     double* muBranch;
     //swhitch fix or free param
-    int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss, fixwR_CHQW, fixlambda_CpG_GpG, fixlambda_GpT, fixfitCpG, fixlambda_tvCpG,fixlambda_tvTpA,fixlambda_tstvCpG,fixlambda_tstvTpA,fixfitTpA;
+    int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss, fixwR_CHQW, fixlambda_CpG_GpG, fixlambda_GpT, fixfitCpG, fixlambda_tvCpG,fixlambda_tvTpA,fixlambda_tstvCpG,fixlambda_tstvTpA,fixfitTpA,fixfitGC;
     int MCMCpointID;
 
     string lambda_TBL_prior, lambda_CpG_prior, lambda_TpA_prior, lambda_omega_prior, lambda_CpG_GpG_prior, wR_CHQW_prior, lambda_GpT_prior;
@@ -222,22 +222,17 @@ public:
 
     double GetGTNR(int i, int j)
     {
-        double norm = GetRateGTNR();
-        return ((this->nucrrnr[i][j])/norm);
+        return this->nucrrnr[i][j]/(2*3);//((this->nucrrnr[i][j])/GetRateGTNR());
     }
 
     double GetGTR(int i, int j )
     {
-
         return ((this->nucp[j] * this->nucrrnr[i][j]) / GetRate());
-
     }
 
     double GetGTRCodeML(int i, int j )
     {
-
         return (this->nucp[j] * this->nucrrnr[i][j]);
-
     }
 
     int    GetNucRRIndex(int i, int j)

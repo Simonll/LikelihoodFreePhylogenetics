@@ -32,6 +32,14 @@ void PriorSampler::sample()
         }
         lparam->wR_CHQW = lparam->rnd->Uniform();
     } */
+    if (lparam->fixfitGC !=1)
+    {
+        if (lparam->verbose)
+        {
+            cerr << "freefitGC\n";
+        }
+        lparam->fitGC = lparam->rnd->Uniform();
+    }
 
     if (lparam->fixfitCpG !=1)
     {
@@ -812,11 +820,7 @@ void PriorSampler::sample()
         {
             cerr << "freegtnr\n";
         }
-   /*      lparam->nucp[0] = 1.0;
-        lparam->nucp[1] = 1.0;
-        lparam->nucp[2] = 1.0;
-        lparam->nucp[3] = 1.0; 
-    */
+   
         //nucrrnr[0][0] = 0.0; //AA
         lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1,2);  //ac
         lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2,2);  //ag
@@ -849,7 +853,10 @@ void PriorSampler::sample()
         {
             for (int nuc2 = 0 ; nuc2 < lparam->Nnucp; nuc2++)
             {
-                sum += lparam->nucrrnr[nuc1][nuc2];
+                if (nuc1=!nuc2)
+                {
+                    sum += lparam->nucrrnr[nuc1][nuc2];
+                }
             }
         }
 
@@ -857,7 +864,10 @@ void PriorSampler::sample()
         {
             for (int nuc2 = 0 ; nuc2 < lparam->Nnucp; nuc2++)
             {
-                lparam->nucrrnr[nuc1][nuc2] /= sum;
+                if (nuc1=!nuc2)
+                {
+                    lparam->nucrrnr[nuc1][nuc2] /= sum;
+                }
             }
         }
 

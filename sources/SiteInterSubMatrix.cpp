@@ -98,6 +98,40 @@ int  SiteInterSubMatrix::testGpTcontext(int inNnodeIndex, int insite, int innucF
     }
 }
 
+int  SiteInterSubMatrix::testGCPref(int innucFrom, int innucTo)
+{
+    //from A|T 
+    if(innucFrom == 0 || innucFrom == 3)
+    {
+        //To C|G
+        if(innucTo == 1 || innucTo == 2)
+        {
+            return 1; 
+        }
+        //To A|T
+        else 
+        {
+            return 0;
+        }
+
+    }
+    //From C|G
+    else
+    {
+        //To A|T
+        if(innucTo == 0 || innucTo == 3)
+        {
+            return -1; 
+        }
+        //To C|G
+        else 
+        {
+            return 0;
+        }
+    }
+}
+
+
 int  SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite, int innucFrom, int innucTo,int**CurrentNodeNucSequence)
 {
     // from {C}pG to NpG
@@ -230,6 +264,9 @@ int  SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite, int innucF
 
 //}
 
+
+
+
 void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,int**CurrentNodeNucSequence)
 {
     //int verbose = lparam->verbose;
@@ -333,7 +370,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
 
                         int CpGcont = testCpGcontext(NodeIndex,site_nuc, nucposFrom[codonPos], nucposTo[codonPos],CurrentNodeNucSequence);
                         int TpAcont = testTpAcontext(NodeIndex,site_nuc, nucposFrom[codonPos], nucposTo[codonPos],CurrentNodeNucSequence);
-                    
+                        int GCPref = testGCPref(nucposFrom[codonPos], nucposTo[codonPos]);
                         if (CpGcont == 1 || CpGcont == 2)
                         {
                             //tsCpG 
@@ -393,6 +430,18 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                             //SubRateSyn = MutRate;
 
                         }
+
+                        
+
+                        if(GCPref > 0)
+                        {
+                            S += log((1.0-lparam->fitGC) / lparam->fitGC); 
+                        }
+                        else if (GCPref < 0)
+                        {
+                            S += log(lparam->fitGC / (1.0 - lparam->fitGC)); 
+                        }
+
 
                         if(CpGcont > 0)
                         {

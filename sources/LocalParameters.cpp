@@ -139,9 +139,11 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->wR_CHQW = 1.0;
     this->fitCpG = 0.5;
     this->fitTpA = 0.5;
+    this->fitGC = 0.5;
     
     //parameter switch
     this->fixNsite = 0; 
+    this->fixfitGC = 1;
     this->fixfitCpG = 1;
     this->fixfitTpA = 1;
     this->fixlambda_TBL = 1;
@@ -622,6 +624,11 @@ void LocalParameters::readLocalInstructions()
             this->fitCpG = atof(s.c_str());
             this->fixfitCpG = 1;
             cerr << "fixfitCpG " << this->fitCpG << "\n";
+        }
+        else if (s == "-freefitGC")
+        {
+            this->fixfitGC = 0;
+            cerr << "free fitGC\n";
         }
         else if (s == "-freefitCpG")
         {
@@ -1154,6 +1161,18 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         {
             this->lambda_CpG = posterior[it][param_i];
         }
+        else if(arrParam[param_i]  == "fitGC")
+        {
+            this->fitGC = posterior[it][param_i];
+            if (fitGC >1)
+            {
+                this->fitGC = 0.9999999999;
+            } 
+            else if (fitGC < 0)
+            {
+                this->fitGC = 0.0000000001;
+            }
+        }
         else if(arrParam[param_i]  == "fitCpG")
         {
             this->fitCpG = posterior[it][param_i];
@@ -1399,6 +1418,10 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         if (arrParam[param_i] == "root")
         {
             cur_param.push_back(this->percentFromOutGroup);
+        }
+        else if(arrParam[param_i]  == "fitGC")
+        {
+            cur_param.push_back(this->fitGC);
         }
         else if(arrParam[param_i]  == "fitCpG")
         {
