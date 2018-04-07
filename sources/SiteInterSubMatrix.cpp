@@ -106,7 +106,7 @@ int  SiteInterSubMatrix::testGCPref(int innucFrom, int innucTo)
         //To C|G
         if(innucTo == 1 || innucTo == 2)
         {
-            return 1; 
+            return -1; 
         }
         //To A|T
         else 
@@ -121,7 +121,7 @@ int  SiteInterSubMatrix::testGCPref(int innucFrom, int innucTo)
         //To A|T
         if(innucTo == 0 || innucTo == 3)
         {
-            return -1; 
+            return 1; 
         }
         //To C|G
         else 
@@ -432,7 +432,6 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                         }
 
                         
-
                         if(GCPref > 0)
                         {
                             S += log((1.0-lparam->fitGC) / lparam->fitGC); 
@@ -441,7 +440,6 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                         {
                             S += log(lparam->fitGC / (1.0 - lparam->fitGC)); 
                         }
-
 
                         if(CpGcont > 0)
                         {
