@@ -853,7 +853,7 @@ void PriorSampler::sample()
         {
             for (int nuc2 = 0 ; nuc2 < lparam->Nnucp; nuc2++)
             {
-                if (nuc1=!nuc2)
+                if (nuc1!=nuc2)
                 {
                     sum += lparam->nucrrnr[nuc1][nuc2];
                 }
@@ -864,7 +864,7 @@ void PriorSampler::sample()
         {
             for (int nuc2 = 0 ; nuc2 < lparam->Nnucp; nuc2++)
             {
-                if (nuc1=!nuc2)
+                if (nuc1!=nuc2)
                 {
                     lparam->nucrrnr[nuc1][nuc2] /= sum;
                 }

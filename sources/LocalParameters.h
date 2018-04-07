@@ -222,7 +222,7 @@ public:
 
     double GetGTNR(int i, int j)
     {
-        return this->nucrrnr[i][j];//((this->nucrrnr[i][j])/GetRateGTNR());
+        return this->nucrrnr[i][j]/(2*3);//((this->nucrrnr[i][j])/GetRateGTNR());
     }
 
     double GetGTR(int i, int j )
