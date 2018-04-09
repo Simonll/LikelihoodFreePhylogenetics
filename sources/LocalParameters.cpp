@@ -1164,11 +1164,11 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         else if(arrParam[param_i]  == "fitGC")
         {
             this->fitGC = posterior[it][param_i];
-            if (fitGC >1)
+            if (this->fitGC >1)
             {
                 this->fitGC = 0.9999999999;
             } 
-            else if (fitGC < 0)
+            else if (this->fitGC < 0)
             {
                 this->fitGC = 0.0000000001;
             }
@@ -1312,9 +1312,7 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         {
             this->nucrrnr[3][2] = posterior[it][param_i];
         }
-
     }
-
 
     delete [] arrParam;
 

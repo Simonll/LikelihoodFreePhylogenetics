@@ -131,8 +131,85 @@ int  SiteInterSubMatrix::testGCPref(int innucFrom, int innucTo)
     }
 }
 
-
 int  SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite, int innucFrom, int innucTo,int**CurrentNodeNucSequence)
+{
+    
+    int X_ = 1;
+    int Y_ = 2; 
+
+    //from XpY to NpY
+    if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] == X_ && CurrentNodeNucSequence[inNnodeIndex][insite+1] == Y_))
+    {
+        if((innucFrom + innucTo % 2) == 0)
+        {
+            // we are leaving XY, coordinate 0,1
+            // trought ts
+            return 1; 
+        }
+        else
+        {
+            // we are leaving XY, coordinate 0,1
+            // trought tv
+            return 2; 
+        }
+    }
+    //from XpY to XpN
+    else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite-1] == X_ && CurrentNodeNucSequence[inNnodeIndex][insite] == Y_))
+    {
+        if((innucFrom + innucTo % 2) == 0)
+        {
+            // we are leaving XY, coordinate -1,0
+            // trought ts
+            return 3; 
+        }
+        else
+        {
+            // we are leaving XY, coordinate -1,0
+            // trought tv
+            return 4; 
+        }
+    }    
+    //from {N}pY to XpY
+    else if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] != X_ && CurrentNodeNucSequence[inNnodeIndex][insite+1] == Y_) && (innucFrom != X_ && innucTo == X_)) 
+    {
+        if((innucFrom + innucTo % 2) == 0)
+        {
+            // we are landing on XY, coordinate 0,1
+            // trought  ts
+            return -1; 
+        }
+        else
+        {
+            // we are landing on XY, coordinate 0,1
+            // trought  ts
+            return -2; 
+        }
+    }
+    //from Xp{N} to XpY
+    else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite-1] == X_ && CurrentNodeNucSequence[inNnodeIndex][insite] != Y_) && (innucFrom != Y_ && innucTo == Y_))
+    {
+        if((innucFrom + innucTo % 2) == 0)
+        {
+            // we are landing on XY, coordinate -1,0
+            // trought ts
+            return -3; 
+        }
+        else
+        {
+            // we are landing on XY, coordinate -1,0
+            // trought  tv
+            return -4; 
+        }
+    }
+    // not XpY context
+    else
+    {
+        return 0;
+    }
+}
+
+
+/* int  SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite, int innucFrom, int innucTo,int**CurrentNodeNucSequence)
 {
     // from {C}pG to NpG
     // if insite is one before end seq and  cur_insite = C and cur_insite+1 = G and C goes to T
@@ -183,7 +260,7 @@ int  SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite, int innucF
         return 0;
     }
 }
-
+ */
 int  SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite, int innucFrom, int innucTo,int**CurrentNodeNucSequence)
 {
     // from {T}pA to NpA
@@ -263,9 +340,6 @@ int  SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite, int innucF
 //    PartialMutRateSyn[NodeIndex] = GetMutRateSyn(NodeIndex,site_codon,CurrentNodeNucSequence);
 
 //}
-
-
-
 
 void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,int**CurrentNodeNucSequence)
 {
@@ -376,6 +450,10 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                             //tsCpG 
                             m *=  lparam->lambda_CpG;
                             m *=  lparam->lambda_tstvCpG;
+                            if (nucposFrom[codonPos] == 1)
+                            {
+                                m *= lparam->lambdaTG; 
+                            }
                         }
                         else if (CpGcont > 2)
                         {
@@ -415,12 +493,9 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                                     lparam->codonprofile[codonTo] /
                                     lparam->codonprofile[codonFrom]);
 
-                        
-
                             SubRate = MutRate * lparam->lambda_omega *  lparam->omega;
                             //MutRateNonSyn = MutRate;
                             //SubRateNonSyn = SubRate;
-
                         }
                         else
                         {
@@ -440,11 +515,12 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                         {
                             S += log(lparam->fitGC / (1.0 - lparam->fitGC)); 
                         }
-
+                        //leave from CpG
                         if(CpGcont > 0)
                         {
                             S += log((1.0-lparam->fitCpG) / lparam->fitCpG); 
                         }
+                        //land on CpG
                         else if (CpGcont < 0)
                         {
                             S += log(lparam->fitCpG / (1.0 - lparam->fitCpG)); 

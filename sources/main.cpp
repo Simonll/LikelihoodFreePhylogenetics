@@ -414,7 +414,7 @@ int main(int argc, char* argv[])
         exit(0);
 
     }
-    else if (model == "CodonMutSelSBDPABC")
+    else if (model == "CodonMutSelSBDPABC") 
     {
         cerr << "CodonMutSelSBDPCpG\n";
 

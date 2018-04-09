@@ -78,7 +78,7 @@ public:
 
     const string listParam[NParam] = 
     {
-        "chainID","root","lambda","lambda_CpG","lambda_TpA","lambdaTG","lambdaCA","lambda_TBL", "lambda_omega",
+        "chainID","root","lambda","lambda_CpG","lambda_TpA","lambdaCG","lambdaCA","lambda_TBL", "lambda_omega",
         "nucsA", "nucsC", "nucsG","nucsT",
         "nucrrAC","nucrrAG","nucrrAT","nucrrCA","nucrrCG","nucrrCT","nucrrGA","nucrrGC","nucrrGT","nucrrTA","nucrrTC","nucrrTG",
         "wR_CHQW","lambda_CpG_GpG","lambda_GpT","fitCpG","lambda_tvCpG","lambda_tstvCpG","lambda_tvTpA","lambda_tstvTpA","fitTpA","fitGC"
