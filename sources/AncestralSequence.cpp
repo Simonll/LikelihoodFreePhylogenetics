@@ -50,23 +50,17 @@ void AncestralSequence::WriteStationary()
     }
     stationary_os << "\n";
     stationary_os.close();
-
-
 }
 
 
 
 void AncestralSequence::GetNewStationaryCodonSequence()
 {
-
-
     for (int site_codon = 0 ; site_codon < lparam->Nsite_codon; site_codon ++ )
     {
-
         double Z = 0.0 ;
         for (int state = 0; state < lparam->Nstate_codon; state++)
         {
-
             CurrentStationaryCodonSequence[site_codon][state] =
                 lparam->nucp[lparam->codonstatespace->GetCodonPosition(0, state)] *
                 lparam->nucp[lparam->codonstatespace->GetCodonPosition(1, state)] *
@@ -76,56 +70,42 @@ void AncestralSequence::GetNewStationaryCodonSequence()
 
             Z += CurrentStationaryCodonSequence[site_codon][state];
         }
-
         for (int state = 0; state < lparam->Nstate_codon; state++)
         {
             CurrentStationaryCodonSequence[site_codon][state] /= Z;
         }
     }
-
-
-
-
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++)
     {
-
         double u = lparam->rnd->Uniform() ;
         int state = 0;
         double testcummul = CurrentStationaryCodonSequence[site_codon][state];
-
         while (testcummul < u)
         {
             state++;
             testcummul += CurrentStationaryCodonSequence[site_codon][state];
         }
-
         if (state >= lparam->Nstate_codon )
         {
             cerr << "failed to draw stationary\n";
             exit(0);
         }
-
         CurrentCodonSequence[site_codon] = state;
         for (int j = 0 ; j < 3 ; j ++ )
         {
             CurrentNucSequence[site_codon*3+j] = lparam->codonstatespace->GetCodonPosition(j,state);
         }
     }
-
 }
-
 
 int AncestralSequence::GetCurrentAncestralCodonSequence(int site_codon)
 {
     return CurrentCodonSequence[site_codon] ;
-
 }
-
 
 int AncestralSequence::GetCurrentAncestralNucSequence(int site_nuc)
 {
     return CurrentNucSequence[site_nuc];
-
 }
 
 

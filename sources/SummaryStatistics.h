@@ -74,7 +74,6 @@ public:
     double* relativeCodonFrequency;
     double* codon_usage_wonR;
     double* relativeAAFrequency;
-    double* aa_usage_wonR;
     double* nuc_usage;
     double* nuc1_usage;
     double* nuc2_usage;
@@ -87,21 +86,35 @@ public:
     double* aa_meandiff;
     double* aa_wonR_meandiff;
     double* CGNAGR;
-    int* nuc_pairwise;
+    double* nuc_pairwise;
     double* nuc_pairwise10;
     double* nuc_pairwise30;
     double* nuc_pairwise50;
+    double* nuc_pairwise70;
     double* nuc_pairwise90;
-    int* nuc1_pairwise;
-    int* nuc2_pairwise;
-    int* nuc3_pairwise;     
-    int* nuc3_pairwise10;
-    int* nuc3_pairwise30;
-    int* nuc3_pairwise50;
+    double* nuc1_pairwise;
+    double* nuc1_pairwise10;
+    double* nuc1_pairwise30;
+    double* nuc1_pairwise50;
+    double* nuc1_pairwise70;
+    double* nuc1_pairwise90;
+    double* nuc2_pairwise;
+    double* nuc2_pairwise10;
+    double* nuc2_pairwise30;
+    double* nuc2_pairwise50;
+    double* nuc2_pairwise70;
+    double* nuc2_pairwise90;
+    double* nuc3_pairwise;     
+    double* nuc3_pairwise10;
+    double* nuc3_pairwise30;
+    double* nuc3_pairwise50;
+    double* nuc3_pairwise70;
+    double* nuc3_pairwise90;
     double* aa_pairwise;
     double* aa_pairwise10;
     double* aa_pairwise30;
     double* aa_pairwise50;
+    double* aa_pairwise70;
     double* aa_pairwise90;
     int* dinucCpG_pairwise;
 
@@ -129,7 +142,6 @@ public:
     bool dinuc23_bool;
     bool dinuc31_bool;
     bool relativeAAFrequency_bool;
-    bool aa_wonR_bool;
     bool dicodon_bool;
     bool diaa_bool;
     bool nuc_bool;
@@ -142,23 +154,35 @@ public:
     bool nuc3_meandiff_bool;
     bool codon_meandiff_bool;
     bool aa_meandiff_bool;
-    bool aa_wonR_meandiff_bool;
-    bool CGNAGR_bool;
     bool nuc_pairwise_bool;
     bool nuc_pairwise_bool10;
     bool nuc_pairwise_bool30;
     bool nuc_pairwise_bool50;
+    bool nuc_pairwise_bool70;
     bool nuc_pairwise_bool90;
     bool nuc1_pairwise_bool;
+    bool nuc1_pairwise_bool10;
+    bool nuc1_pairwise_bool30;
+    bool nuc1_pairwise_bool50;
+    bool nuc1_pairwise_bool70;
+    bool nuc1_pairwise_bool90;
     bool nuc2_pairwise_bool;
+    bool nuc2_pairwise_bool10;
+    bool nuc2_pairwise_bool30;
+    bool nuc2_pairwise_bool50;
+    bool nuc2_pairwise_bool70;
+    bool nuc2_pairwise_bool90;
     bool nuc3_pairwise_bool;
     bool nuc3_pairwise_bool10;
     bool nuc3_pairwise_bool30;
     bool nuc3_pairwise_bool50;
+    bool nuc3_pairwise_bool70;
+    bool nuc3_pairwise_bool90;
     bool aa_pairwise_bool;
     bool aa_pairwise_bool10;
     bool aa_pairwise_bool30;
     bool aa_pairwise_bool50;
+    bool aa_pairwise_bool70;
     bool aa_pairwise_bool90;
     bool dinucCpG_pairwise_bool;
     bool nuc_site_comphet_bool;
@@ -228,111 +252,124 @@ private:
     /////////////////
     double Getnuc_site_comphet(CodonSequenceAlignment* codondata)
     {
+        double cur_v = 0.0;
         if(!nuc_site_comphet_bool)
         {
-            nuc_site_comphet = codondata->nuc_site_comphet();
+            cur_v = codondata->nuc_site_comphet();
             nuc_site_comphet_bool = true;
         }
-        return nuc_site_comphet;
+        return cur_v;
     }
     double Getnuc1_site_comphet(CodonSequenceAlignment* codondata)
     {
+        double cur_v = 0.0;
         if(!nuc1_site_comphet_bool)
         {
-            nuc1_site_comphet = codondata->nuc1_site_comphet();
+            cur_v = codondata->nuc1_site_comphet();
             nuc1_site_comphet_bool = true;
         }
-        return nuc1_site_comphet;
+        return cur_v;
     }
     double Getnuc2_site_comphet(CodonSequenceAlignment* codondata)
     {
+        double cur_v = 0.0;
         if(!nuc2_site_comphet_bool)
         {
-            nuc2_site_comphet = codondata->nuc2_site_comphet();
+            cur_v = codondata->nuc2_site_comphet();
             nuc2_site_comphet_bool = true;
         }
-        return nuc2_site_comphet;
+        return cur_v;
     }
     double Getnuc3_site_comphet(CodonSequenceAlignment* codondata)
-    {
+    {   
+        double cur_v = 0.0;
         if(!nuc3_site_comphet_bool)
         {
-            nuc3_site_comphet = codondata->nuc3_site_comphet();
+            cur_v = codondata->nuc3_site_comphet();
             nuc3_site_comphet_bool = true;
         }
-        return nuc3_site_comphet;
+        return cur_v;
     }
     double Getnuc_taxa_comphet(CodonSequenceAlignment* codondata)
     {
+        double cur_v = 0.0;
         if(!nuc_taxa_comphet_bool)
         {
-            nuc_taxa_comphet = codondata->nuc_taxa_comphet();
+            cur_v = codondata->nuc_taxa_comphet();
             nuc_taxa_comphet_bool = true;
         }
-        return nuc_taxa_comphet;
+        return cur_v;
     }
     double Getnuc1_taxa_comphet(CodonSequenceAlignment* codondata)
     {
+        double cur_v = 0.0;
         if(!nuc1_taxa_comphet_bool)
         {
-            nuc1_taxa_comphet = codondata->nuc1_taxa_comphet();
+            cur_v = codondata->nuc1_taxa_comphet();
             nuc1_taxa_comphet_bool = true;
         }
-        return nuc1_taxa_comphet;
+        return cur_v;
     }
     double Getnuc2_taxa_comphet(CodonSequenceAlignment* codondata)
     {
+        double cur_v = 0.0;
         if(!nuc2_taxa_comphet_bool)
         {
-            nuc2_taxa_comphet = codondata->nuc2_taxa_comphet();
+            cur_v = codondata->nuc2_taxa_comphet();
             nuc2_taxa_comphet_bool = true;
         }
-        return nuc2_taxa_comphet;
+        return cur_v;
     }
     double Getnuc3_taxa_comphet(CodonSequenceAlignment* codondata)
     {
+
+        double cur_v = 0.0;
         if(!nuc3_taxa_comphet_bool)
         {
-            nuc3_taxa_comphet = codondata->nuc3_taxa_comphet();
+            cur_v = codondata->nuc3_taxa_comphet();
             nuc3_taxa_comphet_bool = true;
         }
-        return nuc3_taxa_comphet;
+        return cur_v;
     }
     double Getcodon_site_comphet(CodonSequenceAlignment* codondata)
     {
+        double cur_v = 0.0;
         if(!codon_site_comphet_bool)
         {
-            codon_site_comphet = codondata->codon_site_comphet();
+            cur_v = codondata->codon_site_comphet();
             codon_site_comphet_bool = true;
         }
-        return codon_site_comphet;
+        return cur_v;
     }
     double Getcodon_taxa_comphet(CodonSequenceAlignment* codondata)
     {
+        double cur_v = 0.0;
         if(!codon_taxa_comphet_bool)
         {
-            codon_taxa_comphet = codondata->codon_taxa_comphet();
+            cur_v = codondata->codon_taxa_comphet();
             codon_taxa_comphet_bool = true;
         }
-        return codon_taxa_comphet;
+        return cur_v;
     }
     double Getaa_site_comphet(CodonSequenceAlignment* codondata)
     {
+        double cur_v = 0.0;
         if(!aa_site_comphet_bool)
         {
-            aa_site_comphet = codondata->aa_site_comphet();
+            cur_v = codondata->aa_site_comphet();
             aa_site_comphet_bool = true;
         }
-        return aa_site_comphet;
+        return cur_v;
     }
     double Getaa_taxa_comphet(CodonSequenceAlignment* codondata)
     {
+        double cur_v = 0.0;
         if(!aa_taxa_comphet_bool)
         {
-            aa_taxa_comphet = codondata->aa_taxa_comphet();
+            cur_v = codondata->aa_taxa_comphet();
             aa_taxa_comphet_bool = true;
         }
-        return aa_taxa_comphet;
+        return cur_v;
     }
 
     double GetDinucentropy(CodonSequenceAlignment* codondata)
@@ -2487,196 +2524,6 @@ private:
         }
         return (double) relativeAAFrequency[19];
     }
-
-
-
-//        /////////////////
-//        // aa_usagewo_nr
-//        /////////////////
-
-    double GetAwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[0];
-    }
-    double GetCwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[1];
-    }
-    double GetDwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[2];
-    }
-    double GetEwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[3];
-    }
-    double GetFwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[4];
-    }
-    double GetGwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[5];
-    }
-    double GetHwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[6];
-    }
-    double GetIwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[7];
-    }
-    double GetKwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[8];
-    }
-    double GetLwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[9];
-    }
-    double GetMwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[10];
-    }
-    double GetNwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[11];
-    }
-    double GetPwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[12];
-    }
-    double GetQwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[13];
-    }
-    double GetRwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[14];
-    }
-    double GetSwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[15];
-    }
-    double GetTwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[16];
-    }
-    double GetVwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[17];
-    }
-    double GetWwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[18];
-    }
-    double GetYwonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_wonR_bool)
-        {
-            codondata->aa_usage_wonr(aa_usage_wonR);
-            aa_wonR_bool = true;
-        }
-        return (double) aa_usage_wonR[19];
-    }
-
-
-
     /////////////////
     // dinuc31
     /////////////////
@@ -3653,26 +3500,6 @@ private:
     }
 
 
-    double GetAAmean_wonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_meandiff_bool)
-        {
-            codondata->aa_meandiff_wonr(aa_wonR_meandiff);
-            aa_wonR_meandiff_bool = true;
-        }
-        return (double) aa_wonR_meandiff[0];
-    }
-
-    double GetAAvar_wonR(CodonSequenceAlignment* codondata)
-    {
-        if(!aa_meandiff_bool)
-        {
-            codondata->aa_meandiff_wonr(aa_wonR_meandiff);
-            aa_wonR_meandiff_bool = true;
-        }
-        return (double) aa_wonR_meandiff[1];
-    }
-
     /////////////////
     // dinucCpG_pairwise
     /////////////////
@@ -3711,147 +3538,144 @@ private:
     // aa_pairwise
     /////////////////
     double GetpwAA(CodonSequenceAlignment* codondata)
-    {
-        double sum = 0;
+    {   
         if(!aa_pairwise_bool)
         {
-            sum = codondata->aa_pairwise();
+            codondata->aa_pairwise(aa_pairwise);
             aa_pairwise_bool = true;
         }
         
-        return sum;
+        return aa_pairwise[0];
     }
 
-    double GetK80aa10(CodonSequenceAlignment* codondata)
-    {
-        double cur = 0; 
+    double GetpwAA10(CodonSequenceAlignment* codondata)
+    {   
         if(!aa_pairwise_bool10)
         {
-            cur = codondata->aa_pairwise10();
+            codondata->aa_pairwise10(aa_pairwise10);
             aa_pairwise_bool10 = true;
         }
         
-        return cur;
+        return aa_pairwise10[0];
+    }
+
+    double GetpwAA30(CodonSequenceAlignment* codondata)
+    {   
+        if(!aa_pairwise_bool30)
+        {
+            codondata->aa_pairwise30(aa_pairwise30);
+            aa_pairwise_bool30 = true;
+        }
+        
+        return aa_pairwise30[0];
+    }
+
+    double GetpwAA50(CodonSequenceAlignment* codondata)
+    {   
+        if(!aa_pairwise_bool50)
+        {
+            codondata->aa_pairwise50(aa_pairwise50);
+            aa_pairwise_bool50 = true;
+        }
+        
+        return aa_pairwise50[0];
+    }
+
+
+    double GetpwAA70(CodonSequenceAlignment* codondata)
+    {   
+        if(!aa_pairwise_bool70)
+        {
+            codondata->aa_pairwise70(aa_pairwise70);
+            aa_pairwise_bool70 = true;
+        }
+        
+        return aa_pairwise70[0];
+    }
+
+    double GetpwAA90(CodonSequenceAlignment* codondata)
+    {   
+        if(!aa_pairwise_bool90)
+        {
+            codondata->aa_pairwise90(aa_pairwise90);
+            aa_pairwise_bool90 = true;
+        }
+        
+        return aa_pairwise90[0];
+    }
+
+    double GetK80aa(CodonSequenceAlignment* codondata)
+    {   
+        if(!aa_pairwise_bool)
+        {
+            codondata->aa_pairwise(aa_pairwise);
+            aa_pairwise_bool = true;
+        }
+        
+        return aa_pairwise[1];
+    }
+
+    double GetK80aa10(CodonSequenceAlignment* codondata)
+    {   
+        if(!aa_pairwise_bool10)
+        {
+            codondata->aa_pairwise10(aa_pairwise10);
+            aa_pairwise_bool10 = true;
+        }
+        
+        return aa_pairwise10[1];
     }
 
     double GetK80aa30(CodonSequenceAlignment* codondata)
     {
-        double cur = 0; 
         if(!aa_pairwise_bool30)
         {
-            cur = codondata->aa_pairwise30();
+            codondata->aa_pairwise30(aa_pairwise30);
             aa_pairwise_bool30 = true;
         }
         
-        return cur;
+        return aa_pairwise30[1];
     }
 
     double GetK80aa50(CodonSequenceAlignment* codondata)
     {
-        double cur = 0; 
         if(!aa_pairwise_bool50)
         {
-            cur = codondata->aa_pairwise50();
+            codondata->aa_pairwise50(aa_pairwise50);
             aa_pairwise_bool50 = true;
         }
         
-        return cur;
+        return aa_pairwise50[1];
+    }
+
+
+    double GetK80aa70(CodonSequenceAlignment* codondata)
+    {
+        if(!aa_pairwise_bool70)
+        {
+            codondata->aa_pairwise70(aa_pairwise70);
+            aa_pairwise_bool70 = true;
+        }
+        
+        return aa_pairwise70[1];
     }
 
     double GetK80aa90(CodonSequenceAlignment* codondata)
     {
-        double cur = 0; 
         if(!aa_pairwise_bool90)
         {
-            cur = codondata->aa_pairwise90();
+            codondata->aa_pairwise90(aa_pairwise90);
             aa_pairwise_bool90 = true;
         }
         
-        return cur;
+        return aa_pairwise90[1];
     }
+
 
     /////////////////
     // nuc3_pairwise
     /////////////////
-    double Getpwts(CodonSequenceAlignment* codondata)
-    {
-        if(!nuc_pairwise_bool)
-        {
-            codondata->nuc_pairwise(nuc_pairwise);
-            nuc_pairwise_bool = true;
-        }
-        return (double) (nuc_pairwise[1]+nuc_pairwise[3]);
-    }
 
-    double Getpwtv(CodonSequenceAlignment* codondata)
-    {
-        if(!nuc_pairwise_bool)
-        {
-            codondata->nuc_pairwise(nuc_pairwise);
-            nuc_pairwise_bool = true;
-        }
-        return (double) (nuc_pairwise[0]+nuc_pairwise[2]+nuc_pairwise[4]+nuc_pairwise[5]);
-    }
-
-    double Getpw3ts(CodonSequenceAlignment* codondata)
-    {
-        if(!nuc3_pairwise_bool)
-        {
-            codondata->nuc3_pairwise(nuc3_pairwise);
-            nuc3_pairwise_bool = true;
-        }
-        return (double) (nuc3_pairwise[1]+nuc3_pairwise[3]);
-    }
-
-    double Getpw3tv(CodonSequenceAlignment* codondata)
-    {
-        if(!nuc3_pairwise_bool)
-        {
-            codondata->nuc3_pairwise(nuc3_pairwise);
-            nuc3_pairwise_bool = true;
-        }
-        return (double) (nuc3_pairwise[0]+nuc3_pairwise[2]+nuc3_pairwise[4]+nuc3_pairwise[5]);
-    }
-
-    double Getpw2ts(CodonSequenceAlignment* codondata)
-    {
-        if(!nuc2_pairwise_bool)
-        {
-            codondata->nuc2_pairwise(nuc2_pairwise);
-            nuc2_pairwise_bool = true;
-        }
-        return (double) (nuc2_pairwise[1]+nuc2_pairwise[3]);
-    }
-
-    double Getpw2tv(CodonSequenceAlignment* codondata)
-    {
-        if(!nuc2_pairwise_bool)
-        {
-            codondata->nuc2_pairwise(nuc2_pairwise);
-            nuc2_pairwise_bool = true;
-        }
-        return (double) (nuc2_pairwise[0]+nuc2_pairwise[2]+nuc2_pairwise[4]+nuc2_pairwise[5]);
-    }
-
-    double Getpw1ts(CodonSequenceAlignment* codondata)
-    {
-        if(!nuc1_pairwise_bool)
-        {
-            codondata->nuc1_pairwise(nuc1_pairwise);
-            nuc1_pairwise_bool = true;
-        }
-        return (double) (nuc1_pairwise[1]+nuc1_pairwise[3]);
-    }
-
-    double Getpw1tv(CodonSequenceAlignment* codondata)
-    {
-        if(!nuc1_pairwise_bool)
-        {
-            codondata->nuc1_pairwise(nuc1_pairwise);
-            nuc1_pairwise_bool = true;
-        }
-        return (double) (nuc1_pairwise[0]+nuc1_pairwise[2]+nuc1_pairwise[4]+nuc1_pairwise[5]);
-    }
 
     double Getpw3GT(CodonSequenceAlignment* codondata)
     {
@@ -3914,6 +3738,385 @@ private:
         }
         return (double) nuc3_pairwise[0];
     }
+
+    double GetK80nuc3(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool)
+        {
+            codondata->nuc3_pairwise10(nuc3_pairwise);
+            nuc3_pairwise_bool = true;
+        }
+        return nuc3_pairwise[6];
+    }
+
+
+    double GetK80nuc310(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool10)
+        {
+            codondata->nuc3_pairwise10(nuc3_pairwise10);
+            nuc3_pairwise_bool10 = true;
+        }
+        return nuc3_pairwise10[6];
+    }
+
+    double GetK80nuc330(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool30)
+        {
+            codondata->nuc3_pairwise30(nuc3_pairwise30);
+            nuc3_pairwise_bool30 = true;
+        }
+        return nuc3_pairwise30[6];
+    }
+
+    double GetK80nuc350(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool50)
+        {
+            codondata->nuc3_pairwise50(nuc3_pairwise50);
+            nuc3_pairwise_bool50 = true;
+        }
+        return nuc3_pairwise50[6];
+    }
+
+
+    double GetK80nuc370(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool70)
+        {
+            codondata->nuc3_pairwise70(nuc3_pairwise70);
+            nuc3_pairwise_bool70 = true;
+        }
+        return nuc3_pairwise70[6];
+    }
+
+    double GetK80nuc390(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool90)
+        {
+            codondata->nuc3_pairwise90(nuc3_pairwise90);
+            nuc3_pairwise_bool90 = true;
+        }
+        return nuc3_pairwise90[6];
+    }
+
+    //10
+    double Getpw3GT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool10)
+        {
+            codondata->nuc3_pairwise10(nuc3_pairwise10);
+            nuc3_pairwise_bool10 = true;
+        }
+        return nuc3_pairwise10[5];
+    }
+
+    double Getpw3CT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool10)
+        {
+            codondata->nuc3_pairwise10(nuc3_pairwise10);
+            nuc3_pairwise_bool10 = true;
+        }
+        return nuc3_pairwise10[4];
+    }
+
+    double Getpw3CG10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool10)
+        {
+            codondata->nuc3_pairwise10(nuc3_pairwise10);
+            nuc3_pairwise_bool10 = true;
+        }
+        return nuc3_pairwise10[3];
+    }
+
+
+    double Getpw3AT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool10)
+        {
+            codondata->nuc3_pairwise10(nuc3_pairwise10);
+            nuc3_pairwise_bool10 = true;
+        }
+        return nuc3_pairwise10[2];
+    }
+
+    double Getpw3AG10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool10)
+        {
+            codondata->nuc3_pairwise10(nuc3_pairwise10);
+            nuc3_pairwise_bool10 = true;
+        }
+        return nuc3_pairwise10[1];
+    }
+
+
+    double Getpw3AC10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool10)
+        {
+            codondata->nuc3_pairwise10(nuc3_pairwise10);
+            nuc3_pairwise_bool10 = true;
+        }
+        return nuc3_pairwise10[0];
+    }
+
+    //30 
+    double Getpw3GT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool30)
+        {
+            codondata->nuc3_pairwise30(nuc3_pairwise30);
+            nuc3_pairwise_bool30 = true;
+        }
+        return nuc3_pairwise30[5];
+    }
+
+    double Getpw3CT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool30)
+        {
+            codondata->nuc3_pairwise30(nuc3_pairwise30);
+            nuc3_pairwise_bool30 = true;
+        }
+        return nuc3_pairwise30[4];
+    }
+
+    double Getpw3CG30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool30)
+        {
+            codondata->nuc3_pairwise30(nuc3_pairwise30);
+            nuc3_pairwise_bool30 = true;
+        }
+        return nuc3_pairwise30[3];
+    }
+
+
+    double Getpw3AT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool30)
+        {
+            codondata->nuc3_pairwise30(nuc3_pairwise30);
+            nuc3_pairwise_bool30 = true;
+        }
+        return nuc3_pairwise30[2];
+    }
+
+    double Getpw3AG30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool30)
+        {
+            codondata->nuc3_pairwise30(nuc3_pairwise30);
+            nuc3_pairwise_bool30 = true;
+        }
+        return nuc3_pairwise30[1];
+    }
+
+
+    double Getpw3AC30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool30)
+        {
+            codondata->nuc3_pairwise30(nuc3_pairwise30);
+            nuc3_pairwise_bool30 = true;
+        }
+        return nuc3_pairwise30[0];
+    }
+    //50
+
+    double Getpw3GT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool50)
+        {
+            codondata->nuc3_pairwise50(nuc3_pairwise50);
+            nuc3_pairwise_bool50 = true;
+        }
+        return nuc3_pairwise50[5];
+    }
+
+    double Getpw3CT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool50)
+        {
+            codondata->nuc3_pairwise50(nuc3_pairwise50);
+            nuc3_pairwise_bool50 = true;
+        }
+        return nuc3_pairwise50[4];
+    }
+
+    double Getpw3CG50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool50)
+        {
+            codondata->nuc3_pairwise50(nuc3_pairwise50);
+            nuc3_pairwise_bool50 = true;
+        }
+        return nuc3_pairwise50[3];
+    }
+
+
+    double Getpw3AT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool50)
+        {
+            codondata->nuc3_pairwise50(nuc3_pairwise50);
+            nuc3_pairwise_bool50 = true;
+        }
+        return nuc3_pairwise50[2];
+    }
+
+    double Getpw3AG50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool50)
+        {
+            codondata->nuc3_pairwise50(nuc3_pairwise50);
+            nuc3_pairwise_bool50 = true;
+        }
+        return nuc3_pairwise50[1];
+    }
+
+
+    double Getpw3AC50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool50)
+        {
+            codondata->nuc3_pairwise50(nuc3_pairwise50);
+            nuc3_pairwise_bool50 = true;
+        }
+        return nuc3_pairwise50[0];
+    }
+
+    // 70
+
+    double Getpw3GT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool70)
+        {
+            codondata->nuc3_pairwise70(nuc3_pairwise70);
+            nuc3_pairwise_bool70 = true;
+        }
+        return nuc3_pairwise70[5];
+    }
+
+    double Getpw3CT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool70)
+        {
+            codondata->nuc3_pairwise70(nuc3_pairwise70);
+            nuc3_pairwise_bool70 = true;
+        }
+        return nuc3_pairwise70[4];
+    }
+
+    double Getpw3CG70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool70)
+        {
+            codondata->nuc3_pairwise70(nuc3_pairwise70);
+            nuc3_pairwise_bool70 = true;
+        }
+        return nuc3_pairwise70[3];
+    }
+
+
+    double Getpw3AT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool70)
+        {
+            codondata->nuc3_pairwise70(nuc3_pairwise70);
+            nuc3_pairwise_bool70 = true;
+        }
+        return nuc3_pairwise70[2];
+    }
+
+    double Getpw3AG70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool70)
+        {
+            codondata->nuc3_pairwise70(nuc3_pairwise70);
+            nuc3_pairwise_bool70 = true;
+        }
+        return nuc3_pairwise70[1];
+    }
+
+
+    double Getpw3AC70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool70)
+        {
+            codondata->nuc3_pairwise70(nuc3_pairwise70);
+            nuc3_pairwise_bool70 = true;
+        }
+        return nuc3_pairwise70[0];
+    }
+
+    // 90 
+    double Getpw3GT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool90)
+        {
+            codondata->nuc3_pairwise90(nuc3_pairwise90);
+            nuc3_pairwise_bool90 = true;
+        }
+        return nuc3_pairwise90[5];
+    }
+
+    double Getpw3CT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool90)
+        {
+            codondata->nuc3_pairwise90(nuc3_pairwise90);
+            nuc3_pairwise_bool90 = true;
+        }
+        return nuc3_pairwise90[4];
+    }
+
+    double Getpw3CG90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool90)
+        {
+            codondata->nuc3_pairwise90(nuc3_pairwise90);
+            nuc3_pairwise_bool90 = true;
+        }
+        return nuc3_pairwise90[3];
+    }
+
+
+    double Getpw3AT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool90)
+        {
+            codondata->nuc3_pairwise90(nuc3_pairwise90);
+            nuc3_pairwise_bool90 = true;
+        }
+        return nuc3_pairwise90[2];
+    }
+
+    double Getpw3AG90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool90)
+        {
+            codondata->nuc3_pairwise90(nuc3_pairwise90);
+            nuc3_pairwise_bool90 = true;
+        }
+        return nuc3_pairwise90[1];
+    }
+
+
+    double Getpw3AC90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc3_pairwise_bool90)
+        {
+            codondata->nuc3_pairwise90(nuc3_pairwise90);
+            nuc3_pairwise_bool90 = true;
+        }
+        return nuc3_pairwise90[0];
+    }
+
 
 
 
@@ -3983,10 +4186,392 @@ private:
         return (double) nuc2_pairwise[0];
     }
 
+    double GetK80nuc2(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool)
+        {
+            codondata->nuc2_pairwise10(nuc2_pairwise);
+            nuc2_pairwise_bool = true;
+        }
+        return nuc2_pairwise[6];
+    }
+
+
+    double GetK80nuc210(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool10)
+        {
+            codondata->nuc2_pairwise10(nuc2_pairwise10);
+            nuc2_pairwise_bool10 = true;
+        }
+        return nuc2_pairwise10[6];
+    }
+
+    double GetK80nuc230(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool30)
+        {
+            codondata->nuc2_pairwise30(nuc2_pairwise30);
+            nuc2_pairwise_bool30 = true;
+        }
+        return nuc2_pairwise30[6];
+    }
+
+    double GetK80nuc250(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool50)
+        {
+            codondata->nuc2_pairwise50(nuc2_pairwise50);
+            nuc2_pairwise_bool50 = true;
+        }
+        return nuc2_pairwise50[6];
+    }
+
+
+    double GetK80nuc270(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool70)
+        {
+            codondata->nuc2_pairwise70(nuc2_pairwise70);
+            nuc2_pairwise_bool70 = true;
+        }
+        return nuc2_pairwise70[6];
+    }
+
+    double GetK80nuc290(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool90)
+        {
+            codondata->nuc2_pairwise90(nuc2_pairwise90);
+            nuc2_pairwise_bool90 = true;
+        }
+        return nuc2_pairwise90[6];
+    }
+
+    //10
+    double Getpw2GT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool10)
+        {
+            codondata->nuc2_pairwise10(nuc2_pairwise10);
+            nuc2_pairwise_bool10 = true;
+        }
+        return nuc2_pairwise10[5];
+    }
+
+    double Getpw2CT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool10)
+        {
+            codondata->nuc2_pairwise10(nuc2_pairwise10);
+            nuc2_pairwise_bool10 = true;
+        }
+        return nuc2_pairwise10[4];
+    }
+
+    double Getpw2CG10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool10)
+        {
+            codondata->nuc2_pairwise10(nuc2_pairwise10);
+            nuc2_pairwise_bool10 = true;
+        }
+        return nuc2_pairwise10[3];
+    }
+
+
+    double Getpw2AT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool10)
+        {
+            codondata->nuc2_pairwise10(nuc2_pairwise10);
+            nuc2_pairwise_bool10 = true;
+        }
+        return nuc2_pairwise10[2];
+    }
+
+    double Getpw2AG10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool10)
+        {
+            codondata->nuc2_pairwise10(nuc2_pairwise10);
+            nuc2_pairwise_bool10 = true;
+        }
+        return nuc2_pairwise10[1];
+    }
+
+
+    double Getpw2AC10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool10)
+        {
+            codondata->nuc2_pairwise10(nuc2_pairwise10);
+            nuc2_pairwise_bool10 = true;
+        }
+        return nuc2_pairwise10[0];
+    }
+
+    //30 
+    double Getpw2GT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool30)
+        {
+            codondata->nuc2_pairwise30(nuc2_pairwise30);
+            nuc2_pairwise_bool30 = true;
+        }
+        return nuc2_pairwise30[5];
+    }
+
+    double Getpw2CT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool30)
+        {
+            codondata->nuc2_pairwise30(nuc2_pairwise30);
+            nuc2_pairwise_bool30 = true;
+        }
+        return nuc2_pairwise30[4];
+    }
+
+    double Getpw2CG30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool30)
+        {
+            codondata->nuc2_pairwise30(nuc2_pairwise30);
+            nuc2_pairwise_bool30 = true;
+        }
+        return nuc2_pairwise30[3];
+    }
+
+
+    double Getpw2AT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool30)
+        {
+            codondata->nuc2_pairwise30(nuc2_pairwise30);
+            nuc2_pairwise_bool30 = true;
+        }
+        return nuc2_pairwise30[2];
+    }
+
+    double Getpw2AG30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool30)
+        {
+            codondata->nuc2_pairwise30(nuc2_pairwise30);
+            nuc2_pairwise_bool30 = true;
+        }
+        return nuc2_pairwise30[1];
+    }
+
+
+    double Getpw2AC30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool30)
+        {
+            codondata->nuc2_pairwise30(nuc2_pairwise30);
+            nuc2_pairwise_bool30 = true;
+        }
+        return nuc2_pairwise30[0];
+    }
+    //50
+
+    double Getpw2GT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool50)
+        {
+            codondata->nuc2_pairwise50(nuc2_pairwise50);
+            nuc2_pairwise_bool50 = true;
+        }
+        return nuc2_pairwise50[5];
+    }
+
+    double Getpw2CT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool50)
+        {
+            codondata->nuc2_pairwise50(nuc2_pairwise50);
+            nuc2_pairwise_bool50 = true;
+        }
+        return nuc2_pairwise50[4];
+    }
+
+    double Getpw2CG50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool50)
+        {
+            codondata->nuc2_pairwise50(nuc2_pairwise50);
+            nuc2_pairwise_bool50 = true;
+        }
+        return nuc2_pairwise50[3];
+    }
+
+
+    double Getpw2AT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool50)
+        {
+            codondata->nuc2_pairwise50(nuc2_pairwise50);
+            nuc2_pairwise_bool50 = true;
+        }
+        return nuc2_pairwise50[2];
+    }
+
+    double Getpw2AG50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool50)
+        {
+            codondata->nuc2_pairwise50(nuc2_pairwise50);
+            nuc2_pairwise_bool50 = true;
+        }
+        return nuc2_pairwise50[1];
+    }
+
+
+    double Getpw2AC50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool50)
+        {
+            codondata->nuc2_pairwise50(nuc2_pairwise50);
+            nuc2_pairwise_bool50 = true;
+        }
+        return nuc2_pairwise50[0];
+    }
+
+    // 70
+
+    double Getpw2GT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool70)
+        {
+            codondata->nuc2_pairwise70(nuc2_pairwise70);
+            nuc2_pairwise_bool70 = true;
+        }
+        return nuc2_pairwise70[5];
+    }
+
+    double Getpw2CT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool70)
+        {
+            codondata->nuc2_pairwise70(nuc2_pairwise70);
+            nuc2_pairwise_bool70 = true;
+        }
+        return nuc2_pairwise70[4];
+    }
+
+    double Getpw2CG70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool70)
+        {
+            codondata->nuc2_pairwise70(nuc2_pairwise70);
+            nuc2_pairwise_bool70 = true;
+        }
+        return nuc2_pairwise70[3];
+    }
+
+
+    double Getpw2AT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool70)
+        {
+            codondata->nuc2_pairwise70(nuc2_pairwise70);
+            nuc2_pairwise_bool70 = true;
+        }
+        return nuc2_pairwise70[2];
+    }
+
+    double Getpw2AG70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool70)
+        {
+            codondata->nuc2_pairwise70(nuc2_pairwise70);
+            nuc2_pairwise_bool70 = true;
+        }
+        return nuc2_pairwise70[1];
+    }
+
+
+    double Getpw2AC70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool70)
+        {
+            codondata->nuc2_pairwise70(nuc2_pairwise70);
+            nuc2_pairwise_bool70 = true;
+        }
+        return nuc2_pairwise70[0];
+    }
+
+    // 90 
+    double Getpw2GT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool90)
+        {
+            codondata->nuc2_pairwise90(nuc2_pairwise90);
+            nuc2_pairwise_bool90 = true;
+        }
+        return nuc2_pairwise90[5];
+    }
+
+    double Getpw2CT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool90)
+        {
+            codondata->nuc2_pairwise90(nuc2_pairwise90);
+            nuc2_pairwise_bool90 = true;
+        }
+        return nuc2_pairwise90[4];
+    }
+
+    double Getpw2CG90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool90)
+        {
+            codondata->nuc2_pairwise90(nuc2_pairwise90);
+            nuc2_pairwise_bool90 = true;
+        }
+        return nuc2_pairwise90[3];
+    }
+
+
+    double Getpw2AT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool90)
+        {
+            codondata->nuc2_pairwise90(nuc2_pairwise90);
+            nuc2_pairwise_bool90 = true;
+        }
+        return nuc2_pairwise90[2];
+    }
+
+    double Getpw2AG90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool90)
+        {
+            codondata->nuc2_pairwise90(nuc2_pairwise90);
+            nuc2_pairwise_bool90 = true;
+        }
+        return nuc2_pairwise90[1];
+    }
+
+
+    double Getpw2AC90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc2_pairwise_bool90)
+        {
+            codondata->nuc2_pairwise90(nuc2_pairwise90);
+            nuc2_pairwise_bool90 = true;
+        }
+        return nuc2_pairwise90[0];
+    }
+
+
+
+
     /////////////////
     // nuc1_pairwise
     /////////////////
 
+    
     double Getpw1GT(CodonSequenceAlignment* codondata)
     {
         if(!nuc1_pairwise_bool)
@@ -4048,6 +4633,387 @@ private:
         }
         return (double) nuc1_pairwise[0];
     }
+
+    double GetK80nuc1(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool)
+        {
+            codondata->nuc1_pairwise10(nuc1_pairwise);
+            nuc1_pairwise_bool = true;
+        }
+        return nuc1_pairwise[6];
+    }
+
+
+    double GetK80nuc110(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool10)
+        {
+            codondata->nuc1_pairwise10(nuc1_pairwise10);
+            nuc1_pairwise_bool10 = true;
+        }
+        return nuc1_pairwise10[6];
+    }
+
+    double GetK80nuc130(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool30)
+        {
+            codondata->nuc1_pairwise30(nuc1_pairwise30);
+            nuc1_pairwise_bool30 = true;
+        }
+        return nuc1_pairwise30[6];
+    }
+
+    double GetK80nuc150(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool50)
+        {
+            codondata->nuc1_pairwise50(nuc1_pairwise50);
+            nuc1_pairwise_bool50 = true;
+        }
+        return nuc1_pairwise50[6];
+    }
+
+
+    double GetK80nuc170(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool70)
+        {
+            codondata->nuc1_pairwise70(nuc1_pairwise70);
+            nuc1_pairwise_bool70 = true;
+        }
+        return nuc1_pairwise70[6];
+    }
+
+    double GetK80nuc190(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool90)
+        {
+            codondata->nuc1_pairwise90(nuc1_pairwise90);
+            nuc1_pairwise_bool90 = true;
+        }
+        return nuc1_pairwise90[6];
+    }
+
+    //10
+    double Getpw1GT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool10)
+        {
+            codondata->nuc1_pairwise10(nuc1_pairwise10);
+            nuc1_pairwise_bool10 = true;
+        }
+        return nuc1_pairwise10[5];
+    }
+
+    double Getpw1CT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool10)
+        {
+            codondata->nuc1_pairwise10(nuc1_pairwise10);
+            nuc1_pairwise_bool10 = true;
+        }
+        return nuc1_pairwise10[4];
+    }
+
+    double Getpw1CG10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool10)
+        {
+            codondata->nuc1_pairwise10(nuc1_pairwise10);
+            nuc1_pairwise_bool10 = true;
+        }
+        return nuc1_pairwise10[3];
+    }
+
+
+    double Getpw1AT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool10)
+        {
+            codondata->nuc1_pairwise10(nuc1_pairwise10);
+            nuc1_pairwise_bool10 = true;
+        }
+        return nuc1_pairwise10[2];
+    }
+
+    double Getpw1AG10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool10)
+        {
+            codondata->nuc1_pairwise10(nuc1_pairwise10);
+            nuc1_pairwise_bool10 = true;
+        }
+        return nuc1_pairwise10[1];
+    }
+
+
+    double Getpw1AC10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool10)
+        {
+            codondata->nuc1_pairwise10(nuc1_pairwise10);
+            nuc1_pairwise_bool10 = true;
+        }
+        return nuc1_pairwise10[0];
+    }
+
+    //30 
+    double Getpw1GT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool30)
+        {
+            codondata->nuc1_pairwise30(nuc1_pairwise30);
+            nuc1_pairwise_bool30 = true;
+        }
+        return nuc1_pairwise30[5];
+    }
+
+    double Getpw1CT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool30)
+        {
+            codondata->nuc1_pairwise30(nuc1_pairwise30);
+            nuc1_pairwise_bool30 = true;
+        }
+        return nuc1_pairwise30[4];
+    }
+
+    double Getpw1CG30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool30)
+        {
+            codondata->nuc1_pairwise30(nuc1_pairwise30);
+            nuc1_pairwise_bool30 = true;
+        }
+        return nuc1_pairwise30[3];
+    }
+
+
+    double Getpw1AT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool30)
+        {
+            codondata->nuc1_pairwise30(nuc1_pairwise30);
+            nuc1_pairwise_bool30 = true;
+        }
+        return nuc1_pairwise30[2];
+    }
+
+    double Getpw1AG30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool30)
+        {
+            codondata->nuc1_pairwise30(nuc1_pairwise30);
+            nuc1_pairwise_bool30 = true;
+        }
+        return nuc1_pairwise30[1];
+    }
+
+
+    double Getpw1AC30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool30)
+        {
+            codondata->nuc1_pairwise30(nuc1_pairwise30);
+            nuc1_pairwise_bool30 = true;
+        }
+        return nuc1_pairwise30[0];
+    }
+    //50
+
+    double Getpw1GT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool50)
+        {
+            codondata->nuc1_pairwise50(nuc1_pairwise50);
+            nuc1_pairwise_bool50 = true;
+        }
+        return nuc1_pairwise50[5];
+    }
+
+    double Getpw1CT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool50)
+        {
+            codondata->nuc1_pairwise50(nuc1_pairwise50);
+            nuc1_pairwise_bool50 = true;
+        }
+        return nuc1_pairwise50[4];
+    }
+
+    double Getpw1CG50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool50)
+        {
+            codondata->nuc1_pairwise50(nuc1_pairwise50);
+            nuc1_pairwise_bool50 = true;
+        }
+        return nuc1_pairwise50[3];
+    }
+
+
+    double Getpw1AT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool50)
+        {
+            codondata->nuc1_pairwise50(nuc1_pairwise50);
+            nuc1_pairwise_bool50 = true;
+        }
+        return nuc1_pairwise50[2];
+    }
+
+    double Getpw1AG50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool50)
+        {
+            codondata->nuc1_pairwise50(nuc1_pairwise50);
+            nuc1_pairwise_bool50 = true;
+        }
+        return nuc1_pairwise50[1];
+    }
+
+
+    double Getpw1AC50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool50)
+        {
+            codondata->nuc1_pairwise50(nuc1_pairwise50);
+            nuc1_pairwise_bool50 = true;
+        }
+        return nuc1_pairwise50[0];
+    }
+
+    // 70
+
+    double Getpw1GT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool70)
+        {
+            codondata->nuc1_pairwise70(nuc1_pairwise70);
+            nuc1_pairwise_bool70 = true;
+        }
+        return nuc1_pairwise70[5];
+    }
+
+    double Getpw1CT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool70)
+        {
+            codondata->nuc1_pairwise70(nuc1_pairwise70);
+            nuc1_pairwise_bool70 = true;
+        }
+        return nuc1_pairwise70[4];
+    }
+
+    double Getpw1CG70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool70)
+        {
+            codondata->nuc1_pairwise70(nuc1_pairwise70);
+            nuc1_pairwise_bool70 = true;
+        }
+        return nuc1_pairwise70[3];
+    }
+
+
+    double Getpw1AT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool70)
+        {
+            codondata->nuc1_pairwise70(nuc1_pairwise70);
+            nuc1_pairwise_bool70 = true;
+        }
+        return nuc1_pairwise70[2];
+    }
+
+    double Getpw1AG70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool70)
+        {
+            codondata->nuc1_pairwise70(nuc1_pairwise70);
+            nuc1_pairwise_bool70 = true;
+        }
+        return nuc1_pairwise70[1];
+    }
+
+
+    double Getpw1AC70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool70)
+        {
+            codondata->nuc1_pairwise70(nuc1_pairwise70);
+            nuc1_pairwise_bool70 = true;
+        }
+        return nuc1_pairwise70[0];
+    }
+
+    // 90 
+    double Getpw1GT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool90)
+        {
+            codondata->nuc1_pairwise90(nuc1_pairwise90);
+            nuc1_pairwise_bool90 = true;
+        }
+        return nuc1_pairwise90[5];
+    }
+
+    double Getpw1CT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool90)
+        {
+            codondata->nuc1_pairwise90(nuc1_pairwise90);
+            nuc1_pairwise_bool90 = true;
+        }
+        return nuc1_pairwise90[4];
+    }
+
+    double Getpw1CG90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool90)
+        {
+            codondata->nuc1_pairwise90(nuc1_pairwise90);
+            nuc1_pairwise_bool90 = true;
+        }
+        return nuc1_pairwise90[3];
+    }
+
+
+    double Getpw1AT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool90)
+        {
+            codondata->nuc1_pairwise90(nuc1_pairwise90);
+            nuc1_pairwise_bool90 = true;
+        }
+        return nuc1_pairwise90[2];
+    }
+
+    double Getpw1AG90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool90)
+        {
+            codondata->nuc1_pairwise90(nuc1_pairwise90);
+            nuc1_pairwise_bool90 = true;
+        }
+        return nuc1_pairwise90[1];
+    }
+
+
+    double Getpw1AC90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc1_pairwise_bool90)
+        {
+            codondata->nuc1_pairwise90(nuc1_pairwise90);
+            nuc1_pairwise_bool90 = true;
+        }
+        return nuc1_pairwise90[0];
+    }
+
+
+
 
 
     /////////////////
@@ -4117,6 +5083,17 @@ private:
         return (double) nuc_pairwise[0];
     }
 
+    double GetK80nuc(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool)
+        {
+            codondata->nuc_pairwise10(nuc_pairwise);
+            nuc_pairwise_bool = true;
+        }
+        return nuc_pairwise[6];
+    }
+
+
     double GetK80nuc10(CodonSequenceAlignment* codondata)
     {
         if(!nuc_pairwise_bool10)
@@ -4147,6 +5124,17 @@ private:
         return nuc_pairwise50[6];
     }
 
+
+    double GetK80nuc70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool70)
+        {
+            codondata->nuc_pairwise70(nuc_pairwise70);
+            nuc_pairwise_bool70 = true;
+        }
+        return nuc_pairwise70[6];
+    }
+
     double GetK80nuc90(CodonSequenceAlignment* codondata)
     {
         if(!nuc_pairwise_bool90)
@@ -4157,6 +5145,7 @@ private:
         return nuc_pairwise90[6];
     }
 
+    //10
     double GetpwGT10(CodonSequenceAlignment* codondata)
     {
         if(!nuc_pairwise_bool10)
@@ -4219,7 +5208,7 @@ private:
         return nuc_pairwise10[0];
     }
 
-
+    //30 
     double GetpwGT30(CodonSequenceAlignment* codondata)
     {
         if(!nuc_pairwise_bool30)
@@ -4281,7 +5270,7 @@ private:
         }
         return nuc_pairwise30[0];
     }
-
+    //50
 
     double GetpwGT50(CodonSequenceAlignment* codondata)
     {
@@ -4345,8 +5334,71 @@ private:
         return nuc_pairwise50[0];
     }
 
+    // 70
+
+    double GetpwGT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool70)
+        {
+            codondata->nuc_pairwise70(nuc_pairwise70);
+            nuc_pairwise_bool70 = true;
+        }
+        return nuc_pairwise70[5];
+    }
+
+    double GetpwCT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool70)
+        {
+            codondata->nuc_pairwise70(nuc_pairwise70);
+            nuc_pairwise_bool70 = true;
+        }
+        return nuc_pairwise70[4];
+    }
+
+    double GetpwCG70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool70)
+        {
+            codondata->nuc_pairwise70(nuc_pairwise70);
+            nuc_pairwise_bool70 = true;
+        }
+        return nuc_pairwise70[3];
+    }
 
 
+    double GetpwAT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool70)
+        {
+            codondata->nuc_pairwise70(nuc_pairwise70);
+            nuc_pairwise_bool70 = true;
+        }
+        return nuc_pairwise70[2];
+    }
+
+    double GetpwAG70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool70)
+        {
+            codondata->nuc_pairwise70(nuc_pairwise70);
+            nuc_pairwise_bool70 = true;
+        }
+        return nuc_pairwise70[1];
+    }
+
+
+    double GetpwAC70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwise_bool70)
+        {
+            codondata->nuc_pairwise70(nuc_pairwise70);
+            nuc_pairwise_bool70 = true;
+        }
+        return nuc_pairwise70[0];
+    }
+
+    // 90 
     double GetpwGT90(CodonSequenceAlignment* codondata)
     {
         if(!nuc_pairwise_bool90)
@@ -4415,55 +5467,6 @@ private:
 //
 //
 //
-
-
-
-    double GetCGNAGRcgnconst(CodonSequenceAlignment* codondata)
-    {
-        if(!CGNAGR_bool)
-        {
-            codondata->CGNAGR(CGNAGR);
-            CGNAGR_bool = true;
-        }
-        return (double) CGNAGR[0];
-
-    }
-
-    double GetCGNAGRagrconst(CodonSequenceAlignment* codondata)
-    {
-        if(!CGNAGR_bool)
-        {
-            codondata->CGNAGR(CGNAGR);
-            CGNAGR_bool = true;
-        }
-        return (double) CGNAGR[1];
-
-    }
-
-
-    double GetCGNAGRcgnvar(CodonSequenceAlignment* codondata)
-    {
-        if(!CGNAGR_bool)
-        {
-            codondata->CGNAGR(CGNAGR);
-            CGNAGR_bool = true;
-        }
-        return (double) CGNAGR[2];
-
-    }
-
-    double GetCGNAGRagrvar(CodonSequenceAlignment* codondata)
-    {
-        if(!CGNAGR_bool)
-        {
-            codondata->CGNAGR(CGNAGR);
-            CGNAGR_bool = true;
-        }
-        return (double) CGNAGR[3];
-
-    }
-
-
     double GetDIAA_AA(CodonSequenceAlignment* codondata)
     {
         if(!diaa_bool)

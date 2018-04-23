@@ -362,7 +362,7 @@ int CodonStateSpace::GetDegeneracy(int codon)
         return -1;
     }
     return degeneracy[codon];
-};
+}
 
 void CodonStateSpace::MakeDegeneracyMap()
 {
@@ -396,7 +396,7 @@ void CodonStateSpace::MakeDegeneracyMap()
         degeneracy[codon] = d;
     }
     cerr << "ok\n";
-};
+}
 
 int CodonStateSpace::IsNonCTNearest(int a, int b)
 {

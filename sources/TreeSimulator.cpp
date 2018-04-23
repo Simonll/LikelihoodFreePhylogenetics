@@ -18,7 +18,6 @@ TreeSimulator::TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submat
     this->treeEvoStats = new EvolHistStatistics(this->lparam);
     this->rootBranchEvoStats = new EvolHistStatistics(this->lparam);
 
-
     CurrentNodeCodonSequence = new int*[lparam->refTree->GetNnode()];
     CurrentNodeNucSequence = new int*[lparam->refTree->GetNnode()];
 
@@ -37,7 +36,6 @@ TreeSimulator::TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submat
         CurrentLeafNodeNucSequence[taxa] = new int [lparam->Nsite_nuc];
     }
 
-
     CurrentAncestralCodonSequence = new int**[lparam->Ninterval];
     for (int point_i = 0 ; point_i < lparam->Ninterval ; point_i ++)
     {
@@ -55,9 +53,7 @@ TreeSimulator::~TreeSimulator()
 
 void TreeSimulator::resetSimulator()
 {
-
     int verbose = lparam->verbose;
-
     if(verbose)
     {
         cerr << "resetSimulator1\n";
@@ -70,13 +66,10 @@ void TreeSimulator::resetSimulator()
     {
         for(int site_codon = 0 ; site_codon < lparam->Nsite_codon; site_codon++)
         {
-
             CurrentNodeCodonSequence[node][site_codon] = -2 ;
-
             for(int j = 0 ; j < 3; j ++)
             {
                 CurrentNodeNucSequence[node][site_codon*3+j] = -2;
-
             }
         }
     }
@@ -102,24 +95,19 @@ void TreeSimulator::resetSimulator()
     {
         cerr << "resetSimulator3\n";
     }
-
     for (int point_i = 0 ; point_i < lparam->Ninterval ; point_i ++)
     {
-
         for(int site_codon = 0 ; site_codon < lparam->Nsite_codon; site_codon++)
         {
             CurrentAncestralCodonSequence[point_i][0][site_codon] = -2;
         }
     }
-
-
 }
 
 void TreeSimulator::GetNewSimulatedCodonAlignment()
 {
 
     int verbose = lparam->verbose;
-
     submatrix->resetSubMatrix();
     if(verbose)
     {
@@ -462,7 +450,7 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo)
 
         // Non-root events
         treeEvoStats->Nsub++;
-        treeEvoStats->ssNsub[site_codon]++;
+//       treeEvoStats->ssNsub[site_codon]++;
 
         treeEvoStats->gtnr_stat[3][nucFrom][nucTo]++;
         treeEvoStats->gtnr_stat[CodonPos][nucFrom][nucTo]++;
@@ -477,7 +465,7 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo)
         if(lparam->codonstatespace->Synonymous(codonFrom[1],codonTo[1]))
         {
             treeEvoStats->Nsynsub++;
-            treeEvoStats->ssNsynsub[site_codon]++;
+//            treeEvoStats->ssNsynsub[site_codon]++;
             treeEvoStats->gtnrSyn_stat[3][nucFrom][nucTo]++;
             treeEvoStats->gtnrSyn_stat[CodonPos][nucFrom][nucTo]++;
 //          treeEvoStats->ssgtnrSyn_stat[site_codon][3][nucFrom][nucTo]++;
@@ -611,17 +599,13 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo)
 ////                       evohist->ssdinucNSyn_stat[site_codon][0][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 //
             }
-//
         }
         else if (CodonPos == 2)
         {
-
             treeEvoStats->dinuc_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
             treeEvoStats->dinuc_stat[1][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-
 ////                    evohist->ssdinuc_stat[site_codon][3][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
 ////                    evohist->ssdinuc_stat[site_codon][1][evohist->GetDinucContext(nucposFrom[site_nuc_To-1],nucposFrom[site_nuc_To])][evohist->GetDinucContext(nucposTo[site_nuc_To-1],nucposTo[site_nuc_To])]++; //
-//
             if (site_codon < lparam->Nsite_codon-2)
             {
                 treeEvoStats->dinuc_stat[3][treeEvoStats->GetDinucContext(nucposFrom[site_nuc_To],nucposFrom[site_nuc_To+1])][treeEvoStats->GetDinucContext(nucposTo[site_nuc_To],nucposTo[site_nuc_To+1])]++; //
@@ -674,12 +658,7 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo)
 
     }
 
-
-
-
     //The evolving sequence is updated here
-
-
 
     CurrentNodeNucSequence[NodeIndex][site_nuc] =  nucTo;
     CurrentNodeCodonSequence[NodeIndex][site_codon] = codonTo[1];
@@ -692,11 +671,6 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo)
     delete [] codonTo;
 
 }
-
-
-
-
-
 
 void TreeSimulator::ComputeRecursiveSimulation(Link* from)
 {
@@ -1075,13 +1049,10 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
 
 void TreeSimulator::GetSampleAncestralCodonSequence(int FromNodeIndex,int interval)
 {
-
     for(int site_codon = 0 ; site_codon < lparam->Nsite_codon ; site_codon++)
     {
         CurrentAncestralCodonSequence[interval][0][site_codon] = CurrentNodeCodonSequence[FromNodeIndex][site_codon];
-
     }
-
 }
 
 

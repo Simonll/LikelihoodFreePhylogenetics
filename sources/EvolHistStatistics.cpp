@@ -70,24 +70,24 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam)
         }
     }
 
-//    codon_stat = new double**[4];
-//    codonSyn_stat = new double**[4];
-//    codonNSyn_stat = new double**[4];
-//
-//    for (int i = 0; i < 4;i++)  {
-//        codon_stat[i] = new double*[lparam->Nstate_codon];
-//        codonSyn_stat[i] = new double*[lparam->Nstate_codon];
-//        codonNSyn_stat[i] = new double*[lparam->Nstate_codon];
-//
-//    }
-//
-//    for (int i = 0; i < 4;i++)  {
-//        for (int j = 0 ; j < lparam->Nstate_codon; j++) {
-//            codon_stat[i][j] = new double[lparam->Nstate_codon];
-//            codonSyn_stat[i][j] = new double[lparam->Nstate_codon];
-//            codonNSyn_stat[i][j] = new double[lparam->Nstate_codon];
-//        }
-//    }
+/*     codon_stat = new double**[4];
+    codonSyn_stat = new double**[4];
+    codonNSyn_stat = new double**[4];
+
+    for (int i = 0; i < 4;i++)  {
+        codon_stat[i] = new double*[lparam->Nstate_codon];
+        codonSyn_stat[i] = new double*[lparam->Nstate_codon];
+        codonNSyn_stat[i] = new double*[lparam->Nstate_codon];
+
+    }
+
+    for (int i = 0; i < 4;i++)  {
+        for (int j = 0 ; j < lparam->Nstate_codon; j++) {
+            codon_stat[i][j] = new double[lparam->Nstate_codon];
+            codonSyn_stat[i][j] = new double[lparam->Nstate_codon];
+            codonNSyn_stat[i][j] = new double[lparam->Nstate_codon];
+        }
+    }
 // Site-specific
     ssNsub = new int[lparam->Nsite_codon];
     ssNsynsub = new int[lparam->Nsite_codon];
@@ -95,99 +95,95 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam)
     ssNsubbin = new int[100];
     ssNsynsubbin = new int[100];
 
-//    ssgtnr_stat = new double***[lparam->Nsite_codon];
-//    ssgtnrSyn_stat = new double***[lparam->Nsite_codon];
-//    ssgtnrNSyn_stat = new double***[lparam->Nsite_codon];
-//
-//    ssdinuc_stat = new double***[lparam->Nsite_codon];
-//    ssdinucSyn_stat = new double***[lparam->Nsite_codon];
-//    ssdinucNSyn_stat = new double***[lparam->Nsite_codon];
-//
-//    sscodon_stat = new double***[lparam->Nsite_codon];
-//    sscodonSyn_stat = new double***[lparam->Nsite_codon];
-//    sscodonNSyn_stat = new double***[lparam->Nsite_codon];
-//
-//    for (int i = 0; i < lparam->Nsite_codon; i++)  {
-//        ssgtnr_stat[i] = new double**[4];
-//        ssgtnrSyn_stat[i] = new double**[4];
-//        ssgtnrNSyn_stat[i] = new double**[4];
-//    }
-//
-//    for (int i = 0; i < lparam->Nsite_codon; i++)  {
-//        for (int j = 0 ; j < 4; j ++) {
-//            ssgtnr_stat[i][j] = new double*[lparam->Nnucp];
-//            ssgtnrSyn_stat[i][j] = new double*[lparam->Nnucp];
-//            ssgtnrNSyn_stat[i][j] = new double*[lparam->Nnucp];
-//        }
-//    }
-//
-//    for (int i = 0; i < lparam->Nsite_codon; i++)  {
-//        for (int j = 0 ; j < 4; j ++) {
-//            for (int k = 0 ; k < lparam->Nnucp; k ++) {
-//                ssgtnr_stat[i][j][k] = new double[lparam->Nnucp];
-//                ssgtnrSyn_stat[i][j][k] = new double[lparam->Nnucp];
-//                ssgtnrNSyn_stat[i][j][k] = new double[lparam->Nnucp];
-//            }
-//        }
-//    }
-//
-//    for (int i = 0; i < lparam->Nsite_codon; i++)  {
-//        ssdinuc_stat[i] = new double**[4];
-//        ssdinucSyn_stat[i] = new double**[4];
-//        ssdinucNSyn_stat[i] = new double**[4];
-//    }
-//
-//    for (int i = 0; i < lparam->Nsite_codon; i++)  {
-//        for (int j = 0 ; j < 4; j ++) {
-//            ssdinuc_stat[i][j] = new double*[lparam->Ndinuc];
-//            ssdinucSyn_stat[i][j] = new double*[lparam->Ndinuc];
-//            ssdinucNSyn_stat[i][j] = new double*[lparam->Ndinuc];
-//        }
-//    }
-//
-//    for (int i = 0; i < lparam->Nsite_codon; i++)  {
-//        for (int j = 0 ; j < 4; j ++) {
-//            for (int k = 0 ; k < lparam->Ndinuc; k ++) {
-//                ssdinuc_stat[i][j][k] = new double[lparam->Ndinuc];
-//                ssdinucSyn_stat[i][j][k] = new double[lparam->Ndinuc];
-//                ssdinucNSyn_stat[i][j][k] = new double[lparam->Ndinuc];
-//            }
-//        }
-//    }
-//
-//    for (int i = 0; i < lparam->Nsite_codon; i++)  {
-//        sscodon_stat[i] = new double**[4];
-//        sscodonSyn_stat[i] = new double**[4];
-//        sscodonNSyn_stat[i] = new double**[4];
-//
-//    }
-//
-//    for (int i = 0; i < lparam->Nsite_codon; i++)  {
-//        for (int j = 0 ; j < 4; j ++) {
-//            sscodon_stat[i][j] = new double*[lparam->Nstate_codon];
-//            sscodonSyn_stat[i][j] = new double*[lparam->Nstate_codon];
-//            sscodonNSyn_stat[i][j] = new double*[lparam->Nstate_codon];
-//        }
-//    }
-//
-//    for (int i = 0; i < lparam->Nsite_codon; i++)  {
-//        for (int j = 0 ; j < 4; j ++) {
-//            for (int k = 0 ; k < lparam->Nstate_codon; k ++) {
-//                sscodon_stat[i][j][k] = new double[lparam->Nstate_codon];
-//                sscodonSyn_stat[i][j][k] = new double[lparam->Nstate_codon];
-//                sscodonNSyn_stat[i][j][k] = new double[lparam->Nstate_codon];
-//            }
-//
-//
-//        }
-//
-//    }
+    ssgtnr_stat = new double***[lparam->Nsite_codon];
+    ssgtnrSyn_stat = new double***[lparam->Nsite_codon];
+    ssgtnrNSyn_stat = new double***[lparam->Nsite_codon];
 
-//    branch_stat = new double * [lparam->refTree->GetNnode()];
-//    for (int node = 0 ; node < lparam->refTree->GetNnode(); node++) {
-//        branch_stat[node] = new double [18];
-//    }
+    ssdinuc_stat = new double***[lparam->Nsite_codon];
+    ssdinucSyn_stat = new double***[lparam->Nsite_codon];
+    ssdinucNSyn_stat = new double***[lparam->Nsite_codon];
 
+    sscodon_stat = new double***[lparam->Nsite_codon];
+    sscodonSyn_stat = new double***[lparam->Nsite_codon];
+    sscodonNSyn_stat = new double***[lparam->Nsite_codon];
+
+    for (int i = 0; i < lparam->Nsite_codon; i++)  {
+        ssgtnr_stat[i] = new double**[4];
+        ssgtnrSyn_stat[i] = new double**[4];
+        ssgtnrNSyn_stat[i] = new double**[4];
+    }
+
+    for (int i = 0; i < lparam->Nsite_codon; i++)  {
+        for (int j = 0 ; j < 4; j ++) {
+            ssgtnr_stat[i][j] = new double*[lparam->Nnucp];
+            ssgtnrSyn_stat[i][j] = new double*[lparam->Nnucp];
+            ssgtnrNSyn_stat[i][j] = new double*[lparam->Nnucp];
+        }
+    }
+
+    for (int i = 0; i < lparam->Nsite_codon; i++)  {
+        for (int j = 0 ; j < 4; j ++) {
+            for (int k = 0 ; k < lparam->Nnucp; k ++) {
+                ssgtnr_stat[i][j][k] = new double[lparam->Nnucp];
+                ssgtnrSyn_stat[i][j][k] = new double[lparam->Nnucp];
+                ssgtnrNSyn_stat[i][j][k] = new double[lparam->Nnucp];
+            }
+        }
+    }
+
+    for (int i = 0; i < lparam->Nsite_codon; i++)  {
+        ssdinuc_stat[i] = new double**[4];
+        ssdinucSyn_stat[i] = new double**[4];
+        ssdinucNSyn_stat[i] = new double**[4];
+    }
+
+    for (int i = 0; i < lparam->Nsite_codon; i++)  {
+        for (int j = 0 ; j < 4; j ++) {
+            ssdinuc_stat[i][j] = new double*[lparam->Ndinuc];
+            ssdinucSyn_stat[i][j] = new double*[lparam->Ndinuc];
+            ssdinucNSyn_stat[i][j] = new double*[lparam->Ndinuc];
+        }
+    }
+
+    for (int i = 0; i < lparam->Nsite_codon; i++)  {
+        for (int j = 0 ; j < 4; j ++) {
+            for (int k = 0 ; k < lparam->Ndinuc; k ++) {
+                ssdinuc_stat[i][j][k] = new double[lparam->Ndinuc];
+                ssdinucSyn_stat[i][j][k] = new double[lparam->Ndinuc];
+                ssdinucNSyn_stat[i][j][k] = new double[lparam->Ndinuc];
+            }
+        }
+    }
+
+    for (int i = 0; i < lparam->Nsite_codon; i++)  {
+        sscodon_stat[i] = new double**[4];
+        sscodonSyn_stat[i] = new double**[4];
+        sscodonNSyn_stat[i] = new double**[4];
+    }
+
+    for (int i = 0; i < lparam->Nsite_codon; i++)  {
+        for (int j = 0 ; j < 4; j ++) {
+            sscodon_stat[i][j] = new double*[lparam->Nstate_codon];
+            sscodonSyn_stat[i][j] = new double*[lparam->Nstate_codon];
+            sscodonNSyn_stat[i][j] = new double*[lparam->Nstate_codon];
+        }
+    }
+
+    for (int i = 0; i < lparam->Nsite_codon; i++)  {
+        for (int j = 0 ; j < 4; j ++) {
+            for (int k = 0 ; k < lparam->Nstate_codon; k ++) {
+                sscodon_stat[i][j][k] = new double[lparam->Nstate_codon];
+                sscodonSyn_stat[i][j][k] = new double[lparam->Nstate_codon];
+                sscodonNSyn_stat[i][j][k] = new double[lparam->Nstate_codon];
+            }
+        }
+    }
+
+    branch_stat = new double * [lparam->refTree->GetNnode()];
+    for (int node = 0 ; node < lparam->refTree->GetNnode(); node++) {
+        branch_stat[node] = new double [18];
+    }
+ */
     GetSiteSpecificEvoStatsMap["ssNsub"] = &EvolHistStatistics::GetssNsub;
     GetSiteSpecificEvoStatsMap["ssNsynsub"] = &EvolHistStatistics::GetssNsynsub;
 
@@ -3650,12 +3646,12 @@ void EvolHistStatistics::resetEvoStats()
     Nsynsub = 0;
     Nsub = 0;
 
-    for (int bin_i = 0 ; bin_i < 100; bin_i++)
+    /* for (int bin_i = 0 ; bin_i < 100; bin_i++)
     {
         ssNsubbin[bin_i] = 0;
         ssNsynsubbin[bin_i] = 0;
 
-    }
+    } */
 
 
     if(verbose)
@@ -3663,40 +3659,40 @@ void EvolHistStatistics::resetEvoStats()
         cerr << "resetEvoStats6\n";
     }
 
-    for (int site_codon = 0 ; site_codon < lparam->Nsite_codon ; site_codon++)
+ /*    for (int site_codon = 0 ; site_codon < lparam->Nsite_codon ; site_codon++)
     {
-//
+
         ssNsub[site_codon] = 0;
         ssNsynsub[site_codon]= 0;
 
-//                for (int h=0;h<4;h++){
-//
-//                   for (int i = 0; i < lparam->Nnucp; i++){
-//                        for (int j = 0; j < lparam->Nnucp; j++){
-//                            ssgtnr_stat[site_codon][h][i][j] = 0;
-//                            ssgtnrSyn_stat[site_codon][h][i][j] = 0;
-//                            ssgtnrNSyn_stat[site_codon][h][i][j] = 0;
-//                        }
-//                    }
-//
-//                    for (int i = 0; i < lparam->Ndinuc; i++){
-//                        for (int j = 0; j < lparam->Ndinuc; j++){
-//                            ssdinuc_stat[site_codon][h][i][j] = 0;
-//                            ssdinucSyn_stat[site_codon][h][i][j] = 0;
-//                            ssdinucNSyn_stat[site_codon][h][i][j] = 0;
-//                        }
-//                    }
-//
-//                    for (int i = 0; i < lparam->Nstate_codon; i++){
-//                        for (int j = 0; j < lparam->Nstate_codon; j++){
-//                            sscodon_stat[site_codon][h][i][j] = 0.0;
-//                            sscodonSyn_stat[site_codon][h][i][j] = 0.0;
-//                            sscodonNSyn_stat[site_codon][h][i][j] = 0.0;
-//                        }
-//                    }
-//                }
-    }
+                for (int h=0;h<4;h++){
 
+                   for (int i = 0; i < lparam->Nnucp; i++){
+                        for (int j = 0; j < lparam->Nnucp; j++){
+                            ssgtnr_stat[site_codon][h][i][j] = 0;
+                            ssgtnrSyn_stat[site_codon][h][i][j] = 0;
+                            ssgtnrNSyn_stat[site_codon][h][i][j] = 0;
+                        }
+                    }
+
+                    for (int i = 0; i < lparam->Ndinuc; i++){
+                        for (int j = 0; j < lparam->Ndinuc; j++){
+                            ssdinuc_stat[site_codon][h][i][j] = 0;
+                            ssdinucSyn_stat[site_codon][h][i][j] = 0;
+                            ssdinucNSyn_stat[site_codon][h][i][j] = 0;
+                        }
+                    }
+
+                    for (int i = 0; i < lparam->Nstate_codon; i++){
+                        for (int j = 0; j < lparam->Nstate_codon; j++){
+                            sscodon_stat[site_codon][h][i][j] = 0.0;
+                            sscodonSyn_stat[site_codon][h][i][j] = 0.0;
+                            sscodonNSyn_stat[site_codon][h][i][j] = 0.0;
+                        }
+                    }
+                }
+    }
+ */
     if(verbose)
     {
         cerr << "resetEvoStats7\n";

@@ -335,7 +335,11 @@ public:
     {
 
         int index = 0;
-        int tmpdata[Ntaxa][testnsite];
+        int** tmpdata = new int*[Ntaxa];
+        for (int i =0;i < Ntaxa; i++)
+        {
+            tmpdata[i] = new int [testnsite];
+        }
         for (int k=0; k<Ntaxa; k++)
         {
             for (int i=0; i<testnsite; i++)
@@ -352,6 +356,12 @@ public:
                 Data[k][offset + (i-sitemin)] = tmpdata[k][i];
             }
         }
+        
+        for (int i =0;i < Ntaxa; i++)
+        {
+            delete[] tmpdata[i];
+        }
+
     }
 
     void GetDataVector(int* tmp)
@@ -403,7 +413,7 @@ public:
     virtual double GetTotalDiversity(int sitemin, int sitemax)
     {
         double total = 0;
-        int obs[GetNstate()];
+        int* obs = new int[GetNstate()];
         for (int i=sitemin; i<sitemax; i++)
         {
             for (int k=0; k<GetNstate(); k++)
@@ -428,6 +438,7 @@ public:
             }
             total += div;
         }
+        delete[] obs;
         // total /= (sitemax - sitemin);
         return total;
     }

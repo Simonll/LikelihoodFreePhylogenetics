@@ -1120,8 +1120,6 @@ void LocalParameters::SetBranchesLengthsBetweenInAndOutGroup()
 }
 
 
-
-
 void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<double>>posterior, int it)
 {
 
@@ -1582,20 +1580,6 @@ void LocalParameters::writeParam(ofstream& os)
         os << nucrr[i] << "\t";
     }
 
-    os << "\n";
-
-    os << MutationNormFactor << "\n";
-    for(int i = 0 ; i <Nnucp; i++)
-    {
-
-        for(int j = 0 ; j <Nnucp; j++)
-        {
-
-            os << gtnr[i][j] << "\t";
-        }
-
-        os << "\n";
-    }
     os << "\n";
 
     os << omega << "\n";
