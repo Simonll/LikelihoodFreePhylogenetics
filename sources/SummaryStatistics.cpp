@@ -189,16 +189,30 @@ SummaryStatistics::SummaryStatistics(LocalParameters * lparam)
         nuc3_pairwise90[i] = 0;
     }
 
+    aa_pairwise = new double[2];
+    aa_pairwise10 = new double[2];
+    aa_pairwise30 = new double[2];
+    aa_pairwise50 = new double[2];
+    aa_pairwise70 = new double[2];
+    aa_pairwise90 = new double[2];
+
+    for (int i = 0 ; i <2; i++)
+    {
+        aa_pairwise[i] = 0;
+        aa_pairwise10[i] = 0;
+        aa_pairwise30[i] = 0;
+        aa_pairwise50[i] = 0;
+        aa_pairwise70[i] = 0;
+        aa_pairwise90[i] = 0;
+    }
+
+
     dinucCpG_pairwise = new int [4];
 
     for (int i = 0 ; i <4; i++)
     {
         dinucCpG_pairwise[i] = 0;
     }
-
-
-
-    
 
     RSCU_bool = false;
     relativeCodonFrequency_bool = false;
@@ -450,6 +464,23 @@ SummaryStatistics::SummaryStatistics(LocalData *ldata)
         nuc3_pairwise70[i] = 0;
         nuc3_pairwise90[i] = 0;
     }
+
+    aa_pairwise = new double[2];
+    aa_pairwise10 = new double[2];
+    aa_pairwise30 = new double[2];
+    aa_pairwise50 = new double[2];
+    aa_pairwise70 = new double[2];
+    aa_pairwise90 = new double[2];
+
+    for (int i = 0 ; i <2; i++)
+    {
+        aa_pairwise[i] = 0;
+        aa_pairwise10[i] = 0;
+        aa_pairwise30[i] = 0;
+        aa_pairwise50[i] = 0;
+        aa_pairwise70[i] = 0;
+        aa_pairwise90[i] = 0;
+    }
     
     dinucCpG_pairwise = new int [4];
 
@@ -594,7 +625,7 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["pwCT90"] = &SummaryStatistics::GetpwCT90;
     GetSummariesMap["pwGT90"] = &SummaryStatistics::GetpwGT90;
 
-        GetSummariesMap["K80nucSyn"] = &SummaryStatistics::GetK80nucSyn;
+    GetSummariesMap["K80nucSyn"] = &SummaryStatistics::GetK80nucSyn;
     GetSummariesMap["pwSynAC"] = &SummaryStatistics::GetpwSynAC;
     GetSummariesMap["pwSynAG"] = &SummaryStatistics::GetpwSynAG;
     GetSummariesMap["pwSynAT"] = &SummaryStatistics::GetpwSynAT;
@@ -689,9 +720,6 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["pw1CG90"] = &SummaryStatistics::Getpw1CG90;
     GetSummariesMap["pw1CT90"] = &SummaryStatistics::Getpw1CT90;
     GetSummariesMap["pw1GT90"] = &SummaryStatistics::Getpw1GT90;
-
-
-
 
     GetSummariesMap["K80nuc2"] = &SummaryStatistics::GetK80nuc2;
     GetSummariesMap["pw2AC"] = &SummaryStatistics::Getpw2AC;
@@ -884,7 +912,6 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["dinuc12TC"] = &SummaryStatistics::GetDinuc12TC;
     GetSummariesMap["dinuc12TG"] = &SummaryStatistics::GetDinuc12TG;
     GetSummariesMap["dinuc12TT"] = &SummaryStatistics::GetDinuc12TT;
-
 
     GetSummariesMap["dinuc23AA"] = &SummaryStatistics::GetDinuc23AA;
     GetSummariesMap["dinuc23AC"] = &SummaryStatistics::GetDinuc23AC;
