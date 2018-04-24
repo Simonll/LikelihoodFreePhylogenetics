@@ -561,10 +561,8 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
     {
         TotalSubRate[NodeIndex] = TotalMutRate[NodeIndex];
     } */
-
     delete [] nucposFrom;
     delete [] nucposTo;
-
 }
 
 void SiteInterSubMatrix::transfertTotalRate(int sourceNodeIndex,int sinkNodeIndex)
@@ -599,38 +597,27 @@ int  SiteInterSubMatrix::testContextDinuc(int NodeIndex, int site_nuc, int* cont
     if (context[0] == context[2] && context[1] == nucFrom && context[3] == nucTo)
     {
         MutPos = 1;
-
     }
     else if (context[0] == nucFrom && context[1] == context[3] && context[2] == nucTo)
     {
         MutPos = 0;
-
     }
-
     //Test if the mutating patern is recovered from the actual sequence
     if (MutPos == 0 && site_nuc < lparam->Nsite_nuc-1)
     {
         if (CurrentNodeNucSequence[NodeIndex][site_nuc] == context[MutPos] && CurrentNodeNucSequence[NodeIndex][site_nuc+1] == context[1])
         {
             return 1;
-
         }
-
     }
     else if (MutPos == 1 && site_nuc > 0)
     {
         if (CurrentNodeNucSequence[NodeIndex][site_nuc] == context[MutPos] && CurrentNodeNucSequence[NodeIndex][site_nuc-1] == context[0])
         {
             return 1;
-
         }
-
     }
-    
-
     return -1;
-
-
 }
 
 

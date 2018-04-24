@@ -1288,7 +1288,7 @@ public:
 
     }
 
-    void CodonUsagePerAAwonR(double* stat_container)
+ /*    void CodonUsagePerAAwonR(double* stat_container)
     {
         //int tot = GetCodonStateSpace()->GetNstate();
         for ( int codon  = 0 ; codon < GetCodonStateSpace()->GetNstate(); codon ++ )
@@ -1401,7 +1401,7 @@ public:
         }
 
     }
-
+ */
 
     double RSCUEntropy()
     {
@@ -1498,7 +1498,7 @@ public:
         }
 
     }
-
+/* 
 
     void dicodon_usage(double** stat_container)
     {
@@ -1536,148 +1536,8 @@ public:
         }
 
     }
-
-
-
-    void   aa_meandiff_wonr(double* stat_container)
-    {
-    //    int CCT = GetCodonStateSpace()->GetState("CCT"); // P
-    //    int CCC = GetCodonStateSpace()->GetState("CCC"); // P
-    //    int CCA = GetCodonStateSpace()->GetState("CCA"); // P
-    //    int CCG = GetCodonStateSpace()->GetState("CCG"); // P
-
-    //    int CTT = GetCodonStateSpace()->GetState("CTT"); // L
-    //    int CTC = GetCodonStateSpace()->GetState("CTC"); // L
-    //    int CTA = GetCodonStateSpace()->GetState("CTA"); // L
-        int CTG = GetCodonStateSpace()->GetState("CTG"); // L
-
-        int TGG = GetCodonStateSpace()->GetState("TGG"); // W
-
-        int TCT = GetCodonStateSpace()->GetState("TCT"); // C
-        int TGC = GetCodonStateSpace()->GetState("TGC"); // C
-
-    //    int CAT = GetCodonStateSpace()->GetState("CAT"); // H
-        int CAC = GetCodonStateSpace()->GetState("CAC"); // H
-
-        int CAA = GetCodonStateSpace()->GetState("CAA"); // Q
-        int CAG = GetCodonStateSpace()->GetState("CAG"); // Q
-
-    //    int AGT = GetCodonStateSpace()->GetState("AGT"); // S
-    //    int AGC = GetCodonStateSpace()->GetState("AGC"); // S
-
-        int CGT = GetCodonStateSpace()->GetState("CGT"); // R
-        int CGC = GetCodonStateSpace()->GetState("CGC"); // R
-        int CGA = GetCodonStateSpace()->GetState("CGA"); // R
-        int CGG = GetCodonStateSpace()->GetState("CGG"); // R
-
-        int AGA = GetCodonStateSpace()->GetState("AGA"); // R
-        int AGG = GetCodonStateSpace()->GetState("AGG"); // R
-
-
-        stat_container[0] = 0.0;
-        stat_container[1] = 0.0;
-        int ** in = new int* [Nsite];
-        for(int site_codon = 0; site_codon < Nsite; site_codon++)
-        {
-            in[site_codon] = new int [Naa] ;
-        }
-
-        for(int site_codon = 0; site_codon < Nsite; site_codon++)
-        {
-            for(int aa = 0 ; aa <Naa; aa++)
-            {
-                in[site_codon][aa] = 0 ;
-            }
-        }
-
-        int Nsite_wonR = 0;
-        for (int site_codon = 0 ; site_codon < Nsite; site_codon ++ )
-        {
-            bool test = true;
-            int* cur = new int[20];
-            for (int aa = 0; aa <Naa; aa++)
-            {
-                cur[aa] = 0;
-            }
-            for(int taxa = 0; taxa < Ntaxa; taxa++)
-            {
-
-                int state = Data[taxa][site_codon]; //GetState(taxa, site_codon);
-                int aa_state = GetCodonStateSpace()->Translation(state);
-
-                if (state != unknown)
-                {
-
-                    if (
-                        //state != CCT && state != CCC && state != CCA && state != CCG &&
-                        //state != CTT && state != CTC && state != CTA && state != CAT &&
-                        state != TGG &&
-                        state != TCT && state != TGC &&
-                        state != CTG && state != CAC &&
-                        state != CAA && state != CAG &&
-                        //state != AGT && state != AGC
-                        state != CGT && state != CGC && state != CGA && state != CGG && state != AGA && state != AGG
-
-
-                    )
-                    {
-                        cur[aa_state] = 1;
-                    }
-                    else
-                    {
-                        test = false;
-                    }
-                }
-            }
-            if (test)
-            {
-                Nsite_wonR++;
-                for (int aa = 0; aa <Naa; aa++)
-                {
-                    in[site_codon][aa] = cur[aa];
-                }
-            }
-            delete [] cur;
-        }
-
-        double mean= 0.0;
-        double var = 0.0;
-
-
-        for(int site_codon = 0; site_codon < Nsite; site_codon++)
-        {
-            int Ndiff = 0;
-            for(int aa = 0 ; aa < Naa; aa++ )
-            {
-                if(in[site_codon][aa] != 0)
-                {
-                    Ndiff++;
-                }
-            }
-            mean += static_cast<double> (Ndiff) ;
-            var += static_cast<double> (Ndiff*Ndiff);
-        }
-        mean /= static_cast<double> (Nsite_wonR);
-        var /= static_cast<double> (Nsite_wonR);
-        var = var - (mean * mean);
-
-
-        stat_container[0] = mean;
-        stat_container[1] = var ;
-
-        for(int site_codon = 0; site_codon < Nsite; site_codon++)
-        {
-            delete [] in[site_codon];
-        }
-        delete [] in;
-    }
-
-
-
-
-
-
-    void   aa_meandiff(double* stat_container)
+ */
+    void aa_meandiff(double* stat_container)
     {
         stat_container[0] = 0.0;
         stat_container[1] = 0.0;
@@ -1763,107 +1623,7 @@ public:
         }
     }
 
-
-    void aa_usage_wonr(double* stat_container)
-    {
-    //    int CCT = GetCodonStateSpace()->GetState("CCT"); // P
-    //    int CCC = GetCodonStateSpace()->GetState("CCC"); // P
-    //    int CCA = GetCodonStateSpace()->GetState("CCA"); // P
-    //    int CCG = GetCodonStateSpace()->GetState("CCG"); // P
-
-    //    int CTT = GetCodonStateSpace()->GetState("CTT"); // L
-    //    int CTC = GetCodonStateSpace()->GetState("CTC"); // L
-    //    int CTA = GetCodonStateSpace()->GetState("CTA"); // L
-        int CTG = GetCodonStateSpace()->GetState("CTG"); // L
-
-        int TGG = GetCodonStateSpace()->GetState("TGG"); // W
-
-        int TCT = GetCodonStateSpace()->GetState("TCT"); // C
-        int TGC = GetCodonStateSpace()->GetState("TGC"); // C
-
-    //   int CAT = GetCodonStateSpace()->GetState("CAT"); // H
-        int CAC = GetCodonStateSpace()->GetState("CAC"); // H
-
-        int CAA = GetCodonStateSpace()->GetState("CAA"); // Q
-        int CAG = GetCodonStateSpace()->GetState("CAG"); // Q
-
-    //    int AGT = GetCodonStateSpace()->GetState("AGT"); // S
-    //    int AGC = GetCodonStateSpace()->GetState("AGC"); // S
-
-        int CGT = GetCodonStateSpace()->GetState("CGT"); // R
-        int CGC = GetCodonStateSpace()->GetState("CGC"); // R
-        int CGA = GetCodonStateSpace()->GetState("CGA"); // R
-        int CGG = GetCodonStateSpace()->GetState("CGG"); // R
-
-        int AGA = GetCodonStateSpace()->GetState("AGA"); // R
-        int AGG = GetCodonStateSpace()->GetState("AGG"); // R
-
-
-    //    int tot = 20;
-        for ( int aa = 0 ; aa < Naa; aa ++ )
-        {
-            stat_container[aa] = 1.0;
-        }
-
-        int total = 0;
-        for (int site_codon = 0 ; site_codon < Nsite; site_codon ++ )
-        {
-            bool test = true;
-            int* cur = new int[20];
-            for (int aa = 0; aa <Naa; aa++)
-            {
-                cur[aa] = 0;
-            }
-            for(int taxa = 0; taxa < Ntaxa; taxa++)
-            {
-
-                int state = Data[taxa][site_codon]; //GetState(taxa, site_codon);
-                int aa_state = GetCodonStateSpace()->Translation(state);
-
-                if (state != unknown)
-                {
-
-                    if (
-                        //state != CCT && state != CCC && state != CCA && state != CCG &&
-                        //state != CTT && state != CTC && state != CTA && state != CAT &&
-                        state != TGG &&
-                        state != TCT && state != TGC &&
-                        state != CTG && state != CAC &&
-                        state != CAA && state != CAG &&
-                        //state != AGT && state != AGC
-                        state != CGT && state != CGC && state != CGA && state != CGG && state != AGA && state != AGG
-                    )
-                    {
-                        cur[aa_state]++;
-                        total++;
-                    }
-                    else
-                    {
-                        test = false;
-                    }
-                }
-            }
-            if (test)
-            {
-
-                for (int aa = 0; aa <Naa; aa++)
-                {
-                    stat_container[aa] += cur[aa];
-                }
-            }
-            delete [] cur;
-        }
-        for (int aa = 0; aa < Naa; aa ++)
-        {
-            stat_container[aa]  /= total;
-        }
-
-    }
-
-
-
-
-    void diaa_usage(double** stat_container)
+    /* void diaa_usage(double** stat_container)
     {
         int tot = 400 ;
         for (int aa1 = 0 ; aa1 < Naa ; aa1 ++ )
@@ -1898,7 +1658,7 @@ public:
             }
         }
 
-    }
+    } */
 
     void dNdS_pairwise(int* invec)
     {
@@ -2009,9 +1769,6 @@ public:
                 }
             }
         }
-
-
-
     }
 
 
@@ -2345,6 +2102,672 @@ public:
         std::sort(vec_d.begin(),vec_d.end()); 
 
         int size = (int) vec_ac.size();
+        
+        double sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all,sum_d_K80; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = sum_d_K80 = 0; 
+        
+        for (int i = 0 ; i < size; i++)
+        {
+            sum_ac += vec_ac[i];
+            sum_ag += vec_ag[i];
+            sum_at += vec_at[i];
+            sum_cg += vec_cg[i];
+            sum_ct += vec_ct[i];
+            sum_gt += vec_gt[i];
+            sum_d_K80 += vec_d[i];
+        }
+        invec[0] = sum_ac;
+        invec[1] = sum_ag;
+        invec[2] = sum_at;
+        invec[3] = sum_cg;
+        invec[4] = sum_ct;
+        invec[5] = sum_gt;
+        invec[6] = sum_d_K80; 
+    }
+
+    void nuc_pairwiseSyn(double* invec)
+    {
+        for (int i = 0 ; i < 7; i ++ )
+        {
+            invec[i] = 0 ;
+        }
+
+        std::vector<double> vec_ac;
+        std::vector<double> vec_ag; 
+        std::vector<double> vec_at; 
+        std::vector<double> vec_cg; 
+        std::vector<double> vec_ct; 
+        std::vector<double> vec_gt; 
+        std::vector<double> vec_d; 
+        
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+        {
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+            {
+                double ac,ag,at,cg,ct,gt,cons; 
+                ac = ag = at = cg = ct = gt = cons = 0;
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
+                {
+                    int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
+                    int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
+                    if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
+                    {
+                        int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
+                        if (pos != -1 && pos != 3)
+                        {
+                            int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
+                            int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
+                            if ((posa == 0 && posb == 1 ) || (posa == 1 && posb == 0))  // ca_ac
+                            {
+                                ac++;
+                            }
+                            else if ((posa == 0 && posb == 2) || (posa == 2 && posb == 0) )    //ag_ga
+                            {
+                                ag++;
+                            }
+                            else if ((posa == 0 && posb == 3 ) || (posa == 3 && posb == 0))    //at_ta
+                            {
+                                at++;
+                            }
+                            else if ((posa == 1 && posb == 2 ) || (posa == 2 && posb == 1))    //cg_gc
+                            {
+                                cg++;
+                            }
+                            else if ( (posa == 1 && posb == 3) || (posa == 3 && posb == 1))    //ct_tc
+                            {
+                                ct++;
+                            }
+                            else if ((posa == 3 && posb == 2 ) || (posa == 2 && posb == 3))    //gt_tg
+                            {
+                                gt++;
+                            }
+                            else if (posa == posb)
+                            {
+                                cons++; 
+                            }    
+                        }
+                    }
+                }
+                double all = ac + ag + at + cg + ct + gt + cons; 
+                double p = (ag + ct) / all;
+                double q = (ac + at + cg + gt) / all; 
+                double d_K80 = -0.5*log((1-2*p-q)*sqrt(1-2*q));
+                //double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_d.push_back(d_K80);
+
+            }
+        }
+
+        std::sort(vec_ac.begin(),vec_ac.end()); 
+        std::sort(vec_ag.begin(),vec_ag.end()); 
+        std::sort(vec_at.begin(),vec_at.end()); 
+        std::sort(vec_cg.begin(),vec_cg.end()); 
+        std::sort(vec_ct.begin(),vec_ct.end()); 
+        std::sort(vec_gt.begin(),vec_gt.end()); 
+        std::sort(vec_d.begin(),vec_d.end()); 
+
+        int size = (int) vec_ac.size();
+        
+        double sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all,sum_d_K80; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = sum_d_K80 = 0; 
+        
+        for (int i = 0 ; i < size; i++)
+        {
+            sum_ac += vec_ac[i];
+            sum_ag += vec_ag[i];
+            sum_at += vec_at[i];
+            sum_cg += vec_cg[i];
+            sum_ct += vec_ct[i];
+            sum_gt += vec_gt[i];
+            sum_d_K80 += vec_d[i];
+        }
+        invec[0] = sum_ac;
+        invec[1] = sum_ag;
+        invec[2] = sum_at;
+        invec[3] = sum_cg;
+        invec[4] = sum_ct;
+        invec[5] = sum_gt;
+        invec[6] = sum_d_K80; 
+    }
+
+    void nuc_pairwiseSyn10(double* invec)
+    {
+        for (int i = 0 ; i < 7; i ++ )
+        {
+            invec[i] = 0 ;
+        }
+
+        std::vector<double> vec_ac;
+        std::vector<double> vec_ag; 
+        std::vector<double> vec_at; 
+        std::vector<double> vec_cg; 
+        std::vector<double> vec_ct; 
+        std::vector<double> vec_gt; 
+        std::vector<double> vec_d; 
+        
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+        {
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+            {
+                double ac,ag,at,cg,ct,gt,cons; 
+                ac = ag = at = cg = ct = gt = cons = 0;
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
+                {
+                    int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
+                    int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
+                    if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
+                    {
+                        int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
+                        if (pos != -1 && pos != 3)
+                        {
+                            int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
+                            int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
+                            if ((posa == 0 && posb == 1 ) || (posa == 1 && posb == 0))  // ca_ac
+                            {
+                                ac++;
+                            }
+                            else if ((posa == 0 && posb == 2) || (posa == 2 && posb == 0) )    //ag_ga
+                            {
+                                ag++;
+                            }
+                            else if ((posa == 0 && posb == 3 ) || (posa == 3 && posb == 0))    //at_ta
+                            {
+                                at++;
+                            }
+                            else if ((posa == 1 && posb == 2 ) || (posa == 2 && posb == 1))    //cg_gc
+                            {
+                                cg++;
+                            }
+                            else if ( (posa == 1 && posb == 3) || (posa == 3 && posb == 1))    //ct_tc
+                            {
+                                ct++;
+                            }
+                            else if ((posa == 3 && posb == 2 ) || (posa == 2 && posb == 3))    //gt_tg
+                            {
+                                gt++;
+                            }
+                            else if (posa == posb)
+                            {
+                                cons++; 
+                            }    
+                        }
+                    }
+                }
+                double all = ac + ag + at + cg + ct + gt + cons; 
+                double p = (ag + ct) / all;
+                double q = (ac + at + cg + gt) / all; 
+                double d_K80 = -0.5*log((1-2*p-q)*sqrt(1-2*q));
+                //double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_d.push_back(d_K80);
+
+            }
+        }
+
+        std::sort(vec_ac.begin(),vec_ac.end()); 
+        std::sort(vec_ag.begin(),vec_ag.end()); 
+        std::sort(vec_at.begin(),vec_at.end()); 
+        std::sort(vec_cg.begin(),vec_cg.end()); 
+        std::sort(vec_ct.begin(),vec_ct.end()); 
+        std::sort(vec_gt.begin(),vec_gt.end()); 
+        std::sort(vec_d.begin(),vec_d.end()); 
+
+        int size = (int) vec_ac.size()*0.1;
+        
+        double sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all,sum_d_K80; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = sum_d_K80 = 0; 
+        
+        for (int i = 0 ; i < size; i++)
+        {
+            sum_ac += vec_ac[i];
+            sum_ag += vec_ag[i];
+            sum_at += vec_at[i];
+            sum_cg += vec_cg[i];
+            sum_ct += vec_ct[i];
+            sum_gt += vec_gt[i];
+            sum_d_K80 += vec_d[i];
+        }
+        invec[0] = sum_ac;
+        invec[1] = sum_ag;
+        invec[2] = sum_at;
+        invec[3] = sum_cg;
+        invec[4] = sum_ct;
+        invec[5] = sum_gt;
+        invec[6] = sum_d_K80; 
+    }
+
+    void nuc_pairwiseSyn30(double* invec)
+    {
+        for (int i = 0 ; i < 7; i ++ )
+        {
+            invec[i] = 0 ;
+        }
+
+        std::vector<double> vec_ac;
+        std::vector<double> vec_ag; 
+        std::vector<double> vec_at; 
+        std::vector<double> vec_cg; 
+        std::vector<double> vec_ct; 
+        std::vector<double> vec_gt; 
+        std::vector<double> vec_d; 
+        
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+        {
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+            {
+                double ac,ag,at,cg,ct,gt,cons; 
+                ac = ag = at = cg = ct = gt = cons = 0;
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
+                {
+                    int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
+                    int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
+                    if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
+                    {
+                        int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
+                        if (pos != -1 && pos != 3)
+                        {
+                            int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
+                            int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
+                            if ((posa == 0 && posb == 1 ) || (posa == 1 && posb == 0))  // ca_ac
+                            {
+                                ac++;
+                            }
+                            else if ((posa == 0 && posb == 2) || (posa == 2 && posb == 0) )    //ag_ga
+                            {
+                                ag++;
+                            }
+                            else if ((posa == 0 && posb == 3 ) || (posa == 3 && posb == 0))    //at_ta
+                            {
+                                at++;
+                            }
+                            else if ((posa == 1 && posb == 2 ) || (posa == 2 && posb == 1))    //cg_gc
+                            {
+                                cg++;
+                            }
+                            else if ( (posa == 1 && posb == 3) || (posa == 3 && posb == 1))    //ct_tc
+                            {
+                                ct++;
+                            }
+                            else if ((posa == 3 && posb == 2 ) || (posa == 2 && posb == 3))    //gt_tg
+                            {
+                                gt++;
+                            }
+                            else if (posa == posb)
+                            {
+                                cons++; 
+                            }    
+                        }
+                    }
+                }
+                double all = ac + ag + at + cg + ct + gt + cons; 
+                double p = (ag + ct) / all;
+                double q = (ac + at + cg + gt) / all; 
+                double d_K80 = -0.5*log((1-2*p-q)*sqrt(1-2*q));
+                //double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_d.push_back(d_K80);
+
+            }
+        }
+
+        std::sort(vec_ac.begin(),vec_ac.end()); 
+        std::sort(vec_ag.begin(),vec_ag.end()); 
+        std::sort(vec_at.begin(),vec_at.end()); 
+        std::sort(vec_cg.begin(),vec_cg.end()); 
+        std::sort(vec_ct.begin(),vec_ct.end()); 
+        std::sort(vec_gt.begin(),vec_gt.end()); 
+        std::sort(vec_d.begin(),vec_d.end()); 
+
+        int size = (int) vec_ac.size() * 0.3;
+        
+        double sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all,sum_d_K80; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = sum_d_K80 = 0; 
+        
+        for (int i = 0 ; i < size; i++)
+        {
+            sum_ac += vec_ac[i];
+            sum_ag += vec_ag[i];
+            sum_at += vec_at[i];
+            sum_cg += vec_cg[i];
+            sum_ct += vec_ct[i];
+            sum_gt += vec_gt[i];
+            sum_d_K80 += vec_d[i];
+        }
+        invec[0] = sum_ac;
+        invec[1] = sum_ag;
+        invec[2] = sum_at;
+        invec[3] = sum_cg;
+        invec[4] = sum_ct;
+        invec[5] = sum_gt;
+        invec[6] = sum_d_K80; 
+    }
+
+    void nuc_pairwiseSyn50(double* invec)
+    {
+        for (int i = 0 ; i < 7; i ++ )
+        {
+            invec[i] = 0 ;
+        }
+
+        std::vector<double> vec_ac;
+        std::vector<double> vec_ag; 
+        std::vector<double> vec_at; 
+        std::vector<double> vec_cg; 
+        std::vector<double> vec_ct; 
+        std::vector<double> vec_gt; 
+        std::vector<double> vec_d; 
+        
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+        {
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+            {
+                double ac,ag,at,cg,ct,gt,cons; 
+                ac = ag = at = cg = ct = gt = cons = 0;
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
+                {
+                    int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
+                    int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
+                    if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
+                    {
+                        int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
+                        if (pos != -1 && pos != 3)
+                        {
+                            int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
+                            int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
+                            if ((posa == 0 && posb == 1 ) || (posa == 1 && posb == 0))  // ca_ac
+                            {
+                                ac++;
+                            }
+                            else if ((posa == 0 && posb == 2) || (posa == 2 && posb == 0) )    //ag_ga
+                            {
+                                ag++;
+                            }
+                            else if ((posa == 0 && posb == 3 ) || (posa == 3 && posb == 0))    //at_ta
+                            {
+                                at++;
+                            }
+                            else if ((posa == 1 && posb == 2 ) || (posa == 2 && posb == 1))    //cg_gc
+                            {
+                                cg++;
+                            }
+                            else if ( (posa == 1 && posb == 3) || (posa == 3 && posb == 1))    //ct_tc
+                            {
+                                ct++;
+                            }
+                            else if ((posa == 3 && posb == 2 ) || (posa == 2 && posb == 3))    //gt_tg
+                            {
+                                gt++;
+                            }
+                            else if (posa == posb)
+                            {
+                                cons++; 
+                            }    
+                        }
+                    }
+                }
+                double all = ac + ag + at + cg + ct + gt + cons; 
+                double p = (ag + ct) / all;
+                double q = (ac + at + cg + gt) / all; 
+                double d_K80 = -0.5*log((1-2*p-q)*sqrt(1-2*q));
+                //double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_d.push_back(d_K80);
+
+            }
+        }
+
+        std::sort(vec_ac.begin(),vec_ac.end()); 
+        std::sort(vec_ag.begin(),vec_ag.end()); 
+        std::sort(vec_at.begin(),vec_at.end()); 
+        std::sort(vec_cg.begin(),vec_cg.end()); 
+        std::sort(vec_ct.begin(),vec_ct.end()); 
+        std::sort(vec_gt.begin(),vec_gt.end()); 
+        std::sort(vec_d.begin(),vec_d.end()); 
+
+        int size = (int) vec_ac.size()*0.5;
+        
+        double sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all,sum_d_K80; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = sum_d_K80 = 0; 
+        
+        for (int i = 0 ; i < size; i++)
+        {
+            sum_ac += vec_ac[i];
+            sum_ag += vec_ag[i];
+            sum_at += vec_at[i];
+            sum_cg += vec_cg[i];
+            sum_ct += vec_ct[i];
+            sum_gt += vec_gt[i];
+            sum_d_K80 += vec_d[i];
+        }
+        invec[0] = sum_ac;
+        invec[1] = sum_ag;
+        invec[2] = sum_at;
+        invec[3] = sum_cg;
+        invec[4] = sum_ct;
+        invec[5] = sum_gt;
+        invec[6] = sum_d_K80; 
+    }
+
+    void nuc_pairwiseSyn70(double* invec)
+    {
+        for (int i = 0 ; i < 7; i ++ )
+        {
+            invec[i] = 0 ;
+        }
+
+        std::vector<double> vec_ac;
+        std::vector<double> vec_ag; 
+        std::vector<double> vec_at; 
+        std::vector<double> vec_cg; 
+        std::vector<double> vec_ct; 
+        std::vector<double> vec_gt; 
+        std::vector<double> vec_d; 
+        
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+        {
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+            {
+                double ac,ag,at,cg,ct,gt,cons; 
+                ac = ag = at = cg = ct = gt = cons = 0;
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
+                {
+                    int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
+                    int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
+                    if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
+                    {
+                        int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
+                        if (pos != -1 && pos != 3)
+                        {
+                            int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
+                            int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
+                            if ((posa == 0 && posb == 1 ) || (posa == 1 && posb == 0))  // ca_ac
+                            {
+                                ac++;
+                            }
+                            else if ((posa == 0 && posb == 2) || (posa == 2 && posb == 0) )    //ag_ga
+                            {
+                                ag++;
+                            }
+                            else if ((posa == 0 && posb == 3 ) || (posa == 3 && posb == 0))    //at_ta
+                            {
+                                at++;
+                            }
+                            else if ((posa == 1 && posb == 2 ) || (posa == 2 && posb == 1))    //cg_gc
+                            {
+                                cg++;
+                            }
+                            else if ( (posa == 1 && posb == 3) || (posa == 3 && posb == 1))    //ct_tc
+                            {
+                                ct++;
+                            }
+                            else if ((posa == 3 && posb == 2 ) || (posa == 2 && posb == 3))    //gt_tg
+                            {
+                                gt++;
+                            }
+                            else if (posa == posb)
+                            {
+                                cons++; 
+                            }    
+                        }
+                    }
+                }
+                double all = ac + ag + at + cg + ct + gt + cons; 
+                double p = (ag + ct) / all;
+                double q = (ac + at + cg + gt) / all; 
+                double d_K80 = -0.5*log((1-2*p-q)*sqrt(1-2*q));
+                //double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_d.push_back(d_K80);
+
+            }
+        }
+
+        std::sort(vec_ac.begin(),vec_ac.end()); 
+        std::sort(vec_ag.begin(),vec_ag.end()); 
+        std::sort(vec_at.begin(),vec_at.end()); 
+        std::sort(vec_cg.begin(),vec_cg.end()); 
+        std::sort(vec_ct.begin(),vec_ct.end()); 
+        std::sort(vec_gt.begin(),vec_gt.end()); 
+        std::sort(vec_d.begin(),vec_d.end()); 
+
+        int size = (int) vec_ac.size()*0.7;
+        
+        double sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all,sum_d_K80; 
+        sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = sum_d_K80 = 0; 
+        
+        for (int i = 0 ; i < size; i++)
+        {
+            sum_ac += vec_ac[i];
+            sum_ag += vec_ag[i];
+            sum_at += vec_at[i];
+            sum_cg += vec_cg[i];
+            sum_ct += vec_ct[i];
+            sum_gt += vec_gt[i];
+            sum_d_K80 += vec_d[i];
+        }
+        invec[0] = sum_ac;
+        invec[1] = sum_ag;
+        invec[2] = sum_at;
+        invec[3] = sum_cg;
+        invec[4] = sum_ct;
+        invec[5] = sum_gt;
+        invec[6] = sum_d_K80; 
+    }
+
+    void nuc_pairwiseSyn90(double* invec)
+    {
+        for (int i = 0 ; i < 7; i ++ )
+        {
+            invec[i] = 0 ;
+        }
+
+        std::vector<double> vec_ac;
+        std::vector<double> vec_ag; 
+        std::vector<double> vec_at; 
+        std::vector<double> vec_cg; 
+        std::vector<double> vec_ct; 
+        std::vector<double> vec_gt; 
+        std::vector<double> vec_d; 
+        
+        for (int taxa1 = 0; taxa1 < Ntaxa-1; taxa1++)
+        {
+            for (int taxa2 = taxa1 + 1; taxa2 < Ntaxa; taxa2++)
+            {
+                double ac,ag,at,cg,ct,gt,cons; 
+                ac = ag = at = cg = ct = gt = cons = 0;
+                for (int site_codon = 0; site_codon < Nsite; site_codon++)
+                {
+                    int state_seq1 = Data[taxa1][site_codon]; //GetState(taxa1,site_codon);
+                    int state_seq2 = Data[taxa2][site_codon]; //GetState(taxa2,site_codon);
+                    if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
+                    {
+                        int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
+                        if (pos != -1 && pos != 3)
+                        {
+                            int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
+                            int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
+                            if ((posa == 0 && posb == 1 ) || (posa == 1 && posb == 0))  // ca_ac
+                            {
+                                ac++;
+                            }
+                            else if ((posa == 0 && posb == 2) || (posa == 2 && posb == 0) )    //ag_ga
+                            {
+                                ag++;
+                            }
+                            else if ((posa == 0 && posb == 3 ) || (posa == 3 && posb == 0))    //at_ta
+                            {
+                                at++;
+                            }
+                            else if ((posa == 1 && posb == 2 ) || (posa == 2 && posb == 1))    //cg_gc
+                            {
+                                cg++;
+                            }
+                            else if ( (posa == 1 && posb == 3) || (posa == 3 && posb == 1))    //ct_tc
+                            {
+                                ct++;
+                            }
+                            else if ((posa == 3 && posb == 2 ) || (posa == 2 && posb == 3))    //gt_tg
+                            {
+                                gt++;
+                            }
+                            else if (posa == posb)
+                            {
+                                cons++; 
+                            }    
+                        }
+                    }
+                }
+                double all = ac + ag + at + cg + ct + gt + cons; 
+                double p = (ag + ct) / all;
+                double q = (ac + at + cg + gt) / all; 
+                double d_K80 = -0.5*log((1-2*p-q)*sqrt(1-2*q));
+                //double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
+                vec_ac.push_back(ac); 
+                vec_ag.push_back(ag);
+                vec_at.push_back(at);
+                vec_cg.push_back(cg);
+                vec_ct.push_back(ct);
+                vec_gt.push_back(gt);
+                vec_d.push_back(d_K80);
+
+            }
+        }
+
+        std::sort(vec_ac.begin(),vec_ac.end()); 
+        std::sort(vec_ag.begin(),vec_ag.end()); 
+        std::sort(vec_at.begin(),vec_at.end()); 
+        std::sort(vec_cg.begin(),vec_cg.end()); 
+        std::sort(vec_ct.begin(),vec_ct.end()); 
+        std::sort(vec_gt.begin(),vec_gt.end()); 
+        std::sort(vec_d.begin(),vec_d.end()); 
+
+        int size = (int) vec_ac.size()*0.9;
         
         double sum_ac,sum_ag,sum_at,sum_cg,sum_ct,sum_gt, sum_all,sum_d_K80; 
         sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt =  sum_all = sum_d_K80 = 0; 

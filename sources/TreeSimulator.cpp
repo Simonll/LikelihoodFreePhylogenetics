@@ -1039,12 +1039,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
                 }
             }
         }
-
     }
-
-
-
-
 }
 
 void TreeSimulator::GetSampleAncestralCodonSequence(int FromNodeIndex,int interval)

@@ -55,7 +55,7 @@ public:
     static constexpr double TOOLARGENEGATIVE = -500;
 
 
-    static const int NSummaries = 847;
+    static const int NSummaries = 889;
     static const int NParam = 35;
     static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
@@ -89,11 +89,17 @@ public:
     const string listSummaries[NSummaries] =
     {
         "pwAC","pwAG","pwAT","pwCG","pwCT","pwGT","K80nuc",
-        
+        "pwSynAC","pwSynAG","pwSynAT","pwSynCG","pwSynCT","pwSynGT","K80nucSyn",
         "pw1AC","pw1AG","pw1AT","pw1CG","pw1CT","pw1GT","K80nuc1",
         "pw2AC","pw2AG","pw2AT","pw2CG","pw2CT","pw2GT","K80nuc2",
         "pw3AC","pw3AG","pw3AT","pw3CG","pw3CT","pw3GT","K80nuc3",
         
+        "pwSynAC10","pwSynAG10","pwSynAT10","pwSynCG10","pwSynCT10","pwSynGT10","K80nucSyn10",
+        "pwSynAC30","pwSynAG30","pwSynAT30","pwSynCG30","pwSynCT30","pwSynGT30","K80nucSyn30",
+        "pwSynAC50","pwSynAG50","pwSynAT50","pwSynCG50","pwSynCT50","pwSynGT50","K80nucSyn50",
+        "pwSynAC70","pwSynAG70","pwSynAT70","pwSynCG70","pwSynCT70","pwSynGT70","K80nucSyn70",
+        "pwSynAC90","pwSynAG90","pwSynAT90","pwSynCG90","pwSynCT90","pwSynGT90","K80nucSyn90",
+
         "pwAC10","pwAG10","pwAT10","pwCG10","pwCT10","pwGT10","K80nuc10",
         "pwAC30","pwAG30","pwAT30","pwCG30","pwCT30","pwGT30","K80nuc30",
         "pwAC50","pwAG50","pwAT50","pwCG50","pwCT50","pwGT50","K80nuc50",

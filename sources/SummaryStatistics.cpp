@@ -1019,7 +1019,7 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["aasitecomphet"] = &SummaryStatistics::Getaa_site_comphet;
     GetSummariesMap["aataxacomphet"] = &SummaryStatistics::Getaa_taxa_comphet;
 
-    GetSummariesMap["diaaAA"]=&SummaryStatistics::GetDIAA_AA;
+    /* GetSummariesMap["diaaAA"]=&SummaryStatistics::GetDIAA_AA;
     GetSummariesMap["diaaAC"]=&SummaryStatistics::GetDIAA_AC;
     GetSummariesMap["diaaAD"]=&SummaryStatistics::GetDIAA_AD;
     GetSummariesMap["diaaAE"]=&SummaryStatistics::GetDIAA_AE;
@@ -1418,7 +1418,7 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["diaaYT"]=&SummaryStatistics::GetDIAA_YT;
     GetSummariesMap["diaaYV"]=&SummaryStatistics::GetDIAA_YV;
     GetSummariesMap["diaaYW"]=&SummaryStatistics::GetDIAA_YW;
-    GetSummariesMap["diaaYY"]=&SummaryStatistics::GetDIAA_YY;
+    GetSummariesMap["diaaYY"]=&SummaryStatistics::GetDIAA_YY; */
     GetSummariesMap["RSCUentropy"]=&SummaryStatistics::GetRSCUentropy;
     GetSummariesMap["GC"]=&SummaryStatistics::GetGC;
     GetSummariesMap["GC1"]=&SummaryStatistics::GetGC1;
