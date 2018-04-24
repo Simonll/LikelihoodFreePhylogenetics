@@ -1525,10 +1525,10 @@ void SummaryStatistics::MapFunctions()
     GetSummariesMap["GC3"]=&SummaryStatistics::GetGC3;
     GetSummariesMap["Codonfentropy"]=&SummaryStatistics::GetRelativeCodonFrequencyEntropy;
     GetSummariesMap["AAentropy"]=&SummaryStatistics::GetAAentropy;
-    GetSummariesMap["dinucentropy"]=&SummaryStatistics::GetDinucentropy;
-    GetSummariesMap["dinuc12entropy"]=&SummaryStatistics::GetDinuc12entropy;
-    GetSummariesMap["dinuc23entropy"]=&SummaryStatistics::GetDinuc23entropy;
-    GetSummariesMap["dinuc31entropy"]=&SummaryStatistics::GetDinuc31entropy;
+    GetSummariesMap["Dinucentropy"]=&SummaryStatistics::GetDinucentropy;
+    GetSummariesMap["Dinuc12entropy"]=&SummaryStatistics::GetDinuc12entropy;
+    GetSummariesMap["Dinuc23entropy"]=&SummaryStatistics::GetDinuc23entropy;
+    GetSummariesMap["Dinuc31entropy"]=&SummaryStatistics::GetDinuc31entropy;
 
 }
 
