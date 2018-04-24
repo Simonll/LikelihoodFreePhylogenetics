@@ -86,6 +86,12 @@ public:
     double* aa_meandiff;
     double* aa_wonR_meandiff;
     double* CGNAGR;
+    double* nuc_pairwiseSyn;
+    double* nuc_pairwiseSyn10;
+    double* nuc_pairwiseSyn30;
+    double* nuc_pairwiseSyn50;
+    double* nuc_pairwiseSyn70;
+    double* nuc_pairwiseSyn90;
     double* nuc_pairwise;
     double* nuc_pairwise10;
     double* nuc_pairwise30;
@@ -160,6 +166,12 @@ public:
     bool nuc_pairwise_bool50;
     bool nuc_pairwise_bool70;
     bool nuc_pairwise_bool90;
+    bool nuc_pairwiseSyn_bool;
+    bool nuc_pairwiseSyn_bool10;
+    bool nuc_pairwiseSyn_bool30;
+    bool nuc_pairwiseSyn_bool50;
+    bool nuc_pairwiseSyn_bool70;
+    bool nuc_pairwiseSyn_bool90;
     bool nuc1_pairwise_bool;
     bool nuc1_pairwise_bool10;
     bool nuc1_pairwise_bool30;
@@ -4871,8 +4883,449 @@ private:
         }
         return nuc_pairwise90[0];
     }
+////
+//
+////
+
+double GetpwSynGT(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool)
+        {
+            codondata->nuc_pairwiseSyn(nuc_pairwiseSyn);
+            nuc_pairwiseSyn_bool = true;
+        }
+        return (double) nuc_pairwiseSyn[5];
+    }
+
+    double GetpwSynCT(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool)
+        {
+            codondata->nuc_pairwiseSyn(nuc_pairwiseSyn);
+            nuc_pairwiseSyn_bool = true;
+        }
+        return (double) nuc_pairwiseSyn[4];
+    }
+
+    double GetpwSynCG(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool)
+        {
+            codondata->nuc_pairwiseSyn(nuc_pairwiseSyn);
+            nuc_pairwiseSyn_bool = true;
+        }
+        return (double) nuc_pairwiseSyn[3];
+    }
 
 
+    double GetpwSynAT(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool)
+        {
+            codondata->nuc_pairwiseSyn(nuc_pairwiseSyn);
+            nuc_pairwiseSyn_bool = true;
+        }
+        return (double) nuc_pairwiseSyn[2];
+    }
+
+    double GetpwSynAG(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool)
+        {
+            codondata->nuc_pairwiseSyn(nuc_pairwiseSyn);
+            nuc_pairwiseSyn_bool = true;
+        }
+        return (double) nuc_pairwiseSyn[1];
+    }
+
+
+    double GetpwSynAC(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool)
+        {
+            codondata->nuc_pairwiseSyn(nuc_pairwiseSyn);
+            nuc_pairwiseSyn_bool = true;
+        }
+        return (double) nuc_pairwiseSyn[0];
+    }
+
+    double GetK80nucSyn(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool)
+        {
+            codondata->nuc_pairwiseSyn10(nuc_pairwiseSyn);
+            nuc_pairwiseSyn_bool = true;
+        }
+        return nuc_pairwiseSyn[6];
+    }
+
+
+    double GetK80nucSyn10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool10)
+        {
+            codondata->nuc_pairwiseSyn10(nuc_pairwiseSyn10);
+            nuc_pairwiseSyn_bool10 = true;
+        }
+        return nuc_pairwiseSyn10[6];
+    }
+
+    double GetK80nucSyn30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool30)
+        {
+            codondata->nuc_pairwiseSyn30(nuc_pairwiseSyn30);
+            nuc_pairwiseSyn_bool30 = true;
+        }
+        return nuc_pairwiseSyn30[6];
+    }
+
+    double GetK80nucSyn50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool50)
+        {
+            codondata->nuc_pairwiseSyn50(nuc_pairwiseSyn50);
+            nuc_pairwiseSyn_bool50 = true;
+        }
+        return nuc_pairwiseSyn50[6];
+    }
+
+
+    double GetK80nucSyn70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool70)
+        {
+            codondata->nuc_pairwiseSyn70(nuc_pairwiseSyn70);
+            nuc_pairwiseSyn_bool70 = true;
+        }
+        return nuc_pairwiseSyn70[6];
+    }
+
+    double GetK80nucSyn90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool90)
+        {
+            codondata->nuc_pairwiseSyn90(nuc_pairwiseSyn90);
+            nuc_pairwiseSyn_bool90 = true;
+        }
+        return nuc_pairwiseSyn90[6];
+    }
+
+    //10
+    double GetpwSynGT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool10)
+        {
+            codondata->nuc_pairwiseSyn10(nuc_pairwiseSyn10);
+            nuc_pairwiseSyn_bool10 = true;
+        }
+        return nuc_pairwiseSyn10[5];
+    }
+
+    double GetpwSynCT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool10)
+        {
+            codondata->nuc_pairwiseSyn10(nuc_pairwiseSyn10);
+            nuc_pairwiseSyn_bool10 = true;
+        }
+        return nuc_pairwiseSyn10[4];
+    }
+
+    double GetpwSynCG10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool10)
+        {
+            codondata->nuc_pairwiseSyn10(nuc_pairwiseSyn10);
+            nuc_pairwiseSyn_bool10 = true;
+        }
+        return nuc_pairwiseSyn10[3];
+    }
+
+
+    double GetpwSynAT10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool10)
+        {
+            codondata->nuc_pairwiseSyn10(nuc_pairwiseSyn10);
+            nuc_pairwiseSyn_bool10 = true;
+        }
+        return nuc_pairwiseSyn10[2];
+    }
+
+    double GetpwSynAG10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool10)
+        {
+            codondata->nuc_pairwiseSyn10(nuc_pairwiseSyn10);
+            nuc_pairwiseSyn_bool10 = true;
+        }
+        return nuc_pairwiseSyn10[1];
+    }
+
+
+    double GetpwSynAC10(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool10)
+        {
+            codondata->nuc_pairwiseSyn10(nuc_pairwiseSyn10);
+            nuc_pairwiseSyn_bool10 = true;
+        }
+        return nuc_pairwiseSyn10[0];
+    }
+
+    //30 
+    double GetpwSynGT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool30)
+        {
+            codondata->nuc_pairwiseSyn30(nuc_pairwiseSyn30);
+            nuc_pairwiseSyn_bool30 = true;
+        }
+        return nuc_pairwiseSyn30[5];
+    }
+
+    double GetpwSynCT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool30)
+        {
+            codondata->nuc_pairwiseSyn30(nuc_pairwiseSyn30);
+            nuc_pairwiseSyn_bool30 = true;
+        }
+        return nuc_pairwiseSyn30[4];
+    }
+
+    double GetpwSynCG30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool30)
+        {
+            codondata->nuc_pairwiseSyn30(nuc_pairwiseSyn30);
+            nuc_pairwiseSyn_bool30 = true;
+        }
+        return nuc_pairwiseSyn30[3];
+    }
+
+
+    double GetpwSynAT30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool30)
+        {
+            codondata->nuc_pairwiseSyn30(nuc_pairwiseSyn30);
+            nuc_pairwiseSyn_bool30 = true;
+        }
+        return nuc_pairwiseSyn30[2];
+    }
+
+    double GetpwSynAG30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool30)
+        {
+            codondata->nuc_pairwiseSyn30(nuc_pairwiseSyn30);
+            nuc_pairwiseSyn_bool30 = true;
+        }
+        return nuc_pairwiseSyn30[1];
+    }
+
+
+    double GetpwSynAC30(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool30)
+        {
+            codondata->nuc_pairwiseSyn30(nuc_pairwiseSyn30);
+            nuc_pairwiseSyn_bool30 = true;
+        }
+        return nuc_pairwiseSyn30[0];
+    }
+    //50
+
+    double GetpwSynGT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool50)
+        {
+            codondata->nuc_pairwiseSyn50(nuc_pairwiseSyn50);
+            nuc_pairwiseSyn_bool50 = true;
+        }
+        return nuc_pairwiseSyn50[5];
+    }
+
+    double GetpwSynCT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool50)
+        {
+            codondata->nuc_pairwiseSyn50(nuc_pairwiseSyn50);
+            nuc_pairwiseSyn_bool50 = true;
+        }
+        return nuc_pairwiseSyn50[4];
+    }
+
+    double GetpwSynCG50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool50)
+        {
+            codondata->nuc_pairwiseSyn50(nuc_pairwiseSyn50);
+            nuc_pairwiseSyn_bool50 = true;
+        }
+        return nuc_pairwiseSyn50[3];
+    }
+
+
+    double GetpwSynAT50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool50)
+        {
+            codondata->nuc_pairwiseSyn50(nuc_pairwiseSyn50);
+            nuc_pairwiseSyn_bool50 = true;
+        }
+        return nuc_pairwiseSyn50[2];
+    }
+
+    double GetpwSynAG50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool50)
+        {
+            codondata->nuc_pairwiseSyn50(nuc_pairwiseSyn50);
+            nuc_pairwiseSyn_bool50 = true;
+        }
+        return nuc_pairwiseSyn50[1];
+    }
+
+
+    double GetpwSynAC50(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool50)
+        {
+            codondata->nuc_pairwiseSyn50(nuc_pairwiseSyn50);
+            nuc_pairwiseSyn_bool50 = true;
+        }
+        return nuc_pairwiseSyn50[0];
+    }
+
+    // 70
+
+    double GetpwSynGT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool70)
+        {
+            codondata->nuc_pairwiseSyn70(nuc_pairwiseSyn70);
+            nuc_pairwiseSyn_bool70 = true;
+        }
+        return nuc_pairwiseSyn70[5];
+    }
+
+    double GetpwSynCT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool70)
+        {
+            codondata->nuc_pairwiseSyn70(nuc_pairwiseSyn70);
+            nuc_pairwiseSyn_bool70 = true;
+        }
+        return nuc_pairwiseSyn70[4];
+    }
+
+    double GetpwSynCG70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool70)
+        {
+            codondata->nuc_pairwiseSyn70(nuc_pairwiseSyn70);
+            nuc_pairwiseSyn_bool70 = true;
+        }
+        return nuc_pairwiseSyn70[3];
+    }
+
+
+    double GetpwSynAT70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool70)
+        {
+            codondata->nuc_pairwiseSyn70(nuc_pairwiseSyn70);
+            nuc_pairwiseSyn_bool70 = true;
+        }
+        return nuc_pairwiseSyn70[2];
+    }
+
+    double GetpwSynAG70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool70)
+        {
+            codondata->nuc_pairwiseSyn70(nuc_pairwiseSyn70);
+            nuc_pairwiseSyn_bool70 = true;
+        }
+        return nuc_pairwiseSyn70[1];
+    }
+
+
+    double GetpwSynAC70(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool70)
+        {
+            codondata->nuc_pairwiseSyn70(nuc_pairwiseSyn70);
+            nuc_pairwiseSyn_bool70 = true;
+        }
+        return nuc_pairwiseSyn70[0];
+    }
+
+    // 90 
+    double GetpwSynGT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool90)
+        {
+            codondata->nuc_pairwiseSyn90(nuc_pairwiseSyn90);
+            nuc_pairwiseSyn_bool90 = true;
+        }
+        return nuc_pairwiseSyn90[5];
+    }
+
+    double GetpwSynCT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool90)
+        {
+            codondata->nuc_pairwiseSyn90(nuc_pairwiseSyn90);
+            nuc_pairwiseSyn_bool90 = true;
+        }
+        return nuc_pairwiseSyn90[4];
+    }
+
+    double GetpwSynCG90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool90)
+        {
+            codondata->nuc_pairwiseSyn90(nuc_pairwiseSyn90);
+            nuc_pairwiseSyn_bool90 = true;
+        }
+        return nuc_pairwiseSyn90[3];
+    }
+
+
+    double GetpwSynAT90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool90)
+        {
+            codondata->nuc_pairwiseSyn90(nuc_pairwiseSyn90);
+            nuc_pairwiseSyn_bool90 = true;
+        }
+        return nuc_pairwiseSyn90[2];
+    }
+
+    double GetpwSynAG90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool90)
+        {
+            codondata->nuc_pairwiseSyn90(nuc_pairwiseSyn90);
+            nuc_pairwiseSyn_bool90 = true;
+        }
+        return nuc_pairwiseSyn90[1];
+    }
+
+
+    double GetpwSynAC90(CodonSequenceAlignment* codondata)
+    {
+        if(!nuc_pairwiseSyn_bool90)
+        {
+            codondata->nuc_pairwiseSyn90(nuc_pairwiseSyn90);
+            nuc_pairwiseSyn_bool90 = true;
+        }
+        return nuc_pairwiseSyn90[0];
+    }
 
 
 //
