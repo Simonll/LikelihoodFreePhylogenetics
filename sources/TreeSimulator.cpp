@@ -731,8 +731,8 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
         {
             cerr << "TreeSimulator::ComputeRecursiveSimulation2\n";
             cerr << time << "\n" << blength << "\n";
-            cerr << submatrix->GetTotalMutRate(FromNodeIndex) << "\n" << submatrix->GetTotalMutRateNonSyn(FromNodeIndex) << "\n" << submatrix->GetTotalMutRateSyn(FromNodeIndex) << "\n";
-            cerr << submatrix->GetTotalSubRate(FromNodeIndex) << "\n" << submatrix->GetTotalSubRateNonSyn(FromNodeIndex) << "\n" << submatrix->GetTotalSubRateSyn(FromNodeIndex) << "\n";
+            cerr << submatrix->GetTotalMutRate(FromNodeIndex) << "\n" ;
+            cerr << submatrix->GetTotalSubRate(FromNodeIndex) << "\n" ;
         }
 
         double IntervalLength = 1.0;
