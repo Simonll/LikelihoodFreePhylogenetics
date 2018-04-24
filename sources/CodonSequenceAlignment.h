@@ -2153,7 +2153,11 @@ public:
                     if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
                     {
                         int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
-                        if (pos != -1 && pos != 3)
+                        if (pos == -1)
+                        {
+                            cons++; 
+                        }
+                        else if (pos != 3)
                         {
                             int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
                             int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
@@ -2181,10 +2185,6 @@ public:
                             {
                                 gt++;
                             }
-                            else if (posa == posb)
-                            {
-                                cons++; 
-                            }    
                         }
                     }
                 }
@@ -2264,7 +2264,11 @@ public:
                     if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
                     {
                         int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
-                        if (pos != -1 && pos != 3)
+                        if (pos == -1)
+                        {
+                            cons++; 
+                        }
+                        else if (pos != 3)
                         {
                             int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
                             int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
@@ -2292,10 +2296,6 @@ public:
                             {
                                 gt++;
                             }
-                            else if (posa == posb)
-                            {
-                                cons++; 
-                            }    
                         }
                     }
                 }
@@ -2375,7 +2375,11 @@ public:
                     if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
                     {
                         int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
-                        if (pos != -1 && pos != 3)
+                        if (pos == -1)
+                        {
+                            cons++; 
+                        }
+                        else if (pos != 3)
                         {
                             int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
                             int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
@@ -2403,10 +2407,6 @@ public:
                             {
                                 gt++;
                             }
-                            else if (posa == posb)
-                            {
-                                cons++; 
-                            }    
                         }
                     }
                 }
@@ -2486,7 +2486,11 @@ public:
                     if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
                     {
                         int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
-                        if (pos != -1 && pos != 3)
+                        if (pos == -1)
+                        {
+                            cons++; 
+                        }
+                        else if (pos != 3)
                         {
                             int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
                             int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
@@ -2514,10 +2518,6 @@ public:
                             {
                                 gt++;
                             }
-                            else if (posa == posb)
-                            {
-                                cons++; 
-                            }    
                         }
                     }
                 }
@@ -2597,7 +2597,11 @@ public:
                     if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
                     {
                         int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
-                        if (pos != -1 && pos != 3)
+                        if (pos == -1)
+                        {
+                            cons++; 
+                        }
+                        else if (pos != 3)
                         {
                             int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
                             int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
@@ -2625,10 +2629,6 @@ public:
                             {
                                 gt++;
                             }
-                            else if (posa == posb)
-                            {
-                                cons++; 
-                            }    
                         }
                     }
                 }
@@ -2708,7 +2708,11 @@ public:
                     if(state_seq1 != unknown && state_seq2 != unknown && GetCodonStateSpace()->Synonymous(state_seq1,state_seq2))
                     {
                         int pos = GetCodonStateSpace()->GetDifferingPosition(state_seq1,state_seq2);
-                        if (pos != -1 && pos != 3)
+                        if (pos == -1)
+                        {
+                            cons++; 
+                        }
+                        else if (pos != 3)
                         {
                             int posa = GetCodonStateSpace()->GetCodonPosition(pos,state_seq1);
                             int posb = GetCodonStateSpace()->GetCodonPosition(pos,state_seq2);
@@ -2736,10 +2740,6 @@ public:
                             {
                                 gt++;
                             }
-                            else if (posa == posb)
-                            {
-                                cons++; 
-                            }    
                         }
                     }
                 }
