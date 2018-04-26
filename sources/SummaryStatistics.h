@@ -2424,7 +2424,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[0][0];
+        return dinuc_usage[0][0];
     }
 
     double GetDinucAC(CodonSequenceAlignment* codondata)
@@ -2434,7 +2434,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[0][1];
+        return dinuc_usage[0][1];
     }
     double GetDinucAG(CodonSequenceAlignment* codondata)
     {
@@ -2443,7 +2443,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[0][2];
+        return dinuc_usage[0][2];
 
     }
     double GetDinucAT(CodonSequenceAlignment* codondata)
@@ -2453,7 +2453,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[0][3];
+        return dinuc_usage[0][3];
     }
     double GetDinucCA(CodonSequenceAlignment* codondata)
     {
@@ -2462,7 +2462,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[1][0];
+        return dinuc_usage[1][0];
     }
 
     double GetDinucCC(CodonSequenceAlignment* codondata)
@@ -2472,7 +2472,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[1][1];
+        return dinuc_usage[1][1];
     }
     double GetDinucCG(CodonSequenceAlignment* codondata)
     {
@@ -2481,7 +2481,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[1][2];
+        return dinuc_usage[1][2];
 
     }
     double GetDinucCT(CodonSequenceAlignment* codondata)
@@ -2491,7 +2491,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[1][3];
+        return dinuc_usage[1][3];
     }
     double GetDinucGA(CodonSequenceAlignment* codondata)
     {
@@ -2500,7 +2500,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[2][0];
+        return dinuc_usage[2][0];
     }
 
     double GetDinucGC(CodonSequenceAlignment* codondata)
@@ -2510,7 +2510,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[2][1];
+        return dinuc_usage[2][1];
     }
     double GetDinucGG(CodonSequenceAlignment* codondata)
     {
@@ -2519,7 +2519,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[2][2];
+        return dinuc_usage[2][2];
 
     }
     double GetDinucGT(CodonSequenceAlignment* codondata)
@@ -2529,7 +2529,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[2][3];
+        return dinuc_usage[2][3];
     }
     double GetDinucTA(CodonSequenceAlignment* codondata)
     {
@@ -2538,7 +2538,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[3][0];
+        return dinuc_usage[3][0];
     }
 
     double GetDinucTC(CodonSequenceAlignment* codondata)
@@ -2548,7 +2548,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[3][1];
+        return dinuc_usage[3][1];
     }
     double GetDinucTG(CodonSequenceAlignment* codondata)
     {
@@ -2557,7 +2557,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[3][2];
+        return dinuc_usage[3][2];
 
     }
     double GetDinucTT(CodonSequenceAlignment* codondata)
@@ -2567,7 +2567,7 @@ private:
             codondata->dinuc_usage(dinuc_usage);
             dinuc_bool = true;
         }
-        return (double) dinuc_usage[3][3];
+        return dinuc_usage[3][3];
     }
 
     /////////////////
@@ -2580,7 +2580,7 @@ private:
             codondata->nuc1_usage(nuc1_usage);
             nuc1_bool = true;
         }
-        return (double) nuc1_usage[0];
+        return nuc1_usage[0];
     }
 
     double GetNuc1C(CodonSequenceAlignment* codondata)
@@ -2590,7 +2590,7 @@ private:
             codondata->nuc1_usage(nuc1_usage);
             nuc1_bool = true;
         }
-        return (double) nuc1_usage[1];
+        return nuc1_usage[1];
     }
 
     double GetNuc1G(CodonSequenceAlignment* codondata)
@@ -2600,7 +2600,7 @@ private:
             codondata->nuc1_usage(nuc1_usage);
             nuc1_bool = true;
         }
-        return (double) nuc1_usage[2];
+        return nuc1_usage[2];
     }
 
     double GetNuc1T(CodonSequenceAlignment* codondata)
@@ -2610,7 +2610,7 @@ private:
             codondata->nuc1_usage(nuc1_usage);
             nuc1_bool = true;
         }
-        return (double) nuc1_usage[3];
+        return nuc1_usage[3];
     }
     /////////////////
     // nuc2
@@ -2622,7 +2622,7 @@ private:
             codondata->nuc2_usage(nuc2_usage);
             nuc2_bool = true;
         }
-        return (double) nuc2_usage[0];
+        return nuc2_usage[0];
     }
 
     double GetNuc2C(CodonSequenceAlignment* codondata)
@@ -2632,7 +2632,7 @@ private:
             codondata->nuc2_usage(nuc2_usage);
             nuc2_bool = true;
         }
-        return (double) nuc2_usage[1];
+        return nuc2_usage[1];
     }
 
     double GetNuc2G(CodonSequenceAlignment* codondata)
@@ -2642,7 +2642,7 @@ private:
             codondata->nuc2_usage(nuc2_usage);
             nuc2_bool = true;
         }
-        return (double) nuc2_usage[2];
+        return nuc2_usage[2];
     }
 
     double GetNuc2T(CodonSequenceAlignment* codondata)
@@ -2652,7 +2652,7 @@ private:
             codondata->nuc2_usage(nuc2_usage);
             nuc2_bool = true;
         }
-        return (double) nuc2_usage[3];
+        return nuc2_usage[3];
     }
     /////////////////
     // GC
@@ -2665,7 +2665,7 @@ private:
             nuc_bool = true;
         }
 
-        return (double) (nuc_usage[1]+nuc_usage[2]);
+        return nuc_usage[1]+nuc_usage[2];
     }
 
     double GetGC1(CodonSequenceAlignment* codondata)
@@ -2676,7 +2676,7 @@ private:
             nuc1_bool = true;
         }
 
-        return (double) (nuc1_usage[1]+nuc1_usage[2]);
+        return nuc1_usage[1]+nuc1_usage[2];
     }
 
     double GetGC2(CodonSequenceAlignment* codondata)
@@ -2687,7 +2687,7 @@ private:
             nuc2_bool = true;
         }
 
-        return (double) (nuc2_usage[1]+nuc2_usage[2]);
+        return nuc2_usage[1]+nuc2_usage[2];
     }
 
     double GetGC3(CodonSequenceAlignment* codondata)
@@ -2698,7 +2698,7 @@ private:
             nuc3_bool = true;
         }
 
-        return (double) (nuc3_usage[1]+nuc3_usage[2]);
+        return nuc3_usage[1]+nuc3_usage[2];
     }
 
 
@@ -2712,7 +2712,7 @@ private:
             codondata->nuc3_usage(nuc3_usage);
             nuc3_bool = true;
         }
-        return (double) nuc3_usage[0];
+        return nuc3_usage[0];
     }
 
     double GetNuc3C(CodonSequenceAlignment* codondata)
@@ -2722,7 +2722,7 @@ private:
             codondata->nuc3_usage(nuc3_usage);
             nuc3_bool = true;
         }
-        return (double) nuc3_usage[1];
+        return nuc3_usage[1];
     }
 
     double GetNuc3G(CodonSequenceAlignment* codondata)
@@ -2732,7 +2732,7 @@ private:
             codondata->nuc3_usage(nuc3_usage);
             nuc3_bool = true;
         }
-        return (double) nuc3_usage[2];
+        return nuc3_usage[2];
     }
 
     double GetNuc3T(CodonSequenceAlignment* codondata)
@@ -2742,7 +2742,7 @@ private:
             codondata->nuc3_usage(nuc3_usage);
             nuc3_bool = true;
         }
-        return (double) nuc3_usage[3];
+        return nuc3_usage[3];
     }
     /////////////////
     // nuc
@@ -2754,7 +2754,7 @@ private:
             codondata->nuc_usage(nuc_usage);
             nuc_bool = true;
         }
-        return (double) nuc_usage[0];
+        return nuc_usage[0];
     }
 
     double GetNucC(CodonSequenceAlignment* codondata)
@@ -2764,7 +2764,7 @@ private:
             codondata->nuc_usage(nuc_usage);
             nuc_bool = true;
         }
-        return (double) nuc_usage[1];
+        return nuc_usage[1];
     }
 
     double GetNucG(CodonSequenceAlignment* codondata)
@@ -2774,7 +2774,7 @@ private:
             codondata->nuc_usage(nuc_usage);
             nuc_bool = true;
         }
-        return (double) nuc_usage[2];
+        return nuc_usage[2];
     }
 
     double GetNucT(CodonSequenceAlignment* codondata)
@@ -2784,7 +2784,7 @@ private:
             codondata->nuc_usage(nuc_usage);
             nuc_bool = true;
         }
-        return (double) nuc_usage[3];
+        return nuc_usage[3];
     }
 
 
@@ -2798,7 +2798,7 @@ private:
             codondata->nuc3_meandiff(nuc3_meandiff);
             nuc3_meandiff_bool = true;
         }
-        return (double) nuc3_meandiff[0];
+        return nuc3_meandiff[0];
     }
 
     double GetNuc3var(CodonSequenceAlignment* codondata)
@@ -2808,7 +2808,7 @@ private:
             codondata->nuc3_meandiff(nuc3_meandiff);
             nuc3_meandiff_bool = true;
         }
-        return (double) nuc3_meandiff[3];
+        return nuc3_meandiff[3];
     }
     /////////////////
     // nuc2_meandiff
@@ -2820,7 +2820,7 @@ private:
             codondata->nuc2_meandiff(nuc2_meandiff);
             nuc2_meandiff_bool = true;
         }
-        return (double) nuc2_meandiff[0];
+        return nuc2_meandiff[0];
     }
 
     double GetNuc2var(CodonSequenceAlignment* codondata)
@@ -2830,7 +2830,7 @@ private:
             codondata->nuc2_meandiff(nuc2_meandiff);
             nuc2_meandiff_bool = true;
         }
-        return (double) nuc2_meandiff[2];
+        return nuc2_meandiff[2];
     }
     /////////////////
     // nuc1_meandiff
@@ -2842,7 +2842,7 @@ private:
             codondata->nuc1_meandiff(nuc1_meandiff);
             nuc1_meandiff_bool = true;
         }
-        return (double) nuc1_meandiff[0];
+        return nuc1_meandiff[0];
     }
 
     double GetNuc1var(CodonSequenceAlignment* codondata)
@@ -2852,7 +2852,7 @@ private:
             codondata->nuc1_meandiff(nuc1_meandiff);
             nuc1_meandiff_bool = true;
         }
-        return (double) nuc1_meandiff[1];
+        return nuc1_meandiff[1];
     }
     /////////////////
     // nuc_meandiff
@@ -2864,7 +2864,7 @@ private:
             codondata->nuc_meandiff(nuc_meandiff);
             nuc_meandiff_bool = true;
         }
-        return (double) nuc_meandiff[0];
+        return nuc_meandiff[0];
     }
 
     double GetNucvar(CodonSequenceAlignment* codondata)
@@ -2874,7 +2874,7 @@ private:
             codondata->nuc_meandiff(nuc_meandiff);
             nuc_meandiff_bool = true;
         }
-        return (double) nuc_meandiff[1];
+        return nuc_meandiff[1];
     }
 
     /////////////////
@@ -2887,7 +2887,7 @@ private:
             codondata->codon_meandiff(codon_meandiff);
             codon_meandiff_bool = true;
         }
-        return (double) codon_meandiff[0];
+        return codon_meandiff[0];
     }
 
     double GetCodonvar(CodonSequenceAlignment* codondata)
@@ -2897,7 +2897,7 @@ private:
             codondata->codon_meandiff(codon_meandiff);
             codon_meandiff_bool = true;
         }
-        return (double) codon_meandiff[1];
+        return codon_meandiff[1];
     }
     /////////////////
     // aa_meandiff
@@ -2909,7 +2909,7 @@ private:
             codondata->aa_meandiff(aa_meandiff);
             aa_meandiff_bool = true;
         }
-        return (double) aa_meandiff[0];
+        return aa_meandiff[0];
     }
 
     double GetAAvar(CodonSequenceAlignment* codondata)
@@ -2919,7 +2919,7 @@ private:
             codondata->aa_meandiff(aa_meandiff);
             aa_meandiff_bool = true;
         }
-        return (double) aa_meandiff[1];
+        return aa_meandiff[1];
     }
 
 

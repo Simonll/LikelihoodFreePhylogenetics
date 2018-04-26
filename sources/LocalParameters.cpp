@@ -625,6 +625,13 @@ void LocalParameters::readLocalInstructions()
             this->fixfitCpG = 1;
             cerr << "fixfitCpG " << this->fitCpG << "\n";
         }
+        else if (s =="-fitGC")
+        {
+            iss >> s;
+            this->fitGC = atof(s.c_str());
+            this->fixfitGC = 1;
+            cerr << "fixfitGC " << this->fitGC << "\n";
+        }
         else if (s == "-freefitGC")
         {
             this->fixfitGC = 0;
@@ -791,6 +798,20 @@ void LocalParameters::readLocalInstructions()
             this->lambda_TpA = atof(s.c_str());
             this->fixlambda_TpA = 1;
             cerr << "fix lambda TpA " << this->fixlambda_TpA << "\n";
+        }
+        else if (s == "-lambdatstvCpG")
+        {
+            iss >> s;
+            this->lambda_tstvCpG = atof(s.c_str());
+            this->fixlambda_tstvCpG = 1;
+            cerr << "fix lambda tstvCpG " << this->lambda_tstvCpG << "\n";
+        }
+        else if (s == "-lambdatstvTpA")
+        {
+            iss >> s;
+            this->lambda_tstvTpA = atof(s.c_str());
+            this->fixlambda_tstvTpA = 1;
+            cerr << "fix lambda tstvTpA " << this->lambda_tstvTpA << "\n";
         }
         else if (s == "-freelambdatvCpG")
         {
