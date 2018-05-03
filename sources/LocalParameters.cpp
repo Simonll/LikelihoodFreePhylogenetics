@@ -1110,10 +1110,6 @@ void LocalParameters::SetBranchesLengthsBetweenInAndOutGroup()
 
 void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::tuple<int,std::vector<double>>>posterior, int it)
 {
-    
-    
-    
-    
     string* arrParam = new string[this->NusedParam];
     for (int param_i = 0 ; param_i < this->NParam ; param_i++)
     {
@@ -1142,10 +1138,6 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::tuple<i
                 this->percentFromOutGroup = 0.9999999999;
             }
             this->SetBranchesLengthsBetweenInAndOutGroup();
-        }
-        else if(arrParam[param_i]  == "lambda")
-        {
-            this->lambda_CpG = std::get<1>(posterior[it])[param_i];
         }
         else if(arrParam[param_i]  == "fitGC")
         {

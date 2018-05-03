@@ -271,19 +271,37 @@ std::vector<std::vector<double>> Posterior::GetLocalWeights()
 
 void Posterior::writePosterior(ofstream&os)
 {
-
+    string* arrParam = new string[this->NusedParam];
+    for (int param_i = 0 ; param_i < this->NParam ; param_i++)
+    {
+        auto it = this->mapUsedParam.find(this->listParam[param_i]);
+        if(it != this->mapUsedParam.end() )
+        {
+            if(it->second != -1)
+            {
+                arrParam[it->second] = it->first;
+            }
+        }
+    }
     for (int simu_i = 0 ; simu_i < this->threshold; simu_i++ )
     {
-
-        //write chainID
-        os << std::get<chainIDGetter>(population_t[simu_i]) << "\t";
+        
 
         //write parameters
         if (this->NusedParam > 0)
         {
-            for (int param_i = 0 ; param_i < (int) std::get<paramGetter>(population_t[simu_i]).size(); param_i++)
+            
+            for (int param_i = 0 ; param_i < this->NusedParam; param_i++)
             {
-                os << std::get<paramGetter>(population_t[simu_i])[param_i] << "\t";
+                if (arrParam[param_i] == "chainID")
+                {
+                    //write chainID
+                    os << std::get<chainIDGetter>(population_t[simu_i]) << "\t";
+                }
+                else 
+                {
+                    os << std::get<paramGetter>(population_t[simu_i])[param_i] << "\t";
+                }
             }
         }
         //write summaries
@@ -373,6 +391,7 @@ void Posterior::writePosterior(ofstream&os)
 
         os <<  "\n";
     }
+    delete[] arrParam;
 }
 
 
