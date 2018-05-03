@@ -263,10 +263,8 @@ std::vector<std::vector<double>> Posterior::GetLocalWeights()
         {
             W_i.push_back(GetEpanechnikov(std::get<distancesGetter>(population_t[simu_i])[distance_i],max_[distance_i]));
         }
-
         W.push_back(W_i);
     }
-
     return W;
 }
 
@@ -391,7 +389,7 @@ void Posterior::readPosterior(string posteriorfile)
     std::getline(is, line);
     istringstream iss(line);
     string w;
-    
+    int chainID_ = -1;    
 
     int k = 0;
     while(iss >> w)
@@ -400,6 +398,12 @@ void Posterior::readPosterior(string posteriorfile)
         if (it != mapUsedParam.end())
         {
             cerr << it->first << " " << it->second << " " << k << " " <<  w << "\n";
+            
+            if (w == "chainID")
+            {
+                chainID_ = k;
+            }
+            
             it->second = k;
             k++;
         }
@@ -416,12 +420,6 @@ void Posterior::readPosterior(string posteriorfile)
         exit(0);
     }
 
-
-
-
-
-    
-
     while(std::getline(is, line))
     {
         if(!line.empty())
@@ -430,14 +428,21 @@ void Posterior::readPosterior(string posteriorfile)
             istringstream iss(line);
             double d;
             std::vector <double> cur_param;
-
+            int cur_chainID = -1; 
             for (int param_i = 0; param_i < NusedParam; param_i++)
             {
-                iss >> d;
-                cur_param.push_back(d);
+                if (param_i != chainID_)
+                {
+                    iss >> d;
+                    cur_param.push_back(d);
+                }
+                else if (param_i == chainID_)
+                {
+                    iss >> cur_chainID;
+                }
+                
             }
-
-            posterior.push_back(cur_param);
+            posterior.push_back(std::make_tuple(chainID_,cur_param));
         }
     }
     is.close();
@@ -468,7 +473,6 @@ void Posterior::readPosterior(ifstream& is)
         string* arr = new string[this->NusedParam];
         while(iss >> w || k < this->NusedParam)
         {
-
             auto it = mapUsedParam.find(w);
             if (it != mapUsedParam.end())
             {
@@ -479,14 +483,12 @@ void Posterior::readPosterior(ifstream& is)
                         cerr << k << " "<< it->second << " " << w << " " << it->first << "\n";
                         exit(0);
                     }
-
                     if (w == "chainID")
                     {
                         arr[it->second] = it->first;
                         mapHeader[mapHeaderIndex] = "chainID";
                         k++;
                         mapHeaderIndex++;
-
                     }
                     else
                     {
@@ -495,7 +497,6 @@ void Posterior::readPosterior(ifstream& is)
                         k++;
                         mapHeaderIndex++;
                     }
-
                 }
             }
         }
@@ -523,9 +524,7 @@ void Posterior::readPosterior(ifstream& is)
         string* arr = new string[this->NusedSummaries+1];
         while(iss >> w || k < this->NusedSummaries+1)
         {
-
             auto it = mapUsedSummaries.find(w);
-
             if (it != mapUsedSummaries.end())
             {
                 if(it->second != -1)
@@ -553,17 +552,12 @@ void Posterior::readPosterior(ifstream& is)
                 k++;
                 mapHeaderIndex++;
             }
-
-
         }
-
         for(int v = 0 ; v < this->NusedSummaries; v++)
         {
             cerr << "S " <<  arr[v] << "\n";
-
         }
         cerr << "D_sum " << arr[this->NusedSummaries] << "\n";
-
         delete[] arr;
     }
 
@@ -735,7 +729,7 @@ void Posterior::readPosterior(ifstream& is)
 
 
 }
-
+/* 
 void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double>summariesRealData)
 {
 
@@ -891,12 +885,10 @@ void Posterior::writePosteriorPredictivePvalues(ofstream& os, std::vector<double
     delete [] sum3;
 
 
-}
+} */
 
 void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<double>summariesRealData)
 {
-
-
     int pop_size = (int) population_t.size();
     int k =0 ;
     if (NusedSummaries > 0)
@@ -910,14 +902,9 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
                 if(it->second != -1)
                 {
                     arrSummaries[it->second] = it->first;
-
                 }
-
             }
-
         }
-
-
         for(int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
         {
             if(k == 0 )
@@ -929,7 +916,6 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
             {
                 os << "\t" << arrSummaries[summary_i];
             }
-
         }
         os << "\n";
     }
@@ -955,36 +941,24 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
     {
         for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
         {
-
-
             if(std::get<summariesGetter>(population_t[simu_i])[summary_i] < summariesRealData[summary_i])
             {
                 ppp[summary_i]+=1;
             }
-
             mean[summary_i]+=std::get<summariesGetter>(population_t[simu_i])[summary_i];
             a[summary_i] +=  std::get<summariesGetter>(population_t[simu_i])[summary_i] - K[summary_i];
             b[summary_i] +=  (std::get<summariesGetter>(population_t[simu_i])[summary_i] - K[summary_i]) * (std::get<summariesGetter>(population_t[simu_i])[summary_i] - K[summary_i]);
-
         }
     }
-
-
     for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
         mean[summary_i] /= pop_size;
         var[summary_i]  =  (b[summary_i]  - (a[summary_i]*a[summary_i])/pop_size)/(pop_size);
-
     }
-
-
-
     //posterior predictive p-values (ppp)
     for (int summary_i = 0 ; summary_i < this->NusedSummaries; summary_i++)
     {
-
         ppp[summary_i] /= pop_size;
-
         if(summary_i < this->NusedSummaries-1)
         {
             os << ppp[summary_i] << "\t";
@@ -993,7 +967,6 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
         {
             os << ppp[summary_i] << "\n";
         }
-
     }
 
     //means
@@ -1034,15 +1007,12 @@ void Posterior::writePosteriorPredictiveStatistics(ofstream& os, std::vector<dou
             os <<  (summariesRealData[summary_i]-mean[summary_i]) / sqrt(var[summary_i]) << "\n";
         }
     }
-
     delete [] ppp;
     delete [] mean;
     delete [] var;
     delete [] a;
     delete [] b;
     delete [] K;
-
-
 }
 void Posterior::readMonitor(ifstream & is)
 {
@@ -1090,14 +1060,7 @@ void Posterior::writeHeader(ofstream&os)
 {
 
     // write parameters' header
-    //for (unsigned int param_i = 0 ; param_i < listUsedParam.size() ; param_i++){
     int k = 0;
-
-    //MCMCpt should go there
-
-
-
-
     if(verbose)
     {
         cerr << "writeHeader1 "<< this->NusedParam << "\n";
@@ -1113,11 +1076,8 @@ void Posterior::writeHeader(ofstream&os)
                 if(it->second != -1)
                 {
                     arrParam[it->second] = it->first;
-
                 }
-
             }
-
         }
 
         for (int param_i = 0 ; param_i < this->NusedParam ; param_i++)
@@ -1151,11 +1111,8 @@ void Posterior::writeHeader(ofstream&os)
                 if(it->second != -1)
                 {
                     arrSummaries[it->second] = it->first;
-
                 }
-
             }
-
         }
 
 
@@ -1170,7 +1127,6 @@ void Posterior::writeHeader(ofstream&os)
             {
                 os << "\t" << arrSummaries[summary_i];
             }
-
         }
 
         //write distance header
@@ -1191,8 +1147,6 @@ void Posterior::writeHeader(ofstream&os)
         }
         os << "\tD_sum";
         delete [] arrSummaries;
-
-
     }
 
 
@@ -1207,11 +1161,8 @@ void Posterior::writeHeader(ofstream&os)
                 if(it->second != -1)
                 {
                     arrSummaries[it->second] = it->first;
-
                 }
-
             }
-
         }
 
 
@@ -1226,12 +1177,8 @@ void Posterior::writeHeader(ofstream&os)
             {
                 os << "\t" << "Acc_" <<arrSummaries[summary_i];
             }
-
         }
-
         delete [] arrSummaries;
-
-
     }
 
 
@@ -1251,12 +1198,9 @@ void Posterior::writeHeader(ofstream&os)
                 if(it->second != -1)
                 {
                     arrMapAnc[it->second] = it->first;
-
                 }
-
             }
         }
-
 
         for(int map_i = 0; map_i < NusedEvoAncStats; map_i++)
         {
@@ -1269,8 +1213,6 @@ void Posterior::writeHeader(ofstream&os)
             {
                 os << "\t" << "A_" << arrMapAnc[map_i];
             }
-
-
         }
         delete [] arrMapAnc;
     }
@@ -1311,8 +1253,6 @@ void Posterior::writeHeader(ofstream&os)
 
         }
         delete [] arrMap;
-
-
     }
 
     if(verbose)
@@ -1353,19 +1293,13 @@ void Posterior::writeHeader(ofstream&os)
             }
         }
         delete [] arrMap;
-
-
     }
-
     os << "\n";
-
 }
 
 void Posterior::SetNsite(int i)
 {
     this->Nsite_codon = i;
-
-
 }
 
 void Posterior::GetWeights(string kernel)
@@ -1373,14 +1307,12 @@ void Posterior::GetWeights(string kernel)
     int pop_size = (int) population_t.size();
     if (kernel == "sNormal")
     {
-
         for (int param_i = 0 ; param_i < NusedParam ; param_i++)
         {
             double new_weight = 0.0;
             for (int simu_i = 0 ; simu_i < pop_size; simu_i++)
             {
                 new_weight += std::get<weightsGetter>(population_t[simu_i])[param_i] * (std::get<paramGetter>(population_t[simu_i])[param_i]  + 2.0 * (empVar[param_i]) * rnd->sNormal());
-
             }
             new_weight /= pop_size;
 //            std::get<4>(population_t[simu_i])[param_i] = new_weight;
@@ -1461,7 +1393,6 @@ void Posterior::sortPopulation()
 {
     if (!sorted)
     {
-
         std::sort(population_t.begin(), population_t.end(),
                   [](const std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &left,
                      const std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &right)
@@ -1471,48 +1402,33 @@ void Posterior::sortPopulation()
                  );
         sorted = true;
     }
-
-
 }
 
 void Posterior::slaveRegisterNewSimulation(int chainID, std::vector<double> param,std::vector<double> summaries,std::vector<double> accsummaries,std::vector<double> evoancstat,std::vector<double> evostat,std::vector<double> ssevostat,std::vector<double> distances, std::vector<double> weights)
 {
-
-    population_t.push_back(make_tuple(chainID,param,summaries,accsummaries,evoancstat, evostat,ssevostat,distances,weights));
+    population_t.push_back(make_tuple(chainID,param,summaries,accsummaries,evoancstat,evostat,ssevostat,distances,weights));
     Naccepted++;
     this->Niter++;
-
 }
-
-
 
 void Posterior::registerNewSimulation(int chainID, std::vector<double> param,std::vector<double> summaries,std::vector<double> accsummaries,std::vector<double> evoancstat,std::vector<double> evostat,std::vector<double> ssevostat,std::vector<double> distances, std::vector<double> weights)
 {
-
     if(population_t.empty())
     {
-
         //cerr << "POPULATION IS EMPTY" << Naccepted <<  " "<< threshold <<  " \n";
-
         population_t.push_back(make_tuple(chainID,param,summaries,accsummaries,evoancstat, evostat,ssevostat,distances,weights));
         Naccepted++;
-
     }
     else if((int) population_t.size() < threshold)
     {
-
         //cerr << "POPULATION IS LESS THAN THRESHOLD" << " " << population_t.size() << " "<< Naccepted  << " "<< threshold << " \n";
-
         population_t.push_back(make_tuple(chainID,param,summaries,accsummaries,evoancstat, evostat,ssevostat,distances,weights));
         Naccepted++;
-
     }
     else
     {
-
         if (!sorted)
         {
-
             std::sort(population_t.begin(), population_t.end(),
                       [](const std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &left,
                          const std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> &right)
@@ -1522,7 +1438,6 @@ void Posterior::registerNewSimulation(int chainID, std::vector<double> param,std
                      );
             sorted = true;
         }
-
         std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>> cur_tuple
                 = make_tuple(chainID,param,summaries,accsummaries,evoancstat, evostat,ssevostat,distances,weights);
 
@@ -1533,7 +1448,6 @@ void Posterior::registerNewSimulation(int chainID, std::vector<double> param,std
             return std::get<distancesGetter>(left).back() < std::get<distancesGetter>(right).back();
         }
                                   );
-
         // compute acceptance rate
         if (it != population_t.end())
         {
@@ -1543,7 +1457,6 @@ void Posterior::registerNewSimulation(int chainID, std::vector<double> param,std
             population_t.shrink_to_fit();
             Naccepted++;
         }
-
     }
     this->Niter++;
     //cerr << this->Niter << " ";
@@ -1552,7 +1465,5 @@ void Posterior::registerNewSimulation(int chainID, std::vector<double> param,std
 
 void Posterior::registerOldSimulation(int chainID, std::vector<double> param,std::vector<double> summaries,std::vector<double> accsummaries,std::vector<double> evoancstat,std::vector<double> evostat,std::vector<double> ssevostat,std::vector<double> distances, std::vector<double> weights)
 {
-
     population_t.push_back(make_tuple(chainID,param,summaries,accsummaries,evoancstat, evostat,ssevostat,distances,weights));
-
 }

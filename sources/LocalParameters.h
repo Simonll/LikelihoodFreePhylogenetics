@@ -180,13 +180,12 @@ public:
 
 
     //Setters
-    void SetCurrentParametersFromPosterior(std::vector<std::vector<double>>posterior,int it);
+    void SetCurrentParametersFromPosterior(std::vector<std::tuple<int,std::vector<double>>>posterior,int it);
     void SetTree();
     void SetBranchesLengthsBetweenInAndOutGroup();
     void SetRootBetweenInAndOutGroup();
     void SetRootLCA();
     void SetTreeStuff();
-
     void SetTreeStuffRecursively(Link* from, int notNodeIndex, int gtrIndex);
 
     //Getters
@@ -199,8 +198,6 @@ public:
     std::vector<double> GetCurrentSiteSpecificEvoStats();
     std::vector<double> GetCurrentDistances();
     std::vector<double> GetCurrentWeights();
-
-
     void GetGTR1();
     void GetGTR2();
 
