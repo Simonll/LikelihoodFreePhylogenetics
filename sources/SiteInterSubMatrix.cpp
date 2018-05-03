@@ -407,6 +407,15 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                                     lparam->codonprofile[codonTo] /
                                     lparam->codonprofile[codonFrom]);
 
+                            /* if(aaTo != 14 && aaFrom == 14)
+                            {
+                                S += log((1.0-lparam->lambda_R) / lparam->lambda_R); 
+                            }
+                            else if (aaTo == 14 && aaFrom != 14)
+                            {
+                                S += log(lparam->lambda_R / (1.0 - lparam->lambda_R)); 
+                            } */
+
                             if(aaTo != 14 && aaFrom == 14)
                             {
                                 S += log((1.0-lparam->lambda_R) / lparam->lambda_R); 
