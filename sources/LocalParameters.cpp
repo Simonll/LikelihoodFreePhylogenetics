@@ -131,12 +131,8 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->lambda_tvTpA = 1.0;
     this->lambda_tstvCpG = 1.0; 
     this->lambda_tstvTpA = 1.0;
-    this->lambda_GpT = 1.0;
     this->lambda_TpA = 1.0;
-    this->lambdaCA = 1.0;
-    this->lambdaTG = 1.0;
-    this->lambda_CpG_GpG = 1.0;
-    this->wR_CHQW = 1.0;
+    this->lambda_R = 1.0;
     this->fitCpG = 0.5;
     this->fitTpA = 0.5;
     this->fitGC = 0.5;
@@ -154,6 +150,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->fixlambda_tstvCpG = 1;
     this->fixlambda_tstvTpA = 1;
     this->fixlambda_TpA = 1;
+    this->fixlambda_R = 1;
     this->fixgtr = 1;
     this->fixgtr2 = -1;
     this->fixgtr1 = -1;
@@ -165,8 +162,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->fixts = 1;
     this->fixrr = 1;
     this->fixss = 1;
-    this->fixwR_CHQW = 1;
-    this->fixlambda_CpG_GpG = 1;
     this->rooted = 0;
     this->fixroot = -1;
     this->randomseed = -1;
@@ -192,11 +187,8 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->iscodon = false;
     this->lambda_TBL_prior = "log2Unif";
     this->lambda_CpG_prior = "log10Unif";
-    this->lambda_GpT_prior = "log10Unif";
     this->lambda_TpA_prior = "log10Unif";
     this->lambda_omega_prior = "log2Unif";
-    this->lambda_CpG_GpG_prior = "log10Unif";
-    this->wR_CHQW_prior = "log10Unif";
 
     this->nucrrnr = new double*[this->Nnucp];
     this->nucrrnr1 = new double*[this->Nnucp];
@@ -318,12 +310,10 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
 
 
     }
-
     this->Nsite_codon  = this->codondata->GetNsite();
     this->Nsite_nuc    = this->Nsite_codon * 3;
     this->Ntaxa        = this->codondata->GetNtaxa();
     this->Nstate_codon = this->codondata->GetNstate();
-
     if (this->Nsite_codon >4999)
     {
         cerr << "number of sites too large >=5000: " << this->Nsite_codon  <<"\n";
@@ -653,19 +643,29 @@ void LocalParameters::readLocalInstructions()
             this->lambda_TBL = atof(s.c_str());
             this->fixlambda_TBL = 1;
             cerr << "fix TBL " << this->lambda_TBL << "\n";
-
         }
         else if (s == "-freelambdaTBL")
         {
             this->fixlambda_TBL = 0;
             cerr << "free TBL\n";
-
         }
         else if (s == "-priorlambdaTBL")
         {
             iss >> s;
             this->lambda_TBL_prior = s;
             cerr << "prior TBL " << this->lambda_TBL_prior << "\n";
+        }
+        else if(s == "-freelambdaR")
+        {
+            this->fixlambda_R = 0;
+            cerr << "freelambda_R\n";
+        }
+        else if (s =="-lambdaR")
+        {
+            iss >> s;
+            this->lambda_R = atof(s.c_str());
+            this->fixlambda_R = 1;
+            cerr << "fix lambda_R " << this->lambda_R << "\n";
         }
         else if (s =="-lambdaOmega")
         {
@@ -702,14 +702,12 @@ void LocalParameters::readLocalInstructions()
         else if (s =="-fixgtr1")
         {
             this->fixgtr1 = 1;
-
             iss >> s ;
             this->taxa_gtr1_a = s;
             iss >> s ;
             this->taxa_gtr1_b = s;
             iss >> s ;
             this->taxa_gtr1_c = s;
-
             iss >> s;
             this->nucp1[0] = atof(s.c_str());
             iss >> s;
@@ -718,7 +716,6 @@ void LocalParameters::readLocalInstructions()
             this->nucp1[2] = atof(s.c_str());
             iss >> s;
             this->nucp1[3] = atof(s.c_str());
-
             iss >> s;
             this->nucrr1[0] = atof(s.c_str());
             iss >> s;
@@ -731,7 +728,6 @@ void LocalParameters::readLocalInstructions()
             this->nucrr1[4] = atof(s.c_str());
             iss >> s;
             this->nucrr1[5] = atof(s.c_str());
-
             cerr << " fixgtr1 " << this->fixgtr1 << "\n";
             cerr << this->taxa_gtr1_a << "\t" << this->taxa_gtr1_b <<"\t" << this->taxa_gtr1_c << "\n";
             for (int v = 0 ; v < Nnuc ; v ++ )
@@ -748,14 +744,12 @@ void LocalParameters::readLocalInstructions()
         else if (s =="-fixgtr2")
         {
             this->fixgtr2 = 1;
-
             iss >> s ;
             this->taxa_gtr2_a = s;
             iss >> s ;
             this->taxa_gtr2_b = s;
             iss >> s ;
             this->taxa_gtr2_c = s;
-
             iss >> s;
             this->nucp2[0] = atof(s.c_str());
             iss >> s;
@@ -764,7 +758,6 @@ void LocalParameters::readLocalInstructions()
             this->nucp2[2] = atof(s.c_str());
             iss >> s;
             this->nucp2[3] = atof(s.c_str());
-
             iss >> s;
             this->nucrr2[0] = atof(s.c_str());
             iss >> s;
@@ -839,19 +832,6 @@ void LocalParameters::readLocalInstructions()
             cerr << "freelambdatsCpG\n";
 
         }
-        else if (s == "-freelambdaGpT")
-        {
-            this->fixlambda_GpT = 0;
-            cerr << "freelambdaGpT\n";
-
-        }
-        else if (s == "-priorlambdaGpT")
-        {
-            iss >> s;
-            this->lambda_GpT_prior = s;
-            cerr << "prior GpT " << this->lambda_GpT_prior << "\n";
-
-        }
         else if (s == "-priorlambdaCpG")
         {
             iss >> s;
@@ -870,19 +850,6 @@ void LocalParameters::readLocalInstructions()
             iss >> s;
             this->lambda_TpA_prior = s;
             cerr << "prior TpA " << this->lambda_TpA_prior << "\n";
-
-        }
-        else if (s == "-freelambdaCpG_GpG")
-        {
-            this->fixlambda_CpG_GpG = 0;
-            cerr << "freelambdaCpG_GpG\n";
-
-        }
-        else if (s == "-priorlambdaCpG_GpG")
-        {
-            iss >> s;
-            this->lambda_CpG_GpG_prior = s;
-            cerr << "prior CpG_GpG" << this->lambda_CpG_GpG_prior << "\n";
 
         }
         else if (s =="-freegtnr")
@@ -1220,10 +1187,6 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         {
             this->lambda_CpG = posterior[it][param_i];
         }
-        else if(arrParam[param_i]  == "lambda_GpT")
-        {
-            this->lambda_GpT = posterior[it][param_i];
-        }
         else if(arrParam[param_i]  == "lambda_TpA")
         {
             this->lambda_TpA = posterior[it][param_i];
@@ -1244,18 +1207,6 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         {
             this->lambda_tstvCpG = posterior[it][param_i];
         }
-        else if(arrParam[param_i]  == "lambda_CpG_GpG")
-        {
-            this->lambda_CpG_GpG = posterior[it][param_i];
-        }
-        else if (arrParam[param_i]  == "lambdaTG")
-        {
-            this->lambdaTG = posterior[it][param_i];
-        }
-        else if (arrParam[param_i]  == "lambdaCA")
-        {
-            this->lambdaCA = posterior[it][param_i];
-        }
         else if (arrParam[param_i]  == "lambda_TBL")
         {
             this->lambda_TBL = posterior[it][param_i];
@@ -1266,6 +1217,10 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         else if (arrParam[param_i]  == "lambda_omega")
         {
             this->lambda_omega = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "lambda_R")
+        {
+            this->lambda_R = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucsA")
         {
@@ -1448,21 +1403,9 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         {
             cur_param.push_back(this->fitTpA);
         }
-        else if(arrParam[param_i]  == "lambda")
-        {
-            cur_param.push_back(this->lambda_CpG);
-        }
         else if(arrParam[param_i]  == "lambda_CpG")
         {
             cur_param.push_back(this->lambda_CpG);
-        }
-        else if(arrParam[param_i]  == "lambda_GpT")
-        {
-            cur_param.push_back(this->lambda_GpT);
-        }
-        else if(arrParam[param_i]  == "lambda_CpG_GpG")
-        {
-            cur_param.push_back(this->lambda_CpG_GpG);
         }
         else if(arrParam[param_i]  == "lambda_TpA")
         {
@@ -1484,14 +1427,6 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         {
             cur_param.push_back(this->lambda_tstvCpG);
         }
-        else if (arrParam[param_i]  == "lambdaTG")
-        {
-            cur_param.push_back(this->lambdaTG);
-        }
-        else if (arrParam[param_i]  == "lambdaCA")
-        {
-            cur_param.push_back(this->lambdaCA);
-        }
         else if (arrParam[param_i]  == "lambda_TBL")
         {
             cur_param.push_back(this->lambda_TBL);
@@ -1499,6 +1434,10 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         else if (arrParam[param_i]  == "lambda_omega")
         {
             cur_param.push_back(this->lambda_omega);
+        }
+        else if (arrParam[param_i]  == "lambda_R")
+        {
+            cur_param.push_back(this->lambda_R);
         }
         else if (arrParam[param_i]  == "nucsA")
         {
@@ -1566,7 +1505,6 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         }
     }
     delete [] arrParam;
-
     return cur_param;
 }
 
@@ -1600,62 +1538,44 @@ void LocalParameters::writeParam(ofstream& os)
 
         os << nucrr[i] << "\t";
     }
-
     os << "\n";
-
     os << omega << "\n";
-
     for(int i = 0; i <Nstate_codon; i++)
     {
-
         if (i < Nstate_codon-1)
         {
-
             os << codonprofile[i] << "\t";
         }
         else
         {
-
             os << codonprofile[i] << "\n";
         }
-
-
     }
     os << "\n";
     for(int j = 0; j < Nsite_codon; j++)
     {
-
         for(int i = 0; i <Nstate_aa; i++ )
         {
-
             if (i < Nstate_aa -1)
             {
-
                 os << ssaaprofiles[j][i] << "\t";
             }
             else
             {
-
                 os << ssaaprofiles[j][i] << "\n";
             }
-
         }
-
     }
     for(int i = 0; i < Nsite_codon; i++)
     {
-
         if (i < Nsite_codon -1)
         {
-
             os << alloc[i] << "\t";
         }
         else
         {
-
             os << alloc[i] << "\n";
         }
-
     }
 
     if (this->model == "FMutSelSimu" || this->model == "FMutSel0Simu")

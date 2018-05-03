@@ -365,15 +365,6 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                             m *=  lparam->lambda_CpG;
                             m *=  lparam->lambda_tstvCpG;
                             //CpG>TpG
-                            if (nucposFrom[codonPos] == 1)
-                            {
-                                //CpG within 5'3'
-                                m *= lparam->lambdaTG; 
-                            }
-                            /* else if (nucposFrom[codonPos] == 2)
-                            {
-                                
-                            } */
                         }
                         else if (CpGcont > 2)
                         {
@@ -408,10 +399,23 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
 
                         if (!lparam->codonstatespace->Synonymous(codonFrom,codonTo))
                         {
-                            S = log(lparam->ssaaprofiles[lparam->alloc[site_codon_i]][lparam->codonstatespace->Translation(codonTo)] /
-                                    lparam->ssaaprofiles[lparam->alloc[site_codon_i]][lparam->codonstatespace->Translation(codonFrom)] *
+                            int aaTo = lparam->codonstatespace->Translation(codonTo); 
+                            int aaFrom = lparam->codonstatespace->Translation(codonFrom);
+                            
+                            S = log(lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaTo] /
+                                    lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom] *
                                     lparam->codonprofile[codonTo] /
                                     lparam->codonprofile[codonFrom]);
+
+                            if(aaTo != 14 && aaFrom == 14)
+                            {
+                                S += log((1.0-lparam->lambda_R) / lparam->lambda_R); 
+                            }
+                            else if (aaTo == 14 && aaFrom != 14)
+                            {
+                                S += log(lparam->lambda_R / (1.0 - lparam->lambda_R)); 
+                            }
+
 
                             SubRate = MutRate * lparam->lambda_omega *  lparam->omega;
                             //MutRateNonSyn = MutRate;

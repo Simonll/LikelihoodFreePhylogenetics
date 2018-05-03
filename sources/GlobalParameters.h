@@ -23,7 +23,6 @@ along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses
 #include <algorithm>
 #include <map>
 
-
 #define isnan std::isnan
 #define isinf std::isinf
 #define string std::string
@@ -47,16 +46,13 @@ along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses
 class GlobalParameters
 {
 public:
-
-
     //const
     static constexpr double TOOSMALL = 1e-30;
     static constexpr double TOOLARGE = 500;
     static constexpr double TOOLARGENEGATIVE = -500;
 
-
     static const int NSummaries = 890;
-    static const int NParam = 35;
+    static const int NParam = 31;
     static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
     static const int NDistances = 3; 
@@ -65,7 +61,6 @@ public:
 
     const string listCodes[NCodes] = {
         "Universal","MtMam","MtInv"
-
     };  
 
     const string listTransformtations[NTransformations] = {
@@ -78,13 +73,10 @@ public:
 
     const string listParam[NParam] = 
     {
-        "chainID","root","lambda","lambda_CpG","lambda_TpA","lambdaCG","lambdaCA","lambda_TBL", "lambda_omega",
-        "nucsA", "nucsC", "nucsG","nucsT",
-        "nucrrAC","nucrrAG","nucrrAT","nucrrCA","nucrrCG","nucrrCT","nucrrGA","nucrrGC","nucrrGT","nucrrTA","nucrrTC","nucrrTG",
-        "wR_CHQW","lambda_CpG_GpG","lambda_GpT","fitCpG","lambda_tvCpG","lambda_tstvCpG","lambda_tvTpA","lambda_tstvTpA","fitTpA","fitGC"
+        "chainID","root","lambda","lambda_CpG","lambda_TpA","lambda_TBL","lambda_omega",
+        "nucsA", "nucsC", "nucsG","nucsT","nucrrAC","nucrrAG","nucrrAT","nucrrCA","nucrrCG","nucrrCT","nucrrGA","nucrrGC","nucrrGT","nucrrTA","nucrrTC","nucrrTG",
+        "lambda_R","fitCpG","lambda_tvCpG","lambda_tstvCpG","lambda_tvTpA","lambda_tstvTpA","fitTpA","fitGC"
     };
-
-
 
     const string listSummaries[NSummaries] =
     {
@@ -190,7 +182,6 @@ public:
 
     const string listSiteSpecificEvoStats[NSiteSpecificEvoStats] = {"ssNsub","ssNsynsub"};
 
-
     std::map<string,int> mapUsedParam;
     std::map<string,int> mapUsedSummaries;
     std::map<string,int> mapUsedAncSummaries;
@@ -210,7 +201,6 @@ public:
     string model, controlfile, localcontrolfile, output, distance, transformation;
 
     void readInstructions();
-
     GlobalParameters(string model, string controlfile);
     GlobalParameters(); 
     virtual ~GlobalParameters();

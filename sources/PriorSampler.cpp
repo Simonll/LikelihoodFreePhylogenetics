@@ -24,14 +24,14 @@ PriorSampler::~PriorSampler()
 
 void PriorSampler::sample()
 {
-/*     if (lparam->fixwR_CHQW != 1)
+    if (lparam->fixlambda_R != 1)
     {
         if (lparam->verbose)
         {
-            cerr << "freewR_CHQW\n";
+            cerr << "freelambda_R\n";
         }
-        lparam->wR_CHQW = lparam->rnd->Uniform();
-    } */
+        lparam->lambda_R = lparam->rnd->Uniform();
+    }
     if (lparam->fixfitGC !=1)
     {
         if (lparam->verbose)
@@ -114,27 +114,6 @@ void PriorSampler::sample()
         }
     }
 
-/*     if(lparam->fixlambda_CpG_GpG != 1)
-    {
-        if (lparam->lambda_CpG_GpG_prior == "log10Unif")
-        {
-            lparam->lambda_CpG_GpG = logNUnif(10);
-        }
-        else if (lparam->lambda_CpG_GpG_prior == "log20Unif")
-        {
-            lparam->lambda_CpG_GpG = logNUnif(20);
-        }
-        else if (lparam->lambda_CpG_GpG_prior == "log50Unif")
-        {
-            lparam->lambda_CpG_GpG = logNUnif(50);
-        }
-        else if (lparam->lambda_CpG_GpG_prior == "log100Unif")
-        {
-            lparam->lambda_CpG_GpG = logNUnif(100);
-        }
-    }
- */
-
     if(lparam->fixlambda_TpA != 1)
     {
         if (lparam->lambda_TpA_prior == "log10Unif")
@@ -177,32 +156,6 @@ void PriorSampler::sample()
     {
         lparam->lambda_tstvCpG = logNUnif(10);
     }
-
-/*     if(lparam->fixlambda_GpT != 1)
-    {
-
-        if (lparam->lambda_GpT_prior == "log10Unif")
-        {
-            lparam->lambda_GpT = logNUnif(10);
-
-        }
-        else if (lparam->lambda_GpT_prior == "log20Unif")
-        {
-            lparam->lambda_GpT = logNUnif(20);
-
-        }
-        else if (lparam->lambda_GpT_prior == "log50Unif")
-        {
-            lparam->lambda_GpT = logNUnif(50);
-
-        }
-        else if (lparam->lambda_GpT_prior == "log100Unif")
-        {
-            lparam->lambda_GpT = logNUnif(100);
-        }
-
-
-    } */
 
     if (lparam->fixrr != 1)
     {
