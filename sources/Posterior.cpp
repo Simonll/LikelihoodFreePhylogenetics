@@ -461,7 +461,7 @@ void Posterior::readPosterior(string posteriorfile)
                 }
                 
             }
-            posterior.push_back(std::make_tuple(chainID_,cur_param));
+            posterior.push_back(std::make_tuple(cur_chainID,cur_param));
         }
     }
     is.close();
