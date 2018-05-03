@@ -132,7 +132,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->lambda_tstvCpG = 1.0; 
     this->lambda_tstvTpA = 1.0;
     this->lambda_TpA = 1.0;
-    this->lambda_R = 1.0;
+    this->lambda_R = 0.5;
     this->fitCpG = 0.5;
     this->fitTpA = 0.5;
     this->fitGC = 0.5;
