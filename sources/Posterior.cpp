@@ -369,7 +369,7 @@ void Posterior::readPosterior(string posteriorfile)
     string w;  
     int k = 0 ;
     string* arrParam = new string[this->NusedParam]; 
-    while(iss >> w && k < NusedParam)
+    while(iss >> w)
     {
         auto it = mapUsedParam.find(w);
         if (it != mapUsedParam.end())
@@ -383,6 +383,10 @@ void Posterior::readPosterior(string posteriorfile)
             else
             {
                 cerr << it->first << " " << it->second << " " << w << "\n";
+                if (k > NusedParam)
+                {
+                    cerr << "Wrong number of parameters " << k << " " << NusedParam <<  "\n";
+                }    
                 arrParam[k] = w; 
                 k++;
             }        
@@ -394,7 +398,7 @@ void Posterior::readPosterior(string posteriorfile)
         }
     }
 
-    if ((k) != NusedParam){
+    if (k != NusedParam){
         cerr << "Different number of param between posterior and conf file\n";
         exit(0);
     }
@@ -435,7 +439,7 @@ void Posterior::readPosterior(string posteriorfile)
                             }
                             else if (it_->first == arrParam[param_j] && arrParam[param_j] == "chainID")
                             {
-                                chainID_val = cur_param[param_j];
+                                chainID_val = (int) cur_param[param_j];
                             }
                         }
                     }
