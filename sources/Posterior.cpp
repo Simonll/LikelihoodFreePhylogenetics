@@ -411,7 +411,7 @@ void Posterior::readPosterior(string posteriorfile)
                 if (param_i != chainID_)
                 {
                     iss >> d;
-                    cur_param[position[param_i]];
+                    cur_param[position[param_i]] = d;
                 }
                 else if (param_i == chainID_)
                 {
