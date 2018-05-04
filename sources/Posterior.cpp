@@ -428,7 +428,10 @@ void Posterior::readPosterior(string posteriorfile)
             //cerr << line << "\n";
             istringstream iss(line);
             std::vector <double> cur_param;
-            cur_param.reserve(NusedParam);
+            for (int param_i = 0; param_i < NusedParam; param_i++)
+            {   
+                cur_param.push_back(-1);
+            }
             double d = 0.0;
             for (int param_i = 0; param_i < NusedParam; param_i++)
             {   
