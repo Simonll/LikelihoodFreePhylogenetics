@@ -355,6 +355,8 @@ void Posterior::writePosterior(ofstream&os)
 
 void Posterior::readPosterior(string posteriorfile)
 {
+    
+    
     ifstream is(posteriorfile.c_str());
     if (!is)
     {
@@ -364,24 +366,26 @@ void Posterior::readPosterior(string posteriorfile)
     string line;
     std::getline(is, line);
     istringstream iss(line);
-    string w;
-    int chainID_ = -1;    
-    std::vector <int> position; 
-    int k = 0;
-    while(iss >> w)
+    string w;  
+    int k = 0 ;
+    string* arrParam = new string[this->NusedParam]; 
+    while(iss >> w && k < NusedParam)
     {
         auto it = mapUsedParam.find(w);
         if (it != mapUsedParam.end())
         {
-            cerr << it->first << " " << it->second << " " << k << " " <<  w << "\n";
-            
-            if (w == "chainID")
+            if(it->second == -1)
             {
-                chainID_ = k;
+                cerr << "Undefined parameter " << w << "\n";
+                cerr << "Not present in the posterior\n";
+                exit(0);
             }
-            position.push_back(k);
-            //it->second = k;
-            k++;
+            else
+            {
+                cerr << it->first << " " << it->second << " " << w << "\n";
+                arrParam[k] = w; 
+                k++;
+            }        
         }
         else
         {
@@ -390,39 +394,57 @@ void Posterior::readPosterior(string posteriorfile)
         }
     }
 
-    if (k != NusedParam)
-    {
-        cerr << "differing in number of param between post and config " << k << " " << NusedParam << "\n";
+    if ((k-1) != NusedParam){
+        cerr << "Different number of param between posterior and conf file\n";
         exit(0);
     }
-
     while(std::getline(is, line))
     {
         if(!line.empty())
         {
             //cerr << line << "\n";
             istringstream iss(line);
-            double d;
             std::vector <double> cur_param;
-            cur_param.reserve(position.size());
-            int cur_chainID = -1; 
-            k = 0;
+            double d = 0.0;
+            int chainID_ = 0; 
             for (int param_i = 0; param_i < NusedParam; param_i++)
-            {
-                if (param_i != chainID_)
+            {   
+                if (arrParam[param_i] == "chainID")
                 {
-                    iss >> d;
-                    cur_param[position[k]] = d;
-                    k++;
+                    chainID_ = 1; 
                 }
-                else if (param_i == chainID_)
+                iss >> d;
+                cur_param.push_back(d);
+            }
+
+            std::vector <double> cur_param_final; 
+            cur_param_final.reserve(cur_param.size()-chainID_); // -1 for chainID
+            int chainID_val = 0 ;
+            for (int param_i = 0 ; param_i < this->NParam ; param_i++)
+            {
+                auto it_ = this->mapUsedParam.find(this->listParam[param_i]);
+                if(it_ != this->mapUsedParam.end() )
                 {
-                    iss >> cur_chainID;
+                    if(it_->second != -1)
+                    {
+                        for (int param_j = 0; param_j < NusedParam; param_j++)
+                        {   
+                            if (it_->first == arrParam[param_j] && arrParam[param_j] != "chainID" )
+                            {
+                                cur_param_final.push_back(cur_param[param_j]);
+                            }
+                            else if (it_->first == arrParam[param_j] && arrParam[param_j] == "chainID")
+                            {
+                                chainID_val = cur_param[param_j];
+                            }
+                        }
+                    }
                 }
             }
-            posterior.push_back(std::make_tuple(cur_chainID,cur_param));
+            posterior.push_back(std::make_tuple(chainID_val,cur_param_final));
         }
     }
+    delete[] arrParam;
     is.close();
 }
 
