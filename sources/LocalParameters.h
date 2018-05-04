@@ -180,7 +180,7 @@ public:
 
 
     //Setters
-    void SetCurrentParametersFromPosterior(std::vector<std::tuple<int,std::vector<double>>>posterior,int it);
+    void SetCurrentParametersFromPosterior(std::vector<std::vector<double>> posterior,int it);
     void SetTree();
     void SetBranchesLengthsBetweenInAndOutGroup();
     void SetRootBetweenInAndOutGroup();

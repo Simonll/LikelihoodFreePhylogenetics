@@ -98,8 +98,8 @@ public:
 
     string localcontrolfile, output, model;
 
-    std::vector<std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>>> population_t;
-    std::vector<std::tuple<int,std::vector<double>>> posterior;
+    std::vector<std::tuple<int,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>>> population_t;
+    std::vector<std::vector<double>> posterior;
     double*empVar;
     double*empMean;
 

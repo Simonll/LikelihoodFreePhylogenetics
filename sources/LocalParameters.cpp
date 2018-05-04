@@ -1108,7 +1108,7 @@ void LocalParameters::SetBranchesLengthsBetweenInAndOutGroup()
 }
 
 
-void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::tuple<int,std::vector<double>>>posterior, int it)
+void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<double>>posterior, int it)
 {
     string* arrParam = new string[this->NusedParam];
     for (int param_i = 0 ; param_i < this->NParam ; param_i++)
@@ -1126,12 +1126,12 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::tuple<i
     {
         if (arrParam[param_i] == "chainID")
         {
-            this->MCMCpointID =  std::get<0>(posterior[it]);
-            cerr << "chainID " <<this->MCMCpointID << "\n";
+            this->MCMCpointID =  posterior[it][param_i];
+            cerr << "chainID " << this->MCMCpointID << "\n";
         }
         else if (arrParam[param_i] == "root")
         {
-            this->percentFromOutGroup = std::get<1>(posterior[it])[param_i];
+            this->percentFromOutGroup = posterior[it][param_i];
             if (percentFromOutGroup >= 1.0 )
             {
                 cerr << "percentFromOutGroup > 1\n";
@@ -1141,7 +1141,7 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::tuple<i
         }
         else if(arrParam[param_i]  == "fitGC")
         {
-            this->fitGC = std::get<1>(posterior[it])[param_i];
+            this->fitGC = posterior[it][param_i];
             if (this->fitGC >1)
             {
                 this->fitGC = 0.9999999999;
@@ -1153,7 +1153,7 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::tuple<i
         }
         else if(arrParam[param_i]  == "fitCpG")
         {
-            this->fitCpG = std::get<1>(posterior[it])[param_i];
+            this->fitCpG = posterior[it][param_i];
             if (fitCpG >1)
             {
                 this->fitCpG = 0.9999999999;
@@ -1165,7 +1165,7 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::tuple<i
         }
         else if(arrParam[param_i]  == "fitTpA")
         {
-            this->fitTpA = std::get<1>(posterior[it])[param_i];
+            this->fitTpA = posterior[it][param_i];
             if (fitTpA >1)
             {
                 this->fitTpA = 0.9999999999;
@@ -1177,109 +1177,108 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::tuple<i
         }
         else if(arrParam[param_i]  == "lambda_CpG")
         {
-            this->lambda_CpG = std::get<1>(posterior[it])[param_i];
+            this->lambda_CpG = posterior[it][param_i];
         }
         else if(arrParam[param_i]  == "lambda_TpA")
         {
-            this->lambda_TpA = std::get<1>(posterior[it])[param_i];
+            this->lambda_TpA = posterior[it][param_i];
         }
         else if(arrParam[param_i]  == "lambda_tvTpA")
         {
-            this->lambda_tvTpA = std::get<1>(posterior[it])[param_i];
+            this->lambda_tvTpA = posterior[it][param_i];
         }
         else if(arrParam[param_i]  == "lambda_tvCpG")
         {
-            this->lambda_tvCpG = std::get<1>(posterior[it])[param_i];
+            this->lambda_tvCpG = posterior[it][param_i];
         }
         else if(arrParam[param_i]  == "lambda_tstvTpA")
         {
-            this->lambda_tstvTpA = std::get<1>(posterior[it])[param_i];
+            this->lambda_tstvTpA = posterior[it][param_i];
         }
         else if(arrParam[param_i]  == "lambda_tstvCpG")
         {
-            this->lambda_tstvCpG = std::get<1>(posterior[it])[param_i];
+            this->lambda_tstvCpG = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "lambda_TBL")
         {
-            this->lambda_TBL = std::get<1>(posterior[it])[param_i];
+            this->lambda_TBL = posterior[it][param_i];
 //            for(int node = 0; node < refTree->GetNnode(); node++){
 //                this->muBranch[node] = this->lambda_TBL;
 //            }
         }
         else if (arrParam[param_i]  == "lambda_omega")
         {
-            this->lambda_omega = std::get<1>(posterior[it])[param_i];
+            this->lambda_omega = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "lambda_R")
         {
-            this->lambda_R = std::get<1>(posterior[it])[param_i];
+            this->lambda_R = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucsA")
         {
-            this->nucp[0] = std::get<1>(posterior[it])[param_i];
+            this->nucp[0] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucsC")
         {
-            this->nucp[1] = std::get<1>(posterior[it])[param_i];
+            this->nucp[1] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucsG")
         {
-            this->nucp[2] = std::get<1>(posterior[it])[param_i];
+            this->nucp[2] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucsT")
         {
-            this->nucp[3] = std::get<1>(posterior[it])[param_i];
+            this->nucp[3] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrAC")
         {
-            this->nucrrnr[0][1] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[0][1] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrAG")
         {
-            this->nucrrnr[0][2] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[0][2] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrAT")
         {
-            this->nucrrnr[0][3] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[0][3] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrCA")
         {
-            this->nucrrnr[1][0] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[1][0] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrCG")
         {
-            this->nucrrnr[1][2] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[1][2] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrCT")
         {
-            this->nucrrnr[1][3] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[1][3] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrGA")
         {
-            this->nucrrnr[2][0] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[2][0] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrGC")
         {
-            this->nucrrnr[2][1] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[2][1] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrGT")
         {
-            this->nucrrnr[2][3] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[2][3] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrTA")
         {
-            this->nucrrnr[3][0] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[3][0] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrTC")
         {
-            this->nucrrnr[3][1] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[3][1] = posterior[it][param_i];
         }
         else if (arrParam[param_i]  == "nucrrTG")
         {
-            this->nucrrnr[3][2] = std::get<1>(posterior[it])[param_i];
+            this->nucrrnr[3][2] = posterior[it][param_i];
         }
     }
-
     delete [] arrParam;
 
 

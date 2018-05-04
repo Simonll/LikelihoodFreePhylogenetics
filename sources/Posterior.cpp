@@ -412,15 +412,11 @@ void Posterior::readPosterior(string posteriorfile)
             {
                 for (int param_j = 0; param_j < NusedParam; param_j++)
                 {   
-                    if (it_->first == arrParam[param_j] && arrParam[param_j] != "chainID" )
+                    if (it_->first == arrParam[param_j])
                     {
                         map_neworder.insert({arrParam[param_j],k});
                         k++;
                     }                          
-                    else if (it_->first == arrParam[param_j] && arrParam[param_j] == "chainID")
-                    {
-                        map_neworder.insert({arrParam[param_j],-1});
-                    }
                 }
             }
         }
@@ -432,26 +428,18 @@ void Posterior::readPosterior(string posteriorfile)
             //cerr << line << "\n";
             istringstream iss(line);
             std::vector <double> cur_param;
-            cur_param.reserve(k);
+            cur_param.reserve(NusedParam);
             double d = 0.0;
-            int chainID_val = 0 ;
-            for (int param_i = 0; param_i < k; param_i++)
+            for (int param_i = 0; param_i < NusedParam; param_i++)
             {   
                 auto it_ = map_neworder.find(arrParam[param_i]);
                 if(it_ != map_neworder.end() )
                 {
-                    if (it_->second == -1)
-                    {
-                        iss >> chainID_val;
-                    }
-                    else 
-                    {
                         iss >> d; 
                         cur_param[it_->second] = d;
-                    }
                 }
             }
-            posterior.push_back(std::make_tuple(chainID_val,cur_param));
+            posterior.push_back(cur_param);
         }
     }
     delete[] arrParam;
