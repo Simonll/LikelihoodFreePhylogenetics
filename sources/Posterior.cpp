@@ -435,7 +435,7 @@ void Posterior::readPosterior(string posteriorfile)
             cur_param.reserve(k);
             double d = 0.0;
             int chainID_val = 0 ;
-            for (int param_i = 0; param_i < NusedParam; param_i++)
+            for (int param_i = 0; param_i < k; param_i++)
             {   
                 auto it_ = map_neworder.find(arrParam[param_i]);
                 if(it_ != map_neworder.end() )
