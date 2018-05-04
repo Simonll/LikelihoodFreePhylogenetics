@@ -237,9 +237,6 @@ std::vector<std::vector<double>> Posterior::GetLocalWeights()
 
 void Posterior::writePosterior(ofstream&os)
 {
-    
-    
-    
     string* arrParam = new string[this->NusedParam];
     for (int param_i = 0 ; param_i < this->NParam ; param_i++)
     {
@@ -254,7 +251,7 @@ void Posterior::writePosterior(ofstream&os)
     }
     for (int simu_i = 0 ; simu_i < this->threshold; simu_i++ )
     {
-         //write parameters
+        //write parameters
         if (this->NusedParam > 0)
         {              
             for (int param_i = 0 ; param_i < this->NusedParam; param_i++)
@@ -383,9 +380,9 @@ void Posterior::readPosterior(string posteriorfile)
             else
             {
                 cerr << it->first << " " << it->second << " " << w << "\n";
-                if (k > NusedParam)
+                if (k > this->NusedParam)
                 {
-                    cerr << "Wrong number of parameters " << k << " " << NusedParam <<  "\n";
+                    cerr << "Wrong number of parameters " << k << " " << this->NusedParam <<  "\n";
                 }    
                 arrParam[k] = w; 
                 k++;
@@ -399,8 +396,34 @@ void Posterior::readPosterior(string posteriorfile)
     }
 
     if (k != NusedParam){
-        cerr << "Different number of param between posterior and conf file\n";
+        cerr << "Different number of parameters between posterior and configuration file\n";
         exit(0);
+    }
+
+    // transform for global order
+    std:: map <string,int>  map_neworder; 
+    k = 0;
+    for (int param_i = 0 ; param_i < this->NParam ; param_i++)
+    {
+        auto it_ = this->mapUsedParam.find(this->listParam[param_i]);
+        if(it_ != this->mapUsedParam.end() )
+        {
+            if(it_->second != -1)
+            {
+                for (int param_j = 0; param_j < NusedParam; param_j++)
+                {   
+                    if (it_->first == arrParam[param_j] && arrParam[param_j] != "chainID" )
+                    {
+                        map_neworder.insert({arrParam[param_j],k});
+                        k++;
+                    }                          
+                    else if (it_->first == arrParam[param_j] && arrParam[param_j] == "chainID")
+                    {
+                        map_neworder.insert({arrParam[param_j],-1});
+                    }
+                }
+            }
+        }
     }
     while(std::getline(is, line))
     {
@@ -409,43 +432,26 @@ void Posterior::readPosterior(string posteriorfile)
             //cerr << line << "\n";
             istringstream iss(line);
             std::vector <double> cur_param;
+            cur_param.reserve(k);
             double d = 0.0;
-            int chainID_ = 0; 
+            int chainID_val = 0 ;
             for (int param_i = 0; param_i < NusedParam; param_i++)
             {   
-                if (arrParam[param_i] == "chainID")
+                auto it_ = map_neworder.find(arrParam[param_i]);
+                if(it_ != map_neworder.end() )
                 {
-                    chainID_ = 1; 
-                }
-                iss >> d;
-                cur_param.push_back(d);
-            }
-
-            std::vector <double> cur_param_final; 
-            cur_param_final.reserve(cur_param.size()-chainID_); // -1 for chainID
-            int chainID_val = 0 ;
-            for (int param_i = 0 ; param_i < this->NParam ; param_i++)
-            {
-                auto it_ = this->mapUsedParam.find(this->listParam[param_i]);
-                if(it_ != this->mapUsedParam.end() )
-                {
-                    if(it_->second != -1)
+                    if (it_->second == -1)
                     {
-                        for (int param_j = 0; param_j < NusedParam; param_j++)
-                        {   
-                            if (it_->first == arrParam[param_j] && arrParam[param_j] != "chainID" )
-                            {
-                                cur_param_final.push_back(cur_param[param_j]);
-                            }
-                            else if (it_->first == arrParam[param_j] && arrParam[param_j] == "chainID")
-                            {
-                                chainID_val = (int) cur_param[param_j];
-                            }
-                        }
+                        iss >> chainID_val;
+                    }
+                    else 
+                    {
+                        iss >> d; 
+                        cur_param[it_->second] = d;
                     }
                 }
             }
-            posterior.push_back(std::make_tuple(chainID_val,cur_param_final));
+            posterior.push_back(std::make_tuple(chainID_val,cur_param));
         }
     }
     delete[] arrParam;
