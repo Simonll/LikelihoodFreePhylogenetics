@@ -111,7 +111,6 @@ public:
     // writter
     void writePosterior(ofstream& os);
     void writeMonitorPosterior(ofstream& os);
-    void writePosteriorPredictivePvalues(ofstream& os, std::vector<double> realDataSummaries);
     void writePosteriorPredictiveStatistics(ofstream& os, std::vector<double> realDataSummaries);
     void writeHeader(ofstream& os);
 

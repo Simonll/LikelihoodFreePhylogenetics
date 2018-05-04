@@ -237,34 +237,20 @@ std::vector<std::vector<double>> Posterior::GetLocalWeights()
 
 void Posterior::writePosterior(ofstream&os)
 {
-    string* arrParam = new string[this->NusedParam];
-    for (int param_i = 0 ; param_i < this->NParam ; param_i++)
-    {
-        auto it = this->mapUsedParam.find(this->listParam[param_i]);
-        if(it != this->mapUsedParam.end() )
-        {
-            if(it->second != -1)
-            {
-                arrParam[it->second] = it->first;
-            }
-        }
-    }
+
     for (int simu_i = 0 ; simu_i < this->threshold; simu_i++ )
     {
+    
+        //write chainID
+        os << std::get<chainIDGetter>(population_t[simu_i]) << "\t";
+
+
         //write parameters
         if (this->NusedParam > 0)
         {              
-            for (int param_i = 0 ; param_i < this->NusedParam; param_i++)
+            for (int param_i = 0 ; param_i < (int) std::get<paramGetter>(population_t[simu_i]).size(); param_i++)
             {
-                if (arrParam[param_i] == "chainID")
-                {
-                    //write chainID
-                    os << std::get<chainIDGetter>(population_t[simu_i]) << "\t";
-                }
-                else 
-                {
-                    os << std::get<paramGetter>(population_t[simu_i])[param_i] << "\t";
-                }
+                os << std::get<paramGetter>(population_t[simu_i])[param_i] << "\t";
             }
         }
         //write summaries
@@ -351,9 +337,7 @@ void Posterior::writePosterior(ofstream&os)
 
 
 void Posterior::readPosterior(string posteriorfile)
-{
-    
-    
+{   
     ifstream is(posteriorfile.c_str());
     if (!is)
     {
@@ -364,7 +348,7 @@ void Posterior::readPosterior(string posteriorfile)
     std::getline(is, line);
     istringstream iss(line);
     string w;  
-    int k = 0 ;
+    int k = 0;
     string* arrParam = new string[this->NusedParam]; 
     while(iss >> w)
     {
@@ -380,9 +364,10 @@ void Posterior::readPosterior(string posteriorfile)
             else
             {
                 cerr << it->first << " " << it->second << " " << w << "\n";
-                if (k > this->NusedParam)
+                if (k == this->NusedParam)
                 {
                     cerr << "Wrong number of parameters " << k << " " << this->NusedParam <<  "\n";
+                    exit(0);
                 }    
                 arrParam[k] = w; 
                 k++;
@@ -399,6 +384,7 @@ void Posterior::readPosterior(string posteriorfile)
         cerr << "Different number of parameters between posterior and configuration file\n";
         exit(0);
     }
+    cerr << "NusedParam " << this->NusedParam << " " << k << "\n";
 
     // transform for global order
     std:: map <string,int>  map_neworder; 
@@ -410,7 +396,7 @@ void Posterior::readPosterior(string posteriorfile)
         {
             if(it_->second != -1)
             {
-                for (int param_j = 0; param_j < NusedParam; param_j++)
+                for (int param_j = 0; param_j < this->NusedParam; param_j++)
                 {   
                     if (it_->first == arrParam[param_j])
                     {

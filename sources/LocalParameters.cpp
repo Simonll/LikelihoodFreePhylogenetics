@@ -1126,7 +1126,7 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
     {
         if (arrParam[param_i] == "chainID")
         {
-            this->MCMCpointID =  posterior[it][param_i];
+            this->MCMCpointID = static_cast<int> (posterior[it][param_i]);
             cerr << "chainID " << this->MCMCpointID << "\n";
         }
         else if (arrParam[param_i] == "root")
