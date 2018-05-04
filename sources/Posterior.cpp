@@ -394,7 +394,7 @@ void Posterior::readPosterior(string posteriorfile)
         }
     }
 
-    if ((k-1) != NusedParam){
+    if ((k) != NusedParam){
         cerr << "Different number of param between posterior and conf file\n";
         exit(0);
     }
