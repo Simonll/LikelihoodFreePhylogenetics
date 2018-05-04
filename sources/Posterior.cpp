@@ -406,12 +406,14 @@ void Posterior::readPosterior(string posteriorfile)
             std::vector <double> cur_param;
             cur_param.reserve(position.size());
             int cur_chainID = -1; 
+            k = 0;
             for (int param_i = 0; param_i < NusedParam; param_i++)
             {
                 if (param_i != chainID_)
                 {
                     iss >> d;
-                    cur_param[position[param_i]] = d;
+                    cur_param[position[k]] = d;
+                    k++;
                 }
                 else if (param_i == chainID_)
                 {
