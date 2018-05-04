@@ -331,7 +331,7 @@ void Posterior::writePosterior(ofstream&os)
         }
         os <<  "\n";
     }
-    delete[] arrParam;
+    
 }
 
 
