@@ -400,6 +400,7 @@ void Posterior::readPosterior(string posteriorfile)
                 {   
                     if (it_->first == arrParam[param_j])
                     {
+                        cerr << param_j <<  " " << arrParam[param_j]  << " " << k << "\n"; 
                         map_neworder.insert({arrParam[param_j],k});
                         k++;
                     }                          
