@@ -892,6 +892,7 @@ void Posterior::writeHeader(ofstream&os)
 
     // write parameters' header
     int k = 0;
+    int v = 0; 
     if(verbose)
     {
         cerr << "writeHeader1 "<< this->NusedParam << "\n";
@@ -906,13 +907,16 @@ void Posterior::writeHeader(ofstream&os)
             {
                 if(it->second != -1)
                 {
-                    arrParam[it->second] = it->first;
+                    arrParam[v] = it->first;
+                    v++; 
                 }
             }
         }
 
         for (int param_i = 0 ; param_i < this->NusedParam ; param_i++)
         {
+            
+    
             if(k == 0)
             {
                 os << arrParam[param_i];
