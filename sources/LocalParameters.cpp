@@ -1365,7 +1365,6 @@ std::vector<double> LocalParameters::GetCurrentAccessorySummaries()
 std::vector<double> LocalParameters::GetCurrentParameters()
 {
     string* arrParam = new string[this->NusedParam];
-    int k = k ; 
     for (int param_i = 0 ; param_i < this->NParam ; param_i++)
     {
         auto it = this->mapUsedParam.find(this->listParam[param_i]);
@@ -1373,12 +1372,11 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         {
             if(it->second != -1)
             {
-                arrParam[k] = it->first;
-                k++;
+                arrParam[it->second] = it->first;
             }
         }
     }
-    
+
     std::vector<double> cur_param;
     for (int param_i = 0 ; param_i < this->NusedParam; param_i++)
     {
