@@ -1110,15 +1110,17 @@ void LocalParameters::SetBranchesLengthsBetweenInAndOutGroup()
 
 void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<double>>posterior, int it)
 {
+    int k = 0; 
     string* arrParam = new string[this->NusedParam];
     for (int param_i = 0 ; param_i < this->NParam ; param_i++)
     {
         auto it_ = this->mapUsedParam.find(this->listParam[param_i]);
-        if(it_ != this->mapUsedParam.end() )
+        if(it_ != this->mapUsedParam.end())
         {
             if(it_->second != -1)
             {
-                arrParam[it_->second] = it_->first;
+                arrParam[k] = it_->first;
+                k++;
             }
         }
     }
@@ -1363,6 +1365,7 @@ std::vector<double> LocalParameters::GetCurrentAccessorySummaries()
 std::vector<double> LocalParameters::GetCurrentParameters()
 {
     string* arrParam = new string[this->NusedParam];
+    int k = k ; 
     for (int param_i = 0 ; param_i < this->NParam ; param_i++)
     {
         auto it = this->mapUsedParam.find(this->listParam[param_i]);
@@ -1370,10 +1373,12 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         {
             if(it->second != -1)
             {
-                arrParam[it->second] = it->first;
+                arrParam[k] = it->first;
+                k++;
             }
         }
     }
+    
     std::vector<double> cur_param;
     for (int param_i = 0 ; param_i < this->NusedParam; param_i++)
     {

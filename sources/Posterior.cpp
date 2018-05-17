@@ -899,6 +899,7 @@ void Posterior::writeHeader(ofstream&os)
     if (this->NusedParam > 0)
     {
         string* arrParam = new string[this->NusedParam];
+        int l = 0; 
         for (int param_i = 0 ; param_i < this->NParam ; param_i++)
         {
             auto it = this->mapUsedParam.find(this->listParam[param_i]);
@@ -906,7 +907,8 @@ void Posterior::writeHeader(ofstream&os)
             {
                 if(it->second != -1)
                 {
-                    arrParam[it->second] = it->first;
+                    arrParam[l] = it->first;
+                    l++;
                 }
             }
         }
