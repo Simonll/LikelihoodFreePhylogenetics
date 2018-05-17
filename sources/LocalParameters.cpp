@@ -1371,7 +1371,6 @@ std::vector<double> LocalParameters::GetCurrentParameters()
             if(it->second != -1)
             {
                 arrParam[it->second] = it->first;
-
             }
         }
     }

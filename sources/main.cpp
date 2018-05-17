@@ -1494,7 +1494,7 @@ int main(int argc, char* argv[])
         cerr << "The simulation process started\n";
         if (!post->posterior.empty())
         {
-
+            
             int it = 0 ;
             while(it < post->threshold)
             {
