@@ -26,11 +26,27 @@ void PriorSampler::sample()
 {
     
     if (lparam->fixAAadj != 1)
-    {
-        for(int i =0 ; i < lparam->Nstate_aa; i++)
-        {
-            lparam->AAadj[i] = lparam->rnd->Uniform() ;
-        }
+    {     
+        lparam->Aadj = lparam->rnd->Uniform();
+        lparam->Cadj = lparam->rnd->Uniform();
+        lparam->Dadj = lparam->rnd->Uniform();
+        lparam->Eadj = lparam->rnd->Uniform();
+        lparam->Fadj = lparam->rnd->Uniform();
+        lparam->Gadj = lparam->rnd->Uniform();
+        lparam->Hadj = lparam->rnd->Uniform();
+        lparam->Iadj = lparam->rnd->Uniform();
+        lparam->Kadj = lparam->rnd->Uniform();
+        lparam->Ladj = lparam->rnd->Uniform();
+        lparam->Madj = lparam->rnd->Uniform();
+        lparam->Nadj = lparam->rnd->Uniform();
+        lparam->Padj = lparam->rnd->Uniform();
+        lparam->Qadj = lparam->rnd->Uniform();
+        lparam->Radj = lparam->rnd->Uniform();
+        lparam->Sadj = lparam->rnd->Uniform();
+        lparam->Tadj = lparam->rnd->Uniform();
+        lparam->Vadj = lparam->rnd->Uniform();
+        lparam->Wadj = lparam->rnd->Uniform();
+        lparam->Yadj = lparam->rnd->Uniform();  
     }
     
     if (lparam->fixCODONadj != 1)
@@ -50,6 +66,7 @@ void PriorSampler::sample()
         }
         lparam->lambda_R = lparam->rnd->Uniform();
     }
+
     if (lparam->fixfitGC !=1)
     {
         if (lparam->verbose)
