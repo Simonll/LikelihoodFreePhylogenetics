@@ -136,6 +136,7 @@ int main(int argc, char* argv[])
 
     else if (model == "show")
     {
+        cerr << "show program content\n";
         GlobalParameters* gparam = new GlobalParameters(); 
         cerr << "#PARAMETERS\n";
         for (auto i : gparam->listParam)
