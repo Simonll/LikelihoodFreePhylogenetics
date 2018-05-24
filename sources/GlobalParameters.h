@@ -75,8 +75,8 @@ public:
     {
         "chainID","root","lambda_CpG","lambda_TpA","lambda_TBL","lambda_omega", 
         "nucsA", "nucsC", "nucsG","nucsT","nucrrAC","nucrrAG","nucrrAT","nucrrCA","nucrrCG","nucrrCT","nucrrGA","nucrrGC","nucrrGT","nucrrTA","nucrrTC","nucrrTG",
-        "lambda_R","fitCpG","lambda_tvCpG","lambda_tstvCpG","lambda_tvTpA","lambda_tstvTpA","fitTpA","fitGC",
-        "Aadj", "Cadj", "Dadj", "Eadj", "Fadj", "Gadj", "Hadj", "Iadj", "Kadj", "Ladj", "Madj", "Nadj", "Padj", "Qadj", "Radj", "Sadj", "Tadj", "Vadj", "Wadj", "Yadj"
+        "lambda_R","fitCpG","lambda_tvCpG","lambda_tstvCpG","lambda_tvTpA","lambda_tstvTpA","fitTpA","fitGC","Aadj", "Cadj", "Dadj", "Eadj", "Fadj",
+        "Gadj", "Hadj", "Iadj", "Kadj", "Ladj", "Madj", "Nadj", "Padj", "Qadj", "Radj", "Sadj", "Tadj", "Vadj", "Wadj", "Yadj"
     };
 
     const string listSummaries[NSummaries] =
