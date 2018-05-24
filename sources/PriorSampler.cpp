@@ -53,7 +53,7 @@ void PriorSampler::sample()
     {
         for(int i =0 ; i < lparam->Nstate_codon; i++)
         {
-            lparam->CODONadj[i] = lparam->rnd->Uniform() ;
+            
         }
     }
     
