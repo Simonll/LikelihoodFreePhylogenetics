@@ -402,8 +402,8 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,in
                             int aaTo = lparam->codonstatespace->Translation(codonTo); 
                             int aaFrom = lparam->codonstatespace->Translation(codonFrom);
                             
-                            S = log(lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaTo] /
-                                    lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom] *
+                            S = log(std::pow(lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaTo],lparam->AAadj[aaTo]) /
+                                    std::pow(lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom],lparam->AAadj[aaFrom]) *
                                     lparam->codonprofile[codonTo] /
                                     lparam->codonprofile[codonFrom]);
 

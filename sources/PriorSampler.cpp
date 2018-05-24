@@ -28,25 +28,45 @@ void PriorSampler::sample()
     if (lparam->fixAAadj != 1)
     {     
         lparam->Aadj = lparam->rnd->Uniform();
+        lparam->AAadj[0] = lparam->Aadj;
         lparam->Cadj = lparam->rnd->Uniform();
+        lparam->AAadj[1] = lparam->Cadj;
         lparam->Dadj = lparam->rnd->Uniform();
+        lparam->AAadj[2] = lparam->Dadj;
         lparam->Eadj = lparam->rnd->Uniform();
+        lparam->AAadj[3] = lparam->Eadj;
         lparam->Fadj = lparam->rnd->Uniform();
+        lparam->AAadj[4] = lparam->Fadj;
         lparam->Gadj = lparam->rnd->Uniform();
+        lparam->AAadj[5] = lparam->Gadj;
         lparam->Hadj = lparam->rnd->Uniform();
+        lparam->AAadj[6] = lparam->Hadj;
         lparam->Iadj = lparam->rnd->Uniform();
+        lparam->AAadj[7] = lparam->Iadj;
         lparam->Kadj = lparam->rnd->Uniform();
+        lparam->AAadj[8] = lparam->Kadj;
         lparam->Ladj = lparam->rnd->Uniform();
+        lparam->AAadj[9] = lparam->Ladj;
         lparam->Madj = lparam->rnd->Uniform();
+        lparam->AAadj[10] = lparam->Madj;
         lparam->Nadj = lparam->rnd->Uniform();
+        lparam->AAadj[11] = lparam->Nadj;
         lparam->Padj = lparam->rnd->Uniform();
+        lparam->AAadj[12] = lparam->Padj;
         lparam->Qadj = lparam->rnd->Uniform();
+        lparam->AAadj[13] = lparam->Qadj;
         lparam->Radj = lparam->rnd->Uniform();
+        lparam->AAadj[14] = lparam->Radj;
         lparam->Sadj = lparam->rnd->Uniform();
+        lparam->AAadj[15] = lparam->Sadj;
         lparam->Tadj = lparam->rnd->Uniform();
+        lparam->AAadj[16] = lparam->Tadj;
         lparam->Vadj = lparam->rnd->Uniform();
+        lparam->AAadj[17] = lparam->Vadj;
         lparam->Wadj = lparam->rnd->Uniform();
+        lparam->AAadj[18] = lparam->Wadj;
         lparam->Yadj = lparam->rnd->Uniform();  
+        lparam->AAadj[19] = lparam->Yadj;
     }
     
     if (lparam->fixCODONadj != 1)

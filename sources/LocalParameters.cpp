@@ -136,6 +136,31 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->fitCpG = 0.5;
     this->fitTpA = 0.5;
     this->fitGC = 0.5;
+    AAadj = new double[20];
+    for (int i = 0 ; i < 20 ; i ++)
+    {
+        AAadj[i] = 1; 
+    }
+    this->Aadj = 1.0;
+    this->Cadj = 1.0;
+    this->Dadj = 1.0;
+    this->Eadj = 1.0;
+    this->Fadj = 1.0;
+    this->Gadj = 1.0;
+    this->Hadj = 1.0;
+    this->Iadj = 1.0;
+    this->Kadj = 1.0;
+    this->Ladj = 1.0;
+    this->Madj = 1.0;
+    this->Nadj = 1.0;
+    this->Padj = 1.0;
+    this->Qadj = 1.0;
+    this->Radj = 1.0;
+    this->Sadj = 1.0;
+    this->Tadj = 1.0;
+    this->Vadj = 1.0;
+    this->Wadj = 1.0;
+    this->Yadj = 1.0;
     
     
     //parameter switch
