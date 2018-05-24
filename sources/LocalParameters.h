@@ -135,11 +135,14 @@ public:
     double **ssaaprofiles;
     double *codonprofile;
     int *alloc;
+    
     //param value
     double lambda_TBL, lambda_omega, lambda_CpG, lambda_TpA, MutationNormFactor, MutationNormFactor1, MutationNormFactor2, fitCpG,fitTpA,lambda_tvCpG,lambda_tvTpA,lambda_tstvCpG,lambda_tstvTpA,fitGC,lambda_R;
     double* muBranch;
+    double Aadj, Cadj, Dadj, Eadj, Fadj, Gadj, Hadj, Iadj, Kadj, Ladj, Madj, Nadj, Padj, Qadj, Radj, Sadj, Tadj, Vadj, Wadj, Yadj;
+
     //swhitch fix or free param
-    int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss, fixfitCpG, fixlambda_tvCpG,fixlambda_tvTpA,fixlambda_tstvCpG,fixlambda_tstvTpA,fixfitTpA,fixfitGC,fixlambda_R;
+    int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss, fixfitCpG, fixlambda_tvCpG,fixlambda_tvTpA,fixlambda_tstvCpG,fixlambda_tstvTpA,fixfitTpA,fixfitGC,fixlambda_R, fixAAadj, fixCODONadj;
     int MCMCpointID;
 
     string lambda_TBL_prior, lambda_CpG_prior, lambda_TpA_prior, lambda_omega_prior;

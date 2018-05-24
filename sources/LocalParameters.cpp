@@ -137,6 +137,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->fitTpA = 0.5;
     this->fitGC = 0.5;
     
+    
     //parameter switch
     this->fixNsite = 0; 
     this->fixfitGC = 1;
@@ -151,6 +152,8 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->fixlambda_tstvTpA = 1;
     this->fixlambda_TpA = 1;
     this->fixlambda_R = 1;
+    this->fixAAadj = 1; 
+    this->fixCODONadj = 1;
     this->fixgtr = 1;
     this->fixgtr2 = -1;
     this->fixgtr1 = -1;
@@ -864,6 +867,11 @@ void LocalParameters::readLocalInstructions()
             cerr << "freehky\n";
 
         }
+        else if (s =="-freeAAadj")
+        {
+            this->fixAAadj = 0;
+            cerr << "freeAAadj\n";
+        }
         else if (s =="-freegtr")
         {
             this->fixgtr = 0;
@@ -1280,6 +1288,86 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         {
             this->nucrrnr[3][2] = posterior[it][param_i];
         }
+        else if (arrParam[param_i]  == "Aadj")
+        {
+            this->Aadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Cadj")
+        {
+            this->Cadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Dadj")
+        {
+            this->Dadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Eadj")
+        {
+            this->Eadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Fadj")
+        {
+            this->Fadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Gadj")
+        {
+            this->Gadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Hadj")
+        {
+            this->Hadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Iadj")
+        {
+            this->Iadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Kadj")
+        {
+            this->Kadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Ladj")
+        {
+            this->Ladj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Madj")
+        {
+            this->Madj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Nadj")
+        {
+            this->Nadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Padj")
+        {
+            this->Padj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Qadj")
+        {
+            this->Qadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Radj")
+        {
+            this->Radj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Sadj")
+        {
+            this->Sadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Tadj")
+        {
+            this->Tadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Vadj")
+        {
+            this->Vadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Wadj")
+        {
+            this->Wadj = posterior[it][param_i];
+        }
+        else if (arrParam[param_i]  == "Yadj")
+        {
+            this->Yadj = posterior[it][param_i];
+        }
     }
     delete [] arrParam;
 
@@ -1497,6 +1585,86 @@ std::vector<double> LocalParameters::GetCurrentParameters()
         else if (arrParam[param_i]  == "nucrrTG")
         {
             cur_param.push_back(this->nucrrnr[3][2]);
+        }
+        else if (arrParam[param_i]  == "Aadj")
+        {
+            cur_param.push_back(this->Aadj);
+        }
+        else if (arrParam[param_i]  == "Cadj")
+        {
+            cur_param.push_back(this->Cadj);
+        }
+        else if (arrParam[param_i]  == "Dadj")
+        {
+            cur_param.push_back(this->Dadj);
+        }
+        else if (arrParam[param_i]  == "Eadj")
+        {
+            cur_param.push_back(this->Eadj);
+        }
+        else if (arrParam[param_i]  == "Fadj")
+        {
+            cur_param.push_back(this->Fadj);
+        }
+        else if (arrParam[param_i]  == "Gadj")
+        {
+            cur_param.push_back(this->Gadj);
+        }
+        else if (arrParam[param_i]  == "Hadj")
+        {
+            cur_param.push_back(this->Hadj);
+        }
+        else if (arrParam[param_i]  == "Iadj")
+        {
+            cur_param.push_back(this->Iadj);
+        }
+        else if (arrParam[param_i]  == "Kadj")
+        {
+            cur_param.push_back(this->Kadj);
+        }
+        else if (arrParam[param_i]  == "Ladj")
+        {
+            cur_param.push_back(this->Ladj);
+        }
+        else if (arrParam[param_i]  == "Madj")
+        {
+            cur_param.push_back(this->Madj);
+        }
+        else if (arrParam[param_i]  == "Nadj")
+        {
+            cur_param.push_back(this->Nadj);
+        }
+        else if (arrParam[param_i]  == "Padj")
+        {
+            cur_param.push_back(this->Padj);
+        }
+        else if (arrParam[param_i]  == "Qadj")
+        {
+            cur_param.push_back(this->Qadj);
+        }
+        else if (arrParam[param_i]  == "Radj")
+        {
+            cur_param.push_back(this->Radj);
+        }
+        else if (arrParam[param_i]  == "Sadj")
+        {
+            cur_param.push_back(this->Sadj);
+        }
+        else if (arrParam[param_i]  == "Tadj")
+        {
+            cur_param.push_back(this->Tadj);
+        }
+        else if (arrParam[param_i]  == "Vadj")
+        {
+            cur_param.push_back(this->Vadj);
+        }
+        else if (arrParam[param_i]  == "Wadj")
+        {
+            cur_param.push_back(this->Wadj);
+        }
+        else if (arrParam[param_i]  == "Yadj")
+        {
+            cur_param.push_back(this->Yadj);
         }
     }
     delete [] arrParam;
@@ -2466,34 +2634,24 @@ void LocalParameters::SetTreeStuffRecursively(Link *from,int notNodeIndex,int gt
         cerr << "Error while registring gtr along the tree\n";
         exit(0);
     }
-
-
-
     if(from->isRoot())
     {
-
         for (Link* link = from->Next(); link != from; link = link->Next())
         {
             if (link->Out()->GetNode()->GetIndex() != notNodeIndex)
             {
                 SetTreeStuffRecursively(link->Out(),notNodeIndex,gtrIndex);
             }
-
-
         }
     }
     else if(!from->isLeaf())
     {
-
         for (Link* link = from->Next(); link != from; link = link->Next())
         {
-
-
             if (link->Out()->GetNode()->GetIndex() != notNodeIndex)
             {
                 SetTreeStuffRecursively(link->Out(),notNodeIndex,gtrIndex);
             }
-
         }
     }
     else if (from->isLeaf())
@@ -2585,9 +2743,7 @@ void LocalParameters::writeRealDataSummaries(ofstream&os, bool headers)
 
 void LocalParameters::writeAncestralDataSummaries(ofstream&os, bool headers)
 {
-
     // should be incorporated to populatio_t
-
     string* arrSummaries = new string[NusedAncSummaries];
     for(int summary_i = 0 ; summary_i < NSummaries; summary_i++)
     {
@@ -2628,9 +2784,7 @@ void LocalParameters::writeAncestralDataSummaries(ofstream&os, bool headers)
             os << summariesAncestralData[summary_i] << "\n";
         }
     }
-
     delete [] arrSummaries;
-
 }
 
 

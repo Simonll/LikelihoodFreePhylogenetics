@@ -24,6 +24,24 @@ PriorSampler::~PriorSampler()
 
 void PriorSampler::sample()
 {
+    
+    if (lparam->fixAAadj != 1)
+    {
+        for(int i =0 ; i < lparam->Nstate_aa; i++)
+        {
+            lparam->AAadj[i] = lparam->rnd->Uniform() ;
+        }
+    }
+    
+    if (lparam->fixCODONadj != 1)
+    {
+        for(int i =0 ; i < lparam->Nstate_codon; i++)
+        {
+            lparam->CODONadj[i] = lparam->rnd->Uniform() ;
+        }
+    }
+    
+    
     if (lparam->fixlambda_R != 1)
     {
         if (lparam->verbose)
