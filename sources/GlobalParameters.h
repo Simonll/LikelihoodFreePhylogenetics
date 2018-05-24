@@ -52,7 +52,7 @@ public:
     static constexpr double TOOLARGENEGATIVE = -500;
 
     static const int NSummaries = 890;
-    static const int NParam = 51;
+    static const int NParam = 50;
     static const int NEvoStats = 1358;
     static const int NSiteSpecificEvoStats = 2;
     static const int NDistances = 3; 
@@ -73,7 +73,7 @@ public:
 
     const string listParam[NParam] = 
     {
-        "chainID","root","lambda_CpG","lambda_TpA","lambda_TBL","lambda_omega",
+        "chainID","root","lambda_CpG","lambda_TpA","lambda_TBL","lambda_omega", 
         "nucsA", "nucsC", "nucsG","nucsT","nucrrAC","nucrrAG","nucrrAT","nucrrCA","nucrrCG","nucrrCT","nucrrGA","nucrrGC","nucrrGT","nucrrTA","nucrrTC","nucrrTG",
         "lambda_R","fitCpG","lambda_tvCpG","lambda_tstvCpG","lambda_tvTpA","lambda_tstvTpA","fitTpA","fitGC",
         "Aadj", "Cadj", "Dadj", "Eadj", "Fadj", "Gadj", "Hadj", "Iadj", "Kadj", "Ladj", "Madj", "Nadj", "Padj", "Qadj", "Radj", "Sadj", "Tadj", "Vadj", "Wadj", "Yadj"
