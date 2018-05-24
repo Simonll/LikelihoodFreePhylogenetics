@@ -139,6 +139,7 @@ public:
     //param value
     double lambda_TBL, lambda_omega, lambda_CpG, lambda_TpA, MutationNormFactor, MutationNormFactor1, MutationNormFactor2, fitCpG,fitTpA,lambda_tvCpG,lambda_tvTpA,lambda_tstvCpG,lambda_tstvTpA,fitGC,lambda_R;
     double* muBranch;
+    double* AAadj;
     double Aadj, Cadj, Dadj, Eadj, Fadj, Gadj, Hadj, Iadj, Kadj, Ladj, Madj, Nadj, Padj, Qadj, Radj, Sadj, Tadj, Vadj, Wadj, Yadj;
 
     //swhitch fix or free param

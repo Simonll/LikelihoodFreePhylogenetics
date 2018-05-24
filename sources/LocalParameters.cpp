@@ -136,7 +136,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->fitCpG = 0.5;
     this->fitTpA = 0.5;
     this->fitGC = 0.5;
-    AAadj = new double[20];
+    this->AAadj = new double[20];
     for (int i = 0 ; i < 20 ; i ++)
     {
         AAadj[i] = 1; 
