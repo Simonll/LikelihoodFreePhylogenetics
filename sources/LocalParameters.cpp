@@ -653,7 +653,7 @@ void LocalParameters::readLocalInstructions()
         else if (s == "-freefitGC")
         {
             this->fixfitGC = 0;
-            cerr << "free fitGC\n";
+            cerr << "freefitGC\n";
         }
         else if (s == "-freefitCpG")
         {
@@ -1172,16 +1172,21 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
                 cerr << "percentFromOutGroup > 1\n";
                 this->percentFromOutGroup = 0.9999999999;
             }
+            else if (percentFromOutGroup <= 0.0)
+            {
+                cerr << "percentFromOutGroup > 1\n";
+                this->percentFromOutGroup = 0.000000001;
+            }
             this->SetBranchesLengthsBetweenInAndOutGroup();
         }
         else if(arrParam[param_i]  == "fitGC")
         {
             this->fitGC = posterior[it][param_i];
-            if (this->fitGC >1)
+            if (this->fitGC >= 1.0)
             {
                 this->fitGC = 0.9999999999;
             } 
-            else if (this->fitGC < 0)
+            else if (this->fitGC <= 0.0)
             {
                 this->fitGC = 0.0000000001;
             }
@@ -1189,11 +1194,11 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         else if(arrParam[param_i]  == "fitCpG")
         {
             this->fitCpG = posterior[it][param_i];
-            if (fitCpG >1)
+            if (fitCpG >= 1.0)
             {
                 this->fitCpG = 0.9999999999;
             } 
-            else if (fitCpG < 0)
+            else if (fitCpG <= 0.0)
             {
                 this->fitCpG = 0.0000000001;
             }
@@ -1201,11 +1206,11 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         else if(arrParam[param_i]  == "fitTpA")
         {
             this->fitTpA = posterior[it][param_i];
-            if (fitTpA >1)
+            if (fitTpA >= 1.0)
             {
                 this->fitTpA = 0.9999999999;
             } 
-            else if (fitTpA < 0)
+            else if (fitTpA <= 0.0)
             {
                 this->fitTpA = 0.0000000001;
             }
