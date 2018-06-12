@@ -1357,7 +1357,7 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
         else if (arrParam[param_i]  == "nucrrCG")
         {
             this->nucrrnr[1][2] = posterior[it][param_i];
-            if (this->nucrrnr[1]2] <= 0)
+            if (this->nucrrnr[1][2] <= 0)
             {
                 this->nucrrnr[1][2] = 0.0000000001;
             }
