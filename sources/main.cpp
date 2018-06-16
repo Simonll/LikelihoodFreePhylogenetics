@@ -593,12 +593,9 @@ int main(int argc, char* argv[])
             posterior_is.close();
 
             cerr << post3->Niter << " on " << post3->Nrun << "\n";
-
         }
 
         cerr << "The simulation process started\n";
-
-
         while(post3->Niter < post3->Nrun)
         {
             cerr << ".";
@@ -606,13 +603,9 @@ int main(int argc, char* argv[])
             omp_set_num_threads(gparam->Nthread);
             #pragma omp parallel
             {
-
-
                 #pragma omp for
                 for (int l = 0 ; l < Npoint; l++)
                 {
-
-
                     if(gparam->verbose)
                     {
                         cerr << "debug18\n";
@@ -678,9 +671,6 @@ int main(int argc, char* argv[])
 
 
                             }
-
-
-
                         }
 
 
@@ -729,6 +719,7 @@ int main(int argc, char* argv[])
 
                             if (post3->Niter % post3->threshold == 0)
                             {
+                                cerr << post3->Niter << "\n";
                                 ofstream dist_os2((gparam->output+"-1M.post").c_str(),OUT);
                                 post3->writeHeader(dist_os2);
                                 post3->writePosterior(dist_os2);

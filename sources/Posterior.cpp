@@ -1085,7 +1085,6 @@ void Posterior::writeHeader(ofstream&os)
             {
                 os << "\t" << "T_" << arrMap[map_i];
             }
-
         }
         delete [] arrMap;
     }
