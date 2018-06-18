@@ -731,7 +731,7 @@ int main(int argc, char* argv[])
 
                             }
 
-                            if (post3->Niter == 100000)
+                            /* if (post3->Niter == 100000)
                             {
                                 ofstream dist_os1((gparam->output+"-100K.post").c_str(),OUT);
                                 post3->writeHeader(dist_os1);
@@ -741,7 +741,7 @@ int main(int argc, char* argv[])
                                 ofstream monitor_os1((gparam->output+"-100K.monitor").c_str(),OUT);
                                 post3->writeMonitorPosterior(monitor_os1);
                                 monitor_os1.close();
-                            }
+                            } */
                         }
                     }
                 }
