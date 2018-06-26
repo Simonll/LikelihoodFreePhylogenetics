@@ -1289,6 +1289,12 @@ void LocalParameters::SetCurrentParametersFromPosterior(std::vector<std::vector<
             {
                 this->lambda_R = 0.0000000001;
             }
+            if (this->lambda_R >= 1)
+            {
+                this->lambda_R = 0.9999999999;
+            }
+
+
         }
         else if (arrParam[param_i]  == "nucsA")
         {
