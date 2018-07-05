@@ -656,7 +656,7 @@ int main(int argc, char* argv[])
                                 lparam[l]->GetCurrentWeights()
                             );
 
-                            if (post3->Niter % post3->threshold == 0)
+                            if (post3->Niter % (post3->Nrun/10) == 0)
                             {
 
 
@@ -688,7 +688,7 @@ int main(int argc, char* argv[])
                                 lparam[l]->GetCurrentWeights()
                             );
 
-                            if (post3->Niter % post3->threshold == 0)
+                            if (post3->Niter % (post3->Nrun/10) == 0)
                             {
 
                                 ofstream dist_os1((gparam->output+"-100K.post").c_str(),OUT);
@@ -717,7 +717,7 @@ int main(int argc, char* argv[])
                                 lparam[l]->GetCurrentWeights()
                             );
 
-                            if (post3->Niter % post3->threshold == 0)
+                            if (post3->Niter % (post3->Nrun/10) == 0)
                             {
                                 cerr << post3->Niter << "\n";
                                 ofstream dist_os2((gparam->output+"-1M.post").c_str(),OUT);
