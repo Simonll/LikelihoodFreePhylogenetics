@@ -110,6 +110,7 @@ public:
     bool sorted;
     // writter
     void writePosterior(ofstream& os);
+    void writePosterior(ofstream& os, int Nsimu);
     void writeMonitorPosterior(ofstream& os);
     void writePosteriorPredictiveStatistics(ofstream& os, std::vector<double> realDataSummaries);
     void writeHeader(ofstream& os);

@@ -650,9 +650,10 @@ int main(int argc, char* argv[])
                         }
                         else if ((post3->Nrun/10) < post3->threshold)
                         {
+                            int Nsimu = (int) post3->Nrun/10
                             ofstream dist_os1((gparam->output+".post-tmp").c_str(),OUT);
                             post3->writeHeader(dist_os1);
-                            post3->writePosterior(dist_os1);
+                            post3->writePosterior(dist_os1, Nsimu );
                             dist_os1.close();
 
                             ofstream monitor_os1((gparam->output+".monitor-tmp").c_str(),OUT);

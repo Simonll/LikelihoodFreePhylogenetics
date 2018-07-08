@@ -234,6 +234,105 @@ std::vector<std::vector<double>> Posterior::GetLocalWeights()
     return W;
 }
 
+void Posterior::writePosterior(ofstream&os, int Nsimu)
+{
+
+    for (int simu_i = 0 ; simu_i < Nsimu; simu_i++ )
+    {
+    
+        //write chainID
+        os << std::get<chainIDGetter>(population_t[simu_i]) << "\t";
+
+
+        //write parameters
+        if (this->NusedParam > 0)
+        {              
+            for (int param_i = 0 ; param_i < (int) std::get<paramGetter>(population_t[simu_i]).size(); param_i++)
+            {
+                os << std::get<paramGetter>(population_t[simu_i])[param_i] << "\t";
+            }
+        }
+        //write summaries
+        if (this->NusedSummaries > 0)
+        {
+            for (int summary_i = 0 ; summary_i < (int) std::get<summariesGetter>(population_t[simu_i]).size(); summary_i++)
+            {
+                os << std::get<summariesGetter>(population_t[simu_i])[summary_i] << "\t";
+            }
+        }
+        //write distances (sum of square discrepancies)
+        if (this->NusedSummaries > 0)
+        {
+            if (this->OutPartialDistance)
+            {
+                for (unsigned int distance_i = 0 ; distance_i < std::get<distancesGetter>(population_t[simu_i]).size(); distance_i++)
+                {
+                    os << std::get<distancesGetter>(population_t[simu_i])[distance_i] << "\t";
+                }
+            }
+            else
+            {
+                os << std::get<distancesGetter>(population_t[simu_i])[std::get<distancesGetter>(population_t[simu_i]).size()-1] << "\t";
+            }
+        }
+        //write accessory summaries
+        if (this->NusedAccessorySummaries > 0)
+        {
+            for (unsigned int summary_i = 0 ; summary_i < std::get<accsummariesGetter>(population_t[simu_i]).size(); summary_i++)
+            {
+                os << std::get<accsummariesGetter>(population_t[simu_i])[summary_i] << "\t";
+            }
+        }
+        //write mappingstats
+        if (this->NusedEvoAncStats > 0)
+        {
+            for (unsigned int mapping_i = 0 ; mapping_i < std::get<evoancstatsGetter>(population_t[simu_i]).size(); mapping_i++)
+            {
+                if(mapping_i < std::get<evoancstatsGetter>(population_t[simu_i]).size()-1)
+                {
+                    os << std::get<evoancstatsGetter>(population_t[simu_i])[mapping_i] << "\t";
+                }
+                else
+                {
+                    os << std::get<evoancstatsGetter>(population_t[simu_i])[mapping_i] << "\t";
+                }
+            }
+        }
+        //write mappingstats
+        if (this->NusedEvoStats > 0)
+        {
+            for (unsigned int mapping_i = 0 ; mapping_i < std::get<evostatsGetter>(population_t[simu_i]).size(); mapping_i++)
+            {
+                if(mapping_i < std::get<evostatsGetter>(population_t[simu_i]).size()-1)
+                {
+                    os << std::get<evostatsGetter>(population_t[simu_i])[mapping_i] << "\t";
+                }
+                else
+                {
+                    os << std::get<evostatsGetter>(population_t[simu_i])[mapping_i] << "\t";
+                }
+            }
+        }
+        //write mappingstats
+        if (this->NusedSiteSpecificEvoStats > 0)
+        {
+            for (unsigned int mapping_i = 0 ; mapping_i < std::get<ssevostatsGetter>(population_t[simu_i]).size(); mapping_i++)
+            {
+                if(mapping_i < std::get<ssevostatsGetter>(population_t[simu_i]).size()-1)
+                {
+                    os << std::get<ssevostatsGetter>(population_t[simu_i])[mapping_i] << "\t";
+                }
+                else
+                {
+                    os << std::get<ssevostatsGetter>(population_t[simu_i])[mapping_i] << "\t";
+                }
+            }
+        }
+        os <<  "\n";
+    }
+    
+}
+
 
 void Posterior::writePosterior(ofstream&os)
 {
