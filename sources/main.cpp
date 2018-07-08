@@ -620,9 +620,36 @@ int main(int argc, char* argv[])
 
                     #pragma omp critical
                     {
-                        if (post3->Niter % (post3->Nrun/10) == 0 && (post3->Nrun/10) >= post3->threshold)
+                        
+                        post3->registerNewSimulation(
+                                lparam[l]->MCMCpointID,
+                                lparam[l]->GetCurrentParameters(),
+                                lparam[l]->GetCurrentSummaries(),
+                                lparam[l]->GetCurrentAccessorySummaries(),
+                                lparam[l]->GetCurrentAncEvoStats(),
+                                lparam[l]->GetCurrentEvoStats(),
+                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                lparam[l]->GetCurrentDistances(),
+                                lparam[l]->GetCurrentWeights()
+                            );
+                        
+                        
+                        if ((post3->Nrun/10) >= post3->threshold)
                         {
+                            if (post3->Niter % (post3->Nrun/10) == 0)
+                            {
+                                ofstream dist_os1((gparam->output+".post-tmp").c_str(),OUT);
+                                post3->writeHeader(dist_os1);
+                                post3->writePosterior(dist_os1);
+                                dist_os1.close();
 
+                                ofstream monitor_os1((gparam->output+".monitor-tmp").c_str(),OUT);
+                                post3->writeMonitorPosterior(monitor_os1);
+                                monitor_os1.close();
+                            } 
+                        }
+                        else if ((post3->Nrun/10) < post3->threshold)
+                        {
                             ofstream dist_os1((gparam->output+".post-tmp").c_str(),OUT);
                             post3->writeHeader(dist_os1);
                             post3->writePosterior(dist_os1);
@@ -631,7 +658,7 @@ int main(int argc, char* argv[])
                             ofstream monitor_os1((gparam->output+".monitor-tmp").c_str(),OUT);
                             post3->writeMonitorPosterior(monitor_os1);
                             monitor_os1.close();
-                        }                       
+                        }
                     }
                 }
             }
@@ -647,7 +674,7 @@ int main(int argc, char* argv[])
         monitor_os1.close();
         cerr << "End of the simulation process\n";
         exit(0);
-        
+
     }
     else if (model == "CodonMutSelSBDPABC-v2")
     {
