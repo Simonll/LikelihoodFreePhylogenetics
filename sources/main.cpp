@@ -634,7 +634,7 @@ int main(int argc, char* argv[])
                             );
                         
                         
-                        if ((post3->Nrun/10) >= post3->threshold)
+                        /* if ((post3->Nrun/10) >= post3->threshold)
                         {
                             if (post3->Niter % (post3->Nrun/10) == 0)
                             {
@@ -662,7 +662,7 @@ int main(int argc, char* argv[])
                                 post3->writeMonitorPosterior(monitor_os1);
                                 monitor_os1.close();
                             }
-                        }
+                        } */
                     }
                 }
             }
