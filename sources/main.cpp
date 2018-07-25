@@ -265,6 +265,7 @@ int main(int argc, char* argv[])
                 for (int l = 0 ; l < Npoint; l++)
                 {
 
+                    
                     sampler[l]->sample();
 
                     simulator[l]->GetNewSimulatedCodonAlignment();
@@ -273,18 +274,22 @@ int main(int argc, char* argv[])
 
                     #pragma omp critical
                     {
-                                post3->registerNewSimulation(
-                                lparam[l]->MCMCpointID,
-                                lparam[l]->GetCurrentParameters(),
-                                lparam[l]->GetCurrentSummaries(),
-                                lparam[l]->GetCurrentAccessorySummaries(),
-                                lparam[l]->GetCurrentAncEvoStats(),
-                                lparam[l]->GetCurrentEvoStats(),
-                                lparam[l]->GetCurrentSiteSpecificEvoStats(),
-                                lparam[l]->GetCurrentDistances(),
-                                lparam[l]->GetCurrentWeights()
-                            );
-                        
+                             
+                             
+                            if (post3->Niter < post3->Nrun)
+                            { 
+                                    post3->registerNewSimulation(
+                                    lparam[l]->MCMCpointID,
+                                    lparam[l]->GetCurrentParameters(),
+                                    lparam[l]->GetCurrentSummaries(),
+                                    lparam[l]->GetCurrentAccessorySummaries(),
+                                    lparam[l]->GetCurrentAncEvoStats(),
+                                    lparam[l]->GetCurrentEvoStats(),
+                                    lparam[l]->GetCurrentSiteSpecificEvoStats(),
+                                    lparam[l]->GetCurrentDistances(),
+                                    lparam[l]->GetCurrentWeights()
+                                );
+                            }
                                                 
                         /* if ((post3->Nrun/10) >= post3->threshold)
                         {
