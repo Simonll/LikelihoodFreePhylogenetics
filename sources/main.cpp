@@ -526,12 +526,7 @@ int main(int argc, char* argv[])
                     /* for (int interval_i = 0 ; interval_i < lparam[l]->Ninterval; interval_i++)
                     {
                         ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
-                    } */
-
-                    if(gparam->verbose)
-                    {
-                        cerr << "debug20.1\n";
-                    }
+                    } */              
 
                     ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
                     if(gparam->verbose)
@@ -553,6 +548,20 @@ int main(int argc, char* argv[])
                                 lparam[l]->GetCurrentDistances(),
                                 lparam[l]->GetCurrentWeights()
                             );
+
+                        if (post3->Niter == post3->Nrun)
+                        {
+                            ofstream dist_os1((gparam->output+".post").c_str(),OUT);
+                            post3->writeHeader(dist_os1);
+                            post3->writePosterior(dist_os1);
+                            dist_os1.close();
+
+                            ofstream monitor_os1((gparam->output+".monitor").c_str(),OUT);
+                            post3->writeMonitorPosterior(monitor_os1);
+                            monitor_os1.close();
+                            cerr << "End of the simulation process\n";
+                            exit(0);
+                        }
                         
                                                 
                         /* if ((post3->Nrun/10) >= post3->threshold)
@@ -588,18 +597,6 @@ int main(int argc, char* argv[])
                 }
             }
         }
-
-        ofstream dist_os1((gparam->output+".post").c_str(),OUT);
-        post3->writeHeader(dist_os1);
-        post3->writePosterior(dist_os1);
-        dist_os1.close();
-
-        ofstream monitor_os1((gparam->output+".monitor").c_str(),OUT);
-        post3->writeMonitorPosterior(monitor_os1);
-        monitor_os1.close();
-        cerr << "End of the simulation process\n";
-        exit(0);
-
     }
     else if (model == "CodonMutSelSBDPABC-v2")
     {
