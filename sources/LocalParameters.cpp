@@ -383,7 +383,32 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     cerr << "Nsite_nuc : " << this->Nsite_nuc << "\n";
     cerr << "Ntaxa : " <<  this->Ntaxa << "\n";
     cerr << "Nstate_codon : " << this->Nstate_codon << "\n";
-    cerr << "Rooted at " << this->taxa_a << " " << taxa_b  << "\n";
+
+    int taxa_a_val = this->taxonset->GetTaxonIndexWithIncompleteName(this->taxa_a);
+    int taxa_b_val = this->taxonset->GetTaxonIndexWithIncompleteName(this->taxa_b);
+    
+    if (taxa_a_val == -1 && taxa_b_val == -1)
+    {
+        cerr << "both taxon used for determing root position are absent from the sequence aligment\n"; 
+        cerr << taxa_a << " " << taxa_b << "\n"; 
+        exit(0);
+    } 
+    else if (taxa_a_val == -1)
+    {
+        cerr << "taxon used for determing root position is absent from the sequence aligment\n";
+        cerr << taxa_a << "\n"; 
+        exit(0);
+    }
+    else if (taxa_b_val == -1)
+    {
+        cerr << "taxon used for determing root position is absent from the sequence aligment\n";
+        cerr << taxa_b << "\n"; 
+        exit(0);
+    }
+
+    
+
+    cerr << "Rooted at " << this->taxa_a << " " << this->taxa_b  << "\n";
 }
 
 
@@ -1003,8 +1028,11 @@ void LocalParameters::SetRootBetweenInAndOutGroup()
     outgroupLink = refTree->GetLCA(taxa_a,taxa_b);
         
     if (outgroupLink->isRoot())
-        cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
-        cerr << "redefine root position\n"; 
+        if (verbose)
+            cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
+        cerr << "You have to redefine the root position\n"; 
+        cerr << "The system will exit by now\n";
+        exit(0);
 
     branchLengthBetweenInAndOutGroup = atof(outgroupLink->GetBranch()->GetName().c_str());
 
