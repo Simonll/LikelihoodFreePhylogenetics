@@ -389,24 +389,22 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     
     if (taxa_a_val == -1 && taxa_b_val == -1)
     {
-        cerr << "both taxon used for determing root position are absent from the sequence aligment\n"; 
+        cerr << "both taxon used for determining root position are absent from the sequence aligment\n"; 
         cerr << taxa_a << " " << taxa_b << "\n"; 
         exit(0);
     } 
     else if (taxa_a_val == -1)
     {
-        cerr << "taxon used for determing root position is absent from the sequence aligment\n";
+        cerr << "the taxon used for determining root position is absent from the sequence aligment\n";
         cerr << taxa_a << "\n"; 
         exit(0);
     }
     else if (taxa_b_val == -1)
     {
-        cerr << "taxon used for determing root position is absent from the sequence aligment\n";
+        cerr << "the taxon used for determining root position is absent from the sequence aligment\n";
         cerr << taxa_b << "\n"; 
         exit(0);
     }
-
-    
 
     cerr << "Rooted at " << this->taxa_a << " " << this->taxa_b  << "\n";
 }
@@ -1025,17 +1023,49 @@ void LocalParameters::SetRootBetweenInAndOutGroup()
     if (verbose)
         cerr << "LocalParameters::SetRootBetweenInAndOutGroup1\n";
 
-    outgroupLink = refTree->GetLCA(taxa_a,taxa_b);
+    
         
-    if (outgroupLink->isRoot())
+    if (refTree->GetLCA(taxa_a,taxa_b)->isRoot())
+        
+        if (! refTree->CheckRootDegree())
+        {
+            cerr << "error: root should be of degree tree\n";
+            cerr << "i.e. tree should have following format: (A,B,C) and not (A,(B,C));\n";
+            exit(1);
+        }
+        
+        if (verbose)
+        {
+            cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
+        }
+        
+        if (refTree->GetLCA(taxa_a,taxa_b)->Next()->Out()->GetNode()->GetName() != taxa_a && refTree->GetLCA(taxa_a,taxa_b)->Next()->Out()->GetNode()->GetName() != taxa_b)
+        {
+            outgroupLink = refTree->GetLCA(taxa_a,taxa_b)->Next()->Out();
+        }
+        else if (refTree->GetLCA(taxa_a,taxa_b)->Next()->Next()->Out()->GetNode()->GetName() != taxa_a && refTree->GetLCA(taxa_a,taxa_b)->Next()->Next()->Out()->GetNode()->GetName() != taxa_b)
+        {
+            outgroupLink = refTree->GetLCA(taxa_a,taxa_b)->Next()->Next()->Out();
+        }
+        else if (refTree->GetLCA(taxa_a,taxa_b)->Next()->Next()->Next()->Out()->GetNode()->GetName() != taxa_a && refTree->GetLCA(taxa_a,taxa_b)->Next()->Next()->Next()->Out()->GetNode()->GetName() != taxa_b)
+        {
+            outgroupLink = refTree->GetLCA(taxa_a,taxa_b)->Next()->Next()->Next()->Out();
+        }
+
+
+    else
+    {
+        outgroupLink = refTree->GetLCA(taxa_a,taxa_b);
+    }
+
         if (verbose)
             cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
-        cerr << "You have to redefine the root position\n"; 
-        cerr << "The system will exit by now\n";
-        exit(0);
+        //cerr << "You have to redefine the root position\n"; 
+        //cerr << "The system will exit by now\n";
+        //exit(0);
 
     branchLengthBetweenInAndOutGroup = atof(outgroupLink->GetBranch()->GetName().c_str());
-
+    
     if (verbose)
         cerr << "LocalParameters::SetRootBetweenInAndOutGroup2\n";
     branchToOutGroup = outgroupLink->GetBranch();
