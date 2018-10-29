@@ -1026,7 +1026,7 @@ void LocalParameters::SetRootBetweenInAndOutGroup()
     
         
     if (refTree->GetLCA(taxa_a,taxa_b)->isRoot())
-        
+    {    
         if (! refTree->CheckRootDegree())
         {
             cerr << "error: root should be of degree tree\n";
@@ -1034,7 +1034,7 @@ void LocalParameters::SetRootBetweenInAndOutGroup()
             exit(1);
         }
         
-        /* if (verbose)
+        if (verbose)
         {
             cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
         }
@@ -1050,9 +1050,9 @@ void LocalParameters::SetRootBetweenInAndOutGroup()
         else if (refTree->GetLCA(taxa_a,taxa_b)->Next()->Next()->Next()->Out()->GetNode()->GetName() != taxa_a && refTree->GetLCA(taxa_a,taxa_b)->Next()->Next()->Next()->Out()->GetNode()->GetName() != taxa_b)
         {
             outgroupLink = refTree->GetLCA(taxa_a,taxa_b)->Next()->Next()->Next()->Out();
-        } 
-        */
+        }
 
+    }
     else
     {
         outgroupLink = refTree->GetLCA(taxa_a,taxa_b);
