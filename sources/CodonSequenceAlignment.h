@@ -4268,16 +4268,21 @@ void nuc3_pairwise10(double* invec)
                 }
                 double all = ac + ag + at + cg + ct + gt + cons; 
                 double p = (ag + ct) / all;
-                double q = (ac + at + cg + gt) / all; 
-                double d_K80 = -0.5*log((1-2*p-q)*sqrt(1-2*q));
-                //double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
-                vec_ac.push_back(ac); 
-                vec_ag.push_back(ag);
-                vec_at.push_back(at);
-                vec_cg.push_back(cg);
-                vec_ct.push_back(ct);
-                vec_gt.push_back(gt);
-                vec_d.push_back(d_K80);
+                double q = (ac + at + cg + gt) / all;
+                double t1 = 1-2*p-q;
+                double t2 = 1-2*q;
+                if (t1 > 0 && t2 >0)
+                {
+                    double d_K80 = -0.5*log(t1*sqrt(t2));
+                    //double d_kimura  = -0.5*log(1-2*p-q)-0.25*log(1-2*q); 
+                    vec_ac.push_back(ac); 
+                    vec_ag.push_back(ag);
+                    vec_at.push_back(at);
+                    vec_cg.push_back(cg);
+                    vec_ct.push_back(ct);
+                    vec_gt.push_back(gt);
+                    vec_d.push_back(d_K80);
+                }
 
             }
         }
