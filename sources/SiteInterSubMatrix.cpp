@@ -210,7 +210,7 @@ int  SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite, int innucF
     //from XpY to NpY
     if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] == X_ && CurrentNodeNucSequence[inNnodeIndex][insite+1] == Y_))
     {
-        if((innucFrom + innucTo % 2) == 0)
+        if(((innucFrom + innucTo) % 2) == 0)
         {
             // we are leaving XY, coordinate 0,1
             // trought ts
@@ -226,7 +226,7 @@ int  SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite, int innucF
     //from XpY to XpN
     else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite-1] == X_ && CurrentNodeNucSequence[inNnodeIndex][insite] == Y_))
     {
-        if((innucFrom + innucTo % 2) == 0)
+        if(((innucFrom + innucTo) % 2) == 0)
         {
             // we are leaving XY, coordinate -1,0
             // trought ts
@@ -242,7 +242,7 @@ int  SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite, int innucF
     //from {N}pY to XpY
     else if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] != X_ && CurrentNodeNucSequence[inNnodeIndex][insite+1] == Y_) && (innucFrom != X_ && innucTo == X_)) 
     {
-        if((innucFrom + innucTo % 2) == 0)
+        if(((innucFrom + innucTo) % 2) == 0)
         {
             // we are landing on XY, coordinate 0,1
             // trought  ts
@@ -258,7 +258,7 @@ int  SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite, int innucF
     //from Xp{N} to XpY
     else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite-1] == X_ && CurrentNodeNucSequence[inNnodeIndex][insite] != Y_) && (innucFrom != Y_ && innucTo == Y_))
     {
-        if((innucFrom + innucTo % 2) == 0)
+        if(((innucFrom + innucTo) % 2) == 0)
         {
             // we are landing on XY, coordinate -1,0
             // trought ts
