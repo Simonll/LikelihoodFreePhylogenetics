@@ -43,6 +43,21 @@ TreeSimulator::TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submat
         CurrentAncestralCodonSequence[point_i][0] = new int [lparam->Nsite_codon];
     }
 
+}
+
+TreeSimulator::TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submatrix)
+{
+    this->lparam = lparam;
+    this->submatrix = submatrix;
+
+    CurrentLeafNodeCodonSequences= new int * [lparam->Ntaxa];
+    CurrentLeafNodeNucSequence= new int * [lparam->Ntaxa];
+
+    for (int taxa = 0 ; taxa < lparam->Ntaxa ; taxa ++ )
+    {
+        CurrentLeafNodeCodonSequences[taxa] = new int [lparam->Nsite_codon];
+        CurrentLeafNodeNucSequence[taxa] = new int [lparam->Nsite_nuc];
+    }
 
 }
 
@@ -103,6 +118,98 @@ void TreeSimulator::resetSimulator()
         }
     }
 }
+
+void TreeSimulator::resetSimulatorSeq()
+{
+    
+    int ** cur_data = lparam->codondata->GetData(); 
+
+    int verbose = lparam->verbose;
+    if(verbose)
+    {
+        cerr << "resetSimulator1\n";
+    }
+    
+    // reset nodeleaf sequences
+
+    for (int taxa_i = 0 ; taxa_i < lparam->Ntaxa ; taxa_i ++ )
+    {
+        
+        for(int site_codon = 0 ; site_codon < lparam->Nsite_codon; site_codon++)
+        {
+            int codon_state = cur_data[taxa_i][site_codon]; 
+
+            if(codon_state != unknown)
+            {
+                CurrentLeafNodeCodonSequences[taxa_i][site_codon] = codon_state;
+                for(int j = 0 ; j < 3; j ++)
+                {
+                    CurrentLeafNodeNucSequence[taxa_i][site_codon*3+j] = lparam->codonstatespace->GetCodonPosition(j,codon_state);
+                }
+            }
+            else 
+            {
+                
+                double u = lparam->rnd->Uniform(); 
+
+                std::vector <int> cur_vec ; 
+
+                for (int taxa_j = 0 ; taxa_j < lparam->Ntaxa ; taxa_j ++ )
+                {
+                    codon_state = cur_data[taxa_j][site_codon];
+                    if (codon_state != unknown)
+                    {
+                        cur_vec.push_back(codon_state);
+                    }
+                }
+
+                int p = static_cast <int> (cur_vec.size() * u);
+
+                codon_state = cur_vec[p];
+
+                CurrentLeafNodeCodonSequences[taxa_i][site_codon] = codon_state;
+                for(int j = 0 ; j < 3; j ++)
+                {
+                    CurrentLeafNodeNucSequence[taxa_i][site_codon*3+j] = lparam->codonstatespace->GetCodonPosition(j,codon_state);
+                }
+            }
+        }
+    }
+    for (int taxa_i = 0 ; taxa_i < lparam->Ntaxa ; taxa_i ++ )
+    {
+        delete[] cur_data[taxa_i];
+    }
+    delete[] cur_data; 
+    
+}
+
+void TreeSimulator::GetNewProbSeq()
+{
+
+    int verbose = lparam->verbose;
+    submatrix->resetSubMatrix();
+    if(verbose)
+    {
+        cerr << "submatrix->resetSubMatrix()\n";
+    }
+
+    resetSimulatorSeq();
+    if(verbose)
+    {
+        cerr << "resetSimulator()\n";
+    }
+
+    //launch recursive simulation on a phylogenetic tree
+    
+    ComputeSeqProb();
+    if(verbose)
+    {
+        cerr << "ComputeRecursiveSimulation\n";
+    }
+    //register mappingstats
+
+}
+
 
 void TreeSimulator::GetNewSimulatedCodonAlignment()
 {
@@ -1040,6 +1147,16 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from)
             }
         }
     }
+}
+
+
+void TreeSimulator::ComputeSeqProb()
+{
+    for (int taxa_i = 0 ; taxa_i < lparam->Ntaxa ; taxa_i ++ )
+    {   
+        submatrix->UpdateSubMatrixSeq(taxa_i,CurrentLeafNodeCodonSequences);
+    }
+        
 }
 
 void TreeSimulator::GetSampleAncestralCodonSequence(int FromNodeIndex,int interval)

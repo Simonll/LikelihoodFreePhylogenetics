@@ -1027,7 +1027,7 @@ void LocalParameters::SetRootBetweenInAndOutGroup()
         
     if (refTree->GetLCA(taxa_a,taxa_b)->isRoot())
     {    
-        if (! refTree->CheckRootDegree())
+        if (!refTree->CheckRootDegree())
         {
             cerr << "error: root should be of degree tree\n";
             cerr << "i.e. tree should have following format: (A,B,C) and not (A,(B,C));\n";

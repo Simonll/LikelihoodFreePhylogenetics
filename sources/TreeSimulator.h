@@ -54,9 +54,6 @@ class TreeSimulator
 {
 public:
 
-
-
-
     //Simulating along a tree
     int*** CurrentAncestralCodonSequence;
     int** CurrentNodeCodonSequence;
@@ -71,33 +68,32 @@ public:
     EvolHistStatistics* treeEvoStats;
     EvolHistStatistics* rootBranchEvoStats;
 
-
     //Substitution Matrix
     SiteInterSubMatrix* submatrix;
 
     //Ancestral Sequence
     AncestralSequence* ancestralseq;
 
-
     //Simulation functions
     void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon);
     void RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo);
-
     void ComputeRecursiveSimulation(Link* from);
+    void ComputeSeqProb();
     void resetSimulator();
+    void resetSimulatorSeq();
     void resetEvoStatVectors();
     void WriteAncestral();
 
     //Setters
     void SetAncestralSequence();
 
-
     //Getters
     void GetNewSimulatedCodonAlignment();
+    void GetNewProbSeq();
     void GetSampleAncestralCodonSequence(int FromNodeIndex,int interval);
 
-
     TreeSimulator(LocalParameters* lparam,SiteInterSubMatrix* submatrix,AncestralSequence* ancestralseq);
+    TreeSimulator(LocalParameters* lparam,SiteInterSubMatrix* submatrix);
     ~TreeSimulator();
 
 protected:

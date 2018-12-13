@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
         cerr << "\n";
         cerr << "version 1.0\n";
         cerr << "###########################\n";
-        cerr << "-m < stats | show | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP | CodonMutSelFinitePPred | CodonMutSelSBDPPPred > <controlfile>\n";
+        cerr << "-m < stats | show | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP | CodonMutSelFinitePPred | CodonMutSelSBDPPPred | CodonMutSelSBDPSeq > <controlfile>\n";
         cerr << "###########################\n";
         cerr << "#SUMMARIES\n";
         cerr << "#ANCSUMMARIES\n";
@@ -1425,6 +1425,159 @@ int main(int argc, char* argv[])
             ofstream ppp_os((gparam->output+".ppp").c_str(),OUT);
             post->writePosteriorPredictiveStatistics(ppp_os,lparam->summariesRealData);
             ppp_os.close();
+        }
+
+    }
+    else if (model == "CodonMutSelFiniteSeq" || model == "CodonMutSelSBDPSeq")
+    {
+        // the chain pointS are extract from the posterior file according to chainID
+        cerr << model  << "\n";
+
+        GlobalParameters* gparam = new GlobalParameters(model, controlfile);
+        Posterior* post = new Posterior(gparam);
+        LocalParameters* lparam =  new LocalParameters(gparam);
+
+        if (model == "CodonMutSelSBDPSeq")
+        {
+
+            lparam->readChainCodonMutSelSBDP();
+
+        }
+        else if (model == "CodonMutSelFiniteSeq")
+        {
+
+            lparam->readChainCodonMutSelFinite();
+
+        }
+        
+        /* 
+        ofstream lparam_os ((gparam->output+".inputparam").c_str());
+        lparam->writeParam(lparam_os);
+        lparam_os.close();
+        */
+
+        SummaryStatistics* ss = new SummaryStatistics(lparam);
+        ss->computeSummaries();
+
+        ofstream realDataSummaries_os ((gparam->output+".realdata").c_str());
+        lparam->writeRealDataSummaries(realDataSummaries_os);
+        realDataSummaries_os.close();
+        string s = "seq"; 
+        SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam, s);
+
+        cerr << lparam->Nsite_codon << "\n";
+        TreeSimulator* simulator = new TreeSimulator(lparam, submatrix);
+
+        if(gparam->verbose)
+        {
+            cerr << "debug5\n";
+        }
+        
+        post->readPosterior(lparam->posteriorfile);
+
+        cerr << "The simulation process started\n";
+        if (!post->posterior.empty())
+        {
+            
+            int it = 0 ;
+            while(it < post->threshold)
+            {
+                int point = static_cast<int> (lparam->rnd->Uniform() * post->posterior.size());
+                lparam->SetCurrentParametersFromPosterior(post->posterior,point);
+                
+                if (model == "CodonMutSelSBDPPPred")
+                {
+                    if(gparam->verbose)
+                    {
+                        cerr << "CodonMutSelSBDPPPred " <<"debug6\n";
+                    }
+                    lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
+
+                }
+                else if (model == "CodonMutSelFinitePPred")
+                {
+                    if(gparam->verbose)
+                    {
+                        cerr << "CodonMutSelFinitePPred " <<"debug6\n";
+                    }
+                    lparam->readChainCodonMutSelFinite(lparam->GetPointID());
+
+                }
+                
+                int rep = 0;
+                
+                while (rep < post->Nrun)
+                {
+                    rep++;
+                    if(gparam->verbose)
+                    {
+                        cerr << rep << " " << point <<" debug7\n";
+                    }
+                    simulator->GetNewProbSeq();
+
+                    if(gparam->verbose)
+                    {
+                        cerr <<" debug7.1\n";
+                    }
+                    
+                    if (it == 0 )
+                    {
+                        ofstream mutmatrix_A_os((gparam->output+".mutmatrix_A").c_str(),OUT);
+                        ofstream  selmatrix_A_os((gparam->output+".selmatrix_A").c_str(),OUT);
+                        submatrix->WriteSubMatrix(mutmatrix_A_os,selmatrix_A_os,0);
+                        mutmatrix_A_os.close();
+                        selmatrix_A_os.close();
+
+                        ofstream mutmatrix_C_os((gparam->output+".mutmatrix_C").c_str(),OUT);
+                        ofstream  selmatrix_C_os((gparam->output+".selmatrix_C").c_str(),OUT);
+                        submatrix->WriteSubMatrix(mutmatrix_C_os,selmatrix_C_os,1);
+                        mutmatrix_C_os.close();
+                        selmatrix_C_os.close();
+
+                        ofstream mutmatrix_G_os((gparam->output+".mutmatrix_G").c_str(),OUT);
+                        ofstream  selmatrix_G_os((gparam->output+".selmatrix_G").c_str(),OUT);
+                        submatrix->WriteSubMatrix(mutmatrix_G_os,selmatrix_G_os,2);
+                        mutmatrix_G_os.close();
+                        selmatrix_G_os.close();
+
+                        ofstream mutmatrix_T_os((gparam->output+".mutmatrix_T").c_str(),OUT);
+                        ofstream  selmatrix_T_os((gparam->output+".selmatrix_T").c_str(),OUT);
+                        submatrix->WriteSubMatrix(mutmatrix_T_os,selmatrix_T_os,0);
+                        mutmatrix_T_os.close();
+                        selmatrix_T_os.close();
+                    }
+                    else 
+                    {
+                        ofstream mutmatrix_A_os((gparam->output+".mutmatrix_A").c_str(),APPEND);
+                        ofstream  selmatrix_A_os((gparam->output+".selmatrix_A").c_str(),APPEND);
+                        submatrix->WriteSubMatrix(mutmatrix_A_os,selmatrix_A_os,0);
+                        mutmatrix_A_os.close();
+                        selmatrix_A_os.close();
+
+                        ofstream mutmatrix_C_os((gparam->output+".mutmatrix_C").c_str(),APPEND);
+                        ofstream  selmatrix_C_os((gparam->output+".selmatrix_C").c_str(),APPEND);
+                        submatrix->WriteSubMatrix(mutmatrix_C_os,selmatrix_C_os,1);
+                        mutmatrix_C_os.close();
+                        selmatrix_C_os.close();
+
+                        ofstream mutmatrix_G_os((gparam->output+".mutmatrix_G").c_str(),APPEND);
+                        ofstream  selmatrix_G_os((gparam->output+".selmatrix_G").c_str(),APPEND);
+                        submatrix->WriteSubMatrix(mutmatrix_G_os,selmatrix_G_os,2);
+                        mutmatrix_G_os.close();
+                        selmatrix_G_os.close();
+
+                        ofstream mutmatrix_T_os((gparam->output+".mutmatrix_T").c_str(),APPEND);
+                        ofstream  selmatrix_T_os((gparam->output+".selmatrix_T").c_str(),APPEND);
+                        submatrix->WriteSubMatrix(mutmatrix_T_os,selmatrix_T_os,3);
+                        mutmatrix_T_os.close();
+                        selmatrix_T_os.close();
+                    }
+
+                    it++;
+                }
+                cerr << ".";
+            }
+
         }
 
     }
