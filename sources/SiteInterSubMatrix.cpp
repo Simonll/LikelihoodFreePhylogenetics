@@ -971,47 +971,6 @@ int  SiteInterSubMatrix::testContextDinuc(int NodeIndex, int site_nuc, int* cont
 }
 
 
-//void SiteInterSubMatrix::findCodonContext(int NodeIndex,  int site_nuc,int nucFrom, int nucTo, int &pos1From, int &pos2From, int &pos3From, int &pos1To, int &pos2To, int &pos3To,int**CurrentNodeNucSequence )
-//{
-//    // this function aims at determining adjacent codon from one mutation
-//
-//    int codonPos = (site_nuc % 3);
-//    if (codonPos == 0)
-//    {
-//        pos1From = nucFrom;
-//        pos1To = nucTo;
-//
-//        pos2From = CurrentNodeNucSequence[NodeIndex][site_nuc + 1];
-//        pos2To = CurrentNodeNucSequence[NodeIndex][site_nuc + 1] ;
-//
-//        pos3From = CurrentNodeNucSequence[NodeIndex][NodeIndex + 2];
-//        pos3To = CurrentNodeNucSequence[NodeIndex][site_nuc + 2];
-//
-//    }
-//    else if (codonPos == 1)
-//    {
-//        pos1From = CurrentNodeNucSequence[NodeIndex][site_nuc - 1];
-//        pos1To = CurrentNodeNucSequence[NodeIndex][site_nuc - 1];
-//
-//        pos2From = nucFrom;
-//        pos2To = nucTo;
-//
-//        pos3From = CurrentNodeNucSequence[NodeIndex][site_nuc + 1];
-//        pos3To = CurrentNodeNucSequence[NodeIndex][site_nuc + 1];
-//
-//    }
-//    else if (codonPos == 2)
-//    {
-//        pos1From = CurrentNodeNucSequence[NodeIndex][site_nuc - 2];
-//        pos1To = CurrentNodeNucSequence[NodeIndex][site_nuc - 2];
-//
-//        pos2From = CurrentNodeNucSequence[NodeIndex][site_nuc - 1];
-//        pos2To = CurrentNodeNucSequence[NodeIndex][site_nuc - 1];
-//
-//        pos3From = nucFrom;
-//        pos3To = nucTo;
-//    }
-//}
 
 //
 //double SiteInterSubMatrix::GetMutRateSyn(int NodeIndex,int** CurrentNodeNucSequence)
