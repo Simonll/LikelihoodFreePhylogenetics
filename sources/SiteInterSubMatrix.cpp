@@ -280,45 +280,75 @@ int  SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite, int innucF
 
 int  SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite, int innucFrom, int innucTo,int**CurrentNodeNucSequence)
 {
-    // from {T}pA to NpA
-    // if insite is one before end seq and  cur_insite = T and cur_insite+1 = A and T goes to C
-    if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] == 3 && CurrentNodeNucSequence[inNnodeIndex][insite+1] == 0))
-        if(innucFrom == 3 && innucTo == 1)
+    
+    int X_ = 3;
+    int Y_ = 0; 
+
+    //from XpY to NpY
+    if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] == X_ && CurrentNodeNucSequence[inNnodeIndex][insite+1] == Y_))
+    {
+        if(((innucFrom + innucTo) % 2) == 0)
         {
-            //tsTpA
-            return 1; // TpA>CpA
+            // we are leaving XY, coordinate 0,1
+            // trought ts
+            return 1; 
         }
-        else 
+        else
         {
-            //tvTpA
+            // we are leaving XY, coordinate 0,1
+            // trought tv
             return 9; 
         }
-    // from Tp{A} to TpN
-    // if insite is one after start seq and cur_insite-1 = T and cur_insite = A and A goes to G 
-    else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite-1] == 3 && CurrentNodeNucSequence[inNnodeIndex][insite] == 0))
-        if (innucFrom == 0 && innucTo == 2)
+    }
+    //from XpY to XpN
+    else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite-1] == X_ && CurrentNodeNucSequence[inNnodeIndex][insite] == Y_))
+    {
+        if(((innucFrom + innucTo) % 2) == 0)
         {
-            //tsTpA
-            return 2; // TpA>TpG
+            // we are leaving XY, coordinate -1,0
+            // trought ts
+            return 2; 
         }
-        else 
+        else
         {
-            //tvTpA
+            // we are leaving XY, coordinate -1,0
+            // trought tv
             return 9; 
-        }    
-    //from {A|C|G}pA to TpA
-    else if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] != 3 && CurrentNodeNucSequence[inNnodeIndex][insite+1] == 0) && (innucFrom != 3 && innucTo == 3)) 
+        }
+    }    
+    //from {N}pY to XpY
+    else if (insite < lparam->Nsite_codon*3-1 && (CurrentNodeNucSequence[inNnodeIndex][insite] != X_ && CurrentNodeNucSequence[inNnodeIndex][insite+1] == Y_) && (innucFrom != X_ && innucTo == X_)) 
     {
-        //landing on TpA
-        return -9; 
+        if(((innucFrom + innucTo) % 2) == 0)
+        {
+            // we are landing on XY, coordinate 0,1
+            // trought  ts
+            return -1; 
+        }
+        else
+        {
+            // we are landing on XY, coordinate 0,1
+            // trought  ts
+            return -2; 
+        }
     }
-    //from Tp{C|G|T} to TpA 
-    else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite-1] == 3 && CurrentNodeNucSequence[inNnodeIndex][insite] != 0) && (innucFrom != 0 && innucTo == 0))
+    //from Xp{N} to XpY
+    else if (insite > 0 && (CurrentNodeNucSequence[inNnodeIndex][insite-1] == X_ && CurrentNodeNucSequence[inNnodeIndex][insite] != Y_) && (innucFrom != Y_ && innucTo == Y_))
     {
-        //landing on TpA
-        return -9;
+        if(((innucFrom + innucTo) % 2) == 0)
+        {
+            // we are landing on XY, coordinate -1,0
+            // trought ts
+            return -3; 
+        }
+        else
+        {
+            // we are landing on XY, coordinate -1,0
+            // trought  tv
+            return -4; 
+        }
     }
-    // not CpG context
+    // not XpY context
     else
     {
         return 0;
