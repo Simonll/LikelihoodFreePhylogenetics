@@ -37,7 +37,7 @@ public:
     string 			GetTaxon(int index) const;
     int 			GetTaxonIndex(string intaxon) const;
     int 			GetTaxonIndexWithIncompleteName(string intaxon) const;
-
+    int 			GetTaxonIndexWithCompleteName(string intaxon) const;
     void			ToStream(ostream& os);
 private:
 

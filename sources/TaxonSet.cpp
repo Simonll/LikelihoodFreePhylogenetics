@@ -127,3 +127,37 @@ int TaxonSet::GetTaxonIndexWithIncompleteName(string taxname) const
     return found;
 }
 
+int TaxonSet::GetTaxonIndexWithCompleteName(string taxname) const
+{
+
+    int found = -1;
+    for (int i=0; i<Ntaxa; i++)
+    {
+        if (taxlist[i].substr(0,taxname.length()) == taxname && taxname.length() == taxlist[i].length())
+        {
+            if (found != -1)
+            {
+                cerr << "error : taxon found twice : " << taxname << '\n';
+                exit(1);
+            }
+            found = i;
+        }
+    }
+    /* if (found == -1)
+    {
+        for (int i=0; i<Ntaxa; i++)
+        {
+            if (taxname.substr(0,taxlist[i].length()) == taxlist[i])
+            {
+                if (found != -1)
+                {
+                    cerr << "error : taxon found twice : " << taxname << '\n';
+                    exit(1);
+                }
+                found = i;
+            }
+        }
+    } */
+    return found;
+}
+

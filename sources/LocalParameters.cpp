@@ -960,7 +960,7 @@ void LocalParameters::readLocalInstructions()
         {
             iss >> s;
             this->rootlength = atof(s.c_str());
-            cerr << "rootlength" << this->rootlength <<"\n";
+            cerr << "rootlength " << this->rootlength <<"\n";
 
         }      
         else if (s =="-tofasta" || s =="-tophylip")
