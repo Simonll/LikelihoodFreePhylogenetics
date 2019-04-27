@@ -122,7 +122,6 @@ void SiteInterSubMatrix::resetSubMatrix()
             }
         }
     }
-
 }
 
 void SiteInterSubMatrix::resetSubMatrixSeq()

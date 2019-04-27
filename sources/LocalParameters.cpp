@@ -743,13 +743,6 @@ void LocalParameters::readLocalInstructions()
             this->lambda_omega_prior = s;
             cerr << "prior omega " << this->lambda_omega_prior << "\n";
         }
-        else if (s =="-lambdaCpG" || s == "-fixlambdaCpG")
-        {
-            iss >> s;
-            this->lambda_CpG = atof(s.c_str());
-            this->fixlambda_CpG = 1;
-            cerr << "fix lambda CpG " << this->lambda_CpG << "\n";
-        }
         else if (s =="-fixgtr1")
         {
             this->fixgtr1 = 1;
@@ -843,19 +836,40 @@ void LocalParameters::readLocalInstructions()
             this->fixlambda_TpA = 1;
             cerr << "fix lambda TpA " << this->fixlambda_TpA << "\n";
         }
-        else if (s == "-lambdatstvCpG")
+        else if (s =="-lambdaCpG" || s == "-fixlambdaCpG")
+        {
+            iss >> s;
+            this->lambda_CpG = atof(s.c_str());
+            this->fixlambda_CpG = 1;
+            cerr << "fix lambda CpG " << this->lambda_CpG << "\n";
+        }
+        else if (s == "-lambdatstvCpG" || s == "-fixlambdatstvCpG")
         {
             iss >> s;
             this->lambda_tstvCpG = atof(s.c_str());
             this->fixlambda_tstvCpG = 1;
             cerr << "fix lambda tstvCpG " << this->lambda_tstvCpG << "\n";
         }
-        else if (s == "-lambdatstvTpA")
+        else if (s == "-lambdatstvTpA" || s == "-fixlambdatstvTpA")
         {
             iss >> s;
             this->lambda_tstvTpA = atof(s.c_str());
             this->fixlambda_tstvTpA = 1;
             cerr << "fix lambda tstvTpA " << this->lambda_tstvTpA << "\n";
+        }
+        else if (s == "-lambdatvCpG" || s == "-fixlambdatvCpG")
+        {
+            iss >> s;
+            this->lambda_tvCpG = atof(s.c_str());
+            this->fixlambda_tvCpG = 1;
+            cerr << "fix lambda tvCpG " << this->lambda_tvCpG << "\n";
+        }
+        else if (s == "-lambdatvTpA" || s == "-fixlambdatvTpA")
+        {
+            iss >> s;
+            this->lambda_tvTpA = atof(s.c_str());
+            this->fixlambda_tvTpA = 1;
+            cerr << "fix lambda tvTpA " << this->lambda_tvTpA << "\n";
         }
         else if (s == "-freelambdatvCpG")
         {
