@@ -15,6 +15,9 @@ GlobalParameters::GlobalParameters(string model, string controlfile)
     this->model = model;
     this->controlfile = controlfile;
     this->Nrun = 1;
+    this->Ncon = 1000;
+    this->Nsimu = 1;
+    this->Nrep = 1; 
     this->Nthread = 1;
     this->Niter = 0;
     this->threshold = 10000;
@@ -456,6 +459,20 @@ void GlobalParameters::readInstructions()
             }
 
         }
+        else if (!line.empty() && line.substr(0,5) == "#RUN")
+        {
+            istringstream iss(line);
+            string w;
+            iss >> w;
+            iss >> w;
+            this->Nrep = atoi(w.c_str());
+            iss >> w;
+            this->Nsimu = atoi(w.c_str());
+            iss >> w;
+            this->Ncon = atoi(w.c_str());
+            cerr << "#Nrep " << this->Nrep << "#Nsimu" << this->Nsimu << "#Ncon" << this->Ncon << "\n";
+
+        }        
         else if (!line.empty() && line.substr(0,5) == "#NRUN")
         {
             istringstream iss(line);

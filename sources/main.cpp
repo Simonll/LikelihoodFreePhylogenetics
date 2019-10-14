@@ -325,7 +325,8 @@ int main(int argc, char* argv[])
             }
         }
 
-        ofstream dist_os1((gparam->output+".post").c_str(),OUT);
+        //ofstream dist_os1((gparam->output+".post").c_str(),OUT);
+        ofstream dist_os1((gparam->output+".simu").c_str(),OUT);
         post3->writeHeader(dist_os1);
         post3->writePosterior(dist_os1);
         dist_os1.close();
@@ -551,7 +552,8 @@ int main(int argc, char* argv[])
 
                         if (post3->Niter == post3->Nrun)
                         {
-                            ofstream dist_os1((gparam->output+".post").c_str(),OUT);
+                            //ofstream dist_os1((gparam->output+".post").c_str(),OUT);
+                            ofstream dist_os1((gparam->output+".simu").c_str(),OUT);
                             post3->writeHeader(dist_os1);
                             post3->writePosterior(dist_os1);
                             dist_os1.close();
@@ -1003,7 +1005,8 @@ int main(int argc, char* argv[])
         {
             cerr << "debug15\n";
         }
-        ofstream dist_os((gparam->output+".post").c_str(),OUT);
+        //ofstream dist_os((gparam->output+".post").c_str(),OUT);
+        ofstream dist_os((gparam->output+".simu").c_str(),OUT);
         post->writeHeader(dist_os);
         post->writePosterior(dist_os);
         dist_os.close();
@@ -1119,7 +1122,7 @@ int main(int argc, char* argv[])
         }
         cerr << "End of the simulation process\n";
 
-        ofstream dist_os((gparam->output+".post").c_str(),OUT);
+        ofstream dist_os((gparam->output+".simu").c_str(),OUT);
         post->writeHeader(dist_os);
         post->writePosterior(dist_os);
         dist_os.close();
@@ -1244,7 +1247,8 @@ int main(int argc, char* argv[])
         {
             cerr << "debug11\n";
         }
-        ofstream dist_os((gparam->output+".post").c_str(),OUT);
+        //ofstream dist_os((gparam->output+".post").c_str(),OUT);
+        ofstream dist_os((gparam->output+".simu").c_str(),OUT);
         post->writeHeader(dist_os);
         post->writePosterior(dist_os);
         dist_os.close();
@@ -1417,7 +1421,8 @@ int main(int argc, char* argv[])
 
             cerr << "End of the simulation process\n";
 
-            ofstream dist_os((gparam->output+".post").c_str(),OUT);
+            //ofstream dist_os((gparam->output+".post").c_str(),OUT);
+            ofstream dist_os((gparam->output+".simu").c_str(),OUT);
             post->writeHeader(dist_os);
             post->writePosterior(dist_os);
             dist_os.close();

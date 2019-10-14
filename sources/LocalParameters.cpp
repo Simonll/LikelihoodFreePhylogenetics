@@ -344,8 +344,18 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     this->Nstate_codon = this->codondata->GetNstate();
     if (this->Nsite_codon >4999)
     {
-        cerr << "number of sites too large >=5000: " << this->Nsite_codon  <<"\n";
-        exit(0);
+        this->N_profile = 5000; 
+        
+    } 
+    else 
+    {
+        this->N_profile = this->Nsite_codon;
+    }
+
+    this->alloc = new int [this->N_profile];
+    for(int i =0 ; i < this->N_profile; i++)
+    {
+        this->alloc[i] = -1;
     }
 
     this->codonprofile = new double [this->Nstate_codon];
@@ -354,7 +364,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
         this->codonprofile[i] = 0.0;
     }
 
-    this->ssaaprofiles = new double*[Nsite_codon];
+    this->ssaaprofiles = new double*[this->Nsite_codon];
     for(int i =0 ; i < this->Nsite_codon; i++)
     {
         this->ssaaprofiles[i] = new double [Nstate_aa];
@@ -367,11 +377,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
         }
     }
 
-    this->alloc = new int [Nsite_codon];
-    for(int i =0 ; i < this->Nsite_codon; i++)
-    {
-        this->alloc[i] = -1;
-    }
+    
 
     this->newlink = new Link();
     this->newnext = new Link();
@@ -383,6 +389,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
     cerr << "Nsite_nuc : " << this->Nsite_nuc << "\n";
     cerr << "Ntaxa : " <<  this->Ntaxa << "\n";
     cerr << "Nstate_codon : " << this->Nstate_codon << "\n";
+    cerr << "N_profile : " << this->N_profile << "\n";
 
     int taxa_a_val = this->taxonset->GetTaxonIndexWithIncompleteName(this->taxa_a);
     int taxa_b_val = this->taxonset->GetTaxonIndexWithIncompleteName(this->taxa_b);
@@ -408,9 +415,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
 
     cerr << "Rooted at " << this->taxa_a << " " << this->taxa_b  << "\n";
 }
-
-
-
 
 
 LocalParameters::~LocalParameters()
@@ -2003,7 +2007,7 @@ void LocalParameters::writeParam(ofstream& os)
         }
     }
     os << "\n";
-    for(int j = 0; j < Nsite_codon; j++)
+    for(int j = 0; j < this->Nsite_codon; j++)
     {
         for(int i = 0; i <Nstate_aa; i++ )
         {
@@ -2017,9 +2021,9 @@ void LocalParameters::writeParam(ofstream& os)
             }
         }
     }
-    for(int i = 0; i < Nsite_codon; i++)
+    for(int i = 0; i < this->N_profile; i++)
     {
-        if (i < Nsite_codon -1)
+        if (i < this->N_profile -1)
         {
             os << alloc[i] << "\t";
         }

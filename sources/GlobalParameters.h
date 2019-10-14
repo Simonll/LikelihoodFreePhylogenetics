@@ -191,7 +191,7 @@ public:
     std::map<string,int> mapUsedEvoAncStats;
     std::map<string,int> mapUsedSiteSpecificEvoStats;
 
-    int OutPartialDistance,verbose, NusedAccessorySummaries,NusedSiteSpecificEvoStats, NusedEvoStats, NusedEvoAncStats, NusedParam, NusedSummaries, NusedAncSummaries, Ngenes, chainPointStart, chainPointEnd, chainPointEvery,Nthread, Niter, Nrun, threshold, Nrep, Nsite_codon, Ntaxa;
+    int OutPartialDistance,verbose, NusedAccessorySummaries,NusedSiteSpecificEvoStats, NusedEvoStats, NusedEvoAncStats, NusedParam, NusedSummaries, NusedAncSummaries, Ngenes, chainPointStart, chainPointEnd, chainPointEvery,Nthread, Niter, Nrun, threshold, Nrep, Nsite_codon, Ntaxa, Nsimu, Ncon ;  
 
     std::vector<string> listGenes;
     std::vector<string> listChains;
