@@ -2291,7 +2291,7 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i)
         {
             is >> tmp;
         }
-        for (int k=0; k<this->Nsite_codon; k++)
+        for (int k=0; k<this->N_profile; k++)
         {
             for (int l=0; l<this->Nstate_aa; l++)
             {
@@ -2355,7 +2355,7 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i)
             is >> tmp;
         }
 
-        for (int k=0; k<this->Nsite_codon; k++)
+        for (int k=0; k<this->N_profile; k++)
         {
             for (int l=0; l<Nstate_aa; l++)
             {
@@ -2499,7 +2499,7 @@ void LocalParameters::readChainCodonMutSelSBDP()
             is >> tmp;
         }
 
-        for (int k=0; k<this->Nsite_codon; k++)
+        for (int k=0; k<this->N_profile; k++)
         {
             for (int l=0; l<Nstate_aa; l++)
             {
