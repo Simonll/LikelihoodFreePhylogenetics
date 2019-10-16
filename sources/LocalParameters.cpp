@@ -352,8 +352,8 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
         this->N_profile = this->Nsite_codon;
     }
 
-    this->alloc = new int [this->N_profile];
-    for(int i =0 ; i < this->N_profile; i++)
+    this->alloc = new int [this->Nsite_codon];
+    for(int i =0 ; i < this->Nsite_codon; i++)
     {
         this->alloc[i] = -1;
     }
@@ -364,12 +364,12 @@ LocalParameters::LocalParameters(GlobalParameters* gparam)
         this->codonprofile[i] = 0.0;
     }
 
-    this->ssaaprofiles = new double*[this->Nsite_codon];
-    for(int i =0 ; i < this->Nsite_codon; i++)
+    this->ssaaprofiles = new double*[this->N_profile];
+    for(int i =0 ; i < this->N_profile; i++)
     {
         this->ssaaprofiles[i] = new double [Nstate_aa];
     }
-    for(int i = 0; i < this->Nsite_codon; i++)
+    for(int i = 0; i < this->N_profile; i++)
     {
         for(int j =0 ; j < this->Nstate_aa; j++)
         {
@@ -2007,7 +2007,7 @@ void LocalParameters::writeParam(ofstream& os)
         }
     }
     os << "\n";
-    for(int j = 0; j < this->Nsite_codon; j++)
+    for(int j = 0; j < this->N_profile; j++)
     {
         for(int i = 0; i <Nstate_aa; i++ )
         {
@@ -2021,9 +2021,9 @@ void LocalParameters::writeParam(ofstream& os)
             }
         }
     }
-    for(int i = 0; i < this->N_profile; i++)
+    for(int i = 0; i < this->Nsite_codon; i++)
     {
-        if (i < this->N_profile -1)
+        if (i < this->Nsite_codon -1)
         {
             os << alloc[i] << "\t";
         }
