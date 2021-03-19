@@ -164,17 +164,9 @@ int main(int argc, char* argv[])
     else if (model == "CodonMutSelFiniteABC")
     {
         cerr << "CodonMutSelFiniteCpG\n";
-
         GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-
-
         int Npoint = (int) (gparam->chainPointEnd-gparam->chainPointStart)/gparam->chainPointEvery;
-
-
-       // Posterior* post1 = new Posterior(gparam);
-       // Posterior* post2 = new Posterior(gparam);
         Posterior* post3 = new Posterior(gparam);
-
         cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " " << gparam->chainPointEvery << " " << Npoint << "\n";
 
 
@@ -192,9 +184,7 @@ int main(int argc, char* argv[])
         cerr << "Npoint\t" << Npoint << "\n";
         #pragma omp parallel for
         for (pt_i = gparam->chainPointStart ; pt_i < gparam->chainPointEnd; pt_i+=gparam->chainPointEvery)
-        {
-            //int thread_id = omp_get_thread_num();
-            //for (int thread_i = 0 ; thread_i < gparam->Nthread; thread_i++){
+       {
             int l = (int) (pt_i-gparam->chainPointStart)/gparam->chainPointEvery;
             lparam[l] = new LocalParameters(gparam);
             lparam[l]->readChainCodonMutSelFinite(pt_i);
@@ -209,10 +199,7 @@ int main(int argc, char* argv[])
             if (l == 0)
             {
 
-//                post1->SetNsite(lparam[l]->Nsite_codon);
-//                post2->SetNsite(lparam[l]->Nsite_codon);
                 post3->SetNsite(lparam[l]->Nsite_codon);
-
 
                 ostringstream ost1;
                 ost1 <<  gparam->output << ".inputparam";
@@ -290,42 +277,11 @@ int main(int argc, char* argv[])
                                     lparam[l]->GetCurrentWeights()
                                 );
                             }
-                                                
-                        /* if ((post3->Nrun/10) >= post3->threshold)
-                        {
-                            if (post3->Niter % (post3->Nrun/10) == 0)
-                            {
-                                ofstream dist_os1((gparam->output+".post-tmp").c_str(),OUT);
-                                post3->writeHeader(dist_os1);
-                                post3->writePosterior(dist_os1);
-                                dist_os1.close();
-
-                                ofstream monitor_os1((gparam->output+".monitor-tmp").c_str(),OUT);
-                                post3->writeMonitorPosterior(monitor_os1);
-                                monitor_os1.close();
-                            } 
-                        }
-                        else if ((post3->Nrun/10) < post3->threshold)
-                        {
-                            if (post3->Niter % (post3->Nrun/10) == 0)
-                            {
-                                int Nsimu = (int) post3->Nrun/10;
-                                ofstream dist_os1((gparam->output+".post-tmp").c_str(),OUT);
-                                post3->writeHeader(dist_os1);
-                                post3->writePosterior(dist_os1, Nsimu );
-                                dist_os1.close();
-
-                                ofstream monitor_os1((gparam->output+".monitor-tmp").c_str(),OUT);
-                                post3->writeMonitorPosterior(monitor_os1);
-                                monitor_os1.close();
-                            }
-                        } */
                     }
                 }
             }
         }
 
-        //ofstream dist_os1((gparam->output+".post").c_str(),OUT);
         ofstream dist_os1((gparam->output+".simu").c_str(),OUT);
         post3->writeHeader(dist_os1);
         post3->writePosterior(dist_os1);
@@ -344,10 +300,7 @@ int main(int argc, char* argv[])
         GlobalParameters* gparam = new GlobalParameters(model, controlfile);
         cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " " << gparam->chainPointEvery << "\n";
         int Npoint = (int) (gparam->chainPointEnd-gparam->chainPointStart)/gparam->chainPointEvery;
-//        Posterior* post1 = new Posterior(gparam);
-//        Posterior* post2 = new Posterior(gparam);
         Posterior* post3 = new Posterior(gparam);
-
         LocalParameters** lparam = new LocalParameters*[Npoint];
 
         if(gparam->verbose)
@@ -399,8 +352,6 @@ int main(int argc, char* argv[])
         #pragma omp parallel for
         for (pt_i = gparam->chainPointStart ; pt_i < gparam->chainPointEnd; pt_i+=gparam->chainPointEvery)
         {
-            //int thread_id = omp_get_thread_num();
-            //for (int thread_i = 0 ; thread_i < gparam->Nthread; thread_i++){
             int l = (int) (pt_i-gparam->chainPointStart)/gparam->chainPointEvery;
             if(gparam->verbose)
             {
@@ -452,10 +403,7 @@ int main(int argc, char* argv[])
             if (l == 0)
             {
 
-//                post1->SetNsite(lparam[l]->Nsite_codon);
-//                post2->SetNsite(lparam[l]->Nsite_codon);
                 post3->SetNsite(lparam[l]->Nsite_codon);
-
 
                 ostringstream ost1;
                 ost1 <<  gparam->output << ".inputparam";
@@ -524,11 +472,6 @@ int main(int argc, char* argv[])
                         cerr << "debug20\n";
                     }
 
-                    /* for (int interval_i = 0 ; interval_i < lparam[l]->Ninterval; interval_i++)
-                    {
-                        ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
-                    } */              
-
                     ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
                     if(gparam->verbose)
                     {
@@ -552,7 +495,6 @@ int main(int argc, char* argv[])
 
                         if (post3->Niter == post3->Nrun)
                         {
-                            //ofstream dist_os1((gparam->output+".post").c_str(),OUT);
                             ofstream dist_os1((gparam->output+".simu").c_str(),OUT);
                             post3->writeHeader(dist_os1);
                             post3->writePosterior(dist_os1);
@@ -564,37 +506,6 @@ int main(int argc, char* argv[])
                             cerr << "End of the simulation process\n";
                             exit(0);
                         }
-                        
-                                                
-                        /* if ((post3->Nrun/10) >= post3->threshold)
-                        {
-                            if (post3->Niter % (post3->Nrun/10) == 0)
-                            {
-                                ofstream dist_os1((gparam->output+".post-tmp").c_str(),OUT);
-                                post3->writeHeader(dist_os1);
-                                post3->writePosterior(dist_os1);
-                                dist_os1.close();
-
-                                ofstream monitor_os1((gparam->output+".monitor-tmp").c_str(),OUT);
-                                post3->writeMonitorPosterior(monitor_os1);
-                                monitor_os1.close();
-                            } 
-                        }
-                        else if ((post3->Nrun/10) < post3->threshold)
-                        {
-                            if (post3->Niter % (post3->Nrun/10) == 0)
-                            {
-                                int Nsimu = (int) post3->Nrun/10;
-                                ofstream dist_os1((gparam->output+".post-tmp").c_str(),OUT);
-                                post3->writeHeader(dist_os1);
-                                post3->writePosterior(dist_os1, Nsimu );
-                                dist_os1.close();
-
-                                ofstream monitor_os1((gparam->output+".monitor-tmp").c_str(),OUT);
-                                post3->writeMonitorPosterior(monitor_os1);
-                                monitor_os1.close();
-                            }
-                        } */
                     }
                 }
             }
@@ -607,12 +518,8 @@ int main(int argc, char* argv[])
         GlobalParameters* gparam = new GlobalParameters(model, controlfile);
         cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " " << gparam->chainPointEvery << "\n";
         int Npoint = (int) (gparam->chainPointEnd-gparam->chainPointStart)/gparam->chainPointEvery;
-//        Posterior* post1 = new Posterior(gparam);
-//        Posterior* post2 = new Posterior(gparam);
         Posterior* postMaster = new Posterior(gparam);
-
         Posterior** postSlave = new Posterior*[Npoint];
-
         LocalParameters** lparam = new LocalParameters*[Npoint];
 
         if(gparam->verbose)
@@ -665,9 +572,6 @@ int main(int argc, char* argv[])
         for (pt_i = gparam->chainPointStart ; pt_i < gparam->chainPointEnd; pt_i+=gparam->chainPointEvery)
         {
 
-
-            //int thread_id = omp_get_thread_num();
-            //for (int thread_i = 0 ; thread_i < gparam->Nthread; thread_i++){
             int l = (int) (pt_i-gparam->chainPointStart)/gparam->chainPointEvery;
             if(gparam->verbose)
             {
@@ -786,8 +690,6 @@ int main(int argc, char* argv[])
 
         int runTodo = int((postMaster->Nrun-postMaster->Niter)/Npoint);
         int run = 0;
-//        while(run < runTodo)
-//        {
 
         omp_set_dynamic(0);
         omp_set_num_threads(gparam->Nthread);
@@ -844,10 +746,6 @@ int main(int argc, char* argv[])
 
                 cerr << ".";
             }
-//          }
-
-//            run++;
-
         }
 
         for (int l = 0 ; l < Npoint; l++)
@@ -862,11 +760,6 @@ int main(int argc, char* argv[])
         postMaster->writeHeader(dist_os2);
         postMaster->writePosterior(dist_os2);
         dist_os2.close();
-
-//        ofstream monitor_os2((gparam->output+"-1M.monitor").c_str(),OUT);
-//        postMaster->writeMonitorPosterior(monitor_os2);
-//        monitor_os2.close();
-
         cerr << "End of the simulation process\n";
         exit(0);
 
@@ -1005,7 +898,6 @@ int main(int argc, char* argv[])
         {
             cerr << "debug15\n";
         }
-        //ofstream dist_os((gparam->output+".post").c_str(),OUT);
         ofstream dist_os((gparam->output+".simu").c_str(),OUT);
         post->writeHeader(dist_os);
         post->writePosterior(dist_os);
@@ -1053,11 +945,7 @@ int main(int argc, char* argv[])
             int iter = 0 ;
             while(iter < post->Nrun)
             {
-
-
-
                 sampler->sample();
-
                 simulator->GetNewSimulatedCodonAlignment();
 
                 ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
@@ -1247,7 +1135,6 @@ int main(int argc, char* argv[])
         {
             cerr << "debug11\n";
         }
-        //ofstream dist_os((gparam->output+".post").c_str(),OUT);
         ofstream dist_os((gparam->output+".simu").c_str(),OUT);
         post->writeHeader(dist_os);
         post->writePosterior(dist_os);
@@ -1268,7 +1155,7 @@ int main(int argc, char* argv[])
     }
     else if (model == "CodonMutSelFinitePPPred" || model == "CodonMutSelSBDPPPred")
     {
-        // the chain pointS are extract from the posterior file according to chainID
+        // the chain points are extract from the posterior file according to chainID
         cerr << model  << "\n";
 
         GlobalParameters* gparam = new GlobalParameters(model, controlfile);
@@ -1287,11 +1174,7 @@ int main(int argc, char* argv[])
             lparam->readChainCodonMutSelFinite();
 
         }
-        /* 
-        ofstream lparam_os ((gparam->output+".inputparam").c_str());
-        lparam->writeParam(lparam_os);
-        lparam_os.close();
-        */
+ 
 
         SummaryStatistics* ss = new SummaryStatistics(lparam);
         ss->computeSummaries();
@@ -1305,7 +1188,6 @@ int main(int argc, char* argv[])
             cerr << "debug1\n";
         }
 
-        //PriorSampler* sampler = new PriorSampler(lparam);
 
         if(gparam->verbose)
         {
@@ -1382,26 +1264,7 @@ int main(int argc, char* argv[])
                     {
                         cerr << " debug7.2\n";
                     }
-/* 
-                    for (int interval_i = 0 ; interval_i < lparam[l]->Ninterval; interval_i++)
-                    {
-                        ss[l]->computeSummariesAncestralSequence(simulator[l]->CurrentAncestralCodonSequence[interval_i]);
-                        if (post->Niter == 0)
-                        {
-                            ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), OUT);
-                            bool headers = true;
-                            lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
-                            AncestralDataSummaries_os.close();
-                        }
-                        else
-                        {
-                            ofstream AncestralDataSummaries_os ((gparam->output+".ancestral").c_str(), APPEND);
-                            bool headers = false;
-                            lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,headers);
-                            AncestralDataSummaries_os.close();
-                        }                     
-                    }                        
- */
+
                     post->registerNewSimulation(
                         lparam->GetPointID(),
                         lparam->GetCurrentParameters(),
@@ -1454,12 +1317,6 @@ int main(int argc, char* argv[])
             lparam->readChainCodonMutSelFinite();
 
         }
-        
-        /* 
-        ofstream lparam_os ((gparam->output+".inputparam").c_str());
-        lparam->writeParam(lparam_os);
-        lparam_os.close();
-        */
 
         SummaryStatistics* ss = new SummaryStatistics(lparam);
         ss->computeSummaries();
@@ -1586,7 +1443,6 @@ int main(int argc, char* argv[])
         }
 
     }
-    // end main
 }
 
 
