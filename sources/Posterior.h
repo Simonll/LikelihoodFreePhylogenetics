@@ -1,28 +1,29 @@
 /*
 LikelihoodFreePhylogenetics, Copyright (C) 2017, Simon Laurin-Lemay
 
-LikelihoodFreePhylogenetics is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-LikelihoodFreePhylogenetics is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License for more details. You should have received a copy of the GNU General Public License
-along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses/>.
+LikelihoodFreePhylogenetics is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your option)
+any later version. LikelihoodFreePhylogenetics is distributed in the hope that
+it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details. You should have received a copy of the GNU
+General Public License along with LikelihoodFreePhylogenetics. If not, see
+<http://www.gnu.org/licenses/>.
 */
 #ifndef POSTERIOR_H
 #define POSTERIOR_H
 
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cmath>
-#include <iomanip>
-#include <vector>
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <map>
-
+#include <sstream>
+#include <string>
+#include <vector>
 
 #define isnan std::isnan
 #define isinf std::isinf
@@ -41,157 +42,139 @@ along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses
 #define APPEND std::ios_base::app
 #define OUT std::ios_base::out
 
-
-#include "Random.h"
 #include "GlobalParameters.h"
+#include "Random.h"
 
+class Posterior {
+ public:
+  Posterior(GlobalParameters* gparam);
+  virtual ~Posterior();
 
-class Posterior
-{
-public:
+  static const int chainIDGetter = 0;
+  static const int paramGetter = 1;
+  static const int summariesGetter = 2;
+  static const int accsummariesGetter = 3;
+  static const int evoancstatsGetter = 4;
+  static const int evostatsGetter = 5;
+  static const int ssevostatsGetter = 6;
+  static const int distancesGetter = 7;
+  static const int weightsGetter = 8;
 
-    Posterior(GlobalParameters* gparam);
-    virtual ~Posterior();
+  double TOOSMALL;
+  double TOOLARGE;
+  double TOOLARGENEGATIVE;
 
-    static const int chainIDGetter =  0;
-    static const int paramGetter = 1;
-    static const int summariesGetter = 2;
-    static const int accsummariesGetter = 3;
-    static const int evoancstatsGetter = 4;
-    static const int evostatsGetter = 5;
-    static const int ssevostatsGetter = 6;
-    static const int distancesGetter = 7;
-    static const int weightsGetter = 8;
+  int verbose;
+  int NSummaries;
+  int NParam;
+  int NEvoStats;
+  int NSiteSpecificEvoStats;
+  int NAccessorySummaries;
+  int NEvoAncStats;
 
+  string* listParam;
+  string* listSummaries;
+  string* listEvoStats;
+  string* listSiteSpecificEvoStats;
 
-    double TOOSMALL;
-    double TOOLARGE;
-    double TOOLARGENEGATIVE;
+  std::map<string, int> mapUsedParam;
+  std::map<string, int> mapUsedSummaries;
+  std::map<string, int> mapUsedAccessorySummaries;
+  std::map<string, int> mapUsedEvoStats;
+  std::map<string, int> mapUsedSiteSpecificEvoStats;
+  std::map<string, int> mapUsedEvoAncStats;
 
-    int verbose;
-    int NSummaries;
-    int NParam;
-    int NEvoStats;
-    int NSiteSpecificEvoStats;
-    int NAccessorySummaries;
-    int NEvoAncStats;
+  int NusedEvoStats;
+  int NusedSiteSpecificEvoStats;
+  int NusedEvoAncStats;
+  int NusedParam;
+  int NusedSummaries;
+  int NusedAccessorySummaries;
+  int Ngenes;
 
-    string* listParam;
-    string* listSummaries;
-    string* listEvoStats;
-    string* listSiteSpecificEvoStats;
+  string localcontrolfile, output, model;
 
-    std::map<string,int> mapUsedParam;
-    std::map<string,int> mapUsedSummaries;
-    std::map<string,int> mapUsedAccessorySummaries;
-    std::map<string,int> mapUsedEvoStats;
-    std::map<string,int> mapUsedSiteSpecificEvoStats;
-    std::map<string,int> mapUsedEvoAncStats;
+  std::vector<
+      std::tuple<int, std::vector<double>, std::vector<double>,
+                 std::vector<double>, std::vector<double>, std::vector<double>,
+                 std::vector<double>, std::vector<double>, std::vector<double>>>
+      population_t;
+  std::vector<std::vector<double>> posterior;
+  double* empVar;
+  double* empMean;
 
-    int NusedEvoStats;
-    int NusedSiteSpecificEvoStats;
-    int NusedEvoAncStats;
-    int NusedParam;
-    int NusedSummaries;
-    int NusedAccessorySummaries;
-    int Ngenes;
+  Random* rnd;
+  int randomseed;
 
-    string localcontrolfile, output, model;
+  int OutPartialDistance, Niter, Nrun, Naccepted, threshold, Nthread,
+      Nsite_codon;
+  bool sorted;
+  // writter
+  void writePosterior(ofstream& os);
+  void writePosterior(ofstream& os, int Nsimu);
+  void writeMonitorPosterior(ofstream& os);
+  void writePosteriorPredictiveStatistics(
+      ofstream& os, std::vector<double> realDataSummaries);
+  void writeHeader(ofstream& os);
 
-    std::vector<std::tuple<int,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>>> population_t;
-    std::vector<std::vector<double>> posterior;
-    double*empVar;
-    double*empMean;
+  // readers
+  void readPosterior(string posteriorfile);
+  void readPosterior(ifstream& is);
+  void readMonitor();
+  void readMonitor(ifstream& is);
 
-    Random* rnd;
-    int randomseed;
+  // Getters
+  int PosteriorGetSize();
+  double GetAcceptanceRate();
+  std::vector<std::vector<double>> GetPartialDistances();
+  std::vector<std::vector<double>> GetPartialDistancesT();
+  std::vector<double> GetTheta_i(int theta_i);
+  std::vector<std::vector<double>> GetTheta();
+  void GetEmpVar();
+  void GetWeights(string kernel);
+  std::vector<std::vector<double>> GetLocalWeights();
+  std::vector<double> GetWeights();
+  double GetEpanechnikov(double x, double y);
+  void sortPopulation();
+  void slaveToMaster(
+      std::vector<std::tuple<int, std::vector<double>, std::vector<double>,
+                             std::vector<double>, std::vector<double>,
+                             std::vector<double>, std::vector<double>,
+                             std::vector<double>, std::vector<double>>>
+          population_i);
+  // Setters
 
-    int OutPartialDistance, Niter, Nrun, Naccepted, threshold, Nthread, Nsite_codon;
-    bool sorted;
-    // writter
-    void writePosterior(ofstream& os);
-    void writePosterior(ofstream& os, int Nsimu);
-    void writeMonitorPosterior(ofstream& os);
-    void writePosteriorPredictiveStatistics(ofstream& os, std::vector<double> realDataSummaries);
-    void writeHeader(ofstream& os);
+  void slaveRegisterNewSimulation(
+      int chainID, std::vector<double> param, std::vector<double> summaries,
+      std::vector<double> accsummaries, std::vector<double> ancevostat,
+      std::vector<double> evostat, std::vector<double> ssevostat,
+      std::vector<double> distances, std::vector<double> weights);
 
+  void registerNewSimulation(
+      int chainID, std::vector<double> param, std::vector<double> summaries,
+      std::vector<double> accsummaries, std::vector<double> ancevostat,
+      std::vector<double> evostat, std::vector<double> ssevostat,
+      std::vector<double> distances, std::vector<double> weights);
 
-    //readers
-    void readPosterior(string posteriorfile);
-    void readPosterior(ifstream& is);
-    void readMonitor();
-    void readMonitor(ifstream& is);
+  void registerOldSimulation(
+      int chainID, std::vector<double> param, std::vector<double> summaries,
+      std::vector<double> accsummaries, std::vector<double> ancevostat,
+      std::vector<double> evostat, std::vector<double> ssevostat,
+      std::vector<double> distances, std::vector<double> weights);
 
-    //Getters
-    int PosteriorGetSize();
-    double GetAcceptanceRate();
-    std::vector<std::vector<double>> GetPartialDistances();
-    std::vector<std::vector<double>> GetPartialDistancesT();
-    std::vector<double> GetTheta_i(int theta_i);
-    std::vector<std::vector<double>> GetTheta();
-    void GetEmpVar();
-    void GetWeights(string kernel);
-    std::vector<std::vector<double>> GetLocalWeights();
-    std::vector<double> GetWeights();
-    double GetEpanechnikov(double x, double y);
-    void sortPopulation();
-    void slaveToMaster(std::vector<std::tuple<int, std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>>> population_i);
-    //Setters
+  void SetNsite(int i);
 
-    void slaveRegisterNewSimulation(
-        int chainID,
-        std::vector<double> param,
-        std::vector<double> summaries,
-        std::vector<double> accsummaries,
-        std::vector<double> ancevostat,
-        std::vector<double> evostat,
-        std::vector<double> ssevostat,
-        std::vector<double> distances,
-        std::vector<double> weights
-    );
-
-    void registerNewSimulation(
-        int chainID,
-        std::vector<double> param,
-        std::vector<double> summaries,
-        std::vector<double> accsummaries,
-        std::vector<double> ancevostat,
-        std::vector<double> evostat,
-        std::vector<double> ssevostat,
-        std::vector<double> distances,
-        std::vector<double> weights
-    );
-
-    void registerOldSimulation(
-        int chainID,
-        std::vector<double> param,
-        std::vector<double> summaries,
-        std::vector<double> accsummaries,
-        std::vector<double> ancevostat,
-        std::vector<double> evostat,
-        std::vector<double> ssevostat,
-        std::vector<double> distances,
-        std::vector<double> weights
-    );
-
-    void SetNsite(int i);
-
-    int GetSize()
-    {
-        return population_t.size();
+  int GetSize() { return population_t.size(); }
+  bool thresholdAchieved() {
+    bool test = false;
+    if (this->Niter == threshold) {
+      test = true;
     }
-    bool thresholdAchieved()
-    {
-        bool test = false;
-        if (this->Niter == threshold)
-        {
-            test = true;
-        }
-        return test;
-    }
+    return test;
+  }
 
-protected:
-private:
+ protected:
+ private:
 };
 
-#endif // POSTERIOR_H
+#endif  // POSTERIOR_H

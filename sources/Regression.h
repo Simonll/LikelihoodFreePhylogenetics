@@ -1,27 +1,29 @@
 /*
 LikelihoodFreePhylogenetics, Copyright (C) 2017, Simon Laurin-Lemay
 
-LikelihoodFreePhylogenetics is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-LikelihoodFreePhylogenetics is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License for more details. You should have received a copy of the GNU General Public License
-along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses/>.
+LikelihoodFreePhylogenetics is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your option)
+any later version. LikelihoodFreePhylogenetics is distributed in the hope that
+it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details. You should have received a copy of the GNU
+General Public License along with LikelihoodFreePhylogenetics. If not, see
+<http://www.gnu.org/licenses/>.
 */
 #ifndef REGRESSION_H
 #define REGRESSION_H
 
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cmath>
-#include <iomanip>
-#include <vector>
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <map>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #define isnan std::isnan
 #define isinf std::isinf
@@ -40,44 +42,36 @@ along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses
 #define APPEND std::ios_base::app
 
 #include "GlobalParameters.h"
-#include "linalg.h"
 #include "Posterior.h"
+#include "linalg.h"
 
-class Regression
-{
-public:
+class Regression {
+ public:
+  GlobalParameters* gparam;
+  Posterior* post;
 
+  // local regression adjustment
+  //(X_T dot W dot X)^{-1} dot X_T dot W dot Y
+  std::vector<std::vector<double>> Y_HAT;
+  std::vector<std::vector<double>> Yres;   // Matrix of residual = Y - Y_HAT
+  std::vector<std::vector<double>> B_HAT;  // Matrix of regression coefficient
 
-    GlobalParameters* gparam;
-    Posterior* post;
+  Regression(GlobalParameters* gparam, Posterior* post);
+  virtual ~Regression();
 
-    //local regression adjustment
-    //(X_T dot W dot X)^{-1} dot X_T dot W dot Y
-    std::vector<std::vector<double>> Y_HAT;
-    std::vector<std::vector<double>> Yres; //Matrix of residual = Y - Y_HAT
-    std::vector<std::vector<double>> B_HAT; //Matrix of regression coefficient
+  // Getters
+  double GetRSquare(int i);
+  double GetAjustedRSquare(int i);
+  double GetRSquarePred(int i);
+  double GetS(int i);
+  double** GetXWX_t();
+  double** GetX_tWY();
 
+  void ComputeMultipleRegression();
+  void ComputeX_TWY();
 
-
-
-    Regression(GlobalParameters* gparam, Posterior* post);
-    virtual ~Regression();
-
-    //Getters
-    double GetRSquare(int i);
-    double GetAjustedRSquare(int i);
-    double GetRSquarePred(int i);
-    double GetS(int i);
-    double** GetXWX_t();
-    double** GetX_tWY();
-
-    void ComputeMultipleRegression();
-    void ComputeX_TWY();
-
-
-protected:
-
-private:
+ protected:
+ private:
 };
 
-#endif // REGRESSION_H
+#endif  // REGRESSION_H

@@ -1,28 +1,29 @@
 /*
 LikelihoodFreePhylogenetics, Copyright (C) 2017, Simon Laurin-Lemay
 
-LikelihoodFreePhylogenetics is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-LikelihoodFreePhylogenetics is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License for more details. You should have received a copy of the GNU General Public License
-along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses/>.
+LikelihoodFreePhylogenetics is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your option)
+any later version. LikelihoodFreePhylogenetics is distributed in the hope that
+it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details. You should have received a copy of the GNU
+General Public License along with LikelihoodFreePhylogenetics. If not, see
+<http://www.gnu.org/licenses/>.
 */
 #ifndef LOCALPARAMETERS_H
 #define LOCALPARAMETERS_H
 
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cmath>
-#include <iomanip>
-#include <vector>
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <map>
-
+#include <sstream>
+#include <string>
+#include <vector>
 
 #define isnan std::isnan
 #define isinf std::isinf
@@ -41,250 +42,233 @@ along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses
 #define APPEND std::ios_base::app
 #define OUT std::ios_base::out
 
-
-#include "Random.h"
-#include "Tree.h"
-#include "SequenceAlignment.h"
-#include "CodonStateSpace.h"
-#include "CodonSequenceAlignment.h"
-#include "StringStreamUtils.h"
-#include "GlobalParameters.h"
 #include "BranchSpecificParameters.h"
+#include "CodonSequenceAlignment.h"
+#include "CodonStateSpace.h"
+#include "GlobalParameters.h"
+#include "Random.h"
+#include "SequenceAlignment.h"
+#include "StringStreamUtils.h"
+#include "Tree.h"
 
+class LocalParameters {
+ public:
+  static const int Nnucp = 4;
+  static const int Nnucrr = 6;
+  static const int Ndinuc = 16;
+  static const int Nstate_aa = 20;
 
-class LocalParameters
-{
+  // to be set by global param
+  double TOOSMALL;
+  double TOOLARGE;
+  double TOOLARGENEGATIVE;
 
+  int NSummaries;
+  int NParam;
+  int NEvoStats;
+  int NSiteSpecificEvoStats;
 
-public:
+  string* listParam;
+  string* listSummaries;
+  string* listEvoStats;
+  string* listSiteSpecificEvoStats;
+  string* listSpecies;
 
-    static const int Nnucp = 4;
-    static const int Nnucrr = 6;
-    static const int Ndinuc = 16;
-    static const int Nstate_aa = 20;
+  std::map<string, int> mapUsedParam;
+  std::map<string, int> mapUsedSummaries;
+  std::map<string, int> mapUsedAncSummaries;
+  std::map<string, int> mapUsedAccessorySummaries;
+  std::map<string, int> mapUsedEvoStats;
+  std::map<string, int> mapUsedEvoAncStats;
+  std::map<string, int> mapUsedSiteSpecificEvoStats;
 
-    //to be set by global param
-    double TOOSMALL;
-    double TOOLARGE;
-    double TOOLARGENEGATIVE;
+  int NusedEvoStats;
+  int NusedSiteSpecificEvoStats;
+  int NusedEvoAncStats;
+  int NusedParam;
+  int NusedSummaries;
+  int NusedAncSummaries;
+  int NusedAccessorySummaries;
+  int Ngenes;
 
-    int NSummaries;
-    int NParam;
-    int NEvoStats;
-    int NSiteSpecificEvoStats;
+  string data, localcontrolfile, output, model;
 
-    string* listParam;
-    string* listSummaries;
-    string* listEvoStats;
-    string* listSiteSpecificEvoStats;
-    string* listSpecies;
+  BranchSpecificParameters** bparam;
 
-    std::map<string,int> mapUsedParam;
-    std::map<string,int> mapUsedSummaries;
-    std::map<string,int> mapUsedAncSummaries;
-    std::map<string,int> mapUsedAccessorySummaries;
-    std::map<string,int> mapUsedEvoStats;
-    std::map<string,int> mapUsedEvoAncStats;
-    std::map<string,int> mapUsedSiteSpecificEvoStats;
+  FileSequenceAlignment* dnadata;
+  CodonStateSpace* codonstatespace;
+  CodonSequenceAlignment* codondata;
+  Tree* refTree;
+  const TaxonSet* taxonset;
+  Link* outgroupLink;
+  Link* newlink;
+  Link* newnext;
+  Branch* branchToInGroup;
+  Branch* branchToOutGroup;
+  Node* newnode;
+  Random* rnd;
 
-    int NusedEvoStats;
-    int NusedSiteSpecificEvoStats;
-    int NusedEvoAncStats;
-    int NusedParam;
-    int NusedSummaries;
-    int NusedAncSummaries;
-    int NusedAccessorySummaries;
-    int Ngenes;
+  bool iscodon, isdata;
+  std::map<int, int> gtrMap;
+  int gtr1NodeIndex;
+  int gtr2NodeIndex;
+  int Ninterval;
+  int sampleAncSeq;
+  double rootlength, percentFromOutGroup, branchLengthBetweenInAndOutGroup;
 
-    string data, localcontrolfile, output, model;
+  int Nsite_codon, Nsite_nuc, Ntaxa, Nstate_codon, startPoint, endPoint,
+      everyPoint, tofasta, Nrep, N_profile;
+  string controlfile, code, chain, posteriorfile, taxa_a, taxa_b, taxa_gtr1_a,
+      taxa_gtr1_b, taxa_gtr1_c, taxa_gtr2_a, taxa_gtr2_b, taxa_gtr2_c, distance,
+      transformation;
 
-    BranchSpecificParameters** bparam;
+  bool getrate;
+  bool getrate1;
+  bool getrate2;
 
-    FileSequenceAlignment* dnadata;
-    CodonStateSpace* codonstatespace;
-    CodonSequenceAlignment* codondata;
-    Tree* refTree;
-    const TaxonSet*  taxonset;
-    Link* outgroupLink;
-    Link* newlink;
-    Link* newnext;
-    Branch* branchToInGroup;
-    Branch* branchToOutGroup;
-    Node* newnode;
-    Random* rnd;
+  double omega;
+  double *nucp, *nucrr, *nucp1, *nucrr1, *nucp2, *nucrr2;  // 6 param
+  double **nucrrnr, **nucrrnr1, **nucrrnr2;                // 12 param
+  double **gtnr, **gtnr1, **gtnr2;
+  double** ssaaprofiles;
+  double* codonprofile;
+  int* alloc;
 
-    bool iscodon, isdata;
-    std::map <int,int> gtrMap;
-    int gtr1NodeIndex;
-    int gtr2NodeIndex;
-    int Ninterval;
-    int sampleAncSeq;
-    double rootlength, percentFromOutGroup, branchLengthBetweenInAndOutGroup ;
+  // param value
+  double lambda_TBL, lambda_omega, lambda_CpG, lambda_TpA, MutationNormFactor,
+      MutationNormFactor1, MutationNormFactor2, fitCpG, fitTpA, lambda_tvCpG,
+      lambda_tvTpA, lambda_tstvCpG, lambda_tstvTpA, fitGC, lambda_R;
+  double* muBranch;
+  double* AAadj;
+  double Aadj, Cadj, Dadj, Eadj, Fadj, Gadj, Hadj, Iadj, Kadj, Ladj, Madj, Nadj,
+      Padj, Qadj, Radj, Sadj, Tadj, Vadj, Wadj, Yadj;
 
-    int Nsite_codon, Nsite_nuc, Ntaxa, Nstate_codon, startPoint, endPoint, everyPoint, tofasta, Nrep, N_profile;
-    string controlfile, code, chain, posteriorfile, taxa_a, taxa_b,taxa_gtr1_a, taxa_gtr1_b, taxa_gtr1_c, taxa_gtr2_a, taxa_gtr2_b,taxa_gtr2_c, distance, transformation;
+  // swhitch fix or free param
+  int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG,
+      fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr,
+      fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss,
+      fixfitCpG, fixlambda_tvCpG, fixlambda_tvTpA, fixlambda_tstvCpG,
+      fixlambda_tstvTpA, fixfitTpA, fixfitGC, fixlambda_R, fixAAadj,
+      fixCODONadj;
+  int MCMCpointID;
 
-    bool getrate;
-    bool getrate1;
-    bool getrate2;
+  string lambda_TBL_prior, lambda_CpG_prior, lambda_TpA_prior,
+      lambda_omega_prior;
 
-    double omega;
-    double *nucp, *nucrr, *nucp1, *nucrr1, *nucp2, *nucrr2; // 6 param
-    double **nucrrnr, **nucrrnr1, **nucrrnr2; //12 param
-    double **gtnr, **gtnr1, **gtnr2;
-    double **ssaaprofiles;
-    double *codonprofile;
-    int *alloc;
-    
-    //param value
-    double lambda_TBL, lambda_omega, lambda_CpG, lambda_TpA, MutationNormFactor, MutationNormFactor1, MutationNormFactor2, fitCpG,fitTpA,lambda_tvCpG,lambda_tvTpA,lambda_tstvCpG,lambda_tstvTpA,fitGC,lambda_R;
-    double* muBranch;
-    double* AAadj;
-    double Aadj, Cadj, Dadj, Eadj, Fadj, Gadj, Hadj, Iadj, Kadj, Ladj, Madj, Nadj, Padj, Qadj, Radj, Sadj, Tadj, Vadj, Wadj, Yadj;
+  std::vector<double> summariesRealData;
+  std::vector<double> accessorysummariesRealData;
+  std::vector<double> summariesSimulatedData;
+  std::vector<double> accessorysummariesSimulatedData;
+  std::vector<double> summariesAncestralData;
+  std::vector<double> evostats;
+  std::vector<double> ancevostats;
+  std::vector<double> sitespecificevostats;
+  std::vector<double> weights;
 
-    //swhitch fix or free param
-    int fixNsite, fixomega, fixlambda_omega, fixlambda_TBL, fixlambda_CpG, fixlambda_TpA, fixgtr, fixgtr1, fixgtr2, fixgtnr, fixstat, fixts, fixtr, fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss, fixfitCpG, fixlambda_tvCpG,fixlambda_tvTpA,fixlambda_tstvCpG,fixlambda_tstvTpA,fixfitTpA,fixfitGC,fixlambda_R, fixAAadj, fixCODONadj;
-    int MCMCpointID;
+  // Constructor
+  LocalParameters(GlobalParameters* gparam);
+  void initContainers();
+  virtual ~LocalParameters();
 
-    string lambda_TBL_prior, lambda_CpG_prior, lambda_TpA_prior, lambda_omega_prior;
+  // Writers
+  void writeRealDataSummaries(ofstream& os, bool headers = true);
+  void writeAncestralDataSummaries(ofstream& os, bool headers);
+  void writeParam(ofstream& os);
 
-    std::vector<double> summariesRealData;
-    std::vector<double> accessorysummariesRealData;
-    std::vector<double> summariesSimulatedData;
-    std::vector<double> accessorysummariesSimulatedData;
-    std::vector<double> summariesAncestralData;
-    std::vector<double> evostats;
-    std::vector<double> ancevostats;
-    std::vector<double> sitespecificevostats;
-    std::vector<double> weights;
+  void tobstats(ofstream& os);
+  void tobstats(ofstream& os, const Link* from);
+  void toSsstats(ofstream& os);
+  void toFasta(ofstream& os, int** currentNodeleafCodonSequence);
+  void toAli(ofstream& os, int** currentNodeleafCodonSequence);
 
-    //Constructor
-    LocalParameters(GlobalParameters* gparam);
-    void initContainers();
-    virtual ~LocalParameters();
+  // Readers
+  void readChainCodonMutSelSBDP(int pt_i);
+  void readChainCodonMutSelFinite(int pt_i);
+  void readChainCodonMutSelSBDP();
+  void readChainCodonMutSelFinite();
+  void readFMutSelCodeML();
+  void readLocalInstructions();
 
-    // Writers
-    void writeRealDataSummaries(ofstream&os,bool headers= true);
-    void writeAncestralDataSummaries(ofstream&os,bool headers);
-    void writeParam(ofstream& os);
+  // Setters
+  void SetCurrentParametersFromPosterior(
+      std::vector<std::vector<double>> posterior, int it);
+  void SetTree();
+  void SetBranchesLengthsBetweenInAndOutGroup();
+  void SetRootBetweenInAndOutGroup();
+  void SetRootLCA();
+  void SetTreeStuff();
+  void SetTreeStuffRecursively(Link* from, int notNodeIndex, int gtrIndex);
 
-    void tobstats(ofstream& os);
-    void tobstats(ofstream& os,const Link* from);
-    void toSsstats(ofstream& os);
-    void toFasta(ofstream &os, int** currentNodeleafCodonSequence);
-    void toAli(ofstream &os, int** currentNodeleafCodonSequence);
+  // Getters
+  int GetPointID();
+  std::vector<double> GetCurrentParameters();
+  std::vector<double> GetCurrentSummaries();
+  std::vector<double> GetCurrentAccessorySummaries();
+  std::vector<double> GetCurrentEvoStats();
+  std::vector<double> GetCurrentAncEvoStats();
+  std::vector<double> GetCurrentSiteSpecificEvoStats();
+  std::vector<double> GetCurrentDistances();
+  std::vector<double> GetCurrentWeights();
+  void GetGTR1();
+  void GetGTR2();
 
-    // Readers
-    void readChainCodonMutSelSBDP(int pt_i);
-    void readChainCodonMutSelFinite(int pt_i);
-    void readChainCodonMutSelSBDP();
-    void readChainCodonMutSelFinite();
-    void readFMutSelCodeML();
-    void readLocalInstructions();
+  void incrementStartPoint() { this->startPoint++; }
 
+  int GetNsiteCodon() { return Nsite_codon; }
 
-    //Setters
-    void SetCurrentParametersFromPosterior(std::vector<std::vector<double>> posterior,int it);
-    void SetTree();
-    void SetBranchesLengthsBetweenInAndOutGroup();
-    void SetRootBetweenInAndOutGroup();
-    void SetRootLCA();
-    void SetTreeStuff();
-    void SetTreeStuffRecursively(Link* from, int notNodeIndex, int gtrIndex);
+  double GetGTNR(int i, int j) {
+    return this
+        ->nucrrnr[i][j];  ///(2*3);//((this->nucrrnr[i][j])/GetRateGTNR());
+  }
 
-    //Getters
-    int GetPointID();
-    std::vector<double> GetCurrentParameters();
-    std::vector<double> GetCurrentSummaries();
-    std::vector<double> GetCurrentAccessorySummaries();
-    std::vector<double> GetCurrentEvoStats();
-    std::vector<double> GetCurrentAncEvoStats();
-    std::vector<double> GetCurrentSiteSpecificEvoStats();
-    std::vector<double> GetCurrentDistances();
-    std::vector<double> GetCurrentWeights();
-    void GetGTR1();
-    void GetGTR2();
+  double GetGTR(int i, int j) {
+    return ((this->nucp[j] * this->nucrrnr[i][j]) / GetRate());
+  }
 
+  double GetGTRCodeML(int i, int j) {
+    return (this->nucp[j] * this->nucrrnr[i][j]);
+  }
 
-    void incrementStartPoint()
-    {
-        this->startPoint++;
+  int GetNucRRIndex(int i, int j) {
+    return (i < j) ? (2 * 4 - i - 1) * i / 2 + j - i - 1
+                   : (2 * 4 - j - 1) * j / 2 + i - j - 1;
+  }
 
+  double GetRateGTNR() {
+    if (getrate) {
+      return MutationNormFactor;
     }
-
-    int GetNsiteCodon()
-    {
-        return Nsite_codon;
-
-    }
-
-    double GetGTNR(int i, int j)
-    {
-        return this->nucrrnr[i][j];///(2*3);//((this->nucrrnr[i][j])/GetRateGTNR());
-    }
-
-    double GetGTR(int i, int j )
-    {
-        return ((this->nucp[j] * this->nucrrnr[i][j]) / GetRate());
-    }
-
-    double GetGTRCodeML(int i, int j )
-    {
-        return (this->nucp[j] * this->nucrrnr[i][j]);
-    }
-
-    int    GetNucRRIndex(int i, int j)
-    {
-        return (i<j) ? (2 * 4 - i - 1) * i / 2 + j - i - 1 : (2 * 4 - j - 1) * j / 2 + i - j - 1 ;
-    }
-
-    double GetRateGTNR()
-    {
-        if (getrate)
-        {
-            return MutationNormFactor; 
+    double norm = 0.0;
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        if (i != j) {
+          norm += this->nucrrnr[i][j];
         }
-        double norm = 0.0;
-        for (int i=0; i<4; i++)
-        {
-            for (int j=0; j<4; j++)
-            {
-                if (i!=j)
-                {
-                    norm += this->nucrrnr[i][j];
-                }
-            }
-        }
-        getrate = true;
-        MutationNormFactor = 2 * (norm * 3);
-        return MutationNormFactor;
+      }
     }
+    getrate = true;
+    MutationNormFactor = 2 * (norm * 3);
+    return MutationNormFactor;
+  }
 
-    double GetRate()
-    {
-        if (getrate)
-        {
-            return MutationNormFactor;
-        }
-        double norm = 0.0;
-        for (int i=0; i<4-1; i++)
-        {
-            for (int j=i+1; j<4; j++)
-            {
-                norm += this->nucp[i] * this->nucp[j] * this->nucrrnr[i][j];   
-            }
-        }
-        // 2 for the symetry of the matrix??, and 3 for the number of codon positons
-        getrate = true;
-        MutationNormFactor = 2 * (norm * 3);
-        return MutationNormFactor;
+  double GetRate() {
+    if (getrate) {
+      return MutationNormFactor;
     }
+    double norm = 0.0;
+    for (int i = 0; i < 4 - 1; i++) {
+      for (int j = i + 1; j < 4; j++) {
+        norm += this->nucp[i] * this->nucp[j] * this->nucrrnr[i][j];
+      }
+    }
+    // 2 for the symetry of the matrix??, and 3 for the number of codon positons
+    getrate = true;
+    MutationNormFactor = 2 * (norm * 3);
+    return MutationNormFactor;
+  }
 
-
-
-protected:
-
-private:
+ protected:
+ private:
 };
 
-#endif // PARAMETERS_H
+#endif  // PARAMETERS_H

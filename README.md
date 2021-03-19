@@ -21,10 +21,10 @@ version 1.0 <br>
 \###########################<br>
 
 
-## Running rejection sampling<br> 
+## Running rejection sampling<br>
 ./LFP -m CodonMutSelSBDPABC ACO1-2673-MSAAGTRW-A-GTRWCpG.conf<br>
 
-### Configuration file:<br> 
+### Configuration file:<br>
 \#SUMMARIES	pwAC	pwAG	pwAT	pwCG	pwCT	pwGT	dinuc31CG	dinuc31TG	dinuc31CA	nuc3A	nuc3C	nuc3G	nuc3T	pwAA<br>
 \#PARAM	chainID	root	lambda_CpG	lambda_TBL	lambda_omega	nucsA	nucsC	nucsG	nucsT	nucrrAC	nucrrAG	nucrrAT	nucrrCG	nucrrCT	nucrrGT<br>
 \#MAP	gtnrAC	gtnrAG	gtnrAT	gtnrCA	gtnrCG	gtnrCT	gtnrGA	gtnrGC	gtnrGT	gtnrTA	gtnrTC	gtnrTG	dinuc31CGTG	dinuc31CGCA	Nsub	Nsynsub<br>
@@ -51,9 +51,3 @@ version 1.0 <br>
 Where  λCpG is a multiplicative parameter that modulate the transition rate of CpG context<br>
 Where  λTBL is a multiplicative parameter that modulate the all the branch lengths<br>
 Where  λomega \  λomega* is a multiplicative parameter that modulate Omega or Omega*<br>
-
-
-
-
-
-

@@ -1,27 +1,28 @@
 /*
 LikelihoodFreePhylogenetics, Copyright (C) 2017, Simon Laurin-Lemay
 
-LikelihoodFreePhylogenetics is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-LikelihoodFreePhylogenetics is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License for more details. You should have received a copy of the GNU General Public License
-along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses/>.
+LikelihoodFreePhylogenetics is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your option)
+any later version. LikelihoodFreePhylogenetics is distributed in the hope that
+it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details. You should have received a copy of the GNU
+General Public License along with LikelihoodFreePhylogenetics. If not, see
+<http://www.gnu.org/licenses/>.
 */
 #ifndef ANCESTRALSEQUENCE_H
 #define ANCESTRALSEQUENCE_H
 
-
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cmath>
-#include <iomanip>
-#include <vector>
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #define isnan std::isnan
 #define isinf std::isinf
@@ -40,43 +41,33 @@ along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses
 #define APPEND std::ios_base::app
 #define OUT std::ios_base::out
 
-#include "Random.h"
-#include "Tree.h"
-#include "SequenceAlignment.h"
-#include "CodonStateSpace.h"
 #include "CodonSequenceAlignment.h"
+#include "CodonStateSpace.h"
 #include "LocalParameters.h"
+#include "Random.h"
+#include "SequenceAlignment.h"
+#include "Tree.h"
 
+class AncestralSequence {
+ public:
+  double** CurrentStationaryCodonSequence;
+  int* CurrentCodonSequence;
+  int* CurrentNucSequence;
+  int* CurrentAncestralCodonSequence;
+  int* CurrentAncestralNucSequence;
 
+  LocalParameters* lparam;
 
-class AncestralSequence
-{
-public:
+  AncestralSequence(LocalParameters* lparam);
+  ~AncestralSequence();
 
-    double** CurrentStationaryCodonSequence;
-    int*  CurrentCodonSequence;
-    int*  CurrentNucSequence;
-    int*  CurrentAncestralCodonSequence;
-    int*  CurrentAncestralNucSequence;
+  void WriteStationary();
+  void GetNewStationaryCodonSequence();
+  int GetCurrentAncestralCodonSequence(int site_codon);
+  int GetCurrentAncestralNucSequence(int site_nuc);
 
-    LocalParameters* lparam;
-
-
-
-
-
-
-    AncestralSequence(LocalParameters* lparam);
-    ~AncestralSequence();
-
-    void WriteStationary();
-    void GetNewStationaryCodonSequence();
-    int GetCurrentAncestralCodonSequence(int site_codon);
-    int GetCurrentAncestralNucSequence(int site_nuc);
-
-protected:
-
-private:
+ protected:
+ private:
 };
 
-#endif // ANCESTRALSEQUENCE_H
+#endif  // ANCESTRALSEQUENCE_H

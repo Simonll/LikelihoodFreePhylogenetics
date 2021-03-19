@@ -1,26 +1,28 @@
 /*
 LikelihoodFreePhylogenetics, Copyright (C) 2017, Simon Laurin-Lemay
 
-LikelihoodFreePhylogenetics is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-LikelihoodFreePhylogenetics is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License for more details. You should have received a copy of the GNU General Public License
-along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses/>.
+LikelihoodFreePhylogenetics is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your option)
+any later version. LikelihoodFreePhylogenetics is distributed in the hope that
+it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details. You should have received a copy of the GNU
+General Public License along with LikelihoodFreePhylogenetics. If not, see
+<http://www.gnu.org/licenses/>.
 */
 #ifndef TREESIMULATOR_H
 #define TREESIMULATOR_H
 
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cmath>
-#include <iomanip>
-#include <vector>
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #define isnan std::isnan
 #define isinf std::isinf
@@ -39,69 +41,63 @@ along with LikelihoodFreePhylogenetics. If not, see <http://www.gnu.org/licenses
 #define APPEND std::ios_base::app
 #define OUT std::ios_base::out
 
-#include "Random.h"
-#include "Tree.h"
-#include "SequenceAlignment.h"
-#include "CodonStateSpace.h"
-#include "CodonSequenceAlignment.h"
-#include "LocalParameters.h"
-#include "EvolHistStatistics.h"
-#include "SiteInterSubMatrix.h"
 #include "AncestralSequence.h"
+#include "CodonSequenceAlignment.h"
+#include "CodonStateSpace.h"
+#include "EvolHistStatistics.h"
+#include "LocalParameters.h"
+#include "Random.h"
+#include "SequenceAlignment.h"
+#include "SiteInterSubMatrix.h"
+#include "Tree.h"
 
+class TreeSimulator {
+ public:
+  // Simulating along a tree
+  int*** CurrentAncestralCodonSequence;
+  int** CurrentNodeCodonSequence;
+  int** CurrentNodeNucSequence;
+  int** CurrentLeafNodeNucSequence;
+  int** CurrentLeafNodeCodonSequences;
 
-class TreeSimulator
-{
-public:
+  // parameters
+  LocalParameters* lparam;
 
-    //Simulating along a tree
-    int*** CurrentAncestralCodonSequence;
-    int** CurrentNodeCodonSequence;
-    int** CurrentNodeNucSequence;
-    int** CurrentLeafNodeNucSequence;
-    int** CurrentLeafNodeCodonSequences;
+  // Evolutionary Statistics
+  EvolHistStatistics* treeEvoStats;
+  EvolHistStatistics* rootBranchEvoStats;
 
-    //parameters
-    LocalParameters* lparam;
+  // Substitution Matrix
+  SiteInterSubMatrix* submatrix;
 
-    //Evolutionary Statistics
-    EvolHistStatistics* treeEvoStats;
-    EvolHistStatistics* rootBranchEvoStats;
+  // Ancestral Sequence
+  AncestralSequence* ancestralseq;
 
-    //Substitution Matrix
-    SiteInterSubMatrix* submatrix;
+  // Simulation functions
+  void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon);
+  void RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo);
+  void ComputeRecursiveSimulation(Link* from);
+  void ComputeSeqProb();
+  void resetSimulator();
+  void resetSimulatorSeq();
+  void resetEvoStatVectors();
+  void WriteAncestral();
 
-    //Ancestral Sequence
-    AncestralSequence* ancestralseq;
+  // Setters
+  void SetAncestralSequence();
 
-    //Simulation functions
-    void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon);
-    void RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo);
-    void ComputeRecursiveSimulation(Link* from);
-    void ComputeSeqProb();
-    void resetSimulator();
-    void resetSimulatorSeq();
-    void resetEvoStatVectors();
-    void WriteAncestral();
+  // Getters
+  void GetNewSimulatedCodonAlignment();
+  void GetNewProbSeq();
+  void GetSampleAncestralCodonSequence(int FromNodeIndex, int interval);
 
-    //Setters
-    void SetAncestralSequence();
+  TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submatrix,
+                AncestralSequence* ancestralseq);
+  TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submatrix);
+  ~TreeSimulator();
 
-    //Getters
-    void GetNewSimulatedCodonAlignment();
-    void GetNewProbSeq();
-    void GetSampleAncestralCodonSequence(int FromNodeIndex,int interval);
-
-    TreeSimulator(LocalParameters* lparam,SiteInterSubMatrix* submatrix,AncestralSequence* ancestralseq);
-    TreeSimulator(LocalParameters* lparam,SiteInterSubMatrix* submatrix);
-    ~TreeSimulator();
-
-protected:
-
-private:
+ protected:
+ private:
 };
 
-#endif // TREESIMULATOR_H
-
-
-
+#endif  // TREESIMULATOR_H
