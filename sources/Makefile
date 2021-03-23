@@ -1,12 +1,12 @@
 CC=g++
-CFLAGS=-c -g -std=c++11 -O2 -Wall -pedantic -fopenmp -fno-var-tracking -Wfatal-errors
+CFLAGS=-c -g -std=c++17 -O2 -Wall -pedantic -fopenmp -fno-var-tracking -Wfatal-errors
 LDFLAGS=-fopenmp
 SOURCES=main.cpp GlobalParameters.cpp TaxonSet.cpp Tree.cpp  Random.cpp  SequenceAlignment.cpp CodonSequenceAlignment.cpp\
   StateSpace.cpp CodonStateSpace.cpp  LocalParameters.cpp SummaryStatistics.cpp SiteInterSubMatrix.cpp EvolHistStatistics.cpp\
-  PriorSampler.cpp AncestralSequence.cpp TreeSimulator.cpp Regression.cpp linalg.cpp BranchSpecificParameters.cpp  LocalData.cpp\
+  PriorSampler.cpp AncestralSequence.cpp TreeSimulator.cpp BranchSpecificParameters.cpp  LocalData.cpp\
   Posterior.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=LFP
+EXECUTABLE=../data/LFP
 PROGSDIR=../data
 
 all: $(SOURCES) $(EXECUTABLE)

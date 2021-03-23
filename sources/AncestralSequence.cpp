@@ -32,7 +32,8 @@ AncestralSequence::~AncestralSequence() {
 
 void AncestralSequence::WriteStationary() {
   // Write stationary
-  ofstream stationary_os((lparam->output + ".stat").c_str(), APPEND);
+  ofstream stationary_os((lparam->output + ".stat").c_str(),
+                         std::ios_base::app);
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
     for (int state = 0; state < lparam->Nstate_codon; state++) {
       if (state < lparam->Nstate_codon - 1) {
@@ -75,7 +76,7 @@ void AncestralSequence::GetNewStationaryCodonSequence() {
       testcummul += CurrentStationaryCodonSequence[site_codon][state];
     }
     if (state >= lparam->Nstate_codon) {
-      cerr << "failed to draw stationary\n";
+      std::cerr << "failed to draw stationary\n";
       exit(0);
     }
     CurrentCodonSequence[site_codon] = state;

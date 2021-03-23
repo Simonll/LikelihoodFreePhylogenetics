@@ -70,28 +70,28 @@ void PriorSampler::sample() {
 
   if (lparam->fixlambda_R != 1) {
     if (lparam->verbose) {
-      cerr << "freelambda_R\n";
+      std::cerr << "freelambda_R\n";
     }
     lparam->lambda_R = lparam->rnd->Uniform();
   }
 
   if (lparam->fixfitGC != 1) {
     if (lparam->verbose) {
-      cerr << "freefitGC\n";
+      std::cerr << "freefitGC\n";
     }
     lparam->fitGC = lparam->rnd->Uniform();
   }
 
   if (lparam->fixfitCpG != 1) {
     if (lparam->verbose) {
-      cerr << "freefitCpG\n";
+      std::cerr << "freefitCpG\n";
     }
     lparam->fitCpG = lparam->rnd->Uniform();
   }
 
   if (lparam->fixfitTpA != 1) {
     if (lparam->verbose) {
-      cerr << "freefitTpA\n";
+      std::cerr << "freefitTpA\n";
     }
     lparam->fitTpA = lparam->rnd->Uniform();
   }
@@ -167,7 +167,7 @@ void PriorSampler::sample() {
 
   if (lparam->fixrr != 1) {
     if (lparam->verbose) {
-      cerr << "freenucrr\n";
+      std::cerr << "freenucrr\n";
     }
     // nucrrnr[0][0] = 0.0; //AA
     lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1, 2);  // ac
@@ -176,10 +176,9 @@ void PriorSampler::sample() {
     lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];     // ca
     // nucrrnr[1][1] = 0.0; //cc
     lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1, 2);  // cg
-    lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2, 2);
-    ;                                               // ct
-    lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];  // ga
-    lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];  // gc
+    lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2, 2);  // ct
+    lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];     // ga
+    lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];     // gc
     // nucrrnr[2][2] = 0.0; //gg
     lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1, 2);  // gt
     lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];     // ta
@@ -218,12 +217,7 @@ void PriorSampler::sample() {
     lparam->gtnr[3][2] = lparam->GetGTR(3, 2);  // tg
     // gtnr[3][3] = 0.0; //tt
 
-  }
-
-  else if (lparam->fixkappa != 1) {
-    if (lparam->verbose) {
-      cerr << "freekappa\n";
-    }
+  } else if (lparam->fixkappa != 1) {
     // nucrrnr[0][0] = 0.0; //AA
     lparam->nucrrnr[0][1] = 1.0;              // ac
     lparam->nucrrnr[0][2] = Unif(1.0, 10.0);  // ag
@@ -274,7 +268,7 @@ void PriorSampler::sample() {
 
   } else if (lparam->fixhky != 1) {
     if (lparam->verbose) {
-      cerr << "freehky\n";
+      std::cerr << "freehky\n";
     }
 
     lparam->nucp[0] = lparam->rnd->sExpo();
@@ -339,7 +333,7 @@ void PriorSampler::sample() {
     // gtnr[3][3] = 0.0; //tt
   } else if (lparam->fixstat != 1) {
     if (lparam->verbose) {
-      cerr << "freestat\n";
+      std::cerr << "freestat\n";
     }
     lparam->nucp[0] = lparam->rnd->sExpo();
     lparam->nucp[1] = lparam->rnd->sExpo();
@@ -371,12 +365,9 @@ void PriorSampler::sample() {
     lparam->gtnr[3][1] = lparam->GetGTR(3, 1);  // tc
     lparam->gtnr[3][2] = lparam->GetGTR(3, 2);  // tg
     // gtnr[3][3] = 0.0; //tt
-
-  }
-
-  else if (lparam->fixtr != 1) {
+  } else if (lparam->fixtr != 1) {
     if (lparam->verbose) {
-      cerr << "freetr\n";
+      std::cerr << "freetr\n";
     }
 
     lparam->nucp[0] = lparam->rnd->sExpo();
@@ -438,14 +429,7 @@ void PriorSampler::sample() {
     lparam->gtnr[3][1] = lparam->GetGTR(3, 1);  // tc
     lparam->gtnr[3][2] = lparam->GetGTR(3, 2);  // tg
     // gtnr[3][3] = 0.0; //tt
-
-  }
-
-  else if (lparam->fixts != 1) {
-    if (lparam->verbose) {
-      cerr << "freets\n";
-    }
-
+  } else if (lparam->fixts != 1) {
     lparam->nucp[0] = lparam->rnd->sExpo();
     lparam->nucp[1] = lparam->rnd->sExpo();
     lparam->nucp[2] = lparam->rnd->sExpo();
@@ -508,7 +492,72 @@ void PriorSampler::sample() {
 
   } else if (lparam->fixgtr != 1) {
     if (lparam->verbose) {
-      cerr << "freegtr\n";
+      std::cerr << "freegtr\n";
+    }
+
+    lparam->nucp[0] = lparam->rnd->sExpo();
+    lparam->nucp[1] = lparam->rnd->sExpo();
+    lparam->nucp[2] = lparam->rnd->sExpo();
+    lparam->nucp[3] = lparam->rnd->sExpo();
+    // nucrrnr[0][0] = 0.0; //AA
+    lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1, 2);  // ac
+    lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2, 2);  // ag
+    lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1, 2);  // at
+    lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];     // ca
+    // nucrrnr[1][1] = 0.0; //cc
+    lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1, 2);  // cg
+    lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2, 2);  // ct
+    lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];     // ga
+    lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];     // gc
+    // nucrrnr[2][2] = 0.0; //gg
+    lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1, 2);  // gt
+    lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];     // ta
+    lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3];     // tc
+    lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3];     // tg
+    // nucrrnr[3][3] = 0.0; //tt
+
+    double sum = 0.0;
+    for (int nuc1 = 0; nuc1 < lparam->Nnucp; nuc1++) {
+      sum += lparam->nucp[nuc1];
+    }
+    for (int nuc1 = 0; nuc1 < lparam->Nnucp; nuc1++) {
+      lparam->nucp[nuc1] /= sum;
+    }
+
+    sum = 0.0;
+    for (int nuc1 = 0; nuc1 < 4 - 1; nuc1++) {
+      for (int nuc2 = nuc1 + 1; nuc2 < 4; nuc2++) {
+        sum += lparam->nucrrnr[nuc1][nuc2];
+      }
+    }
+
+    for (int nuc1 = 0; nuc1 < 4; nuc1++) {
+      for (int nuc2 = 0; nuc2 < 4; nuc2++) {
+        lparam->nucrrnr[nuc1][nuc2] /= sum;
+      }
+    }
+
+    lparam->getrate = false;
+
+    lparam->gtnr[0][1] = lparam->GetGTR(0, 1);  // ac
+    lparam->gtnr[0][2] = lparam->GetGTR(0, 2);  // ag
+    lparam->gtnr[0][3] = lparam->GetGTR(0, 3);  // at
+    lparam->gtnr[1][0] = lparam->GetGTR(1, 0);  // ca
+    // gtnr[1][1] = 0.0; //cc
+    lparam->gtnr[1][2] = lparam->GetGTR(1, 2);  // cg
+    lparam->gtnr[1][3] = lparam->GetGTR(1, 3);  // ct
+    lparam->gtnr[2][0] = lparam->GetGTR(2, 0);  // ga
+    lparam->gtnr[2][1] = lparam->GetGTR(2, 1);  // gc
+    // gtnr[2][2] = 0.0; //gg
+    lparam->gtnr[2][3] = lparam->GetGTR(2, 3);  // gt
+    lparam->gtnr[3][0] = lparam->GetGTR(3, 0);  // ta
+    lparam->gtnr[3][1] = lparam->GetGTR(3, 1);  // tc
+    lparam->gtnr[3][2] = lparam->GetGTR(3, 2);  // tg
+                                                // gtnr[3][3] = 0.0; //tt
+
+  } else if (lparam->fixgtr2 == 0) {
+    if (lparam->verbose) {
+      std::cerr << "freegtr2\n";
     }
 
     lparam->nucp[0] = lparam->rnd->sExpo();
@@ -570,81 +619,7 @@ void PriorSampler::sample() {
     lparam->gtnr[3][1] = lparam->GetGTR(3, 1);  // tc
     lparam->gtnr[3][2] = lparam->GetGTR(3, 2);  // tg
     // gtnr[3][3] = 0.0; //tt
-
-  }
-
-  else if (lparam->fixgtr2 == 0) {
-    if (lparam->verbose) {
-      cerr << "freegtr2\n";
-    }
-
-    lparam->nucp[0] = lparam->rnd->sExpo();
-    lparam->nucp[1] = lparam->rnd->sExpo();
-    lparam->nucp[2] = lparam->rnd->sExpo();
-    lparam->nucp[3] = lparam->rnd->sExpo();
-    // nucrrnr[0][0] = 0.0; //AA
-    lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1, 2);  // ac
-    lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2, 2);  // ag
-    lparam->nucrrnr[0][3] = lparam->rnd->Gamma(1, 2);  // at
-    lparam->nucrrnr[1][0] = lparam->nucrrnr[0][1];     // ca
-    // nucrrnr[1][1] = 0.0; //cc
-    lparam->nucrrnr[1][2] = lparam->rnd->Gamma(1, 2);  // cg
-    lparam->nucrrnr[1][3] = lparam->rnd->Gamma(2, 2);  // ct
-    lparam->nucrrnr[2][0] = lparam->nucrrnr[0][2];     // ga
-    lparam->nucrrnr[2][1] = lparam->nucrrnr[1][2];     // gc
-    // nucrrnr[2][2] = 0.0; //gg
-    lparam->nucrrnr[2][3] = lparam->rnd->Gamma(1, 2);  // gt
-    lparam->nucrrnr[3][0] = lparam->nucrrnr[0][3];     // ta
-    lparam->nucrrnr[3][1] = lparam->nucrrnr[1][3];     // tc
-    lparam->nucrrnr[3][2] = lparam->nucrrnr[2][3];     // tg
-    // nucrrnr[3][3] = 0.0; //tt
-
-    double sum = 0.0;
-    for (int nuc1 = 0; nuc1 < lparam->Nnucp; nuc1++) {
-      sum += lparam->nucp[nuc1];
-    }
-    for (int nuc1 = 0; nuc1 < lparam->Nnucp; nuc1++) {
-      lparam->nucp[nuc1] /= sum;
-    }
-
-    sum = 0.0;
-    for (int nuc1 = 0; nuc1 < 4 - 1; nuc1++) {
-      for (int nuc2 = nuc1 + 1; nuc2 < 4; nuc2++) {
-        sum += lparam->nucrrnr[nuc1][nuc2];
-      }
-    }
-
-    for (int nuc1 = 0; nuc1 < 4; nuc1++) {
-      for (int nuc2 = 0; nuc2 < 4; nuc2++) {
-        lparam->nucrrnr[nuc1][nuc2] /= sum;
-      }
-    }
-
-    lparam->getrate = false;
-
-    lparam->gtnr[0][1] = lparam->GetGTR(0, 1);  // ac
-    lparam->gtnr[0][2] = lparam->GetGTR(0, 2);  // ag
-    lparam->gtnr[0][3] = lparam->GetGTR(0, 3);  // at
-    lparam->gtnr[1][0] = lparam->GetGTR(1, 0);  // ca
-    // gtnr[1][1] = 0.0; //cc
-    lparam->gtnr[1][2] = lparam->GetGTR(1, 2);  // cg
-    lparam->gtnr[1][3] = lparam->GetGTR(1, 3);  // ct
-    lparam->gtnr[2][0] = lparam->GetGTR(2, 0);  // ga
-    lparam->gtnr[2][1] = lparam->GetGTR(2, 1);  // gc
-    // gtnr[2][2] = 0.0; //gg
-    lparam->gtnr[2][3] = lparam->GetGTR(2, 3);  // gt
-    lparam->gtnr[3][0] = lparam->GetGTR(3, 0);  // ta
-    lparam->gtnr[3][1] = lparam->GetGTR(3, 1);  // tc
-    lparam->gtnr[3][2] = lparam->GetGTR(3, 2);  // tg
-    // gtnr[3][3] = 0.0; //tt
-
-  }
-
-  else if (lparam->fixss != 1) {
-    if (lparam->verbose) {
-      cerr << "freess\n";
-    }
-
+  } else if (lparam->fixss != 1) {
     lparam->nucp[0] = lparam->rnd->sExpo();
     lparam->nucp[1] = lparam->rnd->sExpo();
     lparam->nucp[2] = lparam->rnd->sExpo();
@@ -704,14 +679,7 @@ void PriorSampler::sample() {
     lparam->gtnr[3][1] = lparam->GetGTR(3, 1);  // tc
     lparam->gtnr[3][2] = lparam->GetGTR(3, 2);  // tg
     // gtnr[3][3] = 0.0; //tt
-
-  }
-
-  else if (lparam->fixgtnr != 1) {
-    if (lparam->verbose) {
-      cerr << "freegtnr\n";
-    }
-
+  } else if (lparam->fixgtnr != 1) {
     // nucrrnr[0][0] = 0.0; //AA
     lparam->nucrrnr[0][1] = lparam->rnd->Gamma(1, 2);  // ac
     lparam->nucrrnr[0][2] = lparam->rnd->Gamma(2, 2);  // ag

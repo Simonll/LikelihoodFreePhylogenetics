@@ -16,11 +16,15 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
-#ifndef SEQUENCEALIGNMENT_H
-#define SEQUENCEALIGNMENT_H
+#ifndef SOURCES_SEQUENCEALIGNMENT_H_
+#define SOURCES_SEQUENCEALIGNMENT_H_
+#include <string>
 
+#include "BiologicalSequences.h"
 #include "StateSpace.h"
 #include "TaxonSet.h"
+
+#define SOURCES_ cout std::cout
 
 // this class works like an interface
 // it does not do any job
@@ -28,7 +32,7 @@ class SequenceAlignment {
  public:
   SequenceAlignment() : Data(0), BKData(0) {}
 
-  SequenceAlignment(SequenceAlignment* from) {
+  explicit SequenceAlignment(SequenceAlignment* from) {
     Ntaxa = from->Ntaxa;
     Nsite = from->Nsite;
     taxset = from->taxset;
@@ -47,7 +51,7 @@ class SequenceAlignment {
   SequenceAlignment(SequenceAlignment* from, int start, int length) {
     Ntaxa = from->Ntaxa;
     if ((start < 0) || (length < 0) || (start + length > from->Nsite)) {
-      cerr << "error in sequence alignment: overflow\n";
+      std::cerr << "error in sequence alignment: overflow\n";
       exit(1);
     }
 
@@ -81,15 +85,15 @@ class SequenceAlignment {
           Data[k][j] = from->Data[i][j];
         }
         if (k >= Ntaxa) {
-          cerr << "error in sequence alignment subset\n";
-          cerr << Ntaxa << '\n';
+          std::cerr << "error in sequence alignment subset\n";
+          std::cerr << Ntaxa << '\n';
           exit(1);
         }
       }
     }
   }
 
-  SequenceAlignment(int** inData, string* names, int inNsite,
+  SequenceAlignment(int** inData, std::string* names, int inNsite,
                     StateSpace* instatespace, const TaxonSet* intaxset) {
     Nsite = inNsite;
     taxset = intaxset;
@@ -127,11 +131,11 @@ class SequenceAlignment {
 
   SequenceAlignment& operator=(SequenceAlignment& from) {
     if (from.GetNsite() != GetNsite()) {
-      cerr << "error in SequenceAlignment::operator=\n";
+      std::cerr << "error in SequenceAlignment::operator=\n";
       exit(1);
     }
     if (from.GetNtaxa() != GetNtaxa()) {
-      cerr << "error in SequenceAlignment::operator=\n";
+      std::cerr << "error in SequenceAlignment::operator=\n";
       exit(1);
     }
     for (int i = 0; i < Ntaxa; i++) {
@@ -171,7 +175,7 @@ class SequenceAlignment {
 
   void Restore() {
     if (!BKData) {
-      cerr << "error : cant restore data without backup\n";
+      std::cerr << "error : cant restore data without backup\n";
       exit(1);
     }
     for (int i = 0; i < Ntaxa; i++) {
@@ -228,7 +232,7 @@ class SequenceAlignment {
 
   int GetBKState(int taxon, int site) {
     if (!BKData) {
-      cerr << "error in get bk state\n";
+      std::cerr << "error in get bk state\n";
       exit(1);
     }
     return BKData[taxon][site];
@@ -246,8 +250,8 @@ class SequenceAlignment {
 
   void GetSiteEmpiricalFreq(double** in);
 
-  void ToStream(ostream& os);
-  void ToFasta(ostream& os);
+  void ToStream(std::ostream& os);
+  void ToFasta(std::ostream& os);
 
   void SetTestData(int testnsite, int offset, int sitemin, int sitemax,
                    int* tmp) {
@@ -308,7 +312,7 @@ class SequenceAlignment {
       i++;
     }
     Nsite -= Eliminated;
-    cout << "number of positions eliminated : " << Eliminated << '\n';
+    std::cout << "number of positions eliminated : " << Eliminated << '\n';
   }
 
   virtual double GetTotalDiversity(int sitemin, int sitemax) {
@@ -341,7 +345,7 @@ class SequenceAlignment {
     return GetTotalDiversity(0, GetNsite()) / GetNsite();
   }
 
-  double CompositionalHeterogeneity(ostream* os) {
+  double CompositionalHeterogeneity(std::ostream* os) {
     int Nstate = GetNstate();
     double** taxfreq = new double*[Ntaxa];
     for (int j = 0; j < Ntaxa; j++) {
@@ -428,19 +432,19 @@ class SequenceAlignment {
 
 class FileSequenceAlignment : public SequenceAlignment {
  public:
-  FileSequenceAlignment(istream& is);
-  FileSequenceAlignment(string filename, int fullline, int myid);
-  FileSequenceAlignment(int ntaxa, int nsite_nuc, string* listspecies);
+  explicit FileSequenceAlignment(std::istream& is);
+  FileSequenceAlignment(std::string filename, int fullline, int myid);
+  FileSequenceAlignment(int ntaxa, int nsite_nuc, std::string* listspecies);
 
  private:
-  int ReadDataFromFile(string filename, int forceinterleaved = 0);
-  int ReadNexus(string filename);
-  int TestPhylipSequential(string filename);
-  void ReadPhylipSequential(string filename);
-  int TestPhylip(string filename, int repeattaxa);
-  void ReadPhylip(string filename, int repeattaxa);
+  int ReadDataFromFile(std::string filename, int forceinterleaved = 0);
+  int ReadNexus(std::string filename);
+  int TestPhylipSequential(std::string filename);
+  void ReadPhylipSequential(std::string filename);
+  int TestPhylip(std::string filename, int repeattaxa);
+  void ReadPhylip(std::string filename, int repeattaxa);
 
-  string* SpeciesNames;
+  std::string* SpeciesNames;
 };
 
-#endif  // SEQUENCEALIGNMENT_H
+#endif  // SOURCES_SEQUENCEALIGNMENT_H_

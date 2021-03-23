@@ -11,8 +11,8 @@ Public License for more details. You should have received a copy of the GNU
 General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
-#ifndef BRANCHSPECIFICPARAMETERS_H
-#define BRANCHSPECIFICPARAMETERS_H
+#ifndef SOURCES_BRANCHSPECIFICPARAMETERS_H_
+#define SOURCES_BRANCHSPECIFICPARAMETERS_H_
 
 #include <algorithm>
 #include <cmath>
@@ -23,23 +23,6 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <sstream>
 #include <string>
 #include <vector>
-
-#define isnan std::isnan
-#define isinf std::isinf
-#define string std::string
-#define ostream std::ostream
-#define ofstream std::ofstream
-#define istream std::istream
-#define ifstream std::ifstream
-#define cin std::cin
-#define cerr std::cerr
-#define cout std::cout
-#define setw std::setw
-#define ostringstream std::ostringstream
-#define istringstream std::istringstream
-#define IOS_APPEND std::ios_base::app
-#define APPEND std::ios_base::app
-#define OUT std::ios_base::out
 
 class BranchSpecificParameters {
  public:
@@ -54,9 +37,6 @@ class BranchSpecificParameters {
   virtual ~BranchSpecificParameters();
 
   void SetLocalParaemters(double* nucp, double* nucrr);
-
- protected:
- private:
 };
 
-#endif  // BRANCHSPECIFICPARAMETERS_H
+#endif  // SOURCES_BRANCHSPECIFICPARAMETERS_H_

@@ -11,8 +11,8 @@ Public License for more details. You should have received a copy of the GNU
 General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
-#ifndef SITEINTERSUBMATRIX_H
-#define SITEINTERSUBMATRIX_H
+#ifndef SOURCES_SITEINTERSUBMATRIX_H_
+#define SOURCES_SITEINTERSUBMATRIX_H_
 
 #include <algorithm>
 #include <cmath>
@@ -23,23 +23,6 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <sstream>
 #include <string>
 #include <vector>
-
-#define isnan std::isnan
-#define isinf std::isinf
-#define string std::string
-#define ostream std::ostream
-#define ofstream std::ofstream
-#define istream std::istream
-#define ifstream std::ifstream
-#define cin std::cin
-#define cerr std::cerr
-#define cout std::cout
-#define setw std::setw
-#define ostringstream std::ostringstream
-#define istringstream std::istringstream
-#define IOS_APPEND std::ios_base::app
-#define APPEND std::ios_base::app
-#define OUT std::ios_base::out
 
 #include "CodonSequenceAlignment.h"
 #include "CodonStateSpace.h"
@@ -73,8 +56,8 @@ class SiteInterSubMatrix {
   LocalParameters* lparam;
 
   // Constructor
-  SiteInterSubMatrix(LocalParameters* lparam);
-  SiteInterSubMatrix(LocalParameters* lparam, string seq);
+  explicit SiteInterSubMatrix(LocalParameters* lparam);
+  SiteInterSubMatrix(LocalParameters* lparam, std::string seq);
   virtual ~SiteInterSubMatrix();
 
   // Getters
@@ -178,9 +161,6 @@ class SiteInterSubMatrix {
   double GetMutRate(int NodeIndex, int site_nuc, int nucTo) {
     return mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
   }
-
- protected:
- private:
 };
 
-#endif  // SITEINTERSUBMATRIX_H
+#endif  // SOURCES_SITEINTERSUBMATRIX_H_

@@ -185,9 +185,9 @@ void Tree::MakeRandomTree() {
   linko3->SetNode(n3);
 
   for (int i = 3; i < Ntaxa; i++) {
-    // ToStream(cerr);
+    // ToStream(std::cerr);
 
-    int choose = ((int)((Ntaxa - i) * rnd::GetRandom().Uniform()));
+    int choose = static_cast<int>((Ntaxa - i) * rnd::GetRandom().Uniform());
 
     for (int j = 0; j <= choose; j++) {
       if (included[j]) {
@@ -195,7 +195,7 @@ void Tree::MakeRandomTree() {
       }
     }
     if (included[choose]) {
-      cerr << "error in random tree\n";
+      std::cerr << "error in random tree\n";
       exit(1);
     }
 
@@ -229,7 +229,7 @@ void Tree::MakeRandomTree() {
     linkdown->SetIndex(choose);
 
     // choose a place in the tree: any node except root
-    int n = ((int)((2 * i - 3) * rnd::GetRandom().Uniform())) + 1;
+    int n = static_cast<int>((2 * i - 3) * rnd::GetRandom().Uniform()) + 1;
     Link* tmp = 0;
     Link* fromdown = ChooseNode(root, tmp, n);
     Link* fromup = fromdown->Out()->Next();
@@ -352,15 +352,15 @@ void Tree::RegisterWith(const TaxonSet* intaxset, int myid) {
   if (!RegisterWith(taxset, GetRoot(), tot)) {
     // if (myid == 0)
     cout << "There is no match between the tree and the sequences.\n";
-    cerr << "problem with : " << taxset->GetNtaxa() << '\n';
-    ToStream(cerr);
+    std::cerr << "problem with : " << taxset->GetNtaxa() << '\n';
+    ToStream(std::cerr);
     exit(1);
   }
   if (tot != taxset->GetNtaxa()) {
     // if (myid == 0) {
-    cerr << "error : non matching number of taxa : " << tot << '\t'
-         << taxset->GetNtaxa() << '\n';
-    cerr << "some taxa in the dataset are not present in the tree\n";
+    std::cerr << "error : non matching number of taxa : " << tot << '\t'
+              << taxset->GetNtaxa() << '\n';
+    std::cerr << "some taxa in the dataset are not present in the tree\n";
     // }
     exit(1);
   }
@@ -387,7 +387,7 @@ bool Tree::RegisterWith(const TaxonSet* taxset, Link* from, int& tot) {
       }
     }
     if (from->isUnary()) {
-      // cerr << "DELETE UNARY NODE\n";
+      // std::cerr << "DELETE UNARY NODE\n";
       DeleteUnaryNode(from);
     }
     return !(from->isLeaf());
@@ -417,7 +417,7 @@ void Tree::RegisterWithIndicesFromNames(const Link* from)	{
 
         string tmp = from->GetNode()->GetName();
         if (! IsInt(tmp))	{
-                cerr << "error in register with indices from names\n";
+                std::cerr << "error in register with indices from names\n";
                 exit(1);
         }
         int temp = atoi(tmp.c_str());
@@ -452,14 +452,14 @@ Tree::Tree(string filename) {
   ReadFromStream(is);
 
   if (!CheckRootDegree()) {
-    cerr << "error: root should be of degree tree\n";
-    cerr << "i.e. tree should have following format: (A,B,C) and not "
-            "(A,(B,C));\n";
+    std::cerr << "error: root should be of degree tree\n";
+    std::cerr << "i.e. tree should have following format: (A,B,C) and not "
+                 "(A,(B,C));\n";
     exit(1);
   }
 
   if (!RecursiveCheckDegree(GetRoot())) {
-    cerr << "error: input tree is not bifurcating\n";
+    std::cerr << "error: input tree is not bifurcating\n";
     exit(1);
   }
 }
@@ -470,14 +470,14 @@ Tree::Tree(istream& is) {
   ReadFromStream(is);
 
   if (!CheckRootDegree()) {
-    cerr << "error: root should be of degree tree\n";
-    cerr << "i.e. tree should have following format: (A,B,C) and not "
-            "(A,(B,C));\n";
+    std::cerr << "error: root should be of degree tree\n";
+    std::cerr << "i.e. tree should have following format: (A,B,C) and not "
+                 "(A,(B,C));\n";
     exit(1);
   }
 
   if (!RecursiveCheckDegree(GetRoot())) {
-    cerr << "error: input tree is not bifurcating\n";
+    std::cerr << "error: input tree is not bifurcating\n";
     exit(1);
   }
 }
@@ -490,12 +490,12 @@ void Tree::ReadFromStream(istream& is) {
     string s;
     is >> s;
     if (s.length() == 0) {
-      cerr << "in tree: null string\n";
+      std::cerr << "in tree: null string\n";
       exit(1);
     }
     if (s.substr(0, 1) != "(") {
-      cerr << "in tree: not a tree\n";
-      cerr << s << "\n";
+      std::cerr << "in tree: not a tree\n";
+      std::cerr << s << "\n";
       exit(1);
     }
     unsigned int k = 0;
@@ -626,8 +626,9 @@ void Tree::Subdivide(Link* from, int Ninterpol) {
   if (!from->isRoot()) {
     double l = atof(from->GetBranch()->GetName().c_str());
     if (l <= 0) {
-      cerr << "warning : non strictly positive branch length : " << l << '\n';
-      cerr << "correcting and setting to 0.001\n";
+      std::cerr << "warning : non strictly positive branch length : " << l
+                << '\n';
+      std::cerr << "correcting and setting to 0.001\n";
       l = 0.001;
     }
 
@@ -691,7 +692,7 @@ void Tree::Print(ostream& os)	const {
 */
 
 bool Tree::CheckRootDegree(int testdegree) {
-  // cerr << "CheckRootDegree\n";
+  // std::cerr << "CheckRootDegree\n";
   bool ret = true;
   int degree = 0;
   const Link* from = GetRoot();
@@ -701,12 +702,12 @@ bool Tree::CheckRootDegree(int testdegree) {
   if (degree != testdegree) {
     ret = false;
   }
-  // cerr << ret << " " << degree <<"\n";
+  // std::cerr << ret << " " << degree <<"\n";
   return ret;
 }
 
 bool Tree::RecursiveCheckDegree(const Link* from, int testdegree) {
-  // cerr << "RecursiveCheckDegree\n";
+  // std::cerr << "RecursiveCheckDegree\n";
   bool ret = true;
   int degree = 0;
   if (!from->isRoot()) {
@@ -739,21 +740,21 @@ Link* Tree::Detach(Link* down, Link* up) {
       fromdown = link->Out();
     }
     if (link->isRoot()) {
-      cerr << "link is root!\n";
+      std::cerr << "link is root!\n";
     }
   }
   if (degree != 2) {
-    cerr << "error in detach: node not of degree 2\n";
-    cerr << degree << '\n';
-    // cerr << down->GetIndex() << '\t' << up->GetIndex() << '\n';
+    std::cerr << "error in detach: node not of degree 2\n";
+    std::cerr << degree << '\n';
+    // std::cerr << down->GetIndex() << '\t' << up->GetIndex() << '\n';
     exit(1);
   }
   if (!fromdown) {
-    cerr << "error in Detach: fromdown not found\n";
+    std::cerr << "error in Detach: fromdown not found\n";
     exit(1);
   }
   if (!foundup) {
-    cerr << "error in Detach: dit not find up\n";
+    std::cerr << "error in Detach: dit not find up\n";
     exit(1);
   }
 
@@ -790,11 +791,11 @@ void Tree::Attach(Link* down, Link* up, Link* todown, Link* toup) {
     linkprev = link;
   }
   if (!found) {
-    cerr << "error in attach: not found\n";
+    std::cerr << "error in attach: not found\n";
     exit(1);
   }
   if (downout->Next() != up) {
-    cerr << "error in attach: downoutnext != up\n";
+    std::cerr << "error in attach: downoutnext != up\n";
     exit(1);
   }
   up->SetNext(todown->Out());
@@ -878,7 +879,7 @@ Link* Tree::ChooseNode(Link* from, Link*& fromup, int& n) {
 
 Link* Tree::ChooseLinkAtRandom() {
   int n = CountInternalNodes(GetRoot());
-  int choose = (int)(n * rnd::GetRandom().Uniform());
+  int choose = static_cast<int>(n * rnd::GetRandom().Uniform());
   Link* tmp = 0;
   Link* newrootnext = ChooseInternalNode(GetRoot(), tmp, choose);
   return newrootnext;
@@ -923,7 +924,7 @@ int Tree::DrawSubTree(Link*& down, Link*& up) {
     nodestatus[link->Out()->GetNode()->GetIndex()] = 0;
     m--;
   }
-  int choose = (int)(m * rnd::GetRandom().Uniform());
+  int choose = static_cast<int>(m * rnd::GetRandom().Uniform());
   int k = 0;
   while ((choose < Nnode) && (k < choose)) {
     if (!nodestatus[k]) {
@@ -935,7 +936,7 @@ int Tree::DrawSubTree(Link*& down, Link*& up) {
     choose++;
   }
   if (choose == Nnode) {
-    cerr << "error in draw sub tree: overflow\n";
+    std::cerr << "error in draw sub tree: overflow\n";
     exit(1);
   }
 
@@ -948,13 +949,13 @@ int Tree::DrawSubTree(Link*& down, Link*& up) {
   }
 
   if ((!down) || (down->isRoot())) {
-    cerr << "error in tree::drawsubtree: down\n";
-    cerr << down << '\n';
+    std::cerr << "error in tree::drawsubtree: down\n";
+    std::cerr << down << '\n';
     exit(1);
   }
   if ((!up) || (up->isLeaf())) {
-    cerr << "error in tree::drawsubtree: up\n";
-    cerr << up << '\n';
+    std::cerr << "error in tree::drawsubtree: up\n";
+    std::cerr << up << '\n';
     exit(1);
   }
   return 0;
@@ -987,13 +988,13 @@ int Tree::DrawSubTree(Link*& down, Link*& up)	{
                 }
         }
         if ((! down) || (down->isRoot()))	{
-                cerr << "error in tree::drawsubtree: down\n";
-                cerr << down << '\n';
+                std::cerr << "error in tree::drawsubtree: down\n";
+                std::cerr << down << '\n';
                 exit(1);
         }
         if ((! up) || (up->isLeaf()))	{
-                cerr << "error in tree::drawsubtree: up\n";
-                cerr << up << '\n';
+                std::cerr << "error in tree::drawsubtree: up\n";
+                std::cerr << up << '\n';
                  exit(1);
         }
         return 0;

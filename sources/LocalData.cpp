@@ -70,7 +70,7 @@ void LocalData::readLocalData(int k) {
   std::stringstream ss;
   ss << this->listGenes[0] << this->listGenes[k];
   this->data = ss.str();
-  cerr << "data " << this->data << "\n";
+  std::cerr << "data " << this->data << "\n";
   /*
           std::stringstream ss;
           ss << this->gparam->listTrees[0] << gparam->listTrees[k];
@@ -82,22 +82,22 @@ void LocalData::readLocalData(int k) {
   this->code = "Universal";
   if (iscodon) {
     if (code == "Universal") {
-      cerr << "Universal\n";
+      std::cerr << "Universal\n";
       this->codonstatespace = new CodonStateSpace(Universal);
       this->codondata = new CodonSequenceAlignment(dnadata, true, Universal);
       this->taxonset = this->codondata->GetTaxonSet();
     } else if (code == "MtMam") {
-      cerr << "MtMam\n";
+      std::cerr << "MtMam\n";
       this->codonstatespace = new CodonStateSpace(MtMam);
       this->codondata = new CodonSequenceAlignment(dnadata, true, MtMam);
       this->taxonset = this->codondata->GetTaxonSet();
     } else if (code == "MtInv") {
-      cerr << "MtInv\n";
+      std::cerr << "MtInv\n";
       this->codonstatespace = new CodonStateSpace(MtInv);
       this->codondata = new CodonSequenceAlignment(dnadata, true, MtInv);
       this->taxonset = this->codondata->GetTaxonSet();
     } else {
-      cerr << "wrong genetic code\n";
+      std::cerr << "wrong genetic code\n";
     }
   }
 
@@ -107,11 +107,11 @@ void LocalData::readLocalData(int k) {
   this->Nsite_nuc = this->Nsite_codon * 3;
   this->Nnode = 0;  // Defined when the tree is red from chain file
 
-  cerr << "Nsite_codon " << this->Nsite_codon << "\n";
-  cerr << "Nsite_nuc " << this->Nsite_nuc << "\n";
-  cerr << "Ntaxa " << this->Ntaxa << "\n";
-  cerr << "Nstate_codon " << this->Nstate_codon << "\n";
-  cerr << "Nstate_aa " << this->Nstate_aa << "\n";
+  std::cerr << "Nsite_codon " << this->Nsite_codon << "\n";
+  std::cerr << "Nsite_nuc " << this->Nsite_nuc << "\n";
+  std::cerr << "Ntaxa " << this->Ntaxa << "\n";
+  std::cerr << "Nstate_codon " << this->Nstate_codon << "\n";
+  std::cerr << "Nstate_aa " << this->Nstate_aa << "\n";
 }
 
 void LocalData::toFasta(ofstream& os, int** curent_nodeleaf_sequence_codon) {

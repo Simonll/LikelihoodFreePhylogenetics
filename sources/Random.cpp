@@ -35,7 +35,7 @@ Random* rnd::array = 0;
 class random_init {
  public:
   random_init() {
-    // cerr << "initialising random. Non-random\n";
+    // std::cerr << "initialising random. Non-random\n";
     // rnd::init(3,1467);
     rnd::init(1);
   }
@@ -51,14 +51,14 @@ Random& rnd::GetRandom(int i) {
     return array[0];
   }
   if ((i < 0) || (i >= dim)) {
-    cerr << "error in GetRandom: overflow " << i << '\t' << dim << '\n';
+    std::cerr << "error in GetRandom: overflow " << i << '\t' << dim << '\n';
     exit(1);
   }
   return array[i];
 }
 
 // ---------------------------------------------------------------------------------
-//		¥ Random()
+//		ï¿½ Random()
 // ---------------------------------------------------------------------------------
 
 void Random::InitRandom(int seed) {
@@ -86,7 +86,7 @@ Random::Random(int seed) {
 int Random::GetSeed() { return Seed; }
 
 // ---------------------------------------------------------------------------------
-//		¥ Uniform()
+//		ï¿½ Uniform()
 // ---------------------------------------------------------------------------------
 
 double Random::Uniform() {
@@ -139,10 +139,10 @@ double Random::Uniform() {
     ret /= 65536;
   }
   if (ret < 0) {
-    cerr << "random negative : " << ret << "\n";
+    std::cerr << "random negative : " << ret << "\n";
   }
   if (ret > 1) {
-    cerr << "random greater than 1 : " << ret << '\n';
+    std::cerr << "random greater than 1 : " << ret << '\n';
   }
   return ret;
 
@@ -157,13 +157,13 @@ double Random::Uniform() {
 }
 
 // ---------------------------------------------------------------------------------
-//		¥ Gamma()
+//		ï¿½ Gamma()
 // ---------------------------------------------------------------------------------
 
 double Random::Gamma(double alpha, double beta) { return sGamma(alpha) / beta; }
 
 // ---------------------------------------------------------------------------------
-//		¥ DrawFromDiscreteDistribution()
+//		ï¿½ DrawFromDiscreteDistribution()
 // ---------------------------------------------------------------------------------
 
 int Random::DrawFromDiscreteDistribution(double* prob, int nstate) {
@@ -180,15 +180,15 @@ int Random::DrawFromDiscreteDistribution(double* prob, int nstate) {
       tot += prob[k];
     } while ((k < nstate) && (tot < p));
     if (k == nstate) {
-      cerr << "finite discrete overflow\n";
+      std::cerr << "finite discrete overflow\n";
       for (int k = 0; k < nstate; k++) {
-        cerr << prob[k] << '\n';
+        std::cerr << prob[k] << '\n';
       }
       throw;
     }
     return k;
   } catch (...) {
-    cerr << "error in draw from \n";
+    std::cerr << "error in draw from \n";
     throw;
   }
 }
@@ -216,7 +216,7 @@ int Random::DrawFromLogDiscreteDistribution(double* ll, int nstate) {
 }
 
 // ---------------------------------------------------------------------------------
-//		¥ DrawFromUrn()
+//		ï¿½ DrawFromUrn()
 // ---------------------------------------------------------------------------------
 
 void Random::DrawFromUrn(int* tab, int n, int N)  // draw n out of N
@@ -237,12 +237,12 @@ void Random::DrawFromUrn(int* tab, int n, int N)  // draw n out of N
       }
     }
     if (trial == N) {
-      cerr << "error in draw from urn: overflow\n";
+      std::cerr << "error in draw from urn: overflow\n";
       exit(1);
     }
     tab[i] = trial;
     if (index[trial]) {
-      cerr << "error in draw from urn: chose twice the same\n";
+      std::cerr << "error in draw from urn: chose twice the same\n";
       exit(1);
     }
     index[trial] = 1;
@@ -257,7 +257,8 @@ N
 
         //assumes that tab is an Int16[n]
         if(n>N){
-                cerr << "in Random::DrawFromUrn : you draw " <<  n << " among "
+                std::cerr << "in Random::DrawFromUrn : you draw " <<  n << "
+among "
 << N << '\n';exit(1);
         }
         for (int i=0; i<n; i++) {
@@ -271,8 +272,8 @@ N
                 for (int i=0; i<n; i++) {
                         int trial = (int) (Random::Uniform() * (N-i));
                         if (trial == N-i){
-                                cerr << "error in draw from urn: overflow\n";
-                                exit(1);
+                                std::cerr << "error in draw from urn:
+overflow\n"; exit(1);
                         }
                         tab[i] = index[trial];
                         index[trial] = index[N-i-1];
@@ -283,7 +284,7 @@ N
 */
 
 // ---------------------------------------------------------------------------------
-//		¥ Choose()
+//		ï¿½ Choose()
 // ---------------------------------------------------------------------------------
 
 int Random::Choose(int scale) { return (int)(Uniform() * scale); }
@@ -299,13 +300,13 @@ int Random::FiniteDiscrete(int n, const double* probarray) {
   int k = 0;
   while ((k < n) && (u > cumul[k])) k++;
   if (k == n) {
-    cerr << "error in Random::FiniteDiscrete\n";
-    cerr << k << '\t' << n << '\n';
+    std::cerr << "error in Random::FiniteDiscrete\n";
+    std::cerr << k << '\t' << n << '\n';
     for (int i = 0; i < n; i++) {
-      cerr << probarray[i] << '\t';
+      std::cerr << probarray[i] << '\t';
     }
-    cerr << '\n';
-    cerr << "tot : " << total << '\n';
+    std::cerr << '\n';
+    std::cerr << "tot : " << total << '\n';
     exit(1);
   }
   delete[] cumul;
@@ -313,7 +314,7 @@ int Random::FiniteDiscrete(int n, const double* probarray) {
 }
 
 // ---------------------------------------------------------------------------------
-//		¥ sNormal()
+//		ï¿½ sNormal()
 // ---------------------------------------------------------------------------------
 
 double Random::sNormal(void) {
@@ -357,7 +358,7 @@ double Random::sNormal(void) {
 }
 
 // ---------------------------------------------------------------------------------
-//		¥ sExpo()
+//		ï¿½ sExpo()
 // ---------------------------------------------------------------------------------
 
 double Random::sExpo() { return -log(Uniform()); }
@@ -372,7 +373,7 @@ double fsign(double num, double sign)
 }
 
 // ---------------------------------------------------------------------------------
-//		¥ sGamma()
+//		ï¿½ sGamma()
 // ---------------------------------------------------------------------------------
 
 double Random::sGamma(double a) {
@@ -395,7 +396,7 @@ double Random::sGamma(double a) {
     x = s + 0.5 * t;
     if (t > 0) {
       if (!x) {
-        cerr << "1\n";
+        std::cerr << "1\n";
       }
       return x * x;
     }
@@ -404,7 +405,7 @@ double Random::sGamma(double a) {
     u = Uniform();
     if (d * u < t * t * t) {
       if (!x) {
-        cerr << "2\n";
+        std::cerr << "2\n";
       }
       return x * x;
     }
@@ -434,7 +435,7 @@ double Random::sGamma(double a) {
       q = q0 - s * t + 0.25 * t * t + 2 * s2 * log(1.0 + v);
       if (log(1 - u) < q) {
         if (!x) {
-          cerr << "3\n";
+          std::cerr << "3\n";
         }
         return x * x;
       }
@@ -461,10 +462,10 @@ double Random::sGamma(double a) {
     x = s + 0.5 * t;
     /*
     if (!x)	{
-            cerr << "4\n";
-            cerr << s << '\t' << t << '\n';
-            cerr << e << '\t' << sigma << '\t' << u << '\n';
-            cerr << b << '\n';
+            std::cerr << "4\n";
+            std::cerr << s << '\t' << t << '\n';
+            std::cerr << e << '\t' << sigma << '\t' << u << '\n';
+            std::cerr << b << '\n';
     }
     */
     return x * x;
@@ -493,7 +494,7 @@ double Random::sGamma(double a) {
 double Random::logGamma(double alpha) {
   // adapted from statlib
   if (alpha < 0) {
-    cerr << "error in loggamma: only positive argument\n";
+    std::cerr << "error in loggamma: only positive argument\n";
     exit(1);
   }
 

@@ -35,11 +35,14 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
-#ifndef CODONSTATESPACE_H
-#define CODONSTATESPACE_H
+#ifndef SOURCES_CODONSTATESPACE_H_
+#define SOURCES_CODONSTATESPACE_H_
 
+#include <cstdlib>
 #include <map>
+#include <string>
 
+#include "BiologicalSequences.h"
 #include "StateSpace.h"
 
 class CodonStateSpace : public StateSpace {
@@ -50,7 +53,7 @@ class CodonStateSpace : public StateSpace {
   // if a method takes or returns a codon stops INCLUDED, then this is made
   // explicit in the method's name
 
-  CodonStateSpace(GeneticCodeType incode);
+  explicit CodonStateSpace(GeneticCodeType incode);
   ~CodonStateSpace();
 
   // -----
@@ -60,10 +63,10 @@ class CodonStateSpace : public StateSpace {
   int GetNstate() { return Nstate; }
 
   // give a three letter code, returns codon (if stop exits with error message)
-  int GetState(string state);
+  int GetState(std::string state);
 
   // give a codon (stops excluded), returns a three letter code
-  string GetState(int state);
+  std::string GetState(int state);
 
   // -----
   // codon specific methods
@@ -94,16 +97,16 @@ class CodonStateSpace : public StateSpace {
   // stops excluded
   int GetCodonPosition(int pos, int codon) {
     if ((pos < 0) || (pos >= Npos)) {
-      cerr << "GetCodonPosition: pos out of bound\n";
-      cerr << pos << '\n';
+      std::cerr << "GetCodonPosition: pos out of bound\n";
+      std::cerr << pos << '\n';
       exit(1);
     }
     if (codon == -1) {
       return -1;
     }
     if ((codon < 0) || (codon >= Nstate)) {
-      cerr << "GetCodonPosition: codon out of bound\n";
-      cerr << codon << '\n';
+      std::cerr << "GetCodonPosition: codon out of bound\n";
+      std::cerr << codon << '\n';
       exit(1);
     }
     return CodonPos[pos][codon];
@@ -172,7 +175,7 @@ class CodonStateSpace : public StateSpace {
   int* StopPos3;
   int* CodeAADeg;
 
-  map<int, int> degeneracy;
+  std::map<int, int> degeneracy;
 };
 
-#endif
+#endif  // SOURCES_CODONSTATESPACE_H_

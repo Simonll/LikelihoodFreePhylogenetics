@@ -41,42 +41,42 @@ GlobalParameters::GlobalParameters(string model, string controlfile) {
   this->transformation = "log2";
   this->OutPartialDistance = 0;
 
-  cerr << "Constructing mapUsedParam\n";
+  std::cerr << "Constructing mapUsedParam\n";
   for (unsigned int i = 0; i < this->NParam; i++) {
     mapUsedParam[listParam[i]] = -1;
   }
 
-  cerr << "Constructing mapUsedAncSummaries\n";
+  std::cerr << "Constructing mapUsedAncSummaries\n";
   for (unsigned int i = 0; i < this->NSummaries; i++) {
     mapUsedAncSummaries[listSummaries[i]] = -1;
   }
 
-  cerr << "Constructing mapUsedSummaries\n";
+  std::cerr << "Constructing mapUsedSummaries\n";
   for (unsigned int i = 0; i < this->NSummaries; i++) {
     mapUsedSummaries[listSummaries[i]] = -1;
   }
 
-  cerr << "Constructing mapUsedAccessorySummaries\n";
+  std::cerr << "Constructing mapUsedAccessorySummaries\n";
   for (unsigned int i = 0; i < this->NSummaries; i++) {
     mapUsedAccessorySummaries[listSummaries[i]] = -1;
   }
 
-  cerr << "Constructing mapUsedEvoStats\n";
+  std::cerr << "Constructing mapUsedEvoStats\n";
   for (unsigned int i = 0; i < this->NEvoStats; i++) {
     mapUsedEvoStats[listEvoStats[i]] = -1;
   }
 
-  cerr << "Constructing mapUsedSiteSpecificEvoStats\n";
+  std::cerr << "Constructing mapUsedSiteSpecificEvoStats\n";
   for (unsigned int i = 0; i < this->NSiteSpecificEvoStats; i++) {
     mapUsedSiteSpecificEvoStats[listSiteSpecificEvoStats[i]] = -1;
   }
 
-  cerr << "Constructing mapUsedEvoAncStats\n";
+  std::cerr << "Constructing mapUsedEvoAncStats\n";
   for (unsigned int i = 0; i < this->NEvoStats; i++) {
     mapUsedEvoAncStats[listEvoStats[i]] = -1;
   }
 
-  cerr << "Reading instructions\n";
+  std::cerr << "Reading instructions\n";
   readInstructions();
 }
 GlobalParameters::GlobalParameters() {}
@@ -87,159 +87,139 @@ GlobalParameters::~GlobalParameters() {
 void GlobalParameters::readInstructions() {
   ifstream is(this->controlfile.c_str());
   if (!is) {
-    cerr << "error: did not find " << this->controlfile << "\n";
+    std::cerr << "error: did not find " << this->controlfile << "\n";
     exit(1);
   }
 
   string line = "";
   while (std::getline(is, line)) {
-    // cerr << line << "\n";
+    // std::cerr << line << "\n";
     if (!line.empty() && line.substr(0, 10) == "#SUMMARIES") {
       istringstream iss(line);
       string w;
       int k = 0;
-      while (iss >> w)
-
-      {
+      while (iss >> w) {
         auto it = mapUsedSummaries.find(w);
         if (it != mapUsedSummaries.end()) {
           it->second = k;
           k++;
 
         } else if (w != "#SUMMARIES") {
-          cerr << "Undefined summary " << w << "\n";
+          std::cerr << "Undefined summary " << w << "\n";
           exit(0);
         }
       }
       NusedSummaries = k;
-      cerr << "#SUMMARIES " << NusedSummaries << "\n";
+      std::cerr << "#SUMMARIES " << NusedSummaries << "\n";
 
     } else if (!line.empty() && line.substr(0, 13) == "#ACCSUMMARIES") {
       istringstream iss(line);
       string w;
       int k = 0;
-      while (iss >> w)
-
-      {
+      while (iss >> w) {
         auto it = mapUsedAccessorySummaries.find(w);
         if (it != mapUsedAccessorySummaries.end()) {
           it->second = k;
           k++;
 
         } else if (w != "#ACCSUMMARIES") {
-          cerr << "Undefined summary " << w << "\n";
+          std::cerr << "Undefined summary " << w << "\n";
           exit(0);
         }
       }
       NusedAccessorySummaries = k;
-      cerr << "#ACCSUMMARIES " << NusedAccessorySummaries << "\n";
+      std::cerr << "#ACCSUMMARIES " << NusedAccessorySummaries << "\n";
 
-    }
-
-    ///
-    ///
-    ///
-
-    else if (!line.empty() && line.substr(0, 13) == "#ANCSUMMARIES") {
+    } else if (!line.empty() && line.substr(0, 13) == "#ANCSUMMARIES") {
       istringstream iss(line);
       string w;
       int k = 0;
-      while (iss >> w)
-
-      {
+      while (iss >> w) {
         auto it = mapUsedAncSummaries.find(w);
         if (it != mapUsedAncSummaries.end()) {
           it->second = k;
           k++;
 
         } else if (w != "#ANCSUMMARIES") {
-          cerr << "Undefined ancestral summary " << w << "\n";
+          std::cerr << "Undefined ancestral summary " << w << "\n";
           exit(0);
         }
       }
       NusedAncSummaries = k;
-      cerr << "#ANCSUMMARIES " << NusedAncSummaries << "\n";
+      std::cerr << "#ANCSUMMARIES " << NusedAncSummaries << "\n";
 
     } else if (!line.empty() && line.substr(0, 6) == "#PARAM") {
       istringstream iss(line);
       string w;
       int k = 0;
-      while (iss >> w)
-
-      {
+      while (iss >> w) {
         auto it = mapUsedParam.find(w);
         if (it != mapUsedParam.end()) {
           it->second = k;
-          cerr << "UsedParam " << k << " " << w << "\n";
+          std::cerr << "UsedParam " << k << " " << w << "\n";
           k++;
 
         } else if (w != "#PARAM") {
-          cerr << "Undefined parameter " << w << "\n";
+          std::cerr << "Undefined parameter " << w << "\n";
           exit(0);
         }
       }
       NusedParam = k;
-      cerr << "#PARAM " << NusedParam << "\n";
+      std::cerr << "#PARAM " << NusedParam << "\n";
 
     } else if (!line.empty() && line.substr(0, 6) == "#SSMAP") {
       istringstream iss(line);
       string w;
       int k = 0;
-      while (iss >> w)
-
-      {
+      while (iss >> w) {
         auto it = mapUsedSiteSpecificEvoStats.find(w);
         if (it != mapUsedSiteSpecificEvoStats.end()) {
           it->second = k;
           k++;
 
         } else if (w != "#SSMAP") {
-          cerr << "Undefined SiteSpecificEvoStats " << w << "\n";
+          std::cerr << "Undefined SiteSpecificEvoStats " << w << "\n";
           exit(0);
         }
       }
       NusedSiteSpecificEvoStats = k;
-      cerr << "#SSMAP " << NusedSiteSpecificEvoStats << "\n";
+      std::cerr << "#SSMAP " << NusedSiteSpecificEvoStats << "\n";
 
     } else if (!line.empty() && line.substr(0, 4) == "#MAP") {
       istringstream iss(line);
       string w;
       int k = 0;
-      while (iss >> w)
-
-      {
+      while (iss >> w) {
         auto it = mapUsedEvoStats.find(w);
         if (it != mapUsedEvoStats.end()) {
           it->second = k;
           k++;
 
         } else if (w != "#MAP") {
-          cerr << "Undefined EvoStats parameter " << w << "\n";
+          std::cerr << "Undefined EvoStats parameter " << w << "\n";
           exit(0);
         }
       }
       NusedEvoStats = k;
-      cerr << "#MAP " << NusedEvoStats << "\n";
+      std::cerr << "#MAP " << NusedEvoStats << "\n";
 
     } else if (!line.empty() && line.substr(0, 13) == "#ANCESTRALMAP") {
       istringstream iss(line);
       string w;
       int k = 0;
-      while (iss >> w)
-
-      {
+      while (iss >> w) {
         auto it = mapUsedEvoAncStats.find(w);
         if (it != mapUsedEvoAncStats.end()) {
           it->second = k;
           k++;
 
         } else if (w != "#ANCESTRALMAP") {
-          cerr << "Undefined EvoAncStats parameter" << w << "\n";
+          std::cerr << "Undefined EvoAncStats parameter" << w << "\n";
           exit(0);
         }
       }
       this->NusedEvoAncStats = k;
-      cerr << "#ANCESTRALMAP " << NusedEvoAncStats << "\n";
+      std::cerr << "#ANCESTRALMAP " << NusedEvoAncStats << "\n";
 
     } else if (!line.empty() && line.substr(0, 6) == "#GENES") {
       istringstream iss(line);
@@ -252,11 +232,11 @@ void GlobalParameters::readInstructions() {
         }
       }
       this->Ngenes = k;
-      cerr << "#GENES\t" << this->Ngenes << "\n";
-      for (int i = 0; i < (int)this->listGenes.size(); i++) {
-        cerr << this->listGenes[i] << "\t";
+      std::cerr << "#GENES\t" << this->Ngenes << "\n";
+      for (int i = 0; i < static_cast<int>(this->listGenes.size()); i++) {
+        std::cerr << this->listGenes[i] << "\t";
       }
-      cerr << "\n";
+      std::cerr << "\n";
 
     } else if (!line.empty() && line.substr(0, 6) == "#TRANS") {
       istringstream iss(line);
@@ -269,16 +249,14 @@ void GlobalParameters::readInstructions() {
         }
       }
 
-      cerr << "#TRANS\t" << this->transformation << "\n";
+      std::cerr << "#TRANS\t" << this->transformation << "\n";
 
     } else if (!line.empty() && line.substr(0, 8) == "#OUTDIST") {
       this->OutPartialDistance = 1;
 
-      cerr << "#OUTDIST\t" << this->distance << "\n";
+      std::cerr << "#OUTDIST\t" << this->distance << "\n";
 
-    }
-
-    else if (!line.empty() && line.substr(0, 11) == "#SPEUDODATA") {
+    } else if (!line.empty() && line.substr(0, 11) == "#SPEUDODATA") {
       istringstream iss(line);
       string w;
       int k = 0;
@@ -293,18 +271,18 @@ void GlobalParameters::readInstructions() {
           this->listSpecies.push_back(w);
         }
       }
-
-      if (this->Ntaxa != (int)this->listSpecies.size()) {
-        cerr << "Error the number of taxa does not match the list species "
-                "size\n";
+      if (this->Ntaxa != static_cast<int>(this->listSpecies.size())) {
+        std::cerr << "Error the number of taxa does not match the list species "
+                     "size\n";
         exit(0);
       }
 
-      cerr << "#SPEUDODATA " << this->Ntaxa << " " << this->Nsite_codon << "\n";
+      std::cerr << "#SPEUDODATA " << this->Ntaxa << " " << this->Nsite_codon
+                << "\n";
       for (auto i : this->listSpecies) {
-        cerr << i << " ";
+        std::cerr << i << " ";
       }
-      cerr << "\n";
+      std::cerr << "\n";
 
     } else if (!line.empty() && line.substr(0, 5) == "#DIST") {
       istringstream iss(line);
@@ -317,7 +295,7 @@ void GlobalParameters::readInstructions() {
         }
       }
 
-      cerr << "#DIST\t" << this->distance << "\n";
+      std::cerr << "#DIST\t" << this->distance << "\n";
 
     } else if (!line.empty() && line.substr(0, 7) == "#CHAINS") {
       istringstream iss(line);
@@ -329,11 +307,11 @@ void GlobalParameters::readInstructions() {
       }
 
     } else if (!line.empty() && line.substr(0, 15) == "#HYPERMUT-DINUC") {
-      cerr << "### HYPERMUT-DINUC ###\n";
+      std::cerr << "### HYPERMUT-DINUC ###\n";
       istringstream iss(line);
       string w;
       while (iss >> w) {
-        cerr << w << "\n";
+        std::cerr << w << "\n";
       }
 
     } else if (!line.empty() && line.substr(0, 5) == "#RUN") {
@@ -346,8 +324,8 @@ void GlobalParameters::readInstructions() {
       this->Nsimu = atoi(w.c_str());
       iss >> w;
       this->Ncon = atoi(w.c_str());
-      cerr << "#Nrep " << this->Nrep << "#Nsimu" << this->Nsimu << "#Ncon"
-           << this->Ncon << "\n";
+      std::cerr << "#Nrep " << this->Nrep << "#Nsimu" << this->Nsimu << "#Ncon"
+                << this->Ncon << "\n";
 
     } else if (!line.empty() && line.substr(0, 5) == "#NRUN") {
       istringstream iss(line);
@@ -357,8 +335,8 @@ void GlobalParameters::readInstructions() {
       this->Nrun = atoi(w.c_str());
       iss >> w;
       this->threshold = atoi(w.c_str());
-      cerr << "#Nrun " << this->Nrun << " threshold " << this->threshold
-           << "\n";
+      std::cerr << "#Nrun " << this->Nrun << " threshold " << this->threshold
+                << "\n";
 
     } else if (!line.empty() && line.substr(0, 9) == "#NTHREADS") {
       istringstream iss(line);
@@ -366,7 +344,7 @@ void GlobalParameters::readInstructions() {
       iss >> w;
       iss >> w;
       this->Nthread = atoi(w.c_str());
-      cerr << "#Nthread " << this->Nthread << "\n";
+      std::cerr << "#Nthread " << this->Nthread << "\n";
 
     } else if (!line.empty() && line.substr(0, 7) == "#OUTPUT") {
       istringstream iss(line);
@@ -374,11 +352,11 @@ void GlobalParameters::readInstructions() {
       iss >> w;
       iss >> w;
       this->output = w;
-      cerr << "#OUTPUT " << this->output << "\n";
+      std::cerr << "#OUTPUT " << this->output << "\n";
 
     } else if (!line.empty() && line.substr(0, 8) == "#VERBOSE") {
       this->verbose = 1;
-      cerr << "#VERBOSE " << this->verbose << "\n";
+      std::cerr << "#VERBOSE " << this->verbose << "\n";
 
     } else if (!line.empty() && line.substr(0, 9) == "#SAMPLING") {
       istringstream iss(line);
@@ -390,17 +368,17 @@ void GlobalParameters::readInstructions() {
       this->chainPointEvery = atoi(w.c_str());
       iss >> w;
       this->chainPointEnd = atoi(w.c_str());
-      cerr << "#SAMPLING " << this->chainPointStart << " "
-           << this->chainPointEvery << " " << this->chainPointEnd << "\n";
+      std::cerr << "#SAMPLING " << this->chainPointStart << " "
+                << this->chainPointEvery << " " << this->chainPointEnd << "\n";
 
     } else if (!line.empty() && line.substr(0, 10) == "#OLDPARAMS") {
-      cerr << "### OLDPARAMS ### \n";
+      std::cerr << "### OLDPARAMS ### \n";
       localcontrolfile = line;
 
     } else if (!line.empty() && line.substr(0, 11) == "#LOCALPARAM") {
       // localcontrolfile should be a list so different localcontrolfile could
       // be tested
-      cerr << "### LOCALPARAM ### \n";
+      std::cerr << "### LOCALPARAM ### \n";
       localcontrolfile = line;
     }
   }

@@ -11,8 +11,8 @@ Public License for more details. You should have received a copy of the GNU
 General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
-#ifndef SEQUENCESIMULATOR_H
-#define SEQUENCESIMULATOR_H
+#ifndef SOURCES_SEQUENCESIMULATOR_H_
+#define SOURCES_SEQUENCESIMULATOR_H_
 
 class SequenceSimulator {
  public:
@@ -27,4 +27,4 @@ class SequenceSimulator {
  private:
 };
 
-#endif  // SEQUENCESIMULATOR_H
+#endif  // SOURCES_SEQUENCESIMULATOR_H_

@@ -35,10 +35,9 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
-#ifndef CODONSEQUENCEALIGNMENT_H
-#define CODONSEQUENCEALIGNMENT_H
+#ifndef SOURCES_CODONSEQUENCEALIGNMENT_H_
+#define SOURCES_CODONSEQUENCEALIGNMENT_H_
 
-//#include "ContinuousData.h"
 #include <algorithm>
 #include <cmath>
 #include <vector>
@@ -48,8 +47,8 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 class CodonSequenceAlignment : public SequenceAlignment {
  public:
-  CodonSequenceAlignment(CodonSequenceAlignment* from)
-      : SequenceAlignment((SequenceAlignment*)from) {}
+  explicit CodonSequenceAlignment(CodonSequenceAlignment* from)
+      : SequenceAlignment(reinterpret_cast<SequenceAlignment*>(from)) {}
   CodonSequenceAlignment(CodonSequenceAlignment* from, int** indata);
   CodonSequenceAlignment(CodonSequenceAlignment* from, int Ntaxa, int** indata);
   CodonSequenceAlignment(SequenceAlignment* from, bool force_stops = false,
@@ -85,7 +84,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
       i++;
     }
     Nsite -= Eliminated;
-    cout << "number of positions eliminated : " << Eliminated << '\n';
+    std::cout << "number of positions eliminated : " << Eliminated << '\n';
   }
 
   virtual double GetTotalDiversity(int sitemin, int sitemax) {
@@ -179,7 +178,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     return maxdist;
   }
 
-  double NucleotideCompositionalHeterogeneity(ostream* os, int pos = -1,
+  double NucleotideCompositionalHeterogeneity(std::ostream* os, int pos = -1,
                                               double** comp = 0) {
     double** taxfreq = 0;
     if (comp) {
@@ -209,10 +208,10 @@ class CodonSequenceAlignment : public SequenceAlignment {
             taxfreq[j][GetCodonStateSpace()->GetCodonPosition(1, state)]++;
             taxfreq[j][GetCodonStateSpace()->GetCodonPosition(2, state)]++;
           } else if (pos > 2) {
-            cerr << "error in "
-                    "CodonSequenceAlignment::"
-                    "NucleotideCompositionHeterogeneity : "
-                 << pos << '\n';
+            std::cerr << "error in "
+                         "CodonSequenceAlignment::"
+                         "NucleotideCompositionHeterogeneity : "
+                      << pos << '\n';
             exit(1);
           } else {
             taxfreq[j][GetCodonStateSpace()->GetCodonPosition(pos, state)]++;
@@ -281,7 +280,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     return maxdist;
   }
 
-  double AminoAcidCompositionalHeterogeneity(ostream* os) {
+  double AminoAcidCompositionalHeterogeneity(std::ostream* os) {
     double** taxfreq = new double*[Ntaxa];
     for (int j = 0; j < Ntaxa; j++) {
       taxfreq[j] = new double[Naa];
@@ -357,7 +356,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     return maxdist;
   }
 
-  //-->SLL
+  // -->SLL
   void nuc_meandiff(double* stat_container) {
     stat_container[0] = 0.0;
     stat_container[1] = 0.0;
@@ -1415,22 +1414,19 @@ class CodonSequenceAlignment : public SequenceAlignment {
 
               if ((posa1 == 1 && posb1 == 2 && posa2 == 3 && posb2 == 2) ||
                   (posa1 == 3 && posb1 == 2 && posa2 == 1 &&
-                   posb2 == 2))  // CpG<->TpG
-              {
+                   posb2 == 2)) {  // CpG<->TpG
                 invec[0]++;
                 invec[3]++;
               } else if ((posa1 == 1 && posb1 == 2 && posa2 == 1 &&
                           posb2 == 0) ||
                          (posa1 == 1 && posb1 == 0 && posa2 == 1 &&
-                          posb2 == 2))  // CpG<->CpA
-              {
+                          posb2 == 2)) {  // CpG<->CpA
                 invec[1]++;
                 invec[3]++;
               } else if ((posa1 == 0 && posb1 == 2 && posa2 == 3 &&
                           posb2 == 2) ||
                          (posa1 == 3 && posb1 == 2 && posa2 == 0 &&
-                          posb2 == 2))  // ApG<->TpG
-              {
+                          posb2 == 2)) {  // ApG<->TpG
                 invec[2]++;
                 invec[3]++;
               }
@@ -1448,14 +1444,12 @@ class CodonSequenceAlignment : public SequenceAlignment {
 
             if ((posa1 == 1 && posb1 == 2 && posa2 == 3 && posb2 == 2) ||
                 (posa1 == 3 && posb1 == 2 && posa2 == 1 &&
-                 posb2 == 2))  // CpG<->TpG
-            {
+                 posb2 == 2)) {  // CpG<->TpG
               invec[0]++;
               invec[2]++;
             } else if ((posa1 == 1 && posb1 == 2 && posa2 == 1 && posb2 == 0) ||
                        (posa1 == 1 && posb1 == 0 && posa2 == 1 &&
-                        posb2 == 2))  // CpG<->CpA
-            {
+                        posb2 == 2)) {  // CpG<->CpA
               invec[1]++;
               invec[2]++;
             }
@@ -1764,28 +1758,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
               int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               } else if (posa == posb) {
                 cons++;
@@ -1816,7 +1804,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size();
+    int size = static_cast<int>(vec_ac.size());
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -1874,28 +1862,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posb =
                   GetCodonStateSpace()->GetCodonPosition(pos, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               }
             }
@@ -1924,7 +1906,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size();
+    int size = static_cast<int>(vec_ac.size());
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -1982,28 +1964,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posb =
                   GetCodonStateSpace()->GetCodonPosition(pos, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               }
             }
@@ -2032,7 +2008,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.1;
+    int size = static_cast<int>(vec_ac.size() * 0.1);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -2090,28 +2066,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posb =
                   GetCodonStateSpace()->GetCodonPosition(pos, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               }
             }
@@ -2140,7 +2110,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.3;
+    int size = static_cast<int>(vec_ac.size() * 0.3);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -2198,28 +2168,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posb =
                   GetCodonStateSpace()->GetCodonPosition(pos, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               }
             }
@@ -2248,7 +2212,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.5;
+    int size = static_cast<int>(vec_ac.size() * 0.5);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -2306,28 +2270,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posb =
                   GetCodonStateSpace()->GetCodonPosition(pos, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               }
             }
@@ -2356,7 +2314,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.7;
+    int size = static_cast<int>(vec_ac.size() * 0.7);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -2414,28 +2372,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posb =
                   GetCodonStateSpace()->GetCodonPosition(pos, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               }
             }
@@ -2464,7 +2416,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.9;
+    int size = static_cast<int>(vec_ac.size() * 0.9);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -2514,28 +2466,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 0;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -2565,7 +2512,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size();
+    int size = static_cast<int>(vec_ac.size());
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -2615,28 +2562,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 0;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -2666,7 +2608,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.1;
+    int size = static_cast<int>(vec_ac.size() * 0.1);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -2716,28 +2658,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 0;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -2767,7 +2704,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.3;
+    int size = static_cast<int>(vec_ac.size() * 0.3);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -2817,28 +2754,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 0;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -2868,7 +2800,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.5;
+    int size = static_cast<int>(vec_ac.size() * 0.5);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -2918,28 +2850,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 0;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -2969,7 +2896,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.7;
+    int size = static_cast<int>(vec_ac.size() * 0.7);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -3019,28 +2946,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 0;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -3070,7 +2992,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.9;
+    int size = static_cast<int>(vec_ac.size() * 0.9);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -3120,28 +3042,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 1;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -3171,7 +3088,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size();
+    int size = static_cast<int>(vec_ac.size());
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -3221,28 +3138,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 1;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -3272,7 +3184,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.1;
+    int size = static_cast<int>(vec_ac.size() * 0.1);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -3322,28 +3234,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 1;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -3373,7 +3280,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.3;
+    int size = static_cast<int>(vec_ac.size() * 0.3);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -3423,28 +3330,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 1;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -3474,7 +3376,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.5;
+    int size = static_cast<int>(vec_ac.size() * 0.5);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -3524,28 +3426,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 1;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -3575,7 +3472,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.7;
+    int size = static_cast<int>(vec_ac.size() * 0.7);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -3625,28 +3522,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 1;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -3676,7 +3568,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.9;
+    int size = static_cast<int>(vec_ac.size() * 0.9);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -3726,28 +3618,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 2;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -3777,7 +3664,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size();
+    int size = static_cast<int>(vec_ac.size());
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -3827,28 +3714,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 2;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -3882,7 +3764,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.1;
+    int size = static_cast<int>(vec_ac.size() * 0.1);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -3932,28 +3814,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 2;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -3983,7 +3860,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.3;
+    int size = static_cast<int>(vec_ac.size() * 0.3);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -4033,28 +3910,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 2;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -4084,7 +3956,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.5;
+    int size = static_cast<int>(vec_ac.size() * 0.5);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -4134,28 +4006,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 2;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -4185,7 +4052,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.7;
+    int size = static_cast<int>(vec_ac.size() * 0.7);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -4235,28 +4102,23 @@ class CodonSequenceAlignment : public SequenceAlignment {
             int i = 2;
             int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
             int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
-            if ((posa == 0 && posb == 1) || (posa == 1 && posb == 0))  // ca_ac
-            {
+            if ((posa == 0 && posb == 1) ||
+                (posa == 1 && posb == 0)) {  // ca_ac
               ac++;
             } else if ((posa == 0 && posb == 2) ||
-                       (posa == 2 && posb == 0))  // ag_ga
-            {
+                       (posa == 2 && posb == 0)) {  // ag_ga
               ag++;
             } else if ((posa == 0 && posb == 3) ||
-                       (posa == 3 && posb == 0))  // at_ta
-            {
+                       (posa == 3 && posb == 0)) {  // at_ta
               at++;
             } else if ((posa == 1 && posb == 2) ||
-                       (posa == 2 && posb == 1))  // cg_gc
-            {
+                       (posa == 2 && posb == 1)) {  // cg_gc
               cg++;
             } else if ((posa == 1 && posb == 3) ||
-                       (posa == 3 && posb == 1))  // ct_tc
-            {
+                       (posa == 3 && posb == 1)) {  // ct_tc
               ct++;
             } else if ((posa == 3 && posb == 2) ||
-                       (posa == 2 && posb == 3))  // gt_tg
-            {
+                       (posa == 2 && posb == 3)) {  // gt_tg
               gt++;
             } else if (posa == posb) {
               cons++;
@@ -4286,7 +4148,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.9;
+    int size = static_cast<int>(vec_ac.size() * 0.9);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -4337,28 +4199,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
               int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               } else if (posa == posb) {
                 cons++;
@@ -4389,7 +4245,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.10;
+    int size = static_cast<int>(vec_ac.size() * 0.10);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -4440,28 +4296,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
               int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               } else if (posa == posb) {
                 cons++;
@@ -4492,7 +4342,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.30;
+    int size = static_cast<int>(vec_ac.size() * 0.30);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -4543,28 +4393,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
               int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               } else if (posa == posb) {
                 cons++;
@@ -4595,7 +4439,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.50;
+    int size = static_cast<int>(vec_ac.size() * 0.50);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -4646,28 +4490,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
               int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               } else if (posa == posb) {
                 cons++;
@@ -4698,7 +4536,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.70;
+    int size = static_cast<int>(vec_ac.size() * 0.70);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -4749,28 +4587,22 @@ class CodonSequenceAlignment : public SequenceAlignment {
               int posa = GetCodonStateSpace()->GetCodonPosition(i, state_seq1);
               int posb = GetCodonStateSpace()->GetCodonPosition(i, state_seq2);
               if ((posa == 0 && posb == 1) ||
-                  (posa == 1 && posb == 0))  // ca_ac
-              {
+                  (posa == 1 && posb == 0)) {  // ca_ac
                 ac++;
               } else if ((posa == 0 && posb == 2) ||
-                         (posa == 2 && posb == 0))  // ag_ga
-              {
+                         (posa == 2 && posb == 0)) {  // ag_ga
                 ag++;
               } else if ((posa == 0 && posb == 3) ||
-                         (posa == 3 && posb == 0))  // at_ta
-              {
+                         (posa == 3 && posb == 0)) {  // at_ta
                 at++;
               } else if ((posa == 1 && posb == 2) ||
-                         (posa == 2 && posb == 1))  // cg_gc
-              {
+                         (posa == 2 && posb == 1)) {  // cg_gc
                 cg++;
               } else if ((posa == 1 && posb == 3) ||
-                         (posa == 3 && posb == 1))  // ct_tc
-              {
+                         (posa == 3 && posb == 1)) {  // ct_tc
                 ct++;
               } else if ((posa == 3 && posb == 2) ||
-                         (posa == 2 && posb == 3))  // gt_tg
-              {
+                         (posa == 2 && posb == 3)) {  // gt_tg
                 gt++;
               } else if (posa == posb) {
                 cons++;
@@ -4801,7 +4633,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
     std::sort(vec_gt.begin(), vec_gt.end());
     std::sort(vec_d.begin(), vec_d.end());
 
-    int size = (int)vec_ac.size() * 0.90;
+    int size = static_cast<int>(vec_ac.size() * 0.90);
 
     double sum_ac, sum_ag, sum_at, sum_cg, sum_ct, sum_gt, sum_all, sum_d_K80;
     sum_ac = sum_ag = sum_at = sum_cg = sum_ct = sum_gt = sum_all = sum_d_K80 =
@@ -4864,7 +4696,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
       }
     }
     std::sort(vec_aa.begin(), vec_aa.end());
-    int size = (int)vec_aa.size() * 0.1;
+    int size = static_cast<int>(vec_aa.size() * 0.1);
     double sum_aa = 0;
     double sum_K80 = 0;
     for (int i = 0; i < size; i++) {
@@ -4915,7 +4747,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
       }
     }
     std::sort(vec_aa.begin(), vec_aa.end());
-    int size = (int)vec_aa.size() * 0.3;
+    int size = static_cast<int>(vec_aa.size() * 0.3);
     double sum_aa = 0;
     double sum_K80 = 0;
     for (int i = 0; i < size; i++) {
@@ -4965,7 +4797,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
       }
     }
     std::sort(vec_aa.begin(), vec_aa.end());
-    int size = (int)vec_aa.size() * 0.5;
+    int size = static_cast<int>(vec_aa.size() * 0.5);
     double sum_aa = 0;
     double sum_K80 = 0;
     for (int i = 0; i < size; i++) {
@@ -5016,7 +4848,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
       }
     }
     std::sort(vec_aa.begin(), vec_aa.end());
-    int size = (int)vec_aa.size() * 0.7;
+    int size = static_cast<int>(vec_aa.size() * 0.7);
     double sum_aa = 0;
     double sum_K80 = 0;
     for (int i = 0; i < size; i++) {
@@ -5066,7 +4898,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
       }
     }
     std::sort(vec_aa.begin(), vec_aa.end());
-    int size = (int)vec_aa.size() * 0.9;
+    int size = static_cast<int>(vec_aa.size() * 0.9);
     double sum_aa = 0;
     double sum_K80 = 0;
     for (int i = 0; i < size; i++) {
@@ -5117,7 +4949,7 @@ class CodonSequenceAlignment : public SequenceAlignment {
       }
     }
     std::sort(vec_aa.begin(), vec_aa.end());
-    int size = (int)vec_aa.size();
+    int size = static_cast<int>(vec_aa.size());
     double sum_aa = 0;
     double sum_K80 = 0;
     for (int i = 0; i < size; i++) {
@@ -6006,14 +5838,14 @@ class CodonSequenceAlignment : public SequenceAlignment {
     return dist;
   }
 
-  //<--SLL
+  // <--SLL
 
   CodonStateSpace* GetCodonStateSpace() {
     // return static_cast<CodonStateSpace*>(statespace);
-    return (CodonStateSpace*)(statespace);
+    return static_cast<CodonStateSpace*>(statespace);
   }
 
-  void ToStream(ostream& os);
+  void ToStream(std::ostream& os);
 
  private:
   SequenceAlignment* DNAsource;
@@ -6038,11 +5870,11 @@ class GCContinuousData : public ContinuousData {
                         double tmp = freq[i][1] + freq[i][2];
                         Data[i][0] = tmp;
                         // Data[i][0] = log(tmp / (1-tmp));
-                        cerr << taxset->GetTaxon(i) << '\t' << tmp << '\t' <<
-Data[i][0] << '\n';
+                        std::cerr << taxset->GetTaxon(i) << '\t' << tmp << '\t'
+<< Data[i][0] << '\n';
                 }
         }
 };
 */
 
-#endif
+#endif  // SOURCES_CODONSEQUENCEALIGNMENT_H_

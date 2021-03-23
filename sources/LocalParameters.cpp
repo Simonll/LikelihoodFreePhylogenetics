@@ -13,6 +13,8 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 */
 #include "LocalParameters.h"
 
+#include "BiologicalSequences.h"
+
 LocalParameters::LocalParameters(GlobalParameters* gparam) {
   // input info
   // this->gparam = gparam;
@@ -29,9 +31,9 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->Nsite_codon = gparam->Nsite_codon;
   this->Nsite_nuc = 3 * this->Nsite_codon;
 
-  if ((int)gparam->listSpecies.size() > 0 && this->Ntaxa > 0 &&
-      (int)gparam->listSpecies.size() == this->Ntaxa) {
-    this->listSpecies = new string[this->Ntaxa];
+  if (static_cast<int>(gparam->listSpecies.size()) > 0 && this->Ntaxa > 0 &&
+      static_cast<int>(gparam->listSpecies.size()) == this->Ntaxa) {
+    this->listSpecies = new std::string[this->Ntaxa];
     for (int i = 0; i < this->Ntaxa; i++) {
       this->listSpecies[i] = gparam->listSpecies[i];
     }
@@ -43,37 +45,37 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->NSiteSpecificEvoStats = gparam->NSiteSpecificEvoStats;
 
   if (gparam->verbose) {
-    cerr << "LocalParam1\n";
+    std::cerr << "LocalParam1\n";
   }
 
-  this->listParam = new string[this->NParam];
+  this->listParam = new std::string[this->NParam];
   for (int param_i = 0; param_i < this->NParam; param_i++) {
     this->listParam[param_i] = gparam->listParam[param_i];
   }
 
   if (gparam->verbose) {
-    cerr << "LocalParam2\n";
+    std::cerr << "LocalParam2\n";
   }
 
-  this->listSummaries = new string[this->NSummaries];
+  this->listSummaries = new std::string[this->NSummaries];
   for (int summary_i = 0; summary_i < this->NSummaries; summary_i++) {
     this->listSummaries[summary_i] = gparam->listSummaries[summary_i];
   }
 
   if (gparam->verbose) {
-    cerr << "LocalParam3\n";
+    std::cerr << "LocalParam3\n";
   }
 
-  this->listEvoStats = new string[this->NEvoStats];
+  this->listEvoStats = new std::string[this->NEvoStats];
   for (int EvoStats_i = 0; EvoStats_i < this->NEvoStats; EvoStats_i++) {
     this->listEvoStats[EvoStats_i] = gparam->listEvoStats[EvoStats_i];
   }
 
   if (gparam->verbose) {
-    cerr << "LocalParam4\n";
+    std::cerr << "LocalParam4\n";
   }
 
-  this->listSiteSpecificEvoStats = new string[this->NSiteSpecificEvoStats];
+  this->listSiteSpecificEvoStats = new std::string[this->NSiteSpecificEvoStats];
   for (int EvoStats_i = 0; EvoStats_i < this->NSiteSpecificEvoStats;
        EvoStats_i++) {
     this->listSiteSpecificEvoStats[EvoStats_i] =
@@ -81,7 +83,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   }
 
   if (gparam->verbose) {
-    cerr << "LocalParam5\n";
+    std::cerr << "LocalParam5\n";
   }
 
   this->NusedEvoStats = gparam->NusedEvoStats;
@@ -189,7 +191,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->fixroot = -1;
   this->randomseed = -1;
   this->rootlength = 10.0;
-  this->Ninterval = (int)this->rootlength;
+  this->Ninterval = static_cast<int>(this->rootlength);
   this->sampleAncSeq = 0;
   this->Nsite_codon = 1000;
   this->Nsite_nuc = 3 * this->Nsite_codon;
@@ -257,53 +259,54 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   readLocalInstructions();
 
   if (this->isdata) {
-    cerr << "alignment found\n";
+    std::cerr << "alignment found\n";
     this->dnadata = new FileSequenceAlignment((data).c_str(), 0, 0);
     if (this->iscodon) {
       if (code == "Universal") {
-        cerr << "Universal\n";
+        std::cerr << "Universal\n";
         this->codonstatespace = new CodonStateSpace(Universal);
         this->codondata = new CodonSequenceAlignment(dnadata, true, Universal);
         this->taxonset = this->codondata->GetTaxonSet();
       } else if (code == "MtMam") {
-        cerr << "MtMam\n";
+        std::cerr << "MtMam\n";
         this->codonstatespace = new CodonStateSpace(MtMam);
         this->codondata = new CodonSequenceAlignment(dnadata, true, MtMam);
         this->taxonset = this->codondata->GetTaxonSet();
       } else if (code == "MtInv") {
-        cerr << "MtInv\n";
+        std::cerr << "MtInv\n";
         this->codonstatespace = new CodonStateSpace(MtInv);
         this->codondata = new CodonSequenceAlignment(dnadata, true, MtInv);
         this->taxonset = this->codondata->GetTaxonSet();
       } else {
-        cerr << "wrong genetic code\n";
+        std::cerr << "wrong genetic code\n";
       }
     }
   } else {
-    cerr << "no alignment found\n";
-    if (this->Ntaxa > 0 && this->Nsite_nuc > 0 && this->listSpecies > 0) {
+    std::cerr << "no alignment found\n";
+    if (this->Ntaxa > 0 && this->Nsite_nuc > 0 &&
+        static_cast<int>(this->listSpecies->size()) > 0) {
       this->dnadata = new FileSequenceAlignment(this->Ntaxa, this->Nsite_nuc,
                                                 this->listSpecies);
 
       if (this->iscodon) {
         if (code == "Universal") {
-          cerr << "Universal\n";
+          std::cerr << "Universal\n";
           this->codonstatespace = new CodonStateSpace(Universal);
           this->codondata =
               new CodonSequenceAlignment(dnadata, true, Universal);
           this->taxonset = this->codondata->GetTaxonSet();
         } else if (code == "MtMam") {
-          cerr << "MtMam\n";
+          std::cerr << "MtMam\n";
           this->codonstatespace = new CodonStateSpace(MtMam);
           this->codondata = new CodonSequenceAlignment(dnadata, true, MtMam);
           this->taxonset = this->codondata->GetTaxonSet();
         } else if (code == "MtInv") {
-          cerr << "MtInv\n";
+          std::cerr << "MtInv\n";
           this->codonstatespace = new CodonStateSpace(MtInv);
           this->codondata = new CodonSequenceAlignment(dnadata, true, MtInv);
           this->taxonset = this->codondata->GetTaxonSet();
         } else {
-          cerr << "wrong genetic code\n";
+          std::cerr << "wrong genetic code\n";
         }
       }
     }
@@ -345,11 +348,11 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->branchToOutGroup = new Branch();
   this->newnode = new Node();
 
-  cerr << "Nsite_codon : " << this->Nsite_codon << "\n";
-  cerr << "Nsite_nuc : " << this->Nsite_nuc << "\n";
-  cerr << "Ntaxa : " << this->Ntaxa << "\n";
-  cerr << "Nstate_codon : " << this->Nstate_codon << "\n";
-  cerr << "N_profile : " << this->N_profile << "\n";
+  std::cerr << "Nsite_codon : " << this->Nsite_codon << "\n";
+  std::cerr << "Nsite_nuc : " << this->Nsite_nuc << "\n";
+  std::cerr << "Ntaxa : " << this->Ntaxa << "\n";
+  std::cerr << "Nstate_codon : " << this->Nstate_codon << "\n";
+  std::cerr << "N_profile : " << this->N_profile << "\n";
 
   int taxa_a_val =
       this->taxonset->GetTaxonIndexWithIncompleteName(this->taxa_a);
@@ -357,23 +360,26 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
       this->taxonset->GetTaxonIndexWithIncompleteName(this->taxa_b);
 
   if (taxa_a_val == -1 && taxa_b_val == -1) {
-    cerr << "both taxon used for determining root position are absent from the "
-            "sequence aligment\n";
-    cerr << taxa_a << " " << taxa_b << "\n";
+    std::cerr
+        << "both taxon used for determining root position are absent from the "
+           "sequence aligment\n";
+    std::cerr << taxa_a << " " << taxa_b << "\n";
     exit(0);
   } else if (taxa_a_val == -1) {
-    cerr << "the taxon used for determining root position is absent from the "
-            "sequence aligment\n";
-    cerr << taxa_a << "\n";
+    std::cerr
+        << "the taxon used for determining root position is absent from the "
+           "sequence aligment\n";
+    std::cerr << taxa_a << "\n";
     exit(0);
   } else if (taxa_b_val == -1) {
-    cerr << "the taxon used for determining root position is absent from the "
-            "sequence aligment\n";
-    cerr << taxa_b << "\n";
+    std::cerr
+        << "the taxon used for determining root position is absent from the "
+           "sequence aligment\n";
+    std::cerr << taxa_b << "\n";
     exit(0);
   }
 
-  cerr << "Rooted at " << this->taxa_a << " " << this->taxa_b << "\n";
+  std::cerr << "Rooted at " << this->taxa_a << " " << this->taxa_b << "\n";
 }
 
 LocalParameters::~LocalParameters() {
@@ -425,7 +431,7 @@ void LocalParameters::GetGTR1() {
     for (int j = i + 1; j < 4; j++) {
       // norm += nucp[i] * nucp[j] * nucrr[GetNucRRIndex(i,j)];
       norm += this->nucp1[i] * this->nucp1[j] * this->nucrrnr1[i][j];
-      // cerr << this->nucp1[i] << " " << this->nucp1[j] << " " <<
+      // std::cerr << this->nucp1[i] << " " << this->nucp1[j] << " " <<
       // this->nucrrnr1[i][j] << " " << norm << "\n";
     }
   }
@@ -487,7 +493,7 @@ void LocalParameters::GetGTR2() {
     for (int j = i + 1; j < 4; j++) {
       // norm += nucp[i] * nucp[j] * nucrr[GetNucRRIndex(i,j)];
       norm += this->nucp2[i] * this->nucp2[j] * this->nucrrnr2[i][j];
-      // cerr << this->nucp1[i] << " " << this->nucp1[j] << " " <<
+      // std::cerr << this->nucp1[i] << " " << this->nucp1[j] << " " <<
       // this->nucrrnr1[i][j] << " " << norm << "\n";
     }
   }
@@ -504,46 +510,46 @@ void LocalParameters::GetGTR2() {
 }
 
 void LocalParameters::readLocalInstructions() {
-  string line = localcontrolfile;
+  std::string line = localcontrolfile;
   istringstream iss(line);
-  string s;
+  std::string s;
 
   while (iss >> s) {
     if (s == "-d") {
       iss >> s;
       this->data = s;
-      cerr << "data " << data << "\n";
+      std::cerr << "data " << data << "\n";
       this->isdata = true;
     } else if (s == "-chain") {
       iss >> s;
       this->chain = s;
-      cerr << "chain " << this->chain << "\n";
+      std::cerr << "chain " << this->chain << "\n";
     } else if (s == "-posterior") {
       iss >> s;
       this->posteriorfile = s;
-      cerr << "posterior " << this->posteriorfile << "\n";
+      std::cerr << "posterior " << this->posteriorfile << "\n";
     } else if (s == "-start") {
       iss >> s;
       this->startPoint = atoi(s.c_str());
-      cerr << "start " << this->startPoint << "\n";
+      std::cerr << "start " << this->startPoint << "\n";
     } else if (s == "-until") {
       iss >> s;
       this->endPoint = atoi(s.c_str());
-      cerr << "until " << this->endPoint << "\n";
+      std::cerr << "until " << this->endPoint << "\n";
     } else if (s == "-every") {
       iss >> s;
       this->everyPoint = atoi(s.c_str());
-      cerr << "every " << this->everyPoint << "\n";
+      std::cerr << "every " << this->everyPoint << "\n";
     } else if (s == "-rep") {
       iss >> s;
       this->Nrep = atoi(s.c_str());
-      cerr << "Nreplicate " << this->Nrep << "\n";
+      std::cerr << "Nreplicate " << this->Nrep << "\n";
     } else if (s == "-iscodon") {
       this->iscodon = true;
     } else if (s == "-code") {
       iss >> s;
       this->code = s;
-      cerr << "code " << this->code << "\n";
+      std::cerr << "code " << this->code << "\n";
     } else if (s == "-root") {
       rooted = 1;
       iss >> s;
@@ -566,73 +572,73 @@ void LocalParameters::readLocalInstructions() {
       //                        }
       //                    }
 
-      cerr << ((this->fixroot == 0) ? "randomroot " : "fixroot ")
-           << this->taxa_a << " " << this->taxa_b << " "
-           << this->percentFromOutGroup << "\n";
+      std::cerr << ((this->fixroot == 0) ? "randomroot " : "fixroot ")
+                << this->taxa_a << " " << this->taxa_b << " "
+                << this->percentFromOutGroup << "\n";
     } else if (s == "-freeroot") {
       this->fixroot = 0;
       iss >> s;
       this->taxa_a = s;
       iss >> s;
       this->taxa_b = s;
-      cerr << ((this->fixroot == 0) ? "freeroot " : "fixroot ") << this->taxa_a
-           << " " << this->taxa_b << "\n";
+      std::cerr << ((this->fixroot == 0) ? "freeroot " : "fixroot ")
+                << this->taxa_a << " " << this->taxa_b << "\n";
     } else if (s == "-fitCpG") {
       iss >> s;
       this->fitCpG = atof(s.c_str());
       this->fixfitCpG = 1;
-      cerr << "fixfitCpG " << this->fitCpG << "\n";
+      std::cerr << "fixfitCpG " << this->fitCpG << "\n";
     } else if (s == "-fitGC") {
       iss >> s;
       this->fitGC = atof(s.c_str());
       this->fixfitGC = 1;
-      cerr << "fixfitGC " << this->fitGC << "\n";
+      std::cerr << "fixfitGC " << this->fitGC << "\n";
     } else if (s == "-freefitGC") {
       this->fixfitGC = 0;
-      cerr << "freefitGC\n";
+      std::cerr << "freefitGC\n";
     } else if (s == "-freefitCpG") {
       this->fixfitCpG = 0;
-      cerr << "free fitCpG\n";
+      std::cerr << "free fitCpG\n";
     } else if (s == "-freefitTpA") {
       this->fixfitTpA = 0;
-      cerr << "free fitTpA\n";
+      std::cerr << "free fitTpA\n";
     } else if (s == "-lambdaTBL") {
       iss >> s;
       this->lambda_TBL = atof(s.c_str());
       this->fixlambda_TBL = 1;
-      cerr << "fix TBL " << this->lambda_TBL << "\n";
+      std::cerr << "fix TBL " << this->lambda_TBL << "\n";
     } else if (s == "-freelambdaTBL") {
       this->fixlambda_TBL = 0;
-      cerr << "free TBL\n";
+      std::cerr << "free TBL\n";
     } else if (s == "-priorlambdaTBL") {
       iss >> s;
       this->lambda_TBL_prior = s;
-      cerr << "prior TBL " << this->lambda_TBL_prior << "\n";
+      std::cerr << "prior TBL " << this->lambda_TBL_prior << "\n";
     } else if (s == "-freelambdaR") {
       this->fixlambda_R = 0;
-      cerr << "freelambda_R\n";
+      std::cerr << "freelambda_R\n";
     } else if (s == "-lambdaR") {
       iss >> s;
       this->lambda_R = atof(s.c_str());
       this->fixlambda_R = 1;
-      cerr << "fix lambda_R " << this->lambda_R << "\n";
+      std::cerr << "fix lambda_R " << this->lambda_R << "\n";
     } else if (s == "-lambdaOmega") {
       iss >> s;
       this->lambda_omega = atof(s.c_str());
       this->fixlambda_omega = 1;
-      cerr << "fix lambdaomega " << this->lambda_omega << "\n";
+      std::cerr << "fix lambdaomega " << this->lambda_omega << "\n";
     } else if (s == "-omega") {
       iss >> s;
       this->omega = atof(s.c_str());
       this->fixomega = 1;
-      cerr << "fix omega " << this->omega << "\n";
+      std::cerr << "fix omega " << this->omega << "\n";
     } else if (s == "-freelambdaomega") {
       this->fixlambda_omega = 0;
-      cerr << "freelambdaomega\n";
+      std::cerr << "freelambdaomega\n";
     } else if (s == "-priorlambdaomega") {
       iss >> s;
       this->lambda_omega_prior = s;
-      cerr << "prior omega " << this->lambda_omega_prior << "\n";
+      std::cerr << "prior omega " << this->lambda_omega_prior << "\n";
     } else if (s == "-fixgtr1") {
       this->fixgtr1 = 1;
       iss >> s;
@@ -661,17 +667,17 @@ void LocalParameters::readLocalInstructions() {
       this->nucrr1[4] = atof(s.c_str());
       iss >> s;
       this->nucrr1[5] = atof(s.c_str());
-      cerr << " fixgtr1 " << this->fixgtr1 << "\n";
-      cerr << this->taxa_gtr1_a << "\t" << this->taxa_gtr1_b << "\t"
-           << this->taxa_gtr1_c << "\n";
+      std::cerr << " fixgtr1 " << this->fixgtr1 << "\n";
+      std::cerr << this->taxa_gtr1_a << "\t" << this->taxa_gtr1_b << "\t"
+                << this->taxa_gtr1_c << "\n";
       for (int v = 0; v < Nnuc; v++) {
-        cerr << this->nucp1[v] << "\t";
+        std::cerr << this->nucp1[v] << "\t";
       }
-      cerr << "\n";
+      std::cerr << "\n";
       for (int v = 0; v < Nnucrr; v++) {
-        cerr << this->nucrr1[v] << "\t";
+        std::cerr << this->nucrr1[v] << "\t";
       }
-      cerr << "\n";
+      std::cerr << "\n";
     } else if (s == "-fixgtr2") {
       this->fixgtr2 = 1;
       iss >> s;
@@ -701,128 +707,128 @@ void LocalParameters::readLocalInstructions() {
       iss >> s;
       this->nucrr2[5] = atof(s.c_str());
 
-      cerr << " fixgtr2 " << this->fixgtr2 << "\n";
-      cerr << this->taxa_gtr2_a << "\t" << this->taxa_gtr2_b << "\t"
-           << this->taxa_gtr2_c << "\n";
+      std::cerr << " fixgtr2 " << this->fixgtr2 << "\n";
+      std::cerr << this->taxa_gtr2_a << "\t" << this->taxa_gtr2_b << "\t"
+                << this->taxa_gtr2_c << "\n";
       for (int v = 0; v < Nnuc; v++) {
-        cerr << this->nucp2[v] << "\t";
+        std::cerr << this->nucp2[v] << "\t";
       }
-      cerr << "\n";
+      std::cerr << "\n";
       for (int v = 0; v < Nnucrr; v++) {
-        cerr << this->nucrr2[v] << "\t";
+        std::cerr << this->nucrr2[v] << "\t";
       }
-      cerr << "\n";
+      std::cerr << "\n";
     } else if (s == "-lambdaTpA" || s == "-fixlambdaTpA") {
       iss >> s;
       this->lambda_TpA = atof(s.c_str());
       this->fixlambda_TpA = 1;
-      cerr << "fix lambda TpA " << this->fixlambda_TpA << "\n";
+      std::cerr << "fix lambda TpA " << this->fixlambda_TpA << "\n";
     } else if (s == "-lambdaCpG" || s == "-fixlambdaCpG") {
       iss >> s;
       this->lambda_CpG = atof(s.c_str());
       this->fixlambda_CpG = 1;
-      cerr << "fix lambda CpG " << this->lambda_CpG << "\n";
+      std::cerr << "fix lambda CpG " << this->lambda_CpG << "\n";
     } else if (s == "-lambdatstvCpG" || s == "-fixlambdatstvCpG") {
       iss >> s;
       this->lambda_tstvCpG = atof(s.c_str());
       this->fixlambda_tstvCpG = 1;
-      cerr << "fix lambda tstvCpG " << this->lambda_tstvCpG << "\n";
+      std::cerr << "fix lambda tstvCpG " << this->lambda_tstvCpG << "\n";
     } else if (s == "-lambdatstvTpA" || s == "-fixlambdatstvTpA") {
       iss >> s;
       this->lambda_tstvTpA = atof(s.c_str());
       this->fixlambda_tstvTpA = 1;
-      cerr << "fix lambda tstvTpA " << this->lambda_tstvTpA << "\n";
+      std::cerr << "fix lambda tstvTpA " << this->lambda_tstvTpA << "\n";
     } else if (s == "-lambdatvCpG" || s == "-fixlambdatvCpG") {
       iss >> s;
       this->lambda_tvCpG = atof(s.c_str());
       this->fixlambda_tvCpG = 1;
-      cerr << "fix lambda tvCpG " << this->lambda_tvCpG << "\n";
+      std::cerr << "fix lambda tvCpG " << this->lambda_tvCpG << "\n";
     } else if (s == "-lambdatvTpA" || s == "-fixlambdatvTpA") {
       iss >> s;
       this->lambda_tvTpA = atof(s.c_str());
       this->fixlambda_tvTpA = 1;
-      cerr << "fix lambda tvTpA " << this->lambda_tvTpA << "\n";
+      std::cerr << "fix lambda tvTpA " << this->lambda_tvTpA << "\n";
     } else if (s == "-freelambdatvCpG") {
       this->fixlambda_tvCpG = 0;
-      cerr << "freelambdatvCpG\n";
+      std::cerr << "freelambdatvCpG\n";
     } else if (s == "-freelambdatvTpA") {
       this->fixlambda_tvTpA = 0;
-      cerr << "freelambdatvTpA\n";
+      std::cerr << "freelambdatvTpA\n";
     } else if (s == "-freelambdatstvCpG") {
       this->fixlambda_tstvCpG = 0;
-      cerr << "freelambdatstvCpG\n";
+      std::cerr << "freelambdatstvCpG\n";
     } else if (s == "-freelambdatstvTpA") {
       this->fixlambda_tstvTpA = 0;
-      cerr << "freelambdatstvCpG\n";
+      std::cerr << "freelambdatstvCpG\n";
     } else if (s == "-freelambdaCpG" || s == "-freelambdatsCpG") {
       this->fixlambda_CpG = 0;
-      cerr << "freelambdatsCpG\n";
+      std::cerr << "freelambdatsCpG\n";
 
     } else if (s == "-priorlambdaCpG") {
       iss >> s;
       this->lambda_CpG_prior = s;
-      cerr << "prior CpG " << this->lambda_CpG_prior << "\n";
+      std::cerr << "prior CpG " << this->lambda_CpG_prior << "\n";
 
     } else if (s == "-freelambdaTpA" || s == "-freelambdatsTpA") {
       this->fixlambda_TpA = 0;
-      cerr << "freelambdatsTpA\n";
+      std::cerr << "freelambdatsTpA\n";
 
     } else if (s == "-priorlambdaTpA") {
       iss >> s;
       this->lambda_TpA_prior = s;
-      cerr << "prior TpA " << this->lambda_TpA_prior << "\n";
+      std::cerr << "prior TpA " << this->lambda_TpA_prior << "\n";
 
     } else if (s == "-freegtnr") {
       this->fixgtnr = 0;
-      cerr << "fixgtnr\n";
+      std::cerr << "fixgtnr\n";
 
     } else if (s == "-freehky") {
       this->fixhky = 0;
-      cerr << "freehky\n";
+      std::cerr << "freehky\n";
 
     } else if (s == "-freeAAadj") {
       this->fixAAadj = 0;
-      cerr << "freeAAadj\n";
+      std::cerr << "freeAAadj\n";
     } else if (s == "-freegtr") {
       this->fixgtr = 0;
-      cerr << "freegtr\n";
+      std::cerr << "freegtr\n";
 
     } else if (s == "-freestat") {
       this->fixstat = 0;
-      cerr << "freestat\n";
+      std::cerr << "freestat\n";
 
     } else if (s == "-freets") {
       this->fixts = 0;
-      cerr << "freets\n";
+      std::cerr << "freets\n";
 
     } else if (s == "-freetr") {
       this->fixtr = 0;
-      cerr << "freetr\n";
+      std::cerr << "freetr\n";
 
     } else if (s == "-freekappa") {
       this->fixkappa = 0;
-      cerr << "freekappa\n";
+      std::cerr << "freekappa\n";
 
     } else if (s == "-freerr") {
       this->fixrr = 0;
-      cerr << "freerr\n";
+      std::cerr << "freerr\n";
 
     } else if (s == "-rootlength") {
       iss >> s;
       this->rootlength = atof(s.c_str());
-      cerr << "rootlength " << this->rootlength << "\n";
+      std::cerr << "rootlength " << this->rootlength << "\n";
 
     } else if (s == "-tofasta" || s == "-tophylip") {
       this->tofasta = 1;
 
     } else if (s == "-randomfix") {
       this->randomseed = 12345;
-      cerr << "randomseed " << this->randomseed << "\n";
+      std::cerr << "randomseed " << this->randomseed << "\n";
 
     } else if (s == "-verbose") {
       iss >> s;
       this->verbose = 1;
-      cerr << "verbose " << this->verbose << "\n";
+      std::cerr << "verbose " << this->verbose << "\n";
 
     } else if (s == "-fixNsite") {
       iss >> s;
@@ -830,8 +836,8 @@ void LocalParameters::readLocalInstructions() {
       iss >> s;
       this->Nsite_codon = atoi(s.c_str());
       this->Nsite_nuc = this->Nsite_codon * 3;
-      cerr << "fixNsite " << this->Nsite_codon << " " << this->Nsite_nuc
-           << "\n";
+      std::cerr << "fixNsite " << this->Nsite_codon << " " << this->Nsite_nuc
+                << "\n";
     }
   }
 }
@@ -854,18 +860,18 @@ void LocalParameters::SetTree() {
 }
 
 void LocalParameters::SetRootBetweenInAndOutGroup() {
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup1\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup1\n";
 
   if (refTree->GetLCA(taxa_a, taxa_b)->isRoot()) {
     if (!refTree->CheckRootDegree()) {
-      cerr << "error: root should be of degree tree\n";
-      cerr << "i.e. tree should have following format: (A,B,C) and not "
-              "(A,(B,C));\n";
+      std::cerr << "error: root should be of degree tree\n";
+      std::cerr << "i.e. tree should have following format: (A,B,C) and not "
+                   "(A,(B,C));\n";
       exit(1);
     }
 
     if (verbose) {
-      cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
+      std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
     }
 
     if (refTree->GetLCA(taxa_a, taxa_b)->Next()->Out()->GetNode()->GetName() !=
@@ -908,79 +914,80 @@ void LocalParameters::SetRootBetweenInAndOutGroup() {
     outgroupLink = refTree->GetLCA(taxa_a, taxa_b);
   }
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
-  // cerr << "You have to redefine the root position\n";
-  // cerr << "The system will exit by now\n";
+  if (verbose)
+    std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup1 isRoot\n";
+  // std::cerr << "You have to redefine the root position\n";
+  // std::cerr << "The system will exit by now\n";
   // exit(0);
 
   branchLengthBetweenInAndOutGroup =
       atof(outgroupLink->GetBranch()->GetName().c_str());
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup2\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup2\n";
   branchToOutGroup = outgroupLink->GetBranch();
 
   newnode->SetName("1");
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup3\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup3\n";
   newnode->SetIndex(refTree->GetNnode());
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup4\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup4\n";
 
   // set linkToIngroup
 
   outgroupLink->Out()->SetBranch(branchToInGroup);
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup5\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup5\n";
   // set newlink
 
   newlink->SetBranch(branchToInGroup);
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup6\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup6\n";
   newlink->SetNode(newnode);
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup7\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup7\n";
   newlink->SetOut(outgroupLink->Out());
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup8\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup8\n";
   newlink->SetNext(newnext);
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup9\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup9\n";
   // set newnext
 
   newnext->SetBranch(branchToOutGroup);
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup10\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup10\n";
   newnext->SetNode(newnode);
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup11\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup11\n";
   newnext->SetOut(outgroupLink);
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup12\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup12\n";
   newnext->SetNext(newlink);
 
   // set outgroupLink
 
   outgroupLink->SetOut(newlink);
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup13\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup13\n";
   refTree->RootAt(newnext);
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup14\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup14\n";
   refTree->SetIndices();
 
   double branchLengthToOutGroup =
       branchLengthBetweenInAndOutGroup * percentFromOutGroup;
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup15\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup15\n";
   branchToInGroup->SetName(std::to_string(branchLengthBetweenInAndOutGroup -
                                           branchLengthToOutGroup));
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup16\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup16\n";
   branchToOutGroup->SetName(std::to_string(branchLengthToOutGroup));
 
-  if (verbose) cerr << "LocalParameters::SetRootBetweenInAndOutGroup17\n";
+  if (verbose) std::cerr << "LocalParameters::SetRootBetweenInAndOutGroup17\n";
 
-  ofstream os((this->output + ".inputparam").c_str(), APPEND);
+  std::ofstream os((this->output + ".inputparam").c_str(), std::ios_base::app);
   refTree->Print(os);
   os.close();
 }
@@ -1008,9 +1015,7 @@ std::vector<double> LocalParameters::GetCurrentDistances() {
       cur_dist.push_back(sqdisc);
     }
     cur_dist.push_back(dist);
-  } else if
-
-      (this->distance == "dist1") {
+  } else if (this->distance == "dist1") {
     for (int i_summary = 0; i_summary < this->NusedSummaries; i_summary++) {
       double sqdisc = this->summariesRealData[i_summary] -
                       summariesSimulatedData[i_summary];
@@ -1033,7 +1038,7 @@ void LocalParameters::SetBranchesLengthsBetweenInAndOutGroup() {
 void LocalParameters::SetCurrentParametersFromPosterior(
     std::vector<std::vector<double>> posterior, int it) {
   int k = 0;
-  string* arrParam = new string[this->NusedParam];
+  std::string* arrParam = new std::string[this->NusedParam];
   for (int param_i = 0; param_i < this->NParam; param_i++) {
     auto it_ = this->mapUsedParam.find(this->listParam[param_i]);
     if (it_ != this->mapUsedParam.end()) {
@@ -1046,14 +1051,14 @@ void LocalParameters::SetCurrentParametersFromPosterior(
   for (int param_i = 0; param_i < this->NusedParam; param_i++) {
     if (arrParam[param_i] == "chainID") {
       this->MCMCpointID = static_cast<int>(posterior[it][param_i]);
-      cerr << "chainID " << this->MCMCpointID << "\n";
+      std::cerr << "chainID " << this->MCMCpointID << "\n";
     } else if (arrParam[param_i] == "root") {
       this->percentFromOutGroup = posterior[it][param_i];
       if (percentFromOutGroup >= 1.0) {
-        cerr << "percentFromOutGroup >= 1\n";
+        std::cerr << "percentFromOutGroup >= 1\n";
         this->percentFromOutGroup = 0.9999999999;
       } else if (percentFromOutGroup <= 0.0) {
-        cerr << "percentFromOutGroup <= 0\n";
+        std::cerr << "percentFromOutGroup <= 0\n";
         this->percentFromOutGroup = 0.000000001;
       }
       this->SetBranchesLengthsBetweenInAndOutGroup();
@@ -1375,7 +1380,7 @@ std::vector<double> LocalParameters::GetCurrentAccessorySummaries() {
 }
 
 std::vector<double> LocalParameters::GetCurrentParameters() {
-  string* arrParam = new string[this->NusedParam];
+  std::string* arrParam = new std::string[this->NusedParam];
   int k = 0;
   for (int param_i = 0; param_i < this->NParam; param_i++) {
     auto it = this->mapUsedParam.find(this->listParam[param_i]);
@@ -1572,9 +1577,9 @@ void LocalParameters::writeParam(ofstream& os) {
 }
 
 void LocalParameters::readFMutSelCodeML() {
-  fstream is((this->chain + ".chain").c_str());
+  ifstream is((this->chain + ".chain").c_str());
   if (!is) {
-    cerr << "error: did not find " << this->chain << ".chain\n";
+    std::cerr << "error: did not find " << this->chain << ".chain\n";
     exit(1);
   }
 
@@ -1583,15 +1588,15 @@ void LocalParameters::readFMutSelCodeML() {
 
   for (int k = 0; k < this->Nnucp; k++) {
     is >> this->nucp[k];
-    // cerr << nucp[k] << "\t";
+    // std::cerr << nucp[k] << "\t";
   }
 
   for (int k = 0; k < this->Nnucrr; k++) {
     is >> this->nucrr[k];
-    // cerr << nucrr[k] << "\t";
+    // std::cerr << nucrr[k] << "\t";
   }
 
-  // cerr << "\n\n\n";
+  // std::cerr << "\n\n\n";
 
   // nucrrnr[0][0]; //AA
   this->nucrrnr[0][1] = nucrr[0];  // AC
@@ -1661,7 +1666,7 @@ void LocalParameters::readFMutSelCodeML() {
   //            aa_vec[codonstatespace->Translation(k)] = tmp;
   //            this->codonprofile[k] = (double) 1/this->Nstate_codon;
   //            Z += tmp;
-  //            //cerr << this->codonprofile[k] << "\t";
+  //            //std::cerr << this->codonprofile[k] << "\t";
   //
   //        }
   //        for (int l=0; l<this->Nstate_aa; l++){
@@ -1671,7 +1676,7 @@ void LocalParameters::readFMutSelCodeML() {
   //        for (int k=0; k<this->Nsite_codon; k++){
   //            for (int l=0; l<this->Nstate_aa; l++){
   //                this->ssaaprofiles[k][l] = aa_vec[l];
-  //                //cerr << this->ssaaprofiles[k][l] << "\t";
+  //                //std::cerr << this->ssaaprofiles[k][l] << "\t";
   //            }
   //        }
   //        delete [] aa_vec;
@@ -1726,14 +1731,14 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
   // set parameters : posterior specific
   ifstream is((this->chain + ".chain").c_str());
   if (!is) {
-    cerr << "error: did not find " << this->chain << ".chain\n";
+    std::cerr << "error: did not find " << this->chain << ".chain\n";
     exit(1);
   }
 
-  // cerr << this->chain;
+  // std::cerr << this->chain;
 
   int j = 0;
-  string tmp = "";
+  std::string tmp = "";
   while (j < pt_i) {
     is >> tmp;  // tree
     is >> tmp;  // branchalpha
@@ -1767,9 +1772,9 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
 
   if (j == pt_i) {
     refTree = new Tree(is);
-    if (verbose) cerr << "READCHAIN1\n";
+    if (verbose) std::cerr << "READCHAIN1\n";
     refTree->RegisterWith(taxonset, 0);
-    if (verbose) cerr << "READCHAIN2\n";
+    if (verbose) std::cerr << "READCHAIN2\n";
 
     is >> tmp;  // branchalpha
     is >> tmp;  // branchbeta
@@ -1840,21 +1845,21 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
 
   SetTreeStuff();
 
-  // cerr << "Nnode : " << refTree->GetNnode() << "\n";
+  // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
 void LocalParameters::readChainCodonMutSelSBDP() {
   // set parameters : posterior specific
   ifstream is((this->chain + ".chain").c_str());
   if (!is) {
-    cerr << "error: did not find " << this->chain << ".chain\n";
+    std::cerr << "error: did not find " << this->chain << ".chain\n";
     exit(1);
   }
 
-  // cerr << this->chain;
+  // std::cerr << this->chain;
 
   int j = 0;
-  string tmp = "";
+  std::string tmp = "";
   while (j < this->startPoint) {
     is >> tmp;  // tree
     is >> tmp;  // branchalpha
@@ -1960,7 +1965,7 @@ void LocalParameters::readChainCodonMutSelSBDP() {
 
   SetTreeStuff();
 
-  // cerr << "Nnode : " << refTree->GetNnode() << "\n";
+  // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
 void LocalParameters::readChainCodonMutSelFinite(int it) {
@@ -1968,14 +1973,14 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
   // set parameters : posterior specific
   ifstream is((this->chain + ".chain").c_str());
   if (!is) {
-    cerr << "error: did not find " << this->chain << ".chain\n";
+    std::cerr << "error: did not find " << this->chain << ".chain\n";
     exit(1);
   }
 
-  // cerr << this->chain;
+  // std::cerr << this->chain;
 
   int j = 0;
-  string tmp = "";
+  std::string tmp = "";
   while (j < it) {
     is >> tmp;  // tree
     is >> tmp;  // branchalpha
@@ -2102,21 +2107,21 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
 
   SetTreeStuff();
 
-  // cerr << "Nnode : " << refTree->GetNnode() << "\n";
+  // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
 void LocalParameters::readChainCodonMutSelFinite() {
   // set parameters : posterior specific
   ifstream is((this->chain + ".chain").c_str());
   if (!is) {
-    cerr << "error: did not find " << this->chain << ".chain\n";
+    std::cerr << "error: did not find " << this->chain << ".chain\n";
     exit(1);
   }
 
-  // cerr << this->chain;
+  // std::cerr << this->chain;
 
   int j = 0;
-  string tmp = "";
+  std::string tmp = "";
   while (j < this->startPoint) {
     is >> tmp;  // tree
     is >> tmp;  // branchalpha
@@ -2243,7 +2248,7 @@ void LocalParameters::readChainCodonMutSelFinite() {
 
   SetTreeStuff();
 
-  // cerr << "Nnode : " << refTree->GetNnode() << "\n";
+  // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
 void LocalParameters::SetTreeStuff() {
@@ -2258,8 +2263,8 @@ void LocalParameters::SetTreeStuff() {
     Link* a = refTree->GetLCA(this->taxa_gtr1_a, taxa_gtr1_b);
     int notNodeIndex =
         refTree->GetLCA(this->taxa_gtr1_a, taxa_gtr1_c)->GetNode()->GetIndex();
-    cerr << "notNodeIndex\t" << notNodeIndex << " nodeIndex"
-         << a->GetNode()->GetIndex() << "\n";
+    std::cerr << "notNodeIndex\t" << notNodeIndex << " nodeIndex"
+              << a->GetNode()->GetIndex() << "\n";
     SetTreeStuffRecursively(a, notNodeIndex, 1);
   }
 
@@ -2269,8 +2274,8 @@ void LocalParameters::SetTreeStuff() {
     Link* a = refTree->GetLCA(this->taxa_gtr2_a, taxa_gtr2_b);
     int notNodeIndex =
         refTree->GetLCA(this->taxa_gtr2_a, taxa_gtr2_c)->GetNode()->GetIndex();
-    cerr << "notNodeIndex\t" << notNodeIndex << " nodeIndex"
-         << a->GetNode()->GetIndex() << "\n";
+    std::cerr << "notNodeIndex\t" << notNodeIndex << " nodeIndex"
+              << a->GetNode()->GetIndex() << "\n";
     SetTreeStuffRecursively(a, notNodeIndex, 2);
   }
 }
@@ -2281,10 +2286,10 @@ void LocalParameters::SetTreeStuffRecursively(Link* from, int notNodeIndex,
 
   auto it = gtrMap.find(from->GetNode()->GetIndex());
   if (it != gtrMap.end()) {
-    cerr << gtrIndex << "\t" << from->GetNode()->GetIndex() << "\t"
-         << it->second << "\n";
+    std::cerr << gtrIndex << "\t" << from->GetNode()->GetIndex() << "\t"
+              << it->second << "\n";
   } else {
-    cerr << "Error while registring gtr along the tree\n";
+    std::cerr << "Error while registring gtr along the tree\n";
     exit(0);
   }
   if (from->isRoot()) {
@@ -2332,7 +2337,7 @@ void LocalParameters::toAli(ofstream& os,
 int LocalParameters::GetPointID() { return MCMCpointID; }
 
 void LocalParameters::writeRealDataSummaries(ofstream& os, bool headers) {
-  string* arrSummaries = new string[NusedSummaries];
+  std::string* arrSummaries = new std::string[NusedSummaries];
   for (int summary_i = 0; summary_i < NSummaries; summary_i++) {
     auto it = mapUsedSummaries.find(listSummaries[summary_i]);
     if (it != mapUsedSummaries.end()) {
@@ -2364,7 +2369,7 @@ void LocalParameters::writeRealDataSummaries(ofstream& os, bool headers) {
 
 void LocalParameters::writeAncestralDataSummaries(ofstream& os, bool headers) {
   // should be incorporated to populatio_t
-  string* arrSummaries = new string[NusedAncSummaries];
+  std::string* arrSummaries = new std::string[NusedAncSummaries];
   for (int summary_i = 0; summary_i < NSummaries; summary_i++) {
     auto it = mapUsedAncSummaries.find(listSummaries[summary_i]);
     if (it != mapUsedAncSummaries.end()) {

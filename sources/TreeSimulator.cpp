@@ -66,10 +66,10 @@ TreeSimulator::~TreeSimulator() {
 void TreeSimulator::resetSimulator() {
   int verbose = lparam->verbose;
   if (verbose) {
-    cerr << "resetSimulator1\n";
+    std::cerr << "resetSimulator1\n";
   }
   if (verbose) {
-    cerr << lparam->refTree->GetNnode() << "resetSimulator1.1\n";
+    std::cerr << lparam->refTree->GetNnode() << "resetSimulator1.1\n";
   }
   for (int node = 0; node < lparam->refTree->GetNnode(); node++) {
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
@@ -81,7 +81,7 @@ void TreeSimulator::resetSimulator() {
   }
 
   if (verbose) {
-    cerr << "resetSimulator2\n";
+    std::cerr << "resetSimulator2\n";
   }
   // reset nodeleaf sequences
   for (int taxa = 0; taxa < lparam->Ntaxa; taxa++) {
@@ -94,7 +94,7 @@ void TreeSimulator::resetSimulator() {
   }
 
   if (verbose) {
-    cerr << "resetSimulator3\n";
+    std::cerr << "resetSimulator3\n";
   }
   for (int point_i = 0; point_i < lparam->Ninterval; point_i++) {
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
@@ -108,7 +108,7 @@ void TreeSimulator::resetSimulatorSeq() {
 
   int verbose = lparam->verbose;
   if (verbose) {
-    cerr << "resetSimulator1\n";
+    std::cerr << "resetSimulator1\n";
   }
 
   // reset nodeleaf sequences
@@ -157,19 +157,19 @@ void TreeSimulator::GetNewProbSeq() {
   int verbose = lparam->verbose;
   submatrix->resetSubMatrix();
   if (verbose) {
-    cerr << "submatrix->resetSubMatrix()\n";
+    std::cerr << "submatrix->resetSubMatrix()\n";
   }
 
   resetSimulatorSeq();
   if (verbose) {
-    cerr << "resetSimulator()\n";
+    std::cerr << "resetSimulator()\n";
   }
 
   // launch recursive simulation on a phylogenetic tree
 
   ComputeSeqProb();
   if (verbose) {
-    cerr << "ComputeRecursiveSimulation\n";
+    std::cerr << "ComputeRecursiveSimulation\n";
   }
   // register mappingstats
 }
@@ -178,59 +178,59 @@ void TreeSimulator::GetNewSimulatedCodonAlignment() {
   int verbose = lparam->verbose;
   submatrix->resetSubMatrix();
   if (verbose) {
-    cerr << "submatrix->resetSubMatrix()\n";
+    std::cerr << "submatrix->resetSubMatrix()\n";
   }
 
   rootBranchEvoStats->resetEvoStats();
   if (verbose) {
-    cerr << "rootBranchEvoStats->resetEvoStats()\n";
+    std::cerr << "rootBranchEvoStats->resetEvoStats()\n";
   }
 
   treeEvoStats->resetEvoStats();
   if (verbose) {
-    cerr << "treeEvoStats->resetEvoStats()\n";
+    std::cerr << "treeEvoStats->resetEvoStats()\n";
   }
 
   resetSimulator();
   if (verbose) {
-    cerr << "resetSimulator()\n";
+    std::cerr << "resetSimulator()\n";
   }
 
   ancestralseq->GetNewStationaryCodonSequence();
   if (verbose) {
-    cerr << "ancestralseq->GetNewStationaryCodonSequence()\n";
+    std::cerr << "ancestralseq->GetNewStationaryCodonSequence()\n";
   }
 
   SetAncestralSequence();
   if (verbose) {
-    cerr << "SetAncestralSequence()\n";
+    std::cerr << "SetAncestralSequence()\n";
   }
 
   // launch recursive simulation on a phylogenetic tree
   ComputeRecursiveSimulation(lparam->refTree->GetRoot());
   if (verbose) {
-    cerr << "ComputeRecursiveSimulation\n";
+    std::cerr << "ComputeRecursiveSimulation\n";
   }
   // register mappingstats
 
   resetEvoStatVectors();
   if (verbose) {
-    cerr << "resetEvoStatVectors()\n";
+    std::cerr << "resetEvoStatVectors()\n";
   }
 
   rootBranchEvoStats->GetEvoAncStats();
   if (verbose) {
-    cerr << "ancestralSequenceEvohist->GetEvoAncStats()\n";
+    std::cerr << "ancestralSequenceEvohist->GetEvoAncStats()\n";
   }
 
   treeEvoStats->GetEvoStats();
   if (verbose) {
-    cerr << "evohist->GetEvoStats()\n";
+    std::cerr << "evohist->GetEvoStats()\n";
   }
 
   treeEvoStats->GetSiteSpecificEvoStats();
   if (verbose) {
-    cerr << "evohist->GetSiteSpecificEvoStats()\n";
+    std::cerr << "evohist->GetSiteSpecificEvoStats()\n";
   }
 }
 
@@ -271,7 +271,7 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
   int* codonFrom = new int[3];
   int* codonTo = new int[3];
 
-  int site_codon = (int)(site_nuc / 3);
+  int site_codon = static_cast<int>(site_nuc / 3);
   int site_codon_start = site_codon - 1;
   int site_codon_end = site_codon + 2;
 
@@ -316,12 +316,12 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
 
   if (lparam->codonstatespace->CheckStop(nucposTo[3], nucposTo[4],
                                          nucposTo[5])) {
-    cerr << "error while registring a substitution\n";
-    cerr << nucTo << "\n";
-    cerr << nucposTo[3] << " " << nucposTo[4] << " " << nucposTo[5] << " "
-         << codonTo[1] << "\n";
-    cerr << nucposFrom[3] << " " << nucposFrom[4] << " " << nucposFrom[5] << " "
-         << codonFrom[1] << "\n";
+    std::cerr << "error while registring a substitution\n";
+    std::cerr << nucTo << "\n";
+    std::cerr << nucposTo[3] << " " << nucposTo[4] << " " << nucposTo[5] << " "
+              << codonTo[1] << "\n";
+    std::cerr << nucposFrom[3] << " " << nucposFrom[4] << " " << nucposFrom[5]
+              << " " << codonFrom[1] << "\n";
     exit(0);
   }
 
@@ -563,7 +563,7 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
       //          treeEvoStats->ssgtnrNSyn_stat[site_codon][CodonPos][nucFrom][nucTo]++;
     }
     if (verbose) {
-      cerr << "10\n";
+      std::cerr << "10\n";
     }
     //
     if (CodonPos == 0) {
@@ -931,7 +931,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
   ////
   if (from->isRoot()) {
     if (verbose) {
-      cerr << "CRS1\n";
+      std::cerr << "CRS1\n";
     }
     submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, -1,
                                       CurrentNodeNucSequence);
@@ -941,14 +941,14 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
     double blength = 0.0;
 
     rate = submatrix->GetTotalSubRate(FromNodeIndex);
-    // cerr << "Sub " << rate << "\n";
+    // std::cerr << "Sub " << rate << "\n";
     if (lparam->model == "FMutSelSimu") {
       rate = submatrix->GetTotalMutRate(FromNodeIndex);
-      // cerr << "Mut " << rate << "\n";
+      // std::cerr << "Mut " << rate << "\n";
     }
 
     if (verbose) {
-      cerr << "TreeSimulator::ComputeRecursiveSimulation1.1\n";
+      std::cerr << "TreeSimulator::ComputeRecursiveSimulation1.1\n";
     }
     ////
     // IF is ROOT
@@ -972,10 +972,10 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
     blength = lparam->rootlength;
 
     if (verbose) {
-      cerr << "TreeSimulator::ComputeRecursiveSimulation2\n";
-      cerr << time << "\n" << blength << "\n";
-      cerr << submatrix->GetTotalMutRate(FromNodeIndex) << "\n";
-      cerr << submatrix->GetTotalSubRate(FromNodeIndex) << "\n";
+      std::cerr << "TreeSimulator::ComputeRecursiveSimulation2\n";
+      std::cerr << time << "\n" << blength << "\n";
+      std::cerr << submatrix->GetTotalMutRate(FromNodeIndex) << "\n";
+      std::cerr << submatrix->GetTotalSubRate(FromNodeIndex) << "\n";
     }
 
     double IntervalLength = 1.0;
@@ -997,13 +997,13 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
       int k = 0;
       while (testcummul < u) {
         k++;
-        site_nuc = (int)k / 4;
+        site_nuc = static_cast<int>(k / 4);
         nucTo = k % 4;
-        // cerr << FromNodeIndex << " " << site_nuc << " " << nucTo << " "
+        // std::cerr << FromNodeIndex << " " << site_nuc << " " << nucTo << " "
         // <<testcummul << " " << u << "\n";
         if (site_nuc >= lparam->Nsite_nuc) {
-          cerr << "error " << site_nuc << " > " << lparam->Nsite_nuc
-               << "testcummul " << testcummul << "\n";
+          std::cerr << "error " << site_nuc << " > " << lparam->Nsite_nuc
+                    << "testcummul " << testcummul << "\n";
           exit(0);
         }
 
@@ -1017,36 +1017,36 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
         //                }
       }
 
-      // cerr << submatrix[FromNodeIndex][site_nuc][nucTo] << "\n";
-      int site_codon = int(site_nuc / 3);
+      // std::cerr << submatrix[FromNodeIndex][site_nuc][nucTo] << "\n";
+      int site_codon = static_cast<int>(site_nuc / 3);
       if (verbose) {
-        cerr << "TreeSimulator::ComputeRecursiveSimulation3\n";
+        std::cerr << "TreeSimulator::ComputeRecursiveSimulation3\n";
       }
       submatrix->ComputePartialRates(FromNodeIndex, site_codon,
                                      CurrentNodeNucSequence);
       RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo);
       if (verbose) {
-        cerr << "TreeSimulator::ComputeRecursiveSimulation4\n";
+        std::cerr << "TreeSimulator::ComputeRecursiveSimulation4\n";
       }
       submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,
                                         CurrentNodeNucSequence);
       if (verbose) {
-        cerr << "TreeSimulator::ComputeRecursiveSimulation5\n";
+        std::cerr << "TreeSimulator::ComputeRecursiveSimulation5\n";
       }
       // submatrix->UpdateSubMatrixTreeSim(FromNodeIndex,
       // -1,CurrentNodeNucSequence);
       rate = submatrix->GetTotalSubRate(FromNodeIndex);
-      // cerr << "Sub " << rate << "\n";
+      // std::cerr << "Sub " << rate << "\n";
       if (lparam->model == "FMutSelSimu") {
         rate = submatrix->GetTotalMutRate(FromNodeIndex);
-        // cerr << "Mut " << rate << "\n";
+        // std::cerr << "Mut " << rate << "\n";
       }
 
       time += (lparam->rnd->sExpo()) / rate;
 
       if (verbose) {
-        cerr << "TreeSimulator::ComputeRecursiveSimulation5.0 " << interval
-             << "\n";
+        std::cerr << "TreeSimulator::ComputeRecursiveSimulation5.0 " << interval
+                  << "\n";
       }
       if (time > IntervalLength * interval && interval < lparam->Ninterval) {
         GetSampleAncestralCodonSequence(FromNodeIndex, interval);
@@ -1055,7 +1055,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
     }
 
     if (verbose) {
-      cerr << "TreeSimulator::ComputeRecursiveSimulation5.1\n";
+      std::cerr << "TreeSimulator::ComputeRecursiveSimulation5.1\n";
     }
 
     //        rootBranchEvoStats->MutRate[1][0] =
@@ -1096,17 +1096,17 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
     // submatrix->UpdateSubMatrixTreeSim(FromNodeIndex,-1,CurrentNodeNucSequence);
     rate = submatrix->GetTotalSubRate(FromNodeIndex);
 
-    // cerr << "Sub " << rate << "\n";
+    // std::cerr << "Sub " << rate << "\n";
     if (lparam->model == "FMutSelSimu") {
       rate = submatrix->GetTotalMutRate(FromNodeIndex);
-      // cerr << "Mut " << rate << "\n";
+      // std::cerr << "Mut " << rate << "\n";
     }
 
     time = (lparam->rnd->sExpo()) / rate;
 
     blength = atof(from->GetBranch()->GetName().c_str());
     if (verbose) {
-      cerr << "CRS5\n";
+      std::cerr << "CRS5\n";
     }
 
     while (time < blength) {
@@ -1118,29 +1118,30 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
       int k = 0;
       while (testcummul < u) {
         k++;
-        site_nuc = (int)k / 4;
+        site_nuc = static_cast<int>(k / 4);
         nucTo = k % 4;
         if (site_nuc >= lparam->Nsite_nuc) {
-          cerr << "error " << site_nuc << " >= " << lparam->Nsite_nuc << "\n";
+          std::cerr << "error " << site_nuc << " >= " << lparam->Nsite_nuc
+                    << "\n";
           exit(0);
         }
         testcummul += submatrix->GetSubRate(FromNodeIndex, site_nuc, nucTo);
       }
       if (verbose) {
-        cerr << "CRS6\n";
+        std::cerr << "CRS6\n";
       }
 
-      int site_codon = int(site_nuc / 3);
+      int site_codon = static_cast<int>(site_nuc / 3);
 
       if (verbose) {
-        cerr << "CRS7\n";
+        std::cerr << "CRS7\n";
       }
       submatrix->ComputePartialRates(FromNodeIndex, site_codon,
                                      CurrentNodeNucSequence);
       RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo);
 
       if (verbose) {
-        cerr << "CRS8\n";
+        std::cerr << "CRS8\n";
       }
 
       submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,
@@ -1153,7 +1154,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
       }
 
       time += (lparam->rnd->sExpo()) / rate;
-      // cerr << rate << "\n";
+      // std::cerr << rate << "\n";
     }
 
     for (Link* link = from->Next(); link != from; link = link->Next()) {
@@ -1179,7 +1180,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
     submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, -1,
                                       CurrentNodeNucSequence);
     rate = submatrix->GetTotalSubRate(FromNodeIndex);
-    // cerr << rate << "\n";
+    // std::cerr << rate << "\n";
     if (lparam->model == "FMutSelSimu") {
       rate = submatrix->GetTotalMutRate(FromNodeIndex);
     }
@@ -1199,16 +1200,17 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
       int k = 0;
       while (testcummul < u) {
         k++;
-        site_nuc = (int)k / 4;
+        site_nuc = static_cast<int>(k / 4);
         nucTo = k % 4;
         if (site_nuc >= lparam->Nsite_nuc) {
-          cerr << "error " << site_nuc << " >= " << lparam->Nsite_nuc << "\n";
+          std::cerr << "error " << site_nuc << " >= " << lparam->Nsite_nuc
+                    << "\n";
           exit(0);
         }
         testcummul += submatrix->GetSubRate(FromNodeIndex, site_nuc, nucTo);
       }
-      // cerr << submatrix[FromNodeIndex][site_nuc][nucTo] << "\n";
-      int site_codon = int(site_nuc / 3);
+      // std::cerr << submatrix[FromNodeIndex][site_nuc][nucTo] << "\n";
+      int site_codon = static_cast<int>(site_nuc / 3);
 
       submatrix->ComputePartialRates(FromNodeIndex, site_codon,
                                      CurrentNodeNucSequence);
@@ -1223,7 +1225,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
       }
 
       time += (lparam->rnd->sExpo()) / rate;
-      // cerr << rate << "\n";
+      // std::cerr << rate << "\n";
     }
 
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
@@ -1261,7 +1263,8 @@ void TreeSimulator::GetSampleAncestralCodonSequence(int FromNodeIndex,
 
 void TreeSimulator::WriteAncestral() {
   // Write stationary
-  ofstream ancestral_os((lparam->output + ".ancestral").c_str(), APPEND);
+  ofstream ancestral_os((lparam->output + ".ancestral").c_str(),
+                        std::ios_base::app);
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
     ancestral_os << lparam->codonstatespace->GetState(
         CurrentNodeCodonSequence[0][site_codon]);

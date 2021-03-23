@@ -11,7 +11,10 @@ Public License for more details. You should have received a copy of the GNU
 General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
+
 #include "SiteInterSubMatrix.h"
+
+#include <string>
 
 SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam) {
   this->lparam = lparam;
@@ -47,7 +50,8 @@ SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam) {
   PartialMutRateSyn = new double[lparam->refTree->GetNnode()]; */
 }
 
-SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam, string seq) {
+SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam,
+                                       std::string seq) {
   this->lparam = lparam;
 
   // init SiteInterSubMatrix containers
@@ -156,21 +160,15 @@ int SiteInterSubMatrix::testGCPref(int innucFrom, int innucTo) {
     // To C|G
     if (innucTo == 1 || innucTo == 2) {
       return -1;
-    }
-    // To A|T
-    else {
+    } else {  // To A|T
       return 0;
     }
 
-  }
-  // From C|G
-  else {
-    // To A|T
+  } else {
+    // From C|G to A|T
     if (innucTo == 0 || innucTo == 3) {
       return 1;
-    }
-    // To C|G
-    else {
+    } else {  // To C|G
       return 0;
     }
   }
@@ -195,12 +193,10 @@ int SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite,
       // trought tv
       return 9;
     }
-  }
-  // from XpY to XpN
-  else if (insite > 0 &&
-           (CurrentNodeNucSequence[inNnodeIndex][insite - 1] == X_ &&
-            CurrentNodeNucSequence[inNnodeIndex][insite] == Y_)) {
-    if (((innucFrom + innucTo) % 2) == 0) {
+  } else if (insite > 0 &&
+             (CurrentNodeNucSequence[inNnodeIndex][insite - 1] == X_ &&
+              CurrentNodeNucSequence[inNnodeIndex][insite] == Y_)) {
+    if (((innucFrom + innucTo) % 2) == 0) {  // from XpY to XpN
       // we are leaving XY, coordinate -1,0
       // trought ts
       return 2;
@@ -209,13 +205,12 @@ int SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite,
       // trought tv
       return 9;
     }
-  }
-  // from {N}pY to XpY
-  else if (insite < lparam->Nsite_codon * 3 - 1 &&
-           (CurrentNodeNucSequence[inNnodeIndex][insite] != X_ &&
-            CurrentNodeNucSequence[inNnodeIndex][insite + 1] == Y_) &&
-           (innucFrom != X_ && innucTo == X_)) {
-    if (((innucFrom + innucTo) % 2) == 0) {
+  } else if (insite < lparam->Nsite_codon * 3 - 1 &&
+             (CurrentNodeNucSequence[inNnodeIndex][insite] != X_ &&
+              CurrentNodeNucSequence[inNnodeIndex][insite + 1] == Y_) &&
+             (innucFrom != X_ && innucTo == X_)) {
+    if (((innucFrom + innucTo) % 2) == 0) {  // from {N}pY to XpY
+
       // we are landing on XY, coordinate 0,1
       // trought  ts
       return -1;
@@ -224,12 +219,10 @@ int SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite,
       // trought  ts
       return -2;
     }
-  }
-  // from Xp{N} to XpY
-  else if (insite > 0 &&
-           (CurrentNodeNucSequence[inNnodeIndex][insite - 1] == X_ &&
-            CurrentNodeNucSequence[inNnodeIndex][insite] != Y_) &&
-           (innucFrom != Y_ && innucTo == Y_)) {
+  } else if (insite > 0 &&
+             (CurrentNodeNucSequence[inNnodeIndex][insite - 1] == X_ &&
+              CurrentNodeNucSequence[inNnodeIndex][insite] != Y_) &&
+             (innucFrom != Y_ && innucTo == Y_)) {  // from Xp{N} to XpY
     if (((innucFrom + innucTo) % 2) == 0) {
       // we are landing on XY, coordinate -1,0
       // trought ts
@@ -239,9 +232,7 @@ int SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite,
       // trought  tv
       return -4;
     }
-  }
-  // not XpY context
-  else {
+  } else {  // not XpY context
     return 0;
   }
 }
@@ -265,11 +256,10 @@ int SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite,
       // trought tv
       return 9;
     }
-  }
-  // from XpY to XpN
-  else if (insite > 0 &&
-           (CurrentNodeNucSequence[inNnodeIndex][insite - 1] == X_ &&
-            CurrentNodeNucSequence[inNnodeIndex][insite] == Y_)) {
+  } else if (insite > 0 &&
+             (CurrentNodeNucSequence[inNnodeIndex][insite - 1] == X_ &&
+              CurrentNodeNucSequence[inNnodeIndex][insite] ==
+                  Y_)) {  // from XpY to XpN
     if (((innucFrom + innucTo) % 2) == 0) {
       // we are leaving XY, coordinate -1,0
       // trought ts
@@ -279,12 +269,10 @@ int SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite,
       // trought tv
       return 9;
     }
-  }
-  // from {N}pY to XpY
-  else if (insite < lparam->Nsite_codon * 3 - 1 &&
-           (CurrentNodeNucSequence[inNnodeIndex][insite] != X_ &&
-            CurrentNodeNucSequence[inNnodeIndex][insite + 1] == Y_) &&
-           (innucFrom != X_ && innucTo == X_)) {
+  } else if (insite < lparam->Nsite_codon * 3 - 1 &&
+             (CurrentNodeNucSequence[inNnodeIndex][insite] != X_ &&
+              CurrentNodeNucSequence[inNnodeIndex][insite + 1] == Y_) &&
+             (innucFrom != X_ && innucTo == X_)) {  // from {N}pY to XpY
     if (((innucFrom + innucTo) % 2) == 0) {
       // we are landing on XY, coordinate 0,1
       // trought  ts
@@ -294,12 +282,10 @@ int SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite,
       // trought  ts
       return -2;
     }
-  }
-  // from Xp{N} to XpY
-  else if (insite > 0 &&
-           (CurrentNodeNucSequence[inNnodeIndex][insite - 1] == X_ &&
-            CurrentNodeNucSequence[inNnodeIndex][insite] != Y_) &&
-           (innucFrom != Y_ && innucTo == Y_)) {
+  } else if (insite > 0 &&
+             (CurrentNodeNucSequence[inNnodeIndex][insite - 1] == X_ &&
+              CurrentNodeNucSequence[inNnodeIndex][insite] != Y_) &&
+             (innucFrom != Y_ && innucTo == Y_)) {  // from Xp{N} to XpY
     if (((innucFrom + innucTo) % 2) == 0) {
       // we are landing on XY, coordinate -1,0
       // trought ts
@@ -309,9 +295,7 @@ int SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite,
       // trought  tv
       return -4;
     }
-  }
-  // not XpY context
-  else {
+  } else {  // not XpY context
     return 0;
   }
 }
@@ -352,7 +336,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
 
     //        if(verbose)
     //        {
-    //            cerr << "SiteInterSubMatrix::UpdateSubMatrixTreeSim " <<
+    //            std::cerr << "SiteInterSubMatrix::UpdateSubMatrixTreeSim " <<
     //            deltaTotalSubRateNonSyn << " " << deltaTotalSubRateSyn <<
     //            "\n";
     //        }
@@ -370,10 +354,9 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
           CurrentNodeNucSequence[NodeIndex][site_nuc_start + codonPos];
     }
 
-    for (int codonPos = 0; codonPos < 3;
-         codonPos++)  // for each nucleotide codon postions [0,2] we will be
-                      // computing adjacent nucleotide.
-    {
+    for (int codonPos = 0; codonPos < 3; codonPos++) {
+      // for each nucleotide codon postions [0,2] we will be
+      // computing adjacent nucleotide.
       int site_nuc = site_nuc_start + codonPos;
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         double S = 0.0;
@@ -396,14 +379,14 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
 
             auto it = lparam->gtrMap.find(NodeIndex);
             if (it == lparam->gtrMap.end()) {
-              cerr << "Error when looking to the gtr along the tree\n";
+              std::cerr << "Error when looking to the gtr along the tree\n";
               exit(0);
             }
             if (it->second == 1) {
-              // cerr << "GTR " << 1 << "\n";
+              // std::cerr << "GTR " << 1 << "\n";
               m = lparam->gtnr1[nucposFrom[codonPos]][nucposTo[codonPos]];
             } else if (it->second == 2) {
-              // cerr << "GTR " << 2 << "\n";
+              // std::cerr << "GTR " << 2 << "\n";
               m = lparam->gtnr2[nucposFrom[codonPos]][nucposTo[codonPos]];
             } else {
               m = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
@@ -493,9 +476,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
             // leave from CpG
             if (CpGcont > 0) {
               S += log((1.0 - lparam->fitCpG) / lparam->fitCpG);
-            }
-            // land on CpG
-            else if (CpGcont < 0) {
+            } else if (CpGcont < 0) {  // land on CpG
               S += log(lparam->fitCpG / (1.0 - lparam->fitCpG));
             }
 
@@ -533,27 +514,27 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
 
             // NUMERICAL SECURITY linked to substitution process
             if (SubRate < 0) {
-              cerr << "negative entry in matrix\n";
-              cerr << "S: " << S << "\n";
+              std::cerr << "negative entry in matrix\n";
+              std::cerr << "S: " << S << "\n";
               exit(1);
             }
             if (isinf(SubRate)) {
-              cerr << "isinf\n";
-              cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t" << S
-                   << "\n";
+              std::cerr << "isinf\n";
+              std::cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t"
+                        << S << "\n";
               exit(1);
             }
             if (isnan(SubRate)) {
-              cerr << "isnan\n";
-              cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t" << S
-                   << "\n";
+              std::cerr << "isnan\n";
+              std::cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t"
+                        << S << "\n";
               exit(1);
             }
             if (lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
                                                    nucposTo[2])) {
-              cerr << nucposTo[0] << " " << nucposTo[1] << " " << nucposTo[2]
-                   << " " << MutRate << " " << SubRate << " "
-                   << submatrixTreeSim[0][site_nuc][nucTo] << "\n";
+              std::cerr << nucposTo[0] << " " << nucposTo[1] << " "
+                        << nucposTo[2] << " " << MutRate << " " << SubRate
+                        << " " << submatrixTreeSim[0][site_nuc][nucTo] << "\n";
               exit(0);
             }
           }
@@ -573,7 +554,7 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
         // selmatrixTreeSim[NodeIndex][site_nuc][nucTo] = S;
         submatrixTreeSim[NodeIndex][site_nuc][nucTo] = SubRate;
 
-        //              cerr << "MutRate" <<
+        //              std::cerr << "MutRate" <<
         //              submatrix_mut[inNodeIndex][site_nuc][nucTo] << "\n";
         /* if (lparam->opt == 3)
         {
@@ -636,10 +617,9 @@ void SiteInterSubMatrix::UpdateSubMatrixSeq(int taxa,
           CurrentLeafNodeNucSequences[taxa][site_nuc_start + codonPos];
     }
 
-    for (int codonPos = 0; codonPos < 3;
-         codonPos++)  // for each nucleotide codon postions [0,2] we will be
-                      // computing adjacent nucleotide.
-    {
+    for (int codonPos = 0; codonPos < 3; codonPos++) {
+      // for each nucleotide codon postions [0,2] we will be
+      // computing adjacent nucleotide.
       int site_nuc = site_nuc_start + codonPos;
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         double S = 0.0;
@@ -746,9 +726,7 @@ void SiteInterSubMatrix::UpdateSubMatrixSeq(int taxa,
             // leave from CpG
             if (CpGcont > 0) {
               S += log((1.0 - lparam->fitCpG) / lparam->fitCpG);
-            }
-            // land on CpG
-            else if (CpGcont < 0) {
+            } else if (CpGcont < 0) {  // land on CpG
               S += log(lparam->fitCpG / (1.0 - lparam->fitCpG));
             }
 
@@ -786,27 +764,27 @@ void SiteInterSubMatrix::UpdateSubMatrixSeq(int taxa,
 
             // NUMERICAL SECURITY linked to substitution process
             if (SubRate < 0) {
-              cerr << "negative entry in matrix\n";
-              cerr << "S: " << S << "\n";
+              std::cerr << "negative entry in matrix\n";
+              std::cerr << "S: " << S << "\n";
               exit(1);
             }
             if (isinf(SubRate)) {
-              cerr << "isinf\n";
-              cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t" << S
-                   << "\n";
+              std::cerr << "isinf\n";
+              std::cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t"
+                        << S << "\n";
               exit(1);
             }
             if (isnan(SubRate)) {
-              cerr << "isnan\n";
-              cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t" << S
-                   << "\n";
+              std::cerr << "isnan\n";
+              std::cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t"
+                        << S << "\n";
               exit(1);
             }
             if (lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
                                                    nucposTo[2])) {
-              cerr << nucposTo[0] << " " << nucposTo[1] << " " << nucposTo[2]
-                   << " " << MutRate << " " << SubRate << " "
-                   << submatrixTreeSim[0][site_nuc][nucTo] << "\n";
+              std::cerr << nucposTo[0] << " " << nucposTo[1] << " "
+                        << nucposTo[2] << " " << MutRate << " " << SubRate
+                        << " " << submatrixTreeSim[0][site_nuc][nucTo] << "\n";
               exit(0);
             }
           }
@@ -826,7 +804,7 @@ void SiteInterSubMatrix::UpdateSubMatrixSeq(int taxa,
         selmatrixTreeSim[taxa][site_nuc][nucTo] = S;
         submatrixTreeSim[taxa][site_nuc][nucTo] = SubRate;
 
-        //              cerr << "MutRate" <<
+        //              std::cerr << "MutRate" <<
         //              submatrix_mut[inNodeIndex][site_nuc][nucTo] << "\n";
         /* if (lparam->opt == 3)
         {
@@ -1046,10 +1024,9 @@ void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,
       nucposTo[codonPos] =
           CurrentNodeNucSequence[NodeIndex][site_nuc_start + codonPos];
     }
-    for (int codonPos = 0; codonPos < 3;
-         codonPos++)  // for each nucleotide codon postions [0,2] we will be
-                      // computing adjacent nucleotide.
-    {
+    for (int codonPos = 0; codonPos < 3; codonPos++) {
+      // for each nucleotide codon postions [0,2] we will be
+      // computing adjacent nucleotide.
       int site_nuc = site_nuc_start + codonPos;
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         double MutRate = 0.0;
@@ -1135,8 +1112,8 @@ void SiteInterSubMatrix::WriteSubMatrix(ostream& mutation_os,
 //
 //    if(verbose)
 //    {
-//        cerr << "SiteInterSubMatrix::GetSubRateNonSyn " << NodeIndex << " " <<
-//        site_codon << "\n";
+//        std::cerr << "SiteInterSubMatrix::GetSubRateNonSyn " << NodeIndex << "
+//        " << site_codon << "\n";
 //    }
 //
 //    if (site_codon > -1)

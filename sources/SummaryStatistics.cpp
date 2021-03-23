@@ -1634,8 +1634,8 @@ void SummaryStatistics::computeSummariesAncestralSequence(
       lparam->codondata, 1, CurrentAncestralCodonSequence);
 
   if (verbose) {
-    cerr << "computeSummariesAncestralSequence(int** "
-            "CurrentNodeLeafCodonSequence)1\n";
+    std::cerr << "computeSummariesAncestralSequence(int** "
+                 "CurrentNodeLeafCodonSequence)1\n";
   }
   string* arrSummaries = new string[lparam->NusedAncSummaries];
   for (int i_summary = 0; i_summary < lparam->NSummaries; i_summary++) {
@@ -1647,8 +1647,8 @@ void SummaryStatistics::computeSummariesAncestralSequence(
   }
 
   if (verbose) {
-    cerr << "computeSummariesAncestralSequence(int** "
-            "CurrentNodeLeafCodonSequence)2\n";
+    std::cerr << "computeSummariesAncestralSequence(int** "
+                 "CurrentNodeLeafCodonSequence)2\n";
   }
   for (int i_summary = 0; i_summary < lparam->NusedAncSummaries; i_summary++) {
     auto it = GetSummariesMap.find(arrSummaries[i_summary]);
@@ -1668,15 +1668,15 @@ void SummaryStatistics::computeSummariesAncestralSequence(
 
   delete[] arrSummaries;
   if (verbose) {
-    cerr << "computeSummariesAncestralSequence(int** "
-            "CurrentNodeLeafCodonSequence)5\n";
+    std::cerr << "computeSummariesAncestralSequence(int** "
+                 "CurrentNodeLeafCodonSequence)5\n";
   }
 }
 
 void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence) {
   int verbose = lparam->verbose;
   if (verbose) {
-    cerr << "SummaryStatistics::computeSummaries\n";
+    std::cerr << "SummaryStatistics::computeSummaries\n";
   }
   lparam->summariesSimulatedData.clear();
   lparam->summariesSimulatedData.shrink_to_fit();
@@ -1684,7 +1684,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence) {
   lparam->accessorysummariesSimulatedData.clear();
   lparam->accessorysummariesSimulatedData.shrink_to_fit();
   if (verbose) {
-    cerr << "clear\n";
+    std::cerr << "clear\n";
   }
   RSCU_bool = false;
   relativeCodonFrequency_bool = false;
@@ -1764,7 +1764,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence) {
       lparam->codondata, CurrentNodeLeafCodonSequence);
 
   if (verbose) {
-    cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)\n";
+    std::cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)\n";
   }
   string* arrSummaries = new string[lparam->NusedSummaries];
   for (int i_summary = 0; i_summary < lparam->NSummaries; i_summary++) {
@@ -1775,7 +1775,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence) {
   }
 
   if (verbose) {
-    cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)2\n";
+    std::cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)2\n";
   }
   for (int i_summary = 0; i_summary < lparam->NusedSummaries; i_summary++) {
     auto it = GetSummariesMap.find(arrSummaries[i_summary]);
@@ -1793,7 +1793,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence) {
     }
   }
   if (verbose) {
-    cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)3\n";
+    std::cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)3\n";
   }
   string* arrAccSummaries = new string[lparam->NusedAccessorySummaries];
   for (int i_summary = 0; i_summary < lparam->NSummaries; i_summary++) {
@@ -1805,7 +1805,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence) {
   }
 
   if (verbose) {
-    cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)4\n";
+    std::cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)4\n";
   }
   for (int i_summary = 0; i_summary < lparam->NusedAccessorySummaries;
        i_summary++) {
@@ -1828,7 +1828,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence) {
   delete[] arrAccSummaries;
   delete[] arrSummaries;
   if (verbose) {
-    cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)5\n";
+    std::cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)5\n";
   }
 }
 

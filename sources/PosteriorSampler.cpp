@@ -42,7 +42,7 @@ PosteriorSampler::~PosteriorSampler() {
 //            test += std::get<4>(lparam->gparam->population_t[simu_i])[param];
 //        }
 //        if (simu_i >=  lparam->gparam->population_t.size()) {
-//            cerr << "error when sampling particules\n";
+//            std::cerr << "error when sampling particules\n";
 //            exit(0);
 //        }
 //        u = std::get<0>(lparam->gparam->population_t[simu_i])[param]  + 2.0 *

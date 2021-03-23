@@ -35,14 +35,11 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
+#include "CodonSequenceAlignment.h"
+
 #include <cstdlib>
 #include <iostream>
-using namespace std;
-
-#include "CodonSequenceAlignment.h"
-// #include "Exception.h"
-
-// new TaxonSet(SpeciesNames,Ntaxa);
+#include <string>
 
 // Ancestral Sequence
 CodonSequenceAlignment::CodonSequenceAlignment(CodonSequenceAlignment* from,
@@ -50,11 +47,11 @@ CodonSequenceAlignment::CodonSequenceAlignment(CodonSequenceAlignment* from,
   Nsite = from->GetNsite();  // Nsite_codon
   this->Ntaxa = Ntaxa;
   statespace = from->GetStateSpace();
-  string* SpeciesNames = new string[Ntaxa];
+  std::string* SpeciesNames = new std::string[Ntaxa];
   SpeciesNames[0] = "Seq0";
   taxset = new TaxonSet(SpeciesNames, Ntaxa);
 
-  // cerr << "Nsite : " << Nsite << "Ntaxa : " << Ntaxa << "\n";
+  // std::cerr << "Nsite : " << Nsite << "Ntaxa : " << Ntaxa << "\n";
 
   Data = new int*[Ntaxa];
   for (int i = 0; i < Ntaxa; i++) {
@@ -77,7 +74,7 @@ CodonSequenceAlignment::CodonSequenceAlignment(CodonSequenceAlignment* from,
   statespace = from->GetStateSpace();
   taxset = from->GetTaxonSet();
 
-  // cerr << "Nsite : " << Nsite << "Ntaxa : " << Ntaxa << "\n";
+  // std::cerr << "Nsite : " << Nsite << "Ntaxa : " << Ntaxa << "\n";
 
   Data = new int*[Ntaxa];
   for (int i = 0; i < Ntaxa; i++) {
@@ -100,7 +97,7 @@ CodonSequenceAlignment::CodonSequenceAlignment(SequenceAlignment* from,
     DNAsource = from;
 
     if (from->Nsite % 3 != 0) {
-      cerr << "not multiple of three\n";
+      std::cerr << "not multiple of three\n";
       exit(1);
     }
     Nsite = from->Nsite / 3;
@@ -108,7 +105,7 @@ CodonSequenceAlignment::CodonSequenceAlignment(SequenceAlignment* from,
     statespace = new CodonStateSpace(type);
 
     taxset = DNAsource->GetTaxonSet();
-    // cerr << "Nsite : " << Nsite << "Ntaxa : " << Ntaxa << "\n";
+    // std::cerr << "Nsite : " << Nsite << "Ntaxa : " << Ntaxa << "\n";
     // make my own arrays
     // make translation
     Data = new int*[Ntaxa];
@@ -121,9 +118,9 @@ CodonSequenceAlignment::CodonSequenceAlignment(SequenceAlignment* from,
               DNAsource->GetState(i, 3 * j + 2));
         } catch (...) {
           // catch(Exception e)	{
-          cerr << "in CodonSequenceAlignment: taxon " << i << " and codon " << j
-               << " (site " << 3 * j << ")\n";
-          cerr << "taxon : " << taxset->GetTaxon(i) << '\n';
+          std::cerr << "in CodonSequenceAlignment: taxon " << i << " and codon "
+                    << j << " (site " << 3 * j << ")\n";
+          std::cerr << "taxon : " << taxset->GetTaxon(i) << '\n';
           if (force_stops) {
             Data[i][j] = -1;
           } else {
@@ -132,17 +129,16 @@ CodonSequenceAlignment::CodonSequenceAlignment(SequenceAlignment* from,
         }
       }
     }
-
   } catch (...) {
     // catch(Exception)	{
-    cerr << "Codon Sequence Alignment: failed to read the datafile\n";
+    std::cerr << "Codon Sequence Alignment: failed to read the datafile\n";
     exit(1);
   }
 }
 
 int** CodonSequenceAlignment::GetData() { return Data; }
 
-void CodonSequenceAlignment::ToStream(ostream& os) {
+void CodonSequenceAlignment::ToStream(std::ostream& os) {
   os << Ntaxa << '\t' << 3 * Nsite << '\n';
   int max = 0;
   for (int i = 0; i < Ntaxa; i++) {

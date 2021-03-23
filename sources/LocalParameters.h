@@ -11,8 +11,8 @@ Public License for more details. You should have received a copy of the GNU
 General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
-#ifndef LOCALPARAMETERS_H
-#define LOCALPARAMETERS_H
+#ifndef SOURCES_LOCALPARAMETERS_H_
+#define SOURCES_LOCALPARAMETERS_H_
 
 #include <algorithm>
 #include <cmath>
@@ -24,23 +24,6 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <sstream>
 #include <string>
 #include <vector>
-
-#define isnan std::isnan
-#define isinf std::isinf
-#define string std::string
-#define ostream std::ostream
-#define ofstream std::ofstream
-#define istream std::istream
-#define ifstream std::ifstream
-#define cin std::cin
-#define cerr std::cerr
-#define cout std::cout
-#define setw std::setw
-#define ostringstream std::ostringstream
-#define istringstream std::istringstream
-#define IOS_APPEND std::ios_base::app
-#define APPEND std::ios_base::app
-#define OUT std::ios_base::out
 
 #include "BranchSpecificParameters.h"
 #include "CodonSequenceAlignment.h"
@@ -166,7 +149,7 @@ class LocalParameters {
   std::vector<double> weights;
 
   // Constructor
-  LocalParameters(GlobalParameters* gparam);
+  explicit LocalParameters(GlobalParameters* gparam);
   void initContainers();
   virtual ~LocalParameters();
 
@@ -218,9 +201,8 @@ class LocalParameters {
 
   double GetGTNR(int i, int j) {
     return this
-        ->nucrrnr[i][j];  ///(2*3);//((this->nucrrnr[i][j])/GetRateGTNR());
+        ->nucrrnr[i][j];  // (2*3);//((this->nucrrnr[i][j])/GetRateGTNR());
   }
-
   double GetGTR(int i, int j) {
     return ((this->nucp[j] * this->nucrrnr[i][j]) / GetRate());
   }
@@ -266,9 +248,6 @@ class LocalParameters {
     MutationNormFactor = 2 * (norm * 3);
     return MutationNormFactor;
   }
-
- protected:
- private:
 };
 
-#endif  // PARAMETERS_H
+#endif  // SOURCES_LOCALPARAMETERS_H_

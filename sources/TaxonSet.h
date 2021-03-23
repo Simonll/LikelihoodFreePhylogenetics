@@ -16,37 +16,36 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
-#ifndef TAXONSET_H
-#define TAXONSET_H
+#ifndef SOURCES_TAXONSET_H_
+#define SOURCES_TAXONSET_H_
 
+#include <cstdlib>
 #include <iostream>
 #include <map>
 #include <string>
-
-using namespace std;
 
 class Tree;
 class Link;
 
 class TaxonSet {
  public:
-  TaxonSet(const string* names, int ntaxa);
-  TaxonSet(const Tree* tree, const Link* subgroup = 0);
+  TaxonSet(const std::string* names, int ntaxa);
+  explicit TaxonSet(const Tree* tree, const Link* subgroup = 0);
   ~TaxonSet();
 
   int GetNtaxa() const;
-  string GetTaxon(int index) const;
-  int GetTaxonIndex(string intaxon) const;
-  int GetTaxonIndexWithIncompleteName(string intaxon) const;
-  int GetTaxonIndexWithCompleteName(string intaxon) const;
-  void ToStream(ostream& os);
+  std::string GetTaxon(int index) const;
+  int GetTaxonIndex(std::string intaxon) const;
+  int GetTaxonIndexWithIncompleteName(std::string intaxon) const;
+  int GetTaxonIndexWithCompleteName(std::string intaxon) const;
+  void ToStream(std::ostream& os);
 
  private:
   void RecursiveGetSubSet(const Link* from, int& index);
 
   int Ntaxa;
-  mutable map<string, int> taxmap;
-  string* taxlist;
+  mutable std::map<std::string, int> taxmap;
+  std::string* taxlist;
 };
 
 //-------------------------------------------------------------------------
@@ -56,9 +55,11 @@ class TaxonSet {
 //-------------------------------------------------------------------------
 
 inline int TaxonSet::GetNtaxa() const { return Ntaxa; }
-inline string TaxonSet::GetTaxon(int index) const { return taxlist[index]; }
-inline int TaxonSet::GetTaxonIndex(string intaxon) const {
+inline std::string TaxonSet::GetTaxon(int index) const {
+  return taxlist[index];
+}
+inline int TaxonSet::GetTaxonIndex(std::string intaxon) const {
   return taxmap[intaxon] - 1;
 }
 
-#endif  // TAXONSET_H
+#endif  // SOURCES_TAXONSET_H_

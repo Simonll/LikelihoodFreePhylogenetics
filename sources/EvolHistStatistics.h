@@ -11,8 +11,8 @@ Public License for more details. You should have received a copy of the GNU
 General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
-#ifndef EVOLHISTSTATISTICS_H
-#define EVOLHISTSTATISTICS_H
+#ifndef SOURCES_EVOLHISTSTATISTICS_H_
+#define SOURCES_EVOLHISTSTATISTICS_H_
 
 #include <algorithm>
 #include <cmath>
@@ -20,26 +20,10 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
 #include <vector>
-
-#define isnan std::isnan
-#define isinf std::isinf
-#define string std::string
-#define ostream std::ostream
-#define ofstream std::ofstream
-#define istream std::istream
-#define ifstream std::ifstream
-#define cin std::cin
-#define cerr std::cerr
-#define cout std::cout
-#define setw std::setw
-#define ostringstream std::ostringstream
-#define istringstream std::istringstream
-#define IOS_APPEND std::ios_base::app
-#define APPEND std::ios_base::app
-#define OUT std::ios_base::out
 
 #include "LocalParameters.h"
 
@@ -87,10 +71,10 @@ class EvolHistStatistics {
   typedef double (EvolHistStatistics::*funcpt)();
   typedef std::vector<double> (EvolHistStatistics::*funcptwtvector)();
 
-  std::map<string, funcpt> GetEvoStatMap;
-  std::map<string, funcptwtvector> GetSiteSpecificEvoStatsMap;
+  std::map<std::string, funcpt> GetEvoStatMap;
+  std::map<std::string, funcptwtvector> GetSiteSpecificEvoStatsMap;
 
-  EvolHistStatistics(LocalParameters* inparam);
+  explicit EvolHistStatistics(LocalParameters* inparam);
 
   virtual ~EvolHistStatistics();
 
@@ -159,7 +143,6 @@ class EvolHistStatistics {
   //                "\n";
   //            }
   //        }
- protected:
  private:
   std::vector<double> GetssNsub() {
     std::vector<double> vec;
@@ -3518,4 +3501,4 @@ class EvolHistStatistics {
   double GetSubRateSynEnd() { return SubRate[1][2]; }
 };
 
-#endif  // EVOLHISTSTATISTICS_H
+#endif  // SOURCES_EVOLHISTSTATISTICS_H_

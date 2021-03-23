@@ -16,11 +16,12 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
-#ifndef TREE_H
-#define TREE_H
+#ifndef SOURCES_TREE_H_
+#define SOURCES_TREE_H_
 
 #include <cstdlib>
 #include <iostream>
+#include <map>
 #include <string>
 
 #include "TaxonSet.h"
@@ -28,17 +29,17 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 class Node {
  private:
   int index;
-  string name;
+  std::string name;
 
  public:
   Node() : index(0), name("") {}
-  Node(string s) : index(0), name(s) {}
-  Node(const Node* from) : index(from->index), name(from->name) {}
+  explicit Node(std::string s) : index(0), name(s) {}
+  explicit Node(const Node* from) : index(from->index), name(from->name) {}
 
   virtual ~Node() {}
 
-  virtual string GetName() const { return name; }
-  virtual void SetName(string inname) { name = inname; }
+  virtual std::string GetName() const { return name; }
+  virtual void SetName(std::string inname) { name = inname; }
   int GetIndex() const { return index; }
   void SetIndex(int i) { index = i; }
 };
@@ -46,17 +47,17 @@ class Node {
 class Branch {
  private:
   int index;
-  string name;
+  std::string name;
 
  public:
   Branch() : index(0), name("") {}
-  Branch(string s) : index(0), name(s) {}
-  Branch(const Branch* from) : index(from->index), name(from->name) {}
+  explicit Branch(std::string s) : index(0), name(s) {}
+  explicit Branch(const Branch* from) : index(from->index), name(from->name) {}
 
   virtual ~Branch() {}
 
-  virtual string GetName() const { return name; }
-  virtual void SetName(string inname) { name = inname; }
+  virtual std::string GetName() const { return name; }
+  virtual void SetName(std::string inname) { name = inname; }
   int GetIndex() const { return index; }
   void SetIndex(int i) { index = i; }
 };
@@ -79,7 +80,7 @@ class Link {
     node = 0;
   }
 
-  Link(const Link* from) {
+  explicit Link(const Link* from) {
     tbl = 0;
     next = out = this;
     node = 0;
@@ -112,8 +113,8 @@ class Link {
     node = innode;
   }
 
-  string GetNodeLeafSet() const {
-    string s;
+  std::string GetNodeLeafSet() const {
+    std::string s;
     if (isLeaf()) {
       s = GetNode()->GetName() + '|';
     } else {
@@ -138,14 +139,12 @@ class Link {
     }
   }
 
-  void Insert(Link* link)  // insert link after this
-  {
+  void Insert(Link* link) {  // insert link after this
     link->next = next;
     next = link;
   }
 
-  void InsertOut(Link* link)  // insert link as out
-  {
+  void InsertOut(Link* link) {  // insert link as out
     link->out = this;
     out = link;
   }
@@ -154,8 +153,8 @@ class Link {
   // Should be call with 0;
   void Knit() {
     Link* previous = 0;
-    for (previous = this; previous->next != this; previous = previous->Next())
-      ;
+    for (previous = this; previous->next != this; previous = previous->Next()) {
+    }
     previous->next = this->next;
     this->next = next->Next();
     previous->next->next = this;
@@ -207,18 +206,18 @@ class NewickTree {
   virtual Link* GetRoot() = 0;
   virtual const Link* GetRoot() const = 0;
 
-  void ToStream(ostream& os) const;
-  void ToStream(ostream& os, const Link* from) const;
-  double ToStreamSimplified(ostream& os, const Link* from) const;
+  void ToStream(std::ostream& os) const;
+  void ToStream(std::ostream& os, const Link* from) const;
+  double ToStreamSimplified(std::ostream& os, const Link* from) const;
 
-  string GetLeftMost(const Link* from) const {
+  std::string GetLeftMost(const Link* from) const {
     if (from->isLeaf()) {
       return GetNodeName(from);
     }
     return GetLeftMost(from->Next()->Out());
   }
 
-  string GetRightMost(const Link* from) const {
+  std::string GetRightMost(const Link* from) const {
     if (from->isLeaf()) {
       return GetNodeName(from);
     }
@@ -231,8 +230,8 @@ class NewickTree {
 
   static void Simplify() { simplify = true; }
 
-  virtual string GetNodeName(const Link* link) const = 0;
-  virtual string GetBranchName(const Link* link) const = 0;
+  virtual std::string GetNodeName(const Link* link) const = 0;
+  virtual std::string GetBranchName(const Link* link) const = 0;
 
  protected:
   static bool simplify;
@@ -244,24 +243,24 @@ class Tree : public NewickTree {
   // default constructor: set member pointers to 0
 
   // void tree;
-  Tree(const TaxonSet* intaxset);
+  explicit Tree(const TaxonSet* intaxset);
 
   void MakeRandomTree();
 
-  Tree(const Tree* from);
+  explicit Tree(const Tree* from);
   // clones the entire Link structure
   // but does NOT clone the Nodes and Branches
   // calls RecursiveClone
 
-  Tree(string filename);
+  explicit Tree(std::string filename);
   // create a tree by reading into a file (netwick format expected)
   // calls ReadFromStream
 
-  Tree(istream& is);
+  explicit Tree(std::istream& is);
   // create a tree by reading into a stream (netwick format expected)
   // calls ReadFromStream
 
-  void ReadFromStream(istream& is);
+  void ReadFromStream(std::istream& is);
   // reading a tree from a stream:
   // recursively invokes the two following functions
 
@@ -312,22 +311,22 @@ class Tree : public NewickTree {
   bool RegisterWith(const TaxonSet* taxset, Link* from, int& tot);
   // recursive function called by RegisterWith
 
-  string GetBranchName(const Link* link) const {
+  std::string GetBranchName(const Link* link) const {
     return link->GetBranch()->GetName();
   }
 
-  string GetNodeName(const Link* link) const {
+  std::string GetNodeName(const Link* link) const {
     return link->GetNode()->GetName();
     /*
     if (! link->isLeaf())	{
             return link->GetNode()->GetName();
     }
-    string s = link->GetNode()->GetName();
+    std::string s = link->GetNode()->GetName();
     unsigned int l = s.length();
     unsigned int i = 0;
     while ((i < l) && (s[i] != '_')) i++;
     if (i == l)	{
-            cerr << "error in get name\n";
+            std::cerr << "error in get name\n";
             exit(1);
     }
     i++;
@@ -373,30 +372,29 @@ class Tree : public NewickTree {
     return 0;
   }
 
-  Link* GetLCA(string tax1, string tax2) {
+  Link* GetLCA(std::string tax1, std::string tax2) {
     bool found1 = false;
     bool found2 = false;
     Link* link = RecursiveGetLCA(GetRoot(), tax1, tax2, found1, found2);
-    // cerr << tax1 << '\t' << tax2 << '\n';
-    // Print(cerr,link);
-    // cerr << '\n' << '\n';
+    // std::cerr << tax1 << '\t' << tax2 << '\n';
+    // Print(std::cerr,link);
+    // std::cerr << '\n' << '\n';
     return link;
   }
 
   void Subdivide(Link* from, int Ninterpol);
 
-  string Reduce(Link* from = 0) {
+  std::string Reduce(Link* from = 0) {
     if (!from) {
       from = GetRoot();
     }
     if (from->isLeaf()) {
-      cerr << from->GetNode()->GetName() << '\n';
-      ;
+      std::cerr << from->GetNode()->GetName() << '\n';
       return from->GetNode()->GetName();
     } else {
-      string name = "None";
+      std::string name = "None";
       for (Link* link = from->Next(); link != from; link = link->Next()) {
-        string tmp = Reduce(link->Out());
+        std::string tmp = Reduce(link->Out());
         if (tmp == "diff") {
           name = "diff";
         } else if (name == "None") {
@@ -405,14 +403,14 @@ class Tree : public NewickTree {
           name = "diff";
         }
       }
-      cerr << '\t' << name << '\n';
+      std::cerr << '\t' << name << '\n';
       from->GetNode()->SetName(name);
       return name;
     }
     return "";
   }
 
-  void Print(ostream& os, const Link* from = 0) {
+  void Print(std::ostream& os, const Link* from = 0) {
     if (!from) {
       from = GetRoot();
     }
@@ -439,7 +437,7 @@ class Tree : public NewickTree {
     }
   }
 
-  void PrintReduced(ostream& os, const Link* from = 0) {
+  void PrintReduced(std::ostream& os, const Link* from = 0) {
     if (!from) {
       from = GetRoot();
     }
@@ -484,35 +482,35 @@ class Tree : public NewickTree {
   Link* GetLink(int index) { return linkmap[index]; }
 
  protected:
-  map<int, const Node*> nodemap;
-  map<int, const Branch*> branchmap;
-  map<int, Link*> linkmap;
+  std::map<int, const Node*> nodemap;
+  std::map<int, const Branch*> branchmap;
+  std::map<int, Link*> linkmap;
 
   void CheckIndices(Link* from) {
     if (!from->isRoot()) {
       if (from->GetBranch() != branchmap[from->GetBranch()->GetIndex()]) {
-        cerr << "branch index : " << from->GetBranch()->GetIndex() << '\n';
+        std::cerr << "branch index : " << from->GetBranch()->GetIndex() << '\n';
         exit(1);
       }
     } else {
       if (branchmap[0] != 0) {
-        cerr << "root branch index\n";
+        std::cerr << "root branch index\n";
         exit(1);
       }
     }
 
     if (from->GetNode() != nodemap[from->GetNode()->GetIndex()]) {
-      cerr << "node index: " << from->GetNode()->GetIndex() << '\n';
+      std::cerr << "node index: " << from->GetNode()->GetIndex() << '\n';
       exit(1);
     }
 
     if (!from->isRoot()) {
       if (from->Out() != linkmap[from->Out()->GetIndex()]) {
-        cerr << "link index : " << from->Out()->GetIndex() << '\n';
+        std::cerr << "link index : " << from->Out()->GetIndex() << '\n';
       }
     }
     if (from != linkmap[from->GetIndex()]) {
-      cerr << "link index : " << from->GetIndex() << '\n';
+      std::cerr << "link index : " << from->GetIndex() << '\n';
     }
 
     for (const Link* link = from->Next(); link != from; link = link->Next()) {
@@ -552,8 +550,8 @@ class Tree : public NewickTree {
 
   // returns 0 if not found
   // returns link if found (then found1 and found2 must
-  Link* RecursiveGetLCA(Link* from, string tax1, string tax2, bool& found1,
-                        bool& found2) {
+  Link* RecursiveGetLCA(Link* from, std::string tax1, std::string tax2,
+                        bool& found1, bool& found2) {
     Link* ret = 0;
     if (from->isLeaf()) {
       found1 |= (from->GetNode()->GetName() == tax1);
@@ -572,12 +570,12 @@ class Tree : public NewickTree {
         found2 |= tmp2;
         if (ret2) {
           if (ret) {
-            cerr << "error : found node twice\n";
-            cerr << tax1 << '\t' << tax2 << '\n';
-            ToStream(cerr, ret2->Out());
-            cerr << '\n';
-            ToStream(cerr, ret->Out());
-            cerr << '\n';
+            std::cerr << "error : found node twice\n";
+            std::cerr << tax1 << '\t' << tax2 << '\n';
+            ToStream(std::cerr, ret2->Out());
+            std::cerr << '\n';
+            ToStream(std::cerr, ret->Out());
+            std::cerr << '\n';
             exit(1);
           }
           ret = ret2;
@@ -592,20 +590,20 @@ class Tree : public NewickTree {
     return ret;
   }
 
-  Link* ParseGroup(string input, Link* from);
+  Link* ParseGroup(std::string input, Link* from);
   // a group is an expression of one of the two following forms:
   //
   // 	(Body)Node_name
   // 	(Body)Node_name:Branch_name
   //
-  // where Body is a list, and Node_name and Branch_name are 2 strings
-  // Node_name may be an empty string
+  // where Body is a list, and Node_name and Branch_name are 2 std::strings
+  // Node_name may be an empty std::string
   //
   // Node_name cannot contain the ':' character, but Branch_name can
   // thus, if the group reads "(BODY)A:B:C"
   // then Node_name = "A" and Branch_name = "B:C"
 
-  Link* ParseList(string input, Node* node);
+  Link* ParseList(std::string input, Node* node);
   // a list is an expression of the form X1,X2,...Xn
   // where Xi is a group
 
@@ -629,4 +627,4 @@ class Tree : public NewickTree {
   int Nbranch;
 };
 
-#endif  // TREE_H
+#endif  // SOURCES_TREE_H_

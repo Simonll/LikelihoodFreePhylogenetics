@@ -16,8 +16,8 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
-#ifndef RANDOM_H
-#define RANDOM_H
+#ifndef SOURCES_RANDOM_H_
+#define SOURCES_RANDOM_H_
 
 #include <cmath>
 #include <cstdlib>
@@ -27,7 +27,6 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 #include <sstream>
 
 #define MT_LEN 624
-
 #define MT_IA 397
 #define MT_IB (MT_LEN - MT_IA)
 #define UPPER_MASK 0x80000000
@@ -36,7 +35,7 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 #define TWIST(b, i, j) ((b)[i] & UPPER_MASK) | ((b)[j] & LOWER_MASK)
 #define MAGIC(s) (((s)&1) * MATRIX_A)
 
-// #define SAFE_EXP(x) ((x)<-200.0 ? 0.0 : exp(x))
+// #define SOURCES_ SAFE_EXP(x) ((x)<-200.0 ? 0.0 : exp(x))
 #define SAFE_EXP(x) exp(x)
 
 using namespace std;
@@ -91,7 +90,7 @@ class rnd {
  public:
   /*
   rnd(int indim = 1, int inseed = -1)	{
-      cerr << "in random_array::constructor\n";
+      std::cerr << "in random_array::constructor\n";
       init(indim,inseed);
   }
   */
@@ -101,11 +100,11 @@ class rnd {
     array = new Random[dim];
     for (int i = 0; i < dim; i++) {
       array[i].InitRandom(seed);
-      // cerr << "seed " << i << " was : " << array[i].GetSeed() << '\n';
+      // std::cerr << "seed " << i << " was : " << array[i].GetSeed() << '\n';
     }
   }
 
   static Random& GetRandom(int i = -1);
 };
 
-#endif  // RANDOM_H
+#endif  // SOURCES_RANDOM_H_

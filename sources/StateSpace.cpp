@@ -16,14 +16,11 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
+#include "StateSpace.h"
+
 #include <cstdlib>
 #include <iostream>
-using namespace std;
-
 #include <sstream>
-
-#include "BiologicalSequences.h"
-#include "StateSpace.h"
 
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
@@ -31,7 +28,7 @@ using namespace std;
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 
-static inline int EquivalentStrings(string a, string b) {
+static inline int EquivalentStrings(std::string a, std::string b) {
   if (a.length() != b.length()) {
     return 0;
   }
@@ -54,8 +51,8 @@ static inline int EquivalentStrings(string a, string b) {
   return cont;
 }
 
-string SimpleStateSpace::GetState(int state) {
-  ostringstream s;
+std::string SimpleStateSpace::GetState(int state) {
+  std::ostringstream s;
   if (state == unknown) {
     s << "-";
   } else {
@@ -64,16 +61,16 @@ string SimpleStateSpace::GetState(int state) {
   return s.str();
 }
 
-int SimpleStateSpace::GetState(string from) {
+int SimpleStateSpace::GetState(std::string from) {
   if (from.length() != 1) {
-    cerr << "error in SingleLetterStateSpace\n";
+    std::cerr << "error in SingleLetterStateSpace\n";
     exit(1);
   }
   char c = from[0];
   int p = 0;
   while ((p < NAlphabetSet) && (c != AlphabetSet[p])) p++;
   if (p == NAlphabetSet) {
-    cout << "error: does not recognise character " << c << '\n';
+    std::cout << "error: does not recognise character " << c << '\n';
     exit(1);
   }
   if (p >= 2 * Nstate) {

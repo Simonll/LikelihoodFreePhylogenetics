@@ -11,8 +11,8 @@ Public License for more details. You should have received a copy of the GNU
 General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
-#ifndef ANCESTRALSEQUENCE_H
-#define ANCESTRALSEQUENCE_H
+#ifndef SOURCES_ANCESTRALSEQUENCE_H_
+#define SOURCES_ANCESTRALSEQUENCE_H_
 
 #include <algorithm>
 #include <cmath>
@@ -23,23 +23,6 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <sstream>
 #include <string>
 #include <vector>
-
-#define isnan std::isnan
-#define isinf std::isinf
-#define string std::string
-#define ostream std::ostream
-#define ofstream std::ofstream
-#define istream std::istream
-#define ifstream std::ifstream
-#define cin std::cin
-#define cerr std::cerr
-#define cout std::cout
-#define setw std::setw
-#define ostringstream std::ostringstream
-#define istringstream std::istringstream
-#define IOS_APPEND std::ios_base::app
-#define APPEND std::ios_base::app
-#define OUT std::ios_base::out
 
 #include "CodonSequenceAlignment.h"
 #include "CodonStateSpace.h"
@@ -58,7 +41,7 @@ class AncestralSequence {
 
   LocalParameters* lparam;
 
-  AncestralSequence(LocalParameters* lparam);
+  explicit AncestralSequence(LocalParameters* lparam);
   ~AncestralSequence();
 
   void WriteStationary();
@@ -70,4 +53,4 @@ class AncestralSequence {
  private:
 };
 
-#endif  // ANCESTRALSEQUENCE_H
+#endif  // SOURCES_ANCESTRALSEQUENCE_H_

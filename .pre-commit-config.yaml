@@ -1,14 +1,15 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v3.4.0
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
 #https://github.com/bmorcos/pre-commit-hooks-cpp
 -   repo: https://github.com/bmorcos/pre-commit-hooks-cpp
-    rev: master
+    rev: 9a5aa38207bf557961110d6a4f7e3a9d352911f9
     hooks:
     -   id: clang-format
-    #-   id: cpplint
-    #-   id: cppcheck
+    -   id: cpplint
+        exclude: sources/Random.*
+    #   id: cppcheck

@@ -36,15 +36,12 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
-#ifndef BIOLOGICALSEQUENCES_H
-#define BIOLOGICALSEQUENCES_H
+#ifndef SOURCES_BIOLOGICALSEQUENCES_H_
+#define SOURCES_BIOLOGICALSEQUENCES_H_
 
 #include <cstdlib>
 #include <iostream>
 #include <string>
-using namespace std;
-
-static const string Path = "";
 
 enum DataType { DNA = 0, RNA = 1, Protein = 2, Other = 3 };
 
@@ -68,7 +65,7 @@ const char RNAset[] = {'A', 'C', 'G', 'U', 'a', 'c', 'g', 'u', 'B', 'D',
 // amino acids
 
 const int precision = 10000;
-const string Alphabet = "Amino_Acids";
+const char* const Alphabet = "Amino_Acids";
 const char AminoAcids[] = {'A', 'C', 'D', 'E', 'F', 'G', 'H',
                            'I', 'K', 'L', 'M', 'N', 'P', 'Q',
                            'R', 'S', 'T', 'V', 'W', 'Y', '-'};
@@ -89,7 +86,7 @@ const int unknown = -1;
 const int Naa = 20;
 const int Nnuc = 4;
 const int Ncodon = 64;
-const string Codons[] = {
+const char* const Codons[] = {
     "TTT", "TTC", "TTA", "TTG", "TCT", "TCC", "TCA", "TCG", "TAT", "TAC", "TAA",
     "TAG", "TGT", "TGC", "TGA", "TGG", "CTT", "CTC", "CTA", "CTG", "CCT", "CCC",
     "CCA", "CCG", "CAT", "CAC", "CAA", "CAG", "CGT", "CGC", "CGA", "CGG", "ATT",
@@ -112,7 +109,7 @@ enum GeneticCodeType { Universal = 0, MtMam = 1, MtInv = 2 };
 // const string UniStopCodons[] = {"TAA","TAG","TGA"};
 const int UniNStopCodons = 3;
 const int UniStopCodons[] = {10, 11, 14};
-int const UniCodonCode[] = {4,  4,  9,  9,  15, 15, 15, 15, 19, 19, -1, -1, 1,
+const int UniCodonCode[] = {4,  4,  9,  9,  15, 15, 15, 15, 19, 19, -1, -1, 1,
                             1,  -1, 18, 9,  9,  9,  9,  12, 12, 12, 12, 6,  6,
                             13, 13, 14, 14, 14, 14, 7,  7,  7,  10, 16, 16, 16,
                             16, 11, 11, 8,  8,  15, 15, 14, 14, 17, 17, 17, 17,
@@ -125,7 +122,7 @@ const int UniCodeAADeg[] = {4, 2, 2, 2, 2, 4, 2, 3, 2, 6,
 
 const int MtInvNStopCodons = 2;
 const int MtInvStopCodons[] = {10, 11};
-int const MtInvCodonCode[] = {
+const int MtInvCodonCode[] = {
     4,  4,  9,  9,  15, 15, 15, 15, 19, 19, -1, -1, 1,  1,  18, 18,
     9,  9,  9,  9,  12, 12, 12, 12, 6,  6,  13, 13, 14, 14, 14, 14,
     7,  7,  10, 10, 16, 16, 16, 16, 11, 11, 8,  8,  15, 15, 15, 15,
@@ -139,7 +136,7 @@ const int MtInvCodeAADeg[] = {4, 2, 2, 2, 2, 4, 2, 2, 2, 6,
 // mammal mitochondrial genetic code
 const int MtMamNStopCodons = 4;
 const int MtMamStopCodons[] = {10, 11, 46, 47};
-int const MtMamCodonCode[] = {
+const int MtMamCodonCode[] = {
     4,  4,  9,  9,  15, 15, 15, 15, 19, 19, -1, -1, 1,  1,  18, 18,
     9,  9,  9,  9,  12, 12, 12, 12, 6,  6,  13, 13, 14, 14, 14, 14,
     7,  7,  10, 10, 16, 16, 16, 16, 11, 11, 8,  8,  15, 15, -1, -1,
@@ -150,8 +147,8 @@ const int MtMamStopPos3[] = {0, 2, 0, 2};
 const int MtMamCodeAADeg[] = {4, 2, 2, 2, 2, 4, 2, 2, 2, 6,
                               2, 2, 4, 2, 4, 6, 4, 4, 2, 2};
 
-inline istream& operator>>(istream& is, GeneticCodeType& type) {
-  string t;
+inline std::istream& operator>>(std::istream& is, GeneticCodeType& type) {
+  std::string t;
   is >> t;
   if (t == "Universal") {
     type = Universal;
@@ -160,14 +157,14 @@ inline istream& operator>>(istream& is, GeneticCodeType& type) {
   } else if (t == "MtInv") {
     type = MtInv;
   } else {
-    cerr << "error in istream genetic code type\n";
-    cerr << t << '\n';
+    std::cerr << "error in istream genetic code type\n";
+    std::cerr << t << '\n';
     exit(1);
   }
   return is;
 }
 
-inline ostream& operator<<(ostream& os, GeneticCodeType type) {
+inline std::ostream& operator<<(std::ostream& os, GeneticCodeType type) {
   if (type == Universal) {
     os << "Universal\n";
   } else if (type == MtMam) {
@@ -175,8 +172,8 @@ inline ostream& operator<<(ostream& os, GeneticCodeType type) {
   } else if (type == MtInv) {
     os << "MtInv\n";
   } else {
-    cerr << "error in ostream genetic code type\n";
-    cerr << (int)type << '\n';
+    std::cerr << "error in ostream genetic code type\n";
+    std::cerr << static_cast<int>(type) << '\n';
     exit(1);
   }
   return os;
@@ -2704,4 +2701,4 @@ const double CG60StatFix[60][20] = {
      0.0212994, 0.0111957,  0.00528802, 0.00625234, 0.00983732,
      0.035293,  0.0682114,  0.0947064,  0.0175499,  0.0183447}};
 
-#endif  // BIOLOGICALSEQUENCES_H
+#endif  // SOURCES_BIOLOGICALSEQUENCES_H_

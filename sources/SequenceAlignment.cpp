@@ -15,12 +15,10 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 <http://www.gnu.org/licenses/>.
 
 **********************/
-
 #include "SequenceAlignment.h"
 
 #include <fstream>
 
-#include "BiologicalSequences.h"
 #include "StringStreamUtils.h"
 
 // ---------------------------------------------------------------------------
@@ -29,9 +27,9 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 
-int Int(string s) { return atoi(s.c_str()); }
+int Int(std::string s) { return atoi(s.c_str()); }
 
-double Double(string s) { return atof(s.c_str()); }
+double Double(std::string s) { return atof(s.c_str()); }
 
 void SequenceAlignment::GetEmpiricalFreq(double* in) {
   int n = GetNstate();
@@ -75,7 +73,7 @@ void SequenceAlignment::GetSiteEmpiricalFreq(double** in) {
   }
 }
 
-void SequenceAlignment::ToFasta(ostream& os) {
+void SequenceAlignment::ToFasta(std::ostream& os) {
   for (int i = 0; i < Ntaxa; i++) {
     os << '>' << taxset->GetTaxon(i) << '\n';
     for (int j = 0; j < Nsite; j++) {
@@ -110,7 +108,7 @@ taxset->GetTaxon(i).length(); j++)	{ os << ' ';
 }
 */
 
-void SequenceAlignment::ToStream(ostream& os) {
+void SequenceAlignment::ToStream(std::ostream& os) {
   // os << Ntaxa << '\t' << 876<< '\n';
   os << Ntaxa << '\t' << Nsite << '\n';
   int max = 0;
@@ -125,7 +123,7 @@ void SequenceAlignment::ToStream(ostream& os) {
     unsigned int i = 0;
     while ((i < l) && (s[i] != '_')) i++;
     if (i == l)	{
-            cerr << "error in get name\n";
+            std::cerr << "error in get name\n";
             exit(1);
     }
     i++;
@@ -144,7 +142,7 @@ void SequenceAlignment::ToStream(ostream& os) {
     unsigned int i = 0;
     while ((i < l) && (s[i] != '_')) i++;
     if (i == l)	{
-            cerr << "error in get name\n";
+            std::cerr << "error in get name\n";
             exit(1);
     }
     i++;
@@ -169,27 +167,27 @@ void SequenceAlignment::ToStream(ostream& os) {
 }
 
 FileSequenceAlignment::FileSequenceAlignment(int ntaxa, int nsite_nuc,
-                                             string* listspecies) {
+                                             std::string* listspecies) {
   int verbose = 0;
 
   this->SpeciesNames = 0;
   if (verbose) {
-    cerr << "FileSequenceAlignment1\n";
+    std::cerr << "FileSequenceAlignment1\n";
   }
 
   this->Ntaxa = ntaxa;
   this->Nsite = nsite_nuc;
   if (verbose) {
-    cerr << this->Ntaxa << " " << this->Nsite << "\n";
+    std::cerr << this->Ntaxa << " " << this->Nsite << "\n";
   }
 
-  this->SpeciesNames = new string[this->Ntaxa];
+  this->SpeciesNames = new std::string[this->Ntaxa];
   for (int i = 0; i < this->Ntaxa; i++) {
     this->SpeciesNames[i] = listspecies[i];
   }
 
   if (verbose) {
-    cerr << "FileSequenceAlignment2\n";
+    std::cerr << "FileSequenceAlignment2\n";
   }
   this->Data = new int*[this->Ntaxa];
   for (int i = 0; i < this->Ntaxa; i++) {
@@ -197,7 +195,7 @@ FileSequenceAlignment::FileSequenceAlignment(int ntaxa, int nsite_nuc,
   }
 
   if (verbose) {
-    cerr << "FileSequenceAlignment3\n";
+    std::cerr << "FileSequenceAlignment3\n";
   }
   for (int i = 0; i < this->Ntaxa; i++) {
     for (int j = 0; j < this->Nsite; j++) {
@@ -211,47 +209,47 @@ FileSequenceAlignment::FileSequenceAlignment(int ntaxa, int nsite_nuc,
 
   if (DNAcomp) {
     statespace = new DNAStateSpace;
-    // cerr << "dna sequences\n";
+    // std::cerr << "dna sequences\n";
   } else if (RNAcomp) {
     statespace = new DNAStateSpace;
-    // cerr << "rna sequences\n";
+    // std::cerr << "rna sequences\n";
   } else if (AAcomp) {
     statespace = new ProteinStateSpace;
-    // cerr << "protein sequences\n";
+    // std::cerr << "protein sequences\n";
   }
 
   if (verbose) {
-    cerr << "FileSequenceAlignment4\n";
+    std::cerr << "FileSequenceAlignment4\n";
   }
   taxset = new TaxonSet(SpeciesNames, Ntaxa);
-  cerr << "number of taxa  : " << GetNtaxa() << '\n';
-  cerr << "number of sites : " << GetNsite() << '\n';
-  cerr << "number of states: " << GetNstate() << '\n';
+  std::cerr << "number of taxa  : " << GetNtaxa() << '\n';
+  std::cerr << "number of sites : " << GetNsite() << '\n';
+  std::cerr << "number of states: " << GetNstate() << '\n';
 
   delete[] SpeciesNames;
 }
 
-FileSequenceAlignment::FileSequenceAlignment(string filename, int fullline,
+FileSequenceAlignment::FileSequenceAlignment(std::string filename, int fullline,
                                              int myid) {
   SpeciesNames = 0;
-  if (myid == 0) cerr << "read data from file : " << filename << "\n";
+  if (myid == 0) std::cerr << "read data from file : " << filename << "\n";
   ReadDataFromFile(filename, 0);
   taxset = new TaxonSet(SpeciesNames, Ntaxa);
   if (myid == 0) {
-    cerr << "number of taxa  : " << GetNtaxa() << '\n';
-    cerr << "number of sites : " << GetNsite() << '\n';
-    cerr << "number of states: " << GetNstate() << '\n';
+    std::cerr << "number of taxa  : " << GetNtaxa() << '\n';
+    std::cerr << "number of sites : " << GetNsite() << '\n';
+    std::cerr << "number of states: " << GetNstate() << '\n';
   }
   delete[] SpeciesNames;
 }
 
-int FileSequenceAlignment::ReadDataFromFile(string filespec,
+int FileSequenceAlignment::ReadDataFromFile(std::string filespec,
                                             int forceinterleaved) {
-  string tmp;
-  ifstream is((Path + filespec).c_str());
+  std::string tmp;
+  std::ifstream is((filespec).c_str());
   if (!is) {
-    cerr << "error : cannot find data file " << filespec << '\n';
-    cerr << "\n";
+    std::cerr << "error : cannot find data file " << filespec << '\n';
+    std::cerr << "\n";
     exit(1);
   }
   is >> tmp;
@@ -260,25 +258,25 @@ int FileSequenceAlignment::ReadDataFromFile(string filespec,
       ReadNexus(filespec);
       return 1;
     } else {
-      // cerr << "PHYLIP\n";
+      // std::cerr << "PHYLIP\n";
       if (!forceinterleaved) {
-        // cerr << "test sequential phylip\n";
+        // std::cerr << "test sequential phylip\n";
         int returnvalue = TestPhylipSequential(filespec);
         if (returnvalue) {
-          // cerr << "assuming phylip sequential format\n";
+          // std::cerr << "assuming phylip sequential format\n";
           ReadPhylipSequential(filespec);
           return 1;
         }
       }
-      // cerr << "test interleaved phylip\n";
+      // std::cerr << "test interleaved phylip\n";
       int returnvalue = TestPhylip(filespec, 1);
       if (returnvalue) {
-        // cerr << "assuming phylip interleaved format\n";
+        // std::cerr << "assuming phylip interleaved format\n";
         ReadPhylip(filespec, 1);
         return 1;
       }
       TestPhylip(filespec, 0);
-      // cerr << "assuming phylip interleaved format\n";
+      // std::cerr << "assuming phylip interleaved format\n";
       ReadPhylip(filespec, 0);
       return 1;
     }
@@ -289,8 +287,8 @@ int FileSequenceAlignment::ReadDataFromFile(string filespec,
   return 1;
 }
 
-int FileSequenceAlignment::ReadNexus(string filespec) {
-  ifstream theStream((Path + filespec).c_str());
+int FileSequenceAlignment::ReadNexus(std::string filespec) {
+  std::ifstream theStream((filespec).c_str());
   try {
     GoPastNextWord(theStream, "dimensions");
     GoPastNext(theStream, '=');
@@ -300,7 +298,7 @@ int FileSequenceAlignment::ReadNexus(string filespec) {
     GoPastNextWord(theStream, "format");
     GoPastNextWord(theStream, "datatype");
     GoPastNext(theStream, '=');
-    string type;
+    std::string type;
     theStream >> type;
 
     if (EquivalentStrings(type, "protein")) {
@@ -310,8 +308,8 @@ int FileSequenceAlignment::ReadNexus(string filespec) {
     } else if (EquivalentStrings(type, "rna")) {
       statespace = new RNAStateSpace();
     } else {
-      cerr << "error cannot recognise data type\n";
-      cerr << type << "\n";
+      std::cerr << "error cannot recognise data type\n";
+      std::cerr << type << "\n";
       exit(1);
     }
 
@@ -321,12 +319,12 @@ int FileSequenceAlignment::ReadNexus(string filespec) {
       }
       delete[] Data;
     }
-    Data = new (int* [Ntaxa]);
+    Data = new int*[Ntaxa];
     for (int i = 0; i < Ntaxa; i++) {
       Data[i] = new int[Nsite];
     }
 
-    SpeciesNames = new string[Ntaxa];
+    SpeciesNames = new std::string[Ntaxa];
 
     GoPastNextWord(theStream, "Matrix");
 
@@ -334,7 +332,7 @@ int FileSequenceAlignment::ReadNexus(string filespec) {
     while (l < Nsite) {
       int m = 0;
       for (int i = 0; i < Ntaxa; i++) {
-        string temp;
+        std::string temp;
         theStream >> temp;
         while (temp == "[") {
           unsigned char c;
@@ -347,8 +345,8 @@ int FileSequenceAlignment::ReadNexus(string filespec) {
           SpeciesNames[i] = temp;
         } else {
           if (temp != SpeciesNames[i]) {
-            cerr << "error when reading tree base: " << temp << '\t'
-                 << SpeciesNames[i] << '\n';
+            std::cerr << "error when reading tree base: " << temp << '\t'
+                      << SpeciesNames[i] << '\n';
             exit(1);
           }
         }
@@ -373,7 +371,7 @@ int FileSequenceAlignment::ReadNexus(string filespec) {
                 theStream >> c;
               }
             } else {
-              ostringstream s;
+              std::ostringstream s;
               s << c;
               Data[i][k] = statespace->GetState(s.str());
             }
@@ -382,8 +380,8 @@ int FileSequenceAlignment::ReadNexus(string filespec) {
         } while ((!theStream.eof()) && (c != '\n') && (c != 13));
         if (theStream.eof()) {
           if (i < Ntaxa - 1) {
-            cerr << "error : found " << i << " taxa instead of " << Ntaxa
-                 << " in datafile\n";
+            std::cerr << "error : found " << i << " taxa instead of " << Ntaxa
+                      << " in datafile\n";
             exit(1);
           }
         }
@@ -391,8 +389,9 @@ int FileSequenceAlignment::ReadNexus(string filespec) {
           m = k;
         } else {
           if (m != k) {
-            cerr << "error when reading nexus : " << m << '\t' << k << '\n';
-            cerr << "taxa : " << i << '\t' << SpeciesNames[i] << '\n';
+            std::cerr << "error when reading nexus : " << m << '\t' << k
+                      << '\n';
+            std::cerr << "taxa : " << i << '\t' << SpeciesNames[i] << '\n';
             if (m > k) {
               while (k != m) {
                 Data[i][k] = unknown;
@@ -405,7 +404,7 @@ int FileSequenceAlignment::ReadNexus(string filespec) {
       l = m;
     }
   } catch (...) {
-    cerr << "error while reading data file\n";
+    std::cerr << "error while reading data file\n";
     return 0;
   }
   return 1;
@@ -415,41 +414,41 @@ int FileSequenceAlignment::ReadNexus(string filespec) {
 //		 ReadPhylip()
 // ---------------------------------------------------------------------------
 
-int FileSequenceAlignment::TestPhylipSequential(string filespec) {
-  ifstream theStream((Path + filespec).c_str());
+int FileSequenceAlignment::TestPhylipSequential(std::string filespec) {
+  std::ifstream theStream((filespec).c_str());
   try {
-    // cerr << "beware: phylip data sets only for amino acids for the moment\n";
-    // cerr.flush();
+    // std::cerr << "beware: phylip data sets only for amino acids for the
+    // moment\n"; std::cerr.flush();
 
-    string temp;
+    std::string temp;
     theStream >> temp;
     if (!IsInt(temp)) {
-      cerr << "error when reading data\n";
-      cerr << "data should be formatted as follows:\n";
-      cerr << "#taxa #sites\n";
-      cerr << "name1 seq1.....\n";
-      cerr << "name2 seq2.....\n";
-      cerr << "...\n";
-      cerr << '\n';
+      std::cerr << "error when reading data\n";
+      std::cerr << "data should be formatted as follows:\n";
+      std::cerr << "#taxa #sites\n";
+      std::cerr << "name1 seq1.....\n";
+      std::cerr << "name2 seq2.....\n";
+      std::cerr << "...\n";
+      std::cerr << '\n';
       exit(1);
     }
     Ntaxa = atoi(temp.c_str());
     theStream >> temp;
     if (!IsInt(temp)) {
-      cerr << "error when reading data\n";
-      cerr << "data should be formatted as follows:\n";
-      cerr << "#taxa #sites\n";
-      cerr << "name1 seq1.....\n";
-      cerr << "name2 seq2.....\n";
-      cerr << "...\n";
-      cerr << '\n';
+      std::cerr << "error when reading data\n";
+      std::cerr << "data should be formatted as follows:\n";
+      std::cerr << "#taxa #sites\n";
+      std::cerr << "name1 seq1.....\n";
+      std::cerr << "name2 seq2.....\n";
+      std::cerr << "...\n";
+      std::cerr << '\n';
       exit(1);
     }
     Nsite = atoi(temp.c_str());
-    // cerr << Ntaxa << '\t' << Nsite << '\n';
+    // std::cerr << Ntaxa << '\t' << Nsite << '\n';
 
     delete[] SpeciesNames;
-    SpeciesNames = new string[Ntaxa];
+    SpeciesNames = new std::string[Ntaxa];
 
     int AAcomp = 1;
     int DNAcomp = 1;
@@ -500,7 +499,7 @@ int FileSequenceAlignment::TestPhylipSequential(string filespec) {
       } while ((!theStream.eof()) && (nsite < Nsite));
       if (theStream.eof()) {
         if (nsite < Nsite) {
-          // cerr << "taxon : " << ntaxa << " : " << SpeciesNames[ntaxa]  <<
+          // std::cerr << "taxon : " << ntaxa << " : " << SpeciesNames[ntaxa] <<
           // "contain only " << nsite << " sites\n";
           return 0;
         }
@@ -509,21 +508,21 @@ int FileSequenceAlignment::TestPhylipSequential(string filespec) {
     }
     if (theStream.eof()) {
       if (ntaxa < Ntaxa) {
-        // cerr << "found only " << ntaxa << " taxa\n";
+        // std::cerr << "found only " << ntaxa << " taxa\n";
         return 0;
       }
     }
     if (DNAcomp) {
       statespace = new DNAStateSpace;
-      // cerr << "dna sequences\n";
+      // std::cerr << "dna sequences\n";
     } else if (RNAcomp) {
       statespace = new RNAStateSpace;
-      // cerr << "rna sequences\n";
+      // std::cerr << "rna sequences\n";
     } else if (AAcomp) {
       statespace = new ProteinStateSpace;
-      // cerr << "protein sequences\n";
+      // std::cerr << "protein sequences\n";
     } else {
-      // cerr << "format not recognised\n";
+      // std::cerr << "format not recognised\n";
       return 0;
     }
   } catch (...) {
@@ -532,34 +531,34 @@ int FileSequenceAlignment::TestPhylipSequential(string filespec) {
   return 1;
 }
 
-void FileSequenceAlignment::ReadPhylipSequential(string filespec) {
-  ifstream theStream((Path + filespec).c_str());
+void FileSequenceAlignment::ReadPhylipSequential(std::string filespec) {
+  std::ifstream theStream((filespec).c_str());
   try {
-    // cerr << "beware: phylip data sets only for amino acids for the moment\n";
-    // cerr.flush();
+    // std::cerr << "beware: phylip data sets only for amino acids for the
+    // moment\n"; std::cerr.flush();
 
-    string temp;
+    std::string temp;
     theStream >> temp;
     if (!IsInt(temp)) {
-      cerr << "error when reading data\n";
-      cerr << "data should be formatted as follows:\n";
-      cerr << "#taxa #sites\n";
-      cerr << "name1 seq1.....\n";
-      cerr << "name2 seq2.....\n";
-      cerr << "...\n";
-      cerr << '\n';
+      std::cerr << "error when reading data\n";
+      std::cerr << "data should be formatted as follows:\n";
+      std::cerr << "#taxa #sites\n";
+      std::cerr << "name1 seq1.....\n";
+      std::cerr << "name2 seq2.....\n";
+      std::cerr << "...\n";
+      std::cerr << '\n';
       exit(1);
     }
     Ntaxa = Int(temp);
     theStream >> temp;
     if (!IsInt(temp)) {
-      cerr << "error when reading data\n";
-      cerr << "data should be formatted as follows:\n";
-      cerr << "#taxa #sites\n";
-      cerr << "name1 seq1.....\n";
-      cerr << "name2 seq2.....\n";
-      cerr << "...\n";
-      cerr << '\n';
+      std::cerr << "error when reading data\n";
+      std::cerr << "data should be formatted as follows:\n";
+      std::cerr << "#taxa #sites\n";
+      std::cerr << "name1 seq1.....\n";
+      std::cerr << "name2 seq2.....\n";
+      std::cerr << "...\n";
+      std::cerr << '\n';
       exit(1);
     }
     Nsite = Int(temp);
@@ -568,7 +567,7 @@ void FileSequenceAlignment::ReadPhylipSequential(string filespec) {
     for (int i = 0; i < Ntaxa; i++) {
       Data[i] = new int[Nsite];
     }
-    SpeciesNames = new string[Ntaxa];
+    SpeciesNames = new std::string[Ntaxa];
 
     int ntaxa = 0;
     while ((!theStream.eof()) && (ntaxa < Ntaxa)) {
@@ -592,7 +591,7 @@ void FileSequenceAlignment::ReadPhylipSequential(string filespec) {
               theStream >> c;
             }
           } else {
-            ostringstream s;
+            std::ostringstream s;
             s << c;
             Data[ntaxa][nsite] = statespace->GetState(s.str());
           }
@@ -602,42 +601,42 @@ void FileSequenceAlignment::ReadPhylipSequential(string filespec) {
       ntaxa++;
     }
   } catch (...) {
-    cerr << "error while reading data file\n";
+    std::cerr << "error while reading data file\n";
     exit(1);
   }
 }
 
-int FileSequenceAlignment::TestPhylip(string filespec, int repeattaxa) {
-  ifstream theStream((Path + filespec).c_str());
+int FileSequenceAlignment::TestPhylip(std::string filespec, int repeattaxa) {
+  std::ifstream theStream((filespec).c_str());
   try {
-    string temp;
+    std::string temp;
     theStream >> temp;
     if (!IsInt(temp)) {
-      cerr << "error when reading data\n";
-      cerr << "data should be formatted as follows:\n";
-      cerr << "#taxa #sites\n";
-      cerr << "name1 seq1.....\n";
-      cerr << "name2 seq2.....\n";
-      cerr << "...\n";
-      cerr << '\n';
+      std::cerr << "error when reading data\n";
+      std::cerr << "data should be formatted as follows:\n";
+      std::cerr << "#taxa #sites\n";
+      std::cerr << "name1 seq1.....\n";
+      std::cerr << "name2 seq2.....\n";
+      std::cerr << "...\n";
+      std::cerr << '\n';
       exit(1);
     }
     Ntaxa = Int(temp);
     theStream >> temp;
     if (!IsInt(temp)) {
-      cerr << "error when reading data\n";
-      cerr << "data should be formatted as follows:\n";
-      cerr << "#taxa #sites\n";
-      cerr << "name1 seq1.....\n";
-      cerr << "name2 seq2.....\n";
-      cerr << "...\n";
-      cerr << '\n';
+      std::cerr << "error when reading data\n";
+      std::cerr << "data should be formatted as follows:\n";
+      std::cerr << "#taxa #sites\n";
+      std::cerr << "name1 seq1.....\n";
+      std::cerr << "name2 seq2.....\n";
+      std::cerr << "...\n";
+      std::cerr << '\n';
       exit(1);
     }
     Nsite = Int(temp);
 
     delete[] SpeciesNames;
-    SpeciesNames = new string[Ntaxa];
+    SpeciesNames = new std::string[Ntaxa];
 
     int AAcomp = 1;
     int DNAcomp = 1;
@@ -650,7 +649,7 @@ int FileSequenceAlignment::TestPhylip(string filespec, int repeattaxa) {
       int m = 0;
       for (int i = 0; i < Ntaxa; i++) {
         if ((!l) || repeattaxa) {
-          string temp;
+          std::string temp;
           theStream >> temp;
           if (!l) {
             SpeciesNames[i] = temp;
@@ -699,8 +698,8 @@ int FileSequenceAlignment::TestPhylip(string filespec, int repeattaxa) {
         } while ((!theStream.eof()) && (c != '\n') && (c != 13) && (c != 10));
         if (theStream.eof()) {
           if (i < Ntaxa - 1) {
-            cerr << "error : found " << i << " taxa instead of " << Ntaxa
-                 << " in datafile\n";
+            std::cerr << "error : found " << i << " taxa instead of " << Ntaxa
+                      << " in datafile\n";
             exit(1);
           }
         }
@@ -713,13 +712,14 @@ int FileSequenceAlignment::TestPhylip(string filespec, int repeattaxa) {
           m = k;
         } else {
           if (m != k) {
-            cerr << "in test phylip\n";
-            cerr << "error when reading data non matching number of sequences "
-                    "in block number "
-                 << block << " for taxon " << i + 1 << " " << SpeciesNames[i]
-                 << '\n';
-            cerr << "taxa : " << i << '\t' << SpeciesNames[i] << '\n';
-            cerr << "read " << m << " instead of " << k << " characters\n";
+            std::cerr << "in test phylip\n";
+            std::cerr
+                << "error when reading data non matching number of sequences "
+                   "in block number "
+                << block << " for taxon " << i + 1 << " " << SpeciesNames[i]
+                << '\n';
+            std::cerr << "taxa : " << i << '\t' << SpeciesNames[i] << '\n';
+            std::cerr << "read " << m << " instead of " << k << " characters\n";
             exit(1);
           }
         }
@@ -727,70 +727,70 @@ int FileSequenceAlignment::TestPhylip(string filespec, int repeattaxa) {
       l = m;
     }
     if (l < Nsite) {
-      cerr << "error : reached end of stream \n";
-      cerr << "data should be formatted as follows:\n";
-      cerr << "#taxa #sites\n";
-      cerr << "name1 seq1.....\n";
-      cerr << "name2 seq2.....\n";
-      cerr << "...\n";
-      cerr << '\n';
+      std::cerr << "error : reached end of stream \n";
+      std::cerr << "data should be formatted as follows:\n";
+      std::cerr << "#taxa #sites\n";
+      std::cerr << "name1 seq1.....\n";
+      std::cerr << "name2 seq2.....\n";
+      std::cerr << "...\n";
+      std::cerr << '\n';
       exit(1);
     }
     if (DNAcomp) {
       statespace = new DNAStateSpace;
-      // cerr << "dna sequences\n";
+      // std::cerr << "dna sequences\n";
     } else if (RNAcomp) {
       statespace = new DNAStateSpace;
-      // cerr << "rna sequences\n";
+      // std::cerr << "rna sequences\n";
     } else if (AAcomp) {
       statespace = new ProteinStateSpace;
-      // cerr << "protein sequences\n";
+      // std::cerr << "protein sequences\n";
     } else {
-      // cerr << "format not recognised\n";
+      // std::cerr << "format not recognised\n";
       return 0;
     }
   } catch (...) {
-    cerr << "error while reading data file\n";
+    std::cerr << "error while reading data file\n";
     return 0;
   }
   return 1;
 }
 
-void FileSequenceAlignment::ReadPhylip(string filespec, int repeattaxa) {
-  ifstream theStream((Path + filespec).c_str());
+void FileSequenceAlignment::ReadPhylip(std::string filespec, int repeattaxa) {
+  std::ifstream theStream((filespec).c_str());
   try {
-    string temp;
+    std::string temp;
     theStream >> temp;
     if (!IsInt(temp)) {
-      cerr << "error when reading data\n";
-      cerr << "data should be formatted as follows:\n";
-      cerr << "#taxa #sites\n";
-      cerr << "name1 seq1.....\n";
-      cerr << "name2 seq2.....\n";
-      cerr << "...\n";
-      cerr << '\n';
+      std::cerr << "error when reading data\n";
+      std::cerr << "data should be formatted as follows:\n";
+      std::cerr << "#taxa #sites\n";
+      std::cerr << "name1 seq1.....\n";
+      std::cerr << "name2 seq2.....\n";
+      std::cerr << "...\n";
+      std::cerr << '\n';
       exit(1);
     }
     Ntaxa = Int(temp);
     theStream >> temp;
     if (!IsInt(temp)) {
-      cerr << "error when reading data\n";
-      cerr << "data should be formatted as follows:\n";
-      cerr << "#taxa #sites\n";
-      cerr << "name1 seq1.....\n";
-      cerr << "name2 seq2.....\n";
-      cerr << "...\n";
-      cerr << '\n';
+      std::cerr << "error when reading data\n";
+      std::cerr << "data should be formatted as follows:\n";
+      std::cerr << "#taxa #sites\n";
+      std::cerr << "name1 seq1.....\n";
+      std::cerr << "name2 seq2.....\n";
+      std::cerr << "...\n";
+      std::cerr << '\n';
       exit(1);
     }
     Nsite = Int(temp);
-    cerr << Ntaxa << '\t' << Nsite << '\n';
+    std::cerr << Ntaxa << '\t' << Nsite << '\n';
 
     Data = new (int* [Ntaxa]);
     for (int i = 0; i < Ntaxa; i++) {
       Data[i] = new int[Nsite];
     }
-    SpeciesNames = new string[Ntaxa];
+    SpeciesNames = new std::string[Ntaxa];
 
     int l = 0;
     int block = 0;
@@ -799,14 +799,14 @@ void FileSequenceAlignment::ReadPhylip(string filespec, int repeattaxa) {
       int m = 0;
       for (int i = 0; i < Ntaxa; i++) {
         if ((!l) || repeattaxa) {
-          string temp;
+          std::string temp;
           theStream >> temp;
           if (!l) {
             SpeciesNames[i] = temp;
           } else {
             if (temp != SpeciesNames[i]) {
-              cerr << "error when reading data: read " << temp << " instead of "
-                   << SpeciesNames[i] << '\n';
+              std::cerr << "error when reading data: read " << temp
+                        << " instead of " << SpeciesNames[i] << '\n';
               exit(1);
             }
           }
@@ -829,7 +829,7 @@ void FileSequenceAlignment::ReadPhylip(string filespec, int repeattaxa) {
                 theStream >> c;
               }
             } else {
-              ostringstream s;
+              std::ostringstream s;
               s << c;
               Data[i][k] = statespace->GetState(s.str());
             }
@@ -838,8 +838,8 @@ void FileSequenceAlignment::ReadPhylip(string filespec, int repeattaxa) {
         } while ((!theStream.eof()) && (c != '\n') && (c != 13));
         if (theStream.eof()) {
           if (i < Ntaxa - 1) {
-            cerr << "error : found " << i << " taxa instead of " << Ntaxa
-                 << " in datafile\n";
+            std::cerr << "error : found " << i << " taxa instead of " << Ntaxa
+                      << " in datafile\n";
             exit(1);
           }
         }
@@ -853,12 +853,13 @@ void FileSequenceAlignment::ReadPhylip(string filespec, int repeattaxa) {
           m = k;
         } else {
           if (m != k) {
-            cerr << "error when reading data non matching number of sequences "
-                    "in block number "
-                 << block << " for taxon " << i << " " << SpeciesNames[i]
-                 << '\n';
-            cerr << "taxa : " << i << '\t' << SpeciesNames[i] << '\n';
-            cerr << "read " << k << " instead of " << m << "characters\n";
+            std::cerr
+                << "error when reading data non matching number of sequences "
+                   "in block number "
+                << block << " for taxon " << i << " " << SpeciesNames[i]
+                << '\n';
+            std::cerr << "taxa : " << i << '\t' << SpeciesNames[i] << '\n';
+            std::cerr << "read " << k << " instead of " << m << "characters\n";
             exit(1);
           }
         }
@@ -866,17 +867,17 @@ void FileSequenceAlignment::ReadPhylip(string filespec, int repeattaxa) {
       l = m;
     }
     if (l < Nsite) {
-      cerr << "error : reached end of stream \n";
-      cerr << "data should be formatted as follows:\n";
-      cerr << "#taxa #sites\n";
-      cerr << "name1 seq1.....\n";
-      cerr << "name2 seq2.....\n";
-      cerr << "...\n";
-      cerr << '\n';
+      std::cerr << "error : reached end of stream \n";
+      std::cerr << "data should be formatted as follows:\n";
+      std::cerr << "#taxa #sites\n";
+      std::cerr << "name1 seq1.....\n";
+      std::cerr << "name2 seq2.....\n";
+      std::cerr << "...\n";
+      std::cerr << '\n';
       exit(1);
     }
   } catch (...) {
-    cerr << "error while reading data file\n";
+    std::cerr << "error while reading data file\n";
   }
 }
 
@@ -887,7 +888,7 @@ void FileSequenceAlignment::ReadPhylip(string filespec, int repeattaxa) {
 /*
 void FileSequenceAlignment::EliminateUnknownColumns()	{
 
-                cerr << "eliminate unknown columns\n";
+                std::cerr << "eliminate unknown columns\n";
 
                 // delete all the sites that are '-' for every species
 
@@ -915,8 +916,8 @@ void FileSequenceAlignment::EliminateUnknownColumns()	{
                 }
                 Nsite -= Eliminated;
                 if (Eliminated)	{
-                        cerr << Eliminated << " columns completely undetermined
-(full of gaps, or unknown): eliminated\n";
+                        std::cerr << Eliminated << " columns completely
+undetermined (full of gaps, or unknown): eliminated\n";
                 }
 }
 */
@@ -928,7 +929,7 @@ void FileSequenceAlignment::EliminateUnknownColumns()	{
 
 void FileSequenceAlignment::EstimateEmpiricalFrequencies()	{
 
-        cerr << "estimate emp freq\n";
+        std::cerr << "estimate emp freq\n";
         for (int k=0; k<Nstate; k++)	{
                 EmpiricalFreq[k] = 1;
         }
@@ -936,7 +937,7 @@ void FileSequenceAlignment::EstimateEmpiricalFrequencies()	{
                 for (int j=0; j<Nsite; j++)	{
                         if (Data[i][j] != unknown)	{
                                 if ( (Data[i][j] < 0 ) || (Data[i][j] >= Nstate)
-)	{ cerr << "error in data matrix : " << Data[i][j] << '\n'; exit(1);
+)	{ std::cerr << "error in data matrix : " << Data[i][j] << '\n'; exit(1);
                                 }
                                 EmpiricalFreq[Data[i][j]] += 1.0;
                         }
@@ -989,7 +990,7 @@ int FileSequenceAlignment::ConstantColumns()	{
 
 void FileSequenceAlignment::EliminateConstantPositions()	{
 
-                cerr << "eliminate constant positions\n";
+                std::cerr << "eliminate constant positions\n";
         int i=0;
         int j=0;
         int Eliminated = 0;
@@ -1028,8 +1029,8 @@ void FileSequenceAlignment::RegisterWithData()	{
         for (int i=0; i<Ntaxa; i++)     {
                 for (int j=i+1; j<Ntaxa; j++)   {
                         if (SpeciesNames[i] == SpeciesNames[j]) {
-                                cerr << "error: taxa " << i << " and " << j << "
-in datafile have same name\n"; exit(1);
+                                std::cerr << "error: taxa " << i << " and " << j
+<< " in datafile have same name\n"; exit(1);
                         }
                 }
         }
@@ -1060,7 +1061,7 @@ in datafile have same name\n"; exit(1);
                 total += temp;
         }
         if (total != Nsite)	{
-                cerr << "total number of sites does not match\n";
+                std::cerr << "total number of sites does not match\n";
                 exit(1);
         }
         if (DeleteConstant)	{
@@ -1075,7 +1076,7 @@ in datafile have same name\n"; exit(1);
                         total += temp;
                 }
                 if (total != Nsite)	{
-                        cerr << "total number of sites does not match\n";
+                        std::cerr << "total number of sites does not match\n";
                         exit(1);
                 }
         }
@@ -1087,8 +1088,8 @@ in datafile have same name\n"; exit(1);
                         nconst ++;
                 }
         }
-        // cerr << "empirical proportion of invariable sites : " << ((double)
-nconst) / Nsite << '\n';
+        // std::cerr << "empirical proportion of invariable sites : " <<
+((double) nconst) / Nsite << '\n';
 }
 
 // ---------------------------------------------------------------------------
@@ -1174,8 +1175,8 @@ void FileSequenceAlignment::ComputeZipArrays()	{
                 }
 
                 if (OrbitSize[i] == 0)	{
-                        cerr << "PhyloParameters::RegisterWithData : missing
-column";
+                        std::cerr << "PhyloParameters::RegisterWithData :
+missing column";
                         // exit(1);
                 }
 
@@ -1209,8 +1210,8 @@ mParam->Data[j][i] , for every i and j
                         // here, may be check that ZipData != -2
 
                         if (ZipData[j][i] == -2)	{
-                                cerr << "PhyloParameters::RegisterWithData :
-error in zip data making\n";
+                                std::cerr << "PhyloParameters::RegisterWithData
+: error in zip data making\n";
                         }
                 }
 
@@ -1228,8 +1229,9 @@ error in zip data making\n";
                         }
                 }
                 if (orbitsize != Nstate)	{
-                        cerr << "error in
-FileSequenceAlignment::RegisterWithData\n"; cerr << "site : " << i << '\n'; cerr
+                        std::cerr << "error in
+FileSequenceAlignment::RegisterWithData\n"; std::cerr << "site : " << i << '\n';
+std::cerr
 << '\n'; exit(1);
                 }
         }
@@ -1239,15 +1241,15 @@ FileSequenceAlignment::RegisterWithData\n"; cerr << "site : " << i << '\n'; cerr
                 temp += ((double) ZipSize[i] * ZipSize[i]) / Nstate / Nstate;
         }
         SpeedFactor =  temp / Nsite ;
-        cerr << "speed factor : " << SpeedFactor << '\n';
+        std::cerr << "speed factor : " << SpeedFactor << '\n';
         int nconst = 0;
         for (int i=0; i<Nsite; i++)	{
                 if (OrbitSize[i] == 1)	{
                         nconst++;
                 }
         }
-        cerr << "number of constant columns: " << nconst << " (" << ((double)
-nconst) / Nsite * 100 << ")" << '\n';
+        std::cerr << "number of constant columns: " << nconst << " (" <<
+((double) nconst) / Nsite * 100 << ")" << '\n';
 
 }
 

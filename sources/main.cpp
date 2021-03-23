@@ -23,6 +23,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <string>
 
 #include "AncestralSequence.h"
+#include "BiologicalSequences.h"
 #include "GlobalParameters.h"
 #include "LocalParameters.h"
 #include "Posterior.h"
@@ -31,29 +32,12 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "SummaryStatistics.h"
 #include "TreeSimulator.h"
 
-#define isnan std::isnan
-#define isinf std::isinf
-#define string std::string
-#define ostream std::ostream
-#define ofstream std::ofstream
-#define istream std::istream
-#define ifstream std::ifstream
-#define cin std::cin
-#define cerr std::cerr
-#define cout std::cout
-#define setw std::setw
-#define ostringstream std::ostringstream
-#define istringstream std::istringstream
-#define IOS_APPEND std::ios_base::app
-#define APPEND std::ios_base::app
-#define OUT std::ios_base::out
-
 int main(int argc, char* argv[]) {
   // Comments
 
   // program options
-  string model = "";
-  string controlfile = "";
+  std::string model = "";
+  std::string controlfile = "";
 
   try {
     if (argc < 2) {
@@ -61,7 +45,7 @@ int main(int argc, char* argv[]) {
     }
     int i = 1;
     while (i < argc) {
-      string s = argv[i];
+      std::string s = argv[i];
       if (s == "-v" || s == "--version") {
         throw(0);
       } else if (s == "-m") {
@@ -72,35 +56,35 @@ int main(int argc, char* argv[]) {
       }
       i++;
     }  // end while
-
-  }  // end try
+  }    // end try
   catch (...) {
-    cerr << "\n";
-    cerr << "version 1.0\n";
-    cerr << "###########################\n";
-    cerr << "-m < stats | show | CodonMutSelFiniteABC | CodonMutSelSBDPABC | "
-            "CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | "
-            "CodonMutSelFinite | CodonMutSelSBDP | CodonMutSelFinitePPred | "
-            "CodonMutSelSBDPPPred | CodonMutSelSBDPSeq > <controlfile>\n";
-    cerr << "###########################\n";
-    cerr << "#SUMMARIES\n";
-    cerr << "#ANCSUMMARIES\n";
-    cerr << "#ACCSUMMARIES\n";
-    cerr << "#PARAM\n";
-    cerr << "#SSMAP\n";
-    cerr << "#MAP\n";
-    cerr << "#ANCESTRALMAP\n";
-    cerr << "#DIST\n";
-    cerr << "#TRANS\n";
-    cerr << "#SPEUDODATA\n";
-    cerr << "#NRUN\n";
-    cerr << "#SAMPLING\n";
-    cerr << "#LOCALPARAM\n";
-    cerr << "###########################\n";
+    std::cerr << "\n";
+    std::cerr << "version 1.0\n";
+    std::cerr << "###########################\n";
+    std::cerr
+        << "-m < stats | show | CodonMutSelFiniteABC | CodonMutSelSBDPABC | "
+           "CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | "
+           "CodonMutSelFinite | CodonMutSelSBDP | CodonMutSelFinitePPred | "
+           "CodonMutSelSBDPPPred | CodonMutSelSBDPSeq > <controlfile>\n";
+    std::cerr << "###########################\n";
+    std::cerr << "#SUMMARIES\n";
+    std::cerr << "#ANCSUMMARIES\n";
+    std::cerr << "#ACCSUMMARIES\n";
+    std::cerr << "#PARAM\n";
+    std::cerr << "#SSMAP\n";
+    std::cerr << "#MAP\n";
+    std::cerr << "#ANCESTRALMAP\n";
+    std::cerr << "#DIST\n";
+    std::cerr << "#TRANS\n";
+    std::cerr << "#SPEUDODATA\n";
+    std::cerr << "#NRUN\n";
+    std::cerr << "#SAMPLING\n";
+    std::cerr << "#LOCALPARAM\n";
+    std::cerr << "###########################\n";
     exit(1);
   }
 
-  cerr << "models\n";
+  std::cerr << "models\n";
   if (model == "stats") {
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
     // Posterior* post = new Posterior(gparam);
@@ -111,10 +95,10 @@ int main(int argc, char* argv[]) {
     ofstream realDataSummaries_os((ldata->output + ".stats").c_str());
     int k = 1;
 
-    while (k < (int)gparam->listGenes.size()) {
-      cerr << "#########\n";
-      cerr << k << "\n";
-      cerr << "#########\n";
+    while (k < static_cast<int>(gparam->listGenes.size())) {
+      std::cerr << "#########\n";
+      std::cerr << k << "\n";
+      std::cerr << "#########\n";
 
       ldata->readLocalData(k);
 
@@ -124,37 +108,33 @@ int main(int argc, char* argv[]) {
       k++;
     }
     realDataSummaries_os.close();
-  }
-
-  else if (model == "show") {
-    cerr << "show program content\n";
+  } else if (model == "show") {
+    std::cerr << "show program content\n";
     GlobalParameters* gparam = new GlobalParameters();
-    cerr << "#PARAMETERS\n";
-    for (auto i : gparam->listParam) cerr << i << "\t";
-    cerr << "\n";
-    cerr << "#SUMMARY\n";
-    for (auto i : gparam->listSummaries) cerr << i << "\t";
-    cerr << "\n";
-    cerr << "#EVOLSTATS\n";
-    for (auto i : gparam->listEvoStats) cerr << i << "\t";
-    cerr << "\n";
-    cerr << "#DIST\n";
-    for (auto i : gparam->listDistances) cerr << i << "\t";
-    cerr << "\n";
-    cerr << "#TRANS\n";
-    for (auto i : gparam->listTransformtations) cerr << i << "\t";
-    cerr << "\n";
-
-  }
-
-  else if (model == "CodonMutSelFiniteABC") {
-    cerr << "CodonMutSelFiniteCpG\n";
+    std::cerr << "#PARAMETERS\n";
+    for (auto i : gparam->listParam) std::cerr << i << "\t";
+    std::cerr << "\n";
+    std::cerr << "#SUMMARY\n";
+    for (auto i : gparam->listSummaries) std::cerr << i << "\t";
+    std::cerr << "\n";
+    std::cerr << "#EVOLSTATS\n";
+    for (auto i : gparam->listEvoStats) std::cerr << i << "\t";
+    std::cerr << "\n";
+    std::cerr << "#DIST\n";
+    for (auto i : gparam->listDistances) std::cerr << i << "\t";
+    std::cerr << "\n";
+    std::cerr << "#TRANS\n";
+    for (auto i : gparam->listTransformtations) std::cerr << i << "\t";
+    std::cerr << "\n";
+  } else if (model == "CodonMutSelFiniteABC") {
+    std::cerr << "CodonMutSelFiniteCpG\n";
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-    int Npoint = (int)(gparam->chainPointEnd - gparam->chainPointStart) /
-                 gparam->chainPointEvery;
+    int Npoint =
+        static_cast<int>(gparam->chainPointEnd - gparam->chainPointStart) /
+        gparam->chainPointEvery;
     Posterior* post3 = new Posterior(gparam);
-    cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " "
-         << gparam->chainPointEvery << " " << Npoint << "\n";
+    std::cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " "
+              << gparam->chainPointEvery << " " << Npoint << "\n";
 
     LocalParameters** lparam = new LocalParameters*[Npoint];
     SummaryStatistics** ss = new SummaryStatistics*[Npoint];
@@ -166,11 +146,12 @@ int main(int argc, char* argv[]) {
     omp_set_dynamic(0);
     omp_set_num_threads(gparam->Nthread);
     int pt_i;
-    cerr << "Npoint\t" << Npoint << "\n";
+    std::cerr << "Npoint\t" << Npoint << "\n";
 #pragma omp parallel for
     for (pt_i = gparam->chainPointStart; pt_i < gparam->chainPointEnd;
          pt_i += gparam->chainPointEvery) {
-      int l = (int)(pt_i - gparam->chainPointStart) / gparam->chainPointEvery;
+      int l = static_cast<int>(pt_i - gparam->chainPointStart) /
+              gparam->chainPointEvery;
       lparam[l] = new LocalParameters(gparam);
       lparam[l]->readChainCodonMutSelFinite(pt_i);
       ss[l] = new SummaryStatistics(lparam[l]);
@@ -183,13 +164,13 @@ int main(int argc, char* argv[]) {
       if (l == 0) {
         post3->SetNsite(lparam[l]->Nsite_codon);
 
-        ostringstream ost1;
+        std::ostringstream ost1;
         ost1 << gparam->output << ".inputparam";
         ofstream lparam_os(ost1.str());
         lparam[l]->writeParam(lparam_os);
         lparam_os.close();
 
-        ostringstream ost2;
+        std::ostringstream ost2;
         ost2 << gparam->output << ".realdata";
         ofstream realDataSummaries_os(ost2.str());
         lparam[l]->writeRealDataSummaries(realDataSummaries_os);
@@ -204,20 +185,20 @@ int main(int argc, char* argv[]) {
 
       ifstream posterior_is((gparam->output + ".post-tmp").c_str());
       if (!posterior_is) {
-        cerr << "error: did not find posteriorfile"
-             << "\n";
+        std::cerr << "error: did not find posteriorfile"
+                  << "\n";
         exit(1);
       }
 
       post3->readPosterior(posterior_is);
       posterior_is.close();
-      cerr << post3->Niter << " on " << post3->Nrun << "\n";
+      std::cerr << post3->Niter << " on " << post3->Nrun << "\n";
     }
 
-    cerr << "The simulation process started\n";
+    std::cerr << "The simulation process started\n";
 
     while (post3->Niter < post3->Nrun) {
-      cerr << ".";
+      std::cerr << ".";
       omp_set_dynamic(0);
       omp_set_num_threads(gparam->Nthread);
 #pragma omp parallel
@@ -248,57 +229,59 @@ int main(int argc, char* argv[]) {
       }
     }
 
-    ofstream dist_os1((gparam->output + ".simu").c_str(), OUT);
+    ofstream dist_os1((gparam->output + ".simu").c_str(), std::ios_base::out);
     post3->writeHeader(dist_os1);
     post3->writePosterior(dist_os1);
     dist_os1.close();
 
-    ofstream monitor_os1((gparam->output + ".monitor").c_str(), OUT);
+    ofstream monitor_os1((gparam->output + ".monitor").c_str(),
+                         std::ios_base::out);
     post3->writeMonitorPosterior(monitor_os1);
     monitor_os1.close();
-    cerr << "End of the simulation process\n";
+    std::cerr << "End of the simulation process\n";
     exit(0);
   } else if (model == "CodonMutSelSBDPABC") {
-    cerr << "CodonMutSelSBDPCpG\n";
+    std::cerr << "CodonMutSelSBDPCpG\n";
 
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-    cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " "
-         << gparam->chainPointEvery << "\n";
-    int Npoint = (int)(gparam->chainPointEnd - gparam->chainPointStart) /
-                 gparam->chainPointEvery;
+    std::cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " "
+              << gparam->chainPointEvery << "\n";
+    int Npoint =
+        static_cast<int>(gparam->chainPointEnd - gparam->chainPointStart) /
+        gparam->chainPointEvery;
     Posterior* post3 = new Posterior(gparam);
     LocalParameters** lparam = new LocalParameters*[Npoint];
 
     if (gparam->verbose) {
-      cerr << "debug1\n";
+      std::cerr << "debug1\n";
     }
 
     if (gparam->verbose) {
-      cerr << "debug2\n";
+      std::cerr << "debug2\n";
     }
-    cerr << "Npoint\t" << Npoint << "\n";
+    std::cerr << "Npoint\t" << Npoint << "\n";
     if (gparam->verbose) {
-      cerr << "debug3\n";
+      std::cerr << "debug3\n";
     }
     SummaryStatistics** ss = new SummaryStatistics*[Npoint];
     if (gparam->verbose) {
-      cerr << "debug4\n";
+      std::cerr << "debug4\n";
     }
     PriorSampler** sampler = new PriorSampler*[Npoint];
     if (gparam->verbose) {
-      cerr << "debug5\n";
+      std::cerr << "debug5\n";
     }
     SiteInterSubMatrix** submatrix = new SiteInterSubMatrix*[Npoint];
     if (gparam->verbose) {
-      cerr << "debug6\n";
+      std::cerr << "debug6\n";
     }
     AncestralSequence** ancestraseq = new AncestralSequence*[Npoint];
     if (gparam->verbose) {
-      cerr << "debug7\n";
+      std::cerr << "debug7\n";
     }
     TreeSimulator** simulator = new TreeSimulator*[Npoint];
     if (gparam->verbose) {
-      cerr << "debug8\n";
+      std::cerr << "debug8\n";
     }
 
     omp_set_dynamic(0);
@@ -307,54 +290,55 @@ int main(int argc, char* argv[]) {
 #pragma omp parallel for
     for (pt_i = gparam->chainPointStart; pt_i < gparam->chainPointEnd;
          pt_i += gparam->chainPointEvery) {
-      int l = (int)(pt_i - gparam->chainPointStart) / gparam->chainPointEvery;
+      int l = static_cast<int>(pt_i - gparam->chainPointStart) /
+              gparam->chainPointEvery;
       if (gparam->verbose) {
-        cerr << "debug9\n";
-        cerr << (l) << "\n";
+        std::cerr << "debug9\n";
+        std::cerr << (l) << "\n";
       }
       lparam[l] = new LocalParameters(gparam);
       if (gparam->verbose) {
-        cerr << "debug10\n";
+        std::cerr << "debug10\n";
       }
       lparam[l]->readChainCodonMutSelSBDP(pt_i);
       if (gparam->verbose) {
-        cerr << "debug11\n";
+        std::cerr << "debug11\n";
       }
       ss[l] = new SummaryStatistics(lparam[l]);
       if (gparam->verbose) {
-        cerr << "debug12\n";
+        std::cerr << "debug12\n";
       }
       ss[l]->computeSummaries();
       if (gparam->verbose) {
-        cerr << "debug13\n";
+        std::cerr << "debug13\n";
       }
       sampler[l] = new PriorSampler(lparam[l]);
       if (gparam->verbose) {
-        cerr << "debug14\n";
+        std::cerr << "debug14\n";
       }
       submatrix[l] = new SiteInterSubMatrix(lparam[l]);
       if (gparam->verbose) {
-        cerr << "debug15\n";
+        std::cerr << "debug15\n";
       }
       ancestraseq[l] = new AncestralSequence(lparam[l]);
       if (gparam->verbose) {
-        cerr << "debug16\n";
+        std::cerr << "debug16\n";
       }
       simulator[l] = new TreeSimulator(lparam[l], submatrix[l], ancestraseq[l]);
       if (gparam->verbose) {
-        cerr << "debug17\n";
+        std::cerr << "debug17\n";
       }
 
       if (l == 0) {
         post3->SetNsite(lparam[l]->Nsite_codon);
 
-        ostringstream ost1;
+        std::ostringstream ost1;
         ost1 << gparam->output << ".inputparam";
         ofstream lparam_os(ost1.str());
         lparam[l]->writeParam(lparam_os);
         lparam_os.close();
 
-        ostringstream ost2;
+        std::ostringstream ost2;
         ost2 << gparam->output << ".realdata";
         ofstream realDataSummaries_os(ost2.str());
         lparam[l]->writeRealDataSummaries(realDataSummaries_os);
@@ -369,19 +353,19 @@ int main(int argc, char* argv[]) {
 
       ifstream posterior_is((gparam->output + ".post-tmp").c_str());
       if (!posterior_is) {
-        cerr << "error: did not find posteriorfile"
-             << "\n";
+        std::cerr << "error: did not find posteriorfile"
+                  << "\n";
         exit(1);
       }
 
       post3->readPosterior(posterior_is);
       posterior_is.close();
-      cerr << post3->Niter << " on " << post3->Nrun << "\n";
+      std::cerr << post3->Niter << " on " << post3->Nrun << "\n";
     }
 
-    cerr << "The simulation process started\n";
+    std::cerr << "The simulation process started\n";
     while (post3->Niter < post3->Nrun) {
-      cerr << ".";
+      std::cerr << ".";
       omp_set_dynamic(0);
       omp_set_num_threads(gparam->Nthread);
 #pragma omp parallel
@@ -389,21 +373,21 @@ int main(int argc, char* argv[]) {
 #pragma omp for
         for (int l = 0; l < Npoint; l++) {
           if (gparam->verbose) {
-            cerr << "debug18\n";
+            std::cerr << "debug18\n";
           }
           sampler[l]->sample();
 
           if (gparam->verbose) {
-            cerr << "debug19\n";
+            std::cerr << "debug19\n";
           }
           simulator[l]->GetNewSimulatedCodonAlignment();
           if (gparam->verbose) {
-            cerr << "debug20\n";
+            std::cerr << "debug20\n";
           }
 
           ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
           if (gparam->verbose) {
-            cerr << "debug21\n";
+            std::cerr << "debug21\n";
           }
 
 #pragma omp critical
@@ -419,15 +403,17 @@ int main(int argc, char* argv[]) {
                 lparam[l]->GetCurrentWeights());
 
             if (post3->Niter == post3->Nrun) {
-              ofstream dist_os1((gparam->output + ".simu").c_str(), OUT);
+              ofstream dist_os1((gparam->output + ".simu").c_str(),
+                                std::ios_base::out);
               post3->writeHeader(dist_os1);
               post3->writePosterior(dist_os1);
               dist_os1.close();
 
-              ofstream monitor_os1((gparam->output + ".monitor").c_str(), OUT);
+              ofstream monitor_os1((gparam->output + ".monitor").c_str(),
+                                   std::ios_base::out);
               post3->writeMonitorPosterior(monitor_os1);
               monitor_os1.close();
-              cerr << "End of the simulation process\n";
+              std::cerr << "End of the simulation process\n";
               exit(0);
             }
           }
@@ -435,47 +421,48 @@ int main(int argc, char* argv[]) {
       }
     }
   } else if (model == "CodonMutSelSBDPABC-v2") {
-    cerr << "CodonMutSelSBDPCpG-v2\n";
+    std::cerr << "CodonMutSelSBDPCpG-v2\n";
 
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-    cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " "
-         << gparam->chainPointEvery << "\n";
-    int Npoint = (int)(gparam->chainPointEnd - gparam->chainPointStart) /
-                 gparam->chainPointEvery;
+    std::cerr << gparam->chainPointStart << " " << gparam->chainPointEnd << " "
+              << gparam->chainPointEvery << "\n";
+    int Npoint =
+        static_cast<int>(gparam->chainPointEnd - gparam->chainPointStart) /
+        gparam->chainPointEvery;
     Posterior* postMaster = new Posterior(gparam);
     Posterior** postSlave = new Posterior*[Npoint];
     LocalParameters** lparam = new LocalParameters*[Npoint];
 
     if (gparam->verbose) {
-      cerr << "debug1\n";
+      std::cerr << "debug1\n";
     }
 
     if (gparam->verbose) {
-      cerr << "debug2\n";
+      std::cerr << "debug2\n";
     }
-    cerr << "Npoint\t" << Npoint << "\n";
+    std::cerr << "Npoint\t" << Npoint << "\n";
     if (gparam->verbose) {
-      cerr << "debug3\n";
+      std::cerr << "debug3\n";
     }
     SummaryStatistics** ss = new SummaryStatistics*[Npoint];
     if (gparam->verbose) {
-      cerr << "debug4\n";
+      std::cerr << "debug4\n";
     }
     PriorSampler** sampler = new PriorSampler*[Npoint];
     if (gparam->verbose) {
-      cerr << "debug5\n";
+      std::cerr << "debug5\n";
     }
     SiteInterSubMatrix** submatrix = new SiteInterSubMatrix*[Npoint];
     if (gparam->verbose) {
-      cerr << "debug6\n";
+      std::cerr << "debug6\n";
     }
     AncestralSequence** ancestraseq = new AncestralSequence*[Npoint];
     if (gparam->verbose) {
-      cerr << "debug7\n";
+      std::cerr << "debug7\n";
     }
     TreeSimulator** simulator = new TreeSimulator*[Npoint];
     if (gparam->verbose) {
-      cerr << "debug8\n";
+      std::cerr << "debug8\n";
     }
 
     omp_set_dynamic(0);
@@ -484,57 +471,58 @@ int main(int argc, char* argv[]) {
 #pragma omp parallel for
     for (pt_i = gparam->chainPointStart; pt_i < gparam->chainPointEnd;
          pt_i += gparam->chainPointEvery) {
-      int l = (int)(pt_i - gparam->chainPointStart) / gparam->chainPointEvery;
+      int l = static_cast<int>(pt_i - gparam->chainPointStart) /
+              gparam->chainPointEvery;
       if (gparam->verbose) {
-        cerr << "debug9\n";
-        cerr << (l) << "\n";
+        std::cerr << "debug9\n";
+        std::cerr << (l) << "\n";
       }
 
       postSlave[l] = new Posterior(gparam);
 
       lparam[l] = new LocalParameters(gparam);
       if (gparam->verbose) {
-        cerr << "debug10\n";
+        std::cerr << "debug10\n";
       }
       lparam[l]->readChainCodonMutSelSBDP(pt_i);
       if (gparam->verbose) {
-        cerr << "debug11\n";
+        std::cerr << "debug11\n";
       }
       ss[l] = new SummaryStatistics(lparam[l]);
       if (gparam->verbose) {
-        cerr << "debug12\n";
+        std::cerr << "debug12\n";
       }
       ss[l]->computeSummaries();
       if (gparam->verbose) {
-        cerr << "debug13\n";
+        std::cerr << "debug13\n";
       }
       sampler[l] = new PriorSampler(lparam[l]);
       if (gparam->verbose) {
-        cerr << "debug14\n";
+        std::cerr << "debug14\n";
       }
       submatrix[l] = new SiteInterSubMatrix(lparam[l]);
       if (gparam->verbose) {
-        cerr << "debug15\n";
+        std::cerr << "debug15\n";
       }
       ancestraseq[l] = new AncestralSequence(lparam[l]);
       if (gparam->verbose) {
-        cerr << "debug16\n";
+        std::cerr << "debug16\n";
       }
       simulator[l] = new TreeSimulator(lparam[l], submatrix[l], ancestraseq[l]);
       if (gparam->verbose) {
-        cerr << "debug17\n";
+        std::cerr << "debug17\n";
       }
 
       postSlave[l]->SetNsite(lparam[l]->Nsite_codon);
 
       if (l == 0) {
-        ostringstream ost1;
+        std::ostringstream ost1;
         ost1 << gparam->output << ".inputparam";
         ofstream lparam_os(ost1.str());
         lparam[l]->writeParam(lparam_os);
         lparam_os.close();
 
-        ostringstream ost2;
+        std::ostringstream ost2;
         ost2 << gparam->output << ".realdata";
         ofstream realDataSummaries_os(ost2.str());
         lparam[l]->writeRealDataSummaries(realDataSummaries_os);
@@ -542,8 +530,8 @@ int main(int argc, char* argv[]) {
       }
     }
 
-    cerr << "The simulation process started\n";
-    cerr << postMaster->Niter << " on " << postMaster->Nrun << "\n";
+    std::cerr << "The simulation process started\n";
+    std::cerr << postMaster->Niter << " on " << postMaster->Nrun << "\n";
 
     ifstream monitor_is((gparam->output + "-1M.monitor").c_str());
     ifstream monitor_is_100K((gparam->output + "-100K.monitor").c_str());
@@ -553,8 +541,8 @@ int main(int argc, char* argv[]) {
 
       ifstream posterior_is((gparam->output + "-1M.post").c_str());
       if (!posterior_is) {
-        cerr << "error: did not find posteriorfile"
-             << "\n";
+        std::cerr << "error: did not find posteriorfile"
+                  << "\n";
         exit(1);
       }
 
@@ -567,8 +555,8 @@ int main(int argc, char* argv[]) {
 
       ifstream posterior_is((gparam->output + "-100K.post").c_str());
       if (!posterior_is) {
-        cerr << "error: did not find posteriorfile"
-             << "\n";
+        std::cerr << "error: did not find posteriorfile"
+                  << "\n";
         exit(1);
       }
 
@@ -576,7 +564,8 @@ int main(int argc, char* argv[]) {
       posterior_is.close();
     }
 
-    int runTodo = int((postMaster->Nrun - postMaster->Niter) / Npoint);
+    int runTodo =
+        static_cast<int>((postMaster->Nrun - postMaster->Niter) / Npoint);
     int run = 0;
 
     omp_set_dynamic(0);
@@ -584,20 +573,18 @@ int main(int argc, char* argv[]) {
 
 #pragma omp parallel for private(run) collapse(2)
     for (int l = 0; l < Npoint; l++) {
-      for (run = 0; run < runTodo; run++)
-
-      {
+      for (run = 0; run < runTodo; run++) {
         if (gparam->verbose) {
-          cerr << "debug18\n";
+          std::cerr << "debug18\n";
         }
         sampler[l]->sample();
 
         if (gparam->verbose) {
-          cerr << "debug19\n";
+          std::cerr << "debug19\n";
         }
         simulator[l]->GetNewSimulatedCodonAlignment();
         if (gparam->verbose) {
-          cerr << "debug20\n";
+          std::cerr << "debug20\n";
         }
 
         for (int interval_i = 0; interval_i < 11; interval_i++) {
@@ -606,12 +593,12 @@ int main(int argc, char* argv[]) {
         }
 
         if (gparam->verbose) {
-          cerr << "debug20.1\n";
+          std::cerr << "debug20.1\n";
         }
 
         ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
         if (gparam->verbose) {
-          cerr << "debug21\n";
+          std::cerr << "debug21\n";
         }
 
         postSlave[l]->slaveRegisterNewSimulation(
@@ -622,7 +609,7 @@ int main(int argc, char* argv[]) {
             lparam[l]->GetCurrentSiteSpecificEvoStats(),
             lparam[l]->GetCurrentDistances(), lparam[l]->GetCurrentWeights());
 
-        cerr << ".";
+        std::cerr << ".";
       }
     }
 
@@ -632,50 +619,51 @@ int main(int argc, char* argv[]) {
 
     postMaster->sortPopulation();
 
-    ofstream dist_os2((gparam->output + "-1M.post").c_str(), OUT);
+    ofstream dist_os2((gparam->output + "-1M.post").c_str(),
+                      std::ios_base::out);
     postMaster->writeHeader(dist_os2);
     postMaster->writePosterior(dist_os2);
     dist_os2.close();
-    cerr << "End of the simulation process\n";
+    std::cerr << "End of the simulation process\n";
     exit(0);
 
   } else if (model == "FMutSelSimu") {
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
 
     if (gparam->verbose) {
-      cerr << "debug2\n";
+      std::cerr << "debug2\n";
     }
     LocalParameters* lparam = new LocalParameters(gparam);
     lparam->readFMutSelCodeML();
 
     if (gparam->verbose) {
-      cerr << "debug3\n";
+      std::cerr << "debug3\n";
     }
     Posterior* post = new Posterior(gparam);
     post->SetNsite(lparam->Nsite_codon);
 
     if (gparam->verbose) {
-      cerr << "debug4\n";
+      std::cerr << "debug4\n";
     }
     SummaryStatistics* ss = new SummaryStatistics(lparam);
 
     if (gparam->verbose) {
-      cerr << "debug5\n";
+      std::cerr << "debug5\n";
     }
     ss->computeSummaries();
 
     if (gparam->verbose) {
-      cerr << "debug6\n";
+      std::cerr << "debug6\n";
     }
     PriorSampler* sampler = new PriorSampler(lparam);
 
     if (gparam->verbose) {
-      cerr << "debug7\n";
+      std::cerr << "debug7\n";
     }
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
 
     if (gparam->verbose) {
-      cerr << "debug8\n";
+      std::cerr << "debug8\n";
     }
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
 
@@ -692,17 +680,17 @@ int main(int argc, char* argv[]) {
 
     while (post->Niter < post->Nrun) {
       if (gparam->verbose) {
-        cerr << "debug11\n";
+        std::cerr << "debug11\n";
       }
       sampler->sample();
 
       if (gparam->verbose) {
-        cerr << "debug12\n";
+        std::cerr << "debug12\n";
       }
       simulator->GetNewSimulatedCodonAlignment();
 
       if (gparam->verbose) {
-        cerr << "debug13\n";
+        std::cerr << "debug13\n";
       }
       ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
 
@@ -711,22 +699,20 @@ int main(int argc, char* argv[]) {
 
       if (post->Niter == 0) {
         ofstream AncestralDataSummaries_os(
-            (gparam->output + ".ancestral").c_str(), OUT);
+            (gparam->output + ".ancestral").c_str(), std::ios_base::out);
         bool headers = true;
         lparam->writeAncestralDataSummaries(AncestralDataSummaries_os, headers);
         AncestralDataSummaries_os.close();
-      } else
-
-      {
+      } else {
         ofstream AncestralDataSummaries_os(
-            (gparam->output + ".ancestral").c_str(), APPEND);
+            (gparam->output + ".ancestral").c_str(), std::ios_base::app);
         bool headers = false;
         lparam->writeAncestralDataSummaries(AncestralDataSummaries_os, headers);
         AncestralDataSummaries_os.close();
       }
 
       if (gparam->verbose) {
-        cerr << "debug14\n";
+        std::cerr << "debug14\n";
       }
       post->registerNewSimulation(
           1, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
@@ -736,33 +722,33 @@ int main(int argc, char* argv[]) {
           lparam->GetCurrentDistances(), lparam->GetCurrentWeights());
 
       if (lparam->tofasta) {
-        ostringstream oss;
+        std::ostringstream oss;
         oss << gparam->output << "-" << post->Niter << ".phylip";
-        string output = oss.str();
-        ofstream ali_os((output).c_str(), OUT);
+        std::string output = oss.str();
+        std::ofstream ali_os((output).c_str(), std::ios_base::out);
         lparam->toAli(ali_os, simulator->CurrentLeafNodeCodonSequences);
         ali_os.close();
       }
-      cerr << ".";
+      std::cerr << ".";
     }
-    cerr << "End of the simulation process\n";
+    std::cerr << "End of the simulation process\n";
     if (gparam->verbose) {
-      cerr << "debug15\n";
+      std::cerr << "debug15\n";
     }
-    ofstream dist_os((gparam->output + ".simu").c_str(), OUT);
+    ofstream dist_os((gparam->output + ".simu").c_str(), std::ios_base::out);
     post->writeHeader(dist_os);
     post->writePosterior(dist_os);
     dist_os.close();
 
-    ofstream ppp_os((gparam->output + ".ppp").c_str(), OUT);
+    ofstream ppp_os((gparam->output + ".ppp").c_str(), std::ios_base::out);
     post->writePosteriorPredictiveStatistics(ppp_os, lparam->summariesRealData);
     ppp_os.close();
 
     exit(0);
 
   } else if (model == "CodonMutSelSBDP") {
-    cerr << "CodonMutSelSBDP"
-         << "\n";
+    std::cerr << "CodonMutSelSBDP"
+              << "\n";
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
     Posterior* post = new Posterior(gparam);
 
@@ -786,7 +772,7 @@ int main(int argc, char* argv[]) {
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
 
-    cerr << "Start simulating \n";
+    std::cerr << "Start simulating \n";
     while (lparam->startPoint < lparam->endPoint) {
       lparam->readChainCodonMutSelSBDP();
 
@@ -804,14 +790,14 @@ int main(int argc, char* argv[]) {
 
             if (post->Niter == 0) {
               ofstream AncestralDataSummaries_os(
-                  (gparam->output + ".ancestral").c_str(), OUT);
+                  (gparam->output + ".ancestral").c_str(), std::ios_base::out);
               bool headers = true;
               lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,
                                                   headers);
               AncestralDataSummaries_os.close();
             } else {
               ofstream AncestralDataSummaries_os(
-                  (gparam->output + ".ancestral").c_str(), APPEND);
+                  (gparam->output + ".ancestral").c_str(), std::ios_base::app);
               bool headers = false;
               lparam->writeAncestralDataSummaries(AncestralDataSummaries_os,
                                                   headers);
@@ -832,8 +818,8 @@ int main(int argc, char* argv[]) {
           ostringstream oss;
           oss << gparam->output << "-pt" << lparam->startPoint << "-" << iter
               << ".phylip";
-          string output = oss.str();
-          ofstream ali_os((output).c_str(), OUT);
+          std::string output = oss.str();
+          ofstream ali_os((output).c_str(), std::ios_base::out);
           lparam->toAli(ali_os, simulator->CurrentLeafNodeCodonSequences);
           ali_os.close();
         }
@@ -846,50 +832,50 @@ int main(int argc, char* argv[]) {
         lparam->incrementStartPoint();
       }
       lparam->incrementStartPoint();
-      cerr << ".";
+      std::cerr << ".";
     }
-    cerr << "End of the simulation process\n";
+    std::cerr << "End of the simulation process\n";
 
-    ofstream dist_os((gparam->output + ".simu").c_str(), OUT);
+    ofstream dist_os((gparam->output + ".simu").c_str(), std::ios_base::out);
     post->writeHeader(dist_os);
     post->writePosterior(dist_os);
     dist_os.close();
 
-    ofstream ppp_os((gparam->output + ".ppp").c_str(), OUT);
+    ofstream ppp_os((gparam->output + ".ppp").c_str(), std::ios_base::out);
     post->writePosteriorPredictiveStatistics(ppp_os, lparam->summariesRealData);
     ppp_os.close();
 
     exit(0);
 
   } else if (model == "CodonMutSelFinite") {
-    cerr << "CodonMutSelFinite"
-         << "\n";
+    std::cerr << "CodonMutSelFinite"
+              << "\n";
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
     Posterior* post = new Posterior(gparam);
     if (gparam->verbose) {
-      cerr << "debug1\n";
+      std::cerr << "debug1\n";
     }
     LocalParameters* lparam = new LocalParameters(gparam);
     lparam->readChainCodonMutSelFinite();
     if (gparam->verbose) {
-      cerr << "debug2\n";
+      std::cerr << "debug2\n";
     }
     ofstream lparam_os((gparam->output + ".inputparam").c_str());
     lparam->writeParam(lparam_os);
     lparam_os.close();
     if (gparam->verbose) {
-      cerr << "debug3\n";
+      std::cerr << "debug3\n";
     }
     SummaryStatistics* ss = new SummaryStatistics(lparam);
     ss->computeSummaries();
     if (gparam->verbose) {
-      cerr << "debug4\n";
+      std::cerr << "debug4\n";
     }
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());
     lparam->writeRealDataSummaries(realDataSummaries_os);
     realDataSummaries_os.close();
     if (gparam->verbose) {
-      cerr << "debug5\n";
+      std::cerr << "debug5\n";
     }
     PriorSampler* sampler = new PriorSampler(lparam);
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
@@ -897,24 +883,24 @@ int main(int argc, char* argv[]) {
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
     if (gparam->verbose) {
-      cerr << "debug6\n";
+      std::cerr << "debug6\n";
     }
-    cerr << "Start simulating \n";
+    std::cerr << "Start simulating \n";
     while (lparam->startPoint < lparam->endPoint) {
       lparam->readChainCodonMutSelFinite();
       int iter = 0;
       while (iter < post->Nrun) {
         sampler->sample();
         if (gparam->verbose) {
-          cerr << "debug7\n";
+          std::cerr << "debug7\n";
         }
         simulator->GetNewSimulatedCodonAlignment();
         if (gparam->verbose) {
-          cerr << "debug8\n";
+          std::cerr << "debug8\n";
         }
         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
         if (gparam->verbose) {
-          cerr << "debug9\n";
+          std::cerr << "debug9\n";
         }
         post->registerNewSimulation(
             lparam->startPoint, lparam->GetCurrentParameters(),
@@ -924,14 +910,14 @@ int main(int argc, char* argv[]) {
             lparam->GetCurrentSiteSpecificEvoStats(),
             lparam->GetCurrentDistances(), lparam->GetCurrentWeights());
         if (gparam->verbose) {
-          cerr << "debug10\n";
+          std::cerr << "debug10\n";
         }
         if (lparam->tofasta) {
           ostringstream oss;
           oss << gparam->output << "-pt" << lparam->startPoint << "-" << iter
               << ".phylip";
-          string output = oss.str();
-          ofstream ali_os((output).c_str(), OUT);
+          std::string output = oss.str();
+          ofstream ali_os((output).c_str(), std::ios_base::out);
           lparam->toAli(ali_os, simulator->CurrentLeafNodeCodonSequences);
           ali_os.close();
         }
@@ -944,21 +930,21 @@ int main(int argc, char* argv[]) {
         lparam->incrementStartPoint();
       }
       lparam->incrementStartPoint();
-      cerr << ".";
+      std::cerr << ".";
     }
-    cerr << "End of the simulation process\n";
+    std::cerr << "End of the simulation process\n";
     if (gparam->verbose) {
-      cerr << "debug11\n";
+      std::cerr << "debug11\n";
     }
-    ofstream dist_os((gparam->output + ".simu").c_str(), OUT);
+    ofstream dist_os((gparam->output + ".simu").c_str(), std::ios_base::out);
     post->writeHeader(dist_os);
     post->writePosterior(dist_os);
     dist_os.close();
     if (gparam->verbose) {
-      cerr << "debug12\n";
+      std::cerr << "debug12\n";
     }
 
-    ofstream ppp_os((gparam->output + ".ppp").c_str(), OUT);
+    ofstream ppp_os((gparam->output + ".ppp").c_str(), std::ios_base::out);
     post->writePosteriorPredictiveStatistics(ppp_os, lparam->summariesRealData);
     ppp_os.close();
 
@@ -967,7 +953,7 @@ int main(int argc, char* argv[]) {
   } else if (model == "CodonMutSelFinitePPPred" ||
              model == "CodonMutSelSBDPPPred") {
     // the chain points are extract from the posterior file according to chainID
-    cerr << model << "\n";
+    std::cerr << model << "\n";
 
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
     Posterior* post = new Posterior(gparam);
@@ -988,35 +974,35 @@ int main(int argc, char* argv[]) {
     realDataSummaries_os.close();
 
     if (gparam->verbose) {
-      cerr << "debug1\n";
+      std::cerr << "debug1\n";
     }
 
     if (gparam->verbose) {
-      cerr << "debug2\n";
+      std::cerr << "debug2\n";
     }
 
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
 
     if (gparam->verbose) {
-      cerr << "debug3\n";
+      std::cerr << "debug3\n";
     }
 
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
 
     if (gparam->verbose) {
-      cerr << "debug4\n";
+      std::cerr << "debug4\n";
     }
 
-    cerr << lparam->Nsite_codon << "\n";
+    std::cerr << lparam->Nsite_codon << "\n";
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
 
     if (gparam->verbose) {
-      cerr << "debug5\n";
+      std::cerr << "debug5\n";
     }
     post->readPosterior(lparam->posteriorfile);
 
-    cerr << "The simulation process started\n";
+    std::cerr << "The simulation process started\n";
     if (!post->posterior.empty()) {
       int it = 0;
       while (it < post->threshold) {
@@ -1026,15 +1012,15 @@ int main(int argc, char* argv[]) {
 
         if (model == "CodonMutSelSBDPPPred") {
           if (gparam->verbose) {
-            cerr << "CodonMutSelSBDPPPred "
-                 << "debug6\n";
+            std::cerr << "CodonMutSelSBDPPPred "
+                      << "debug6\n";
           }
           lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
 
         } else if (model == "CodonMutSelFinitePPred") {
           if (gparam->verbose) {
-            cerr << "CodonMutSelFinitePPred "
-                 << "debug6\n";
+            std::cerr << "CodonMutSelFinitePPred "
+                      << "debug6\n";
           }
           lparam->readChainCodonMutSelFinite(lparam->GetPointID());
         }
@@ -1042,16 +1028,16 @@ int main(int argc, char* argv[]) {
         while (rep < post->Nrun) {
           rep++;
           if (gparam->verbose) {
-            cerr << rep << " " << point << " debug7\n";
+            std::cerr << rep << " " << point << " debug7\n";
           }
           simulator->GetNewSimulatedCodonAlignment();
 
           if (gparam->verbose) {
-            cerr << " debug7.1\n";
+            std::cerr << " debug7.1\n";
           }
           ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
           if (gparam->verbose) {
-            cerr << " debug7.2\n";
+            std::cerr << " debug7.2\n";
           }
 
           post->registerNewSimulation(
@@ -1064,18 +1050,19 @@ int main(int argc, char* argv[]) {
           it++;
         }
 
-        cerr << ".";
+        std::cerr << ".";
       }
 
-      cerr << "End of the simulation process\n";
+      std::cerr << "End of the simulation process\n";
 
-      // ofstream dist_os((gparam->output+".post").c_str(),OUT);
-      ofstream dist_os((gparam->output + ".simu").c_str(), OUT);
+      std::ofstream dist_os((gparam->output + ".simu").c_str(),
+                            std::ios_base::out);
       post->writeHeader(dist_os);
       post->writePosterior(dist_os);
       dist_os.close();
 
-      ofstream ppp_os((gparam->output + ".ppp").c_str(), OUT);
+      std::ofstream ppp_os((gparam->output + ".ppp").c_str(),
+                           std::ios_base::out);
       post->writePosteriorPredictiveStatistics(ppp_os,
                                                lparam->summariesRealData);
       ppp_os.close();
@@ -1083,7 +1070,7 @@ int main(int argc, char* argv[]) {
 
   } else if (model == "CodonMutSelFiniteSeq" || model == "CodonMutSelSBDPSeq") {
     // the chain pointS are extract from the posterior file according to chainID
-    cerr << model << "\n";
+    std::cerr << model << "\n";
 
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
     Posterior* post = new Posterior(gparam);
@@ -1102,19 +1089,19 @@ int main(int argc, char* argv[]) {
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());
     lparam->writeRealDataSummaries(realDataSummaries_os);
     realDataSummaries_os.close();
-    string s = "seq";
+    std::string s = "seq";
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam, s);
 
-    cerr << lparam->Nsite_codon << "\n";
+    std::cerr << lparam->Nsite_codon << "\n";
     TreeSimulator* simulator = new TreeSimulator(lparam, submatrix);
 
     if (gparam->verbose) {
-      cerr << "debug5\n";
+      std::cerr << "debug5\n";
     }
 
     post->readPosterior(lparam->posteriorfile);
 
-    cerr << "The simulation process started\n";
+    std::cerr << "The simulation process started\n";
     if (!post->posterior.empty()) {
       int it = 0;
       while (it < post->threshold) {
@@ -1124,15 +1111,15 @@ int main(int argc, char* argv[]) {
 
         if (model == "CodonMutSelSBDPPPred") {
           if (gparam->verbose) {
-            cerr << "CodonMutSelSBDPPPred "
-                 << "debug6\n";
+            std::cerr << "CodonMutSelSBDPPPred "
+                      << "debug6\n";
           }
           lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
 
         } else if (model == "CodonMutSelFinitePPred") {
           if (gparam->verbose) {
-            cerr << "CodonMutSelFinitePPred "
-                 << "debug6\n";
+            std::cerr << "CodonMutSelFinitePPred "
+                      << "debug6\n";
           }
           lparam->readChainCodonMutSelFinite(lparam->GetPointID());
         }
@@ -1142,75 +1129,75 @@ int main(int argc, char* argv[]) {
         while (rep < post->Nrun) {
           rep++;
           if (gparam->verbose) {
-            cerr << rep << " " << point << " debug7\n";
+            std::cerr << rep << " " << point << " debug7\n";
           }
           simulator->GetNewProbSeq();
 
           if (gparam->verbose) {
-            cerr << " debug7.1\n";
+            std::cerr << " debug7.1\n";
           }
 
           if (it == 0) {
             ofstream mutmatrix_A_os((gparam->output + ".mutmatrix_A").c_str(),
-                                    OUT);
+                                    std::ios_base::out);
             ofstream selmatrix_A_os((gparam->output + ".selmatrix_A").c_str(),
-                                    OUT);
+                                    std::ios_base::out);
             submatrix->WriteSubMatrix(mutmatrix_A_os, selmatrix_A_os, 0);
             mutmatrix_A_os.close();
             selmatrix_A_os.close();
 
             ofstream mutmatrix_C_os((gparam->output + ".mutmatrix_C").c_str(),
-                                    OUT);
+                                    std::ios_base::out);
             ofstream selmatrix_C_os((gparam->output + ".selmatrix_C").c_str(),
-                                    OUT);
+                                    std::ios_base::out);
             submatrix->WriteSubMatrix(mutmatrix_C_os, selmatrix_C_os, 1);
             mutmatrix_C_os.close();
             selmatrix_C_os.close();
 
             ofstream mutmatrix_G_os((gparam->output + ".mutmatrix_G").c_str(),
-                                    OUT);
+                                    std::ios_base::out);
             ofstream selmatrix_G_os((gparam->output + ".selmatrix_G").c_str(),
-                                    OUT);
+                                    std::ios_base::out);
             submatrix->WriteSubMatrix(mutmatrix_G_os, selmatrix_G_os, 2);
             mutmatrix_G_os.close();
             selmatrix_G_os.close();
 
             ofstream mutmatrix_T_os((gparam->output + ".mutmatrix_T").c_str(),
-                                    OUT);
+                                    std::ios_base::out);
             ofstream selmatrix_T_os((gparam->output + ".selmatrix_T").c_str(),
-                                    OUT);
+                                    std::ios_base::out);
             submatrix->WriteSubMatrix(mutmatrix_T_os, selmatrix_T_os, 0);
             mutmatrix_T_os.close();
             selmatrix_T_os.close();
           } else {
             ofstream mutmatrix_A_os((gparam->output + ".mutmatrix_A").c_str(),
-                                    APPEND);
+                                    std::ios_base::app);
             ofstream selmatrix_A_os((gparam->output + ".selmatrix_A").c_str(),
-                                    APPEND);
+                                    std::ios_base::app);
             submatrix->WriteSubMatrix(mutmatrix_A_os, selmatrix_A_os, 0);
             mutmatrix_A_os.close();
             selmatrix_A_os.close();
 
             ofstream mutmatrix_C_os((gparam->output + ".mutmatrix_C").c_str(),
-                                    APPEND);
+                                    std::ios_base::app);
             ofstream selmatrix_C_os((gparam->output + ".selmatrix_C").c_str(),
-                                    APPEND);
+                                    std::ios_base::app);
             submatrix->WriteSubMatrix(mutmatrix_C_os, selmatrix_C_os, 1);
             mutmatrix_C_os.close();
             selmatrix_C_os.close();
 
             ofstream mutmatrix_G_os((gparam->output + ".mutmatrix_G").c_str(),
-                                    APPEND);
+                                    std::ios_base::app);
             ofstream selmatrix_G_os((gparam->output + ".selmatrix_G").c_str(),
-                                    APPEND);
+                                    std::ios_base::app);
             submatrix->WriteSubMatrix(mutmatrix_G_os, selmatrix_G_os, 2);
             mutmatrix_G_os.close();
             selmatrix_G_os.close();
 
             ofstream mutmatrix_T_os((gparam->output + ".mutmatrix_T").c_str(),
-                                    APPEND);
+                                    std::ios_base::app);
             ofstream selmatrix_T_os((gparam->output + ".selmatrix_T").c_str(),
-                                    APPEND);
+                                    std::ios_base::app);
             submatrix->WriteSubMatrix(mutmatrix_T_os, selmatrix_T_os, 3);
             mutmatrix_T_os.close();
             selmatrix_T_os.close();
@@ -1218,7 +1205,7 @@ int main(int argc, char* argv[]) {
 
           it++;
         }
-        cerr << ".";
+        std::cerr << ".";
       }
     }
   }

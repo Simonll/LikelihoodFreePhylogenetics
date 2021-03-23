@@ -16,15 +16,15 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
-#ifndef STRINGSTREAMUTILS_H
-#define STRINGSTREAMUTILS_H
+#ifndef SOURCES_STRINGSTREAMUTILS_H_
+#define SOURCES_STRINGSTREAMUTILS_H_
 
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-using namespace std;
+#include <string>
 
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
@@ -34,7 +34,7 @@ using namespace std;
 
 const char digit[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
-inline int GoPastNext(istream& is, const char inChar) {
+inline int GoPastNext(std::istream& is, const char inChar) {
   unsigned char c;
   if (!is.eof()) {
     do {
@@ -44,8 +44,8 @@ inline int GoPastNext(istream& is, const char inChar) {
   return !is.eof();
 }
 
-inline string ReadLine(istream& is) {
-  string str = "";
+inline std::string ReadLine(std::istream& is) {
+  std::string str = "";
   char c;
   do {
     is.get(c);
@@ -56,7 +56,7 @@ inline string ReadLine(istream& is) {
   return str;
 }
 
-inline void GoPastNextWord(istream& is, const string inWord) {
+inline void GoPastNextWord(std::istream& is, const std::string inWord) {
   unsigned int k = 0;
   char c;
   while ((!is.eof()) && (k < inWord.length())) {
@@ -76,7 +76,7 @@ inline void GoPastNextWord(istream& is, const string inWord) {
   }
 }
 
-inline int EquivalentStrings(string a, string b) {
+inline int EquivalentStrings(std::string a, std::string b) {
   if (a.length() != b.length()) {
     return 0;
   }
@@ -99,16 +99,16 @@ inline int EquivalentStrings(string a, string b) {
   return cont;
 }
 
-inline void GoPastNextLine(istream& is, const string inLine) {
-  string theLine;
+inline void GoPastNextLine(std::istream& is, const std::string inLine) {
+  std::string theLine;
   do {
     theLine = ReadLine(is);
-    cerr << theLine << "\n";
+    std::cerr << theLine << "\n";
   } while (!EquivalentStrings(theLine, inLine));
 }
 
-inline string StringReplace(char c, string by, string s) {
-  string tmp;
+inline std::string StringReplace(char c, std::string by, std::string s) {
+  std::string tmp;
   for (unsigned int i = 0; i < s.length(); i++) {
     if (s[i] == c) {
       tmp += by;
@@ -119,7 +119,7 @@ inline string StringReplace(char c, string by, string s) {
   return tmp;
 }
 
-inline int EmptyLine(string s) {
+inline int EmptyLine(std::string s) {
   int unsigned n = 0;
   while ((n < s.length()) &&
          ((s[n] == ' ') || (s[n] == '\t') || (s[n] == '\n'))) {
@@ -128,8 +128,8 @@ inline int EmptyLine(string s) {
   return (n == s.length());
 }
 
-inline string Filter(string input, char c) {
-  string temp = "";
+inline std::string Filter(std::string input, char c) {
+  std::string temp = "";
   for (int unsigned i = 0; i < input.length(); i++) {
     if (input[i] != c) {
       temp += input[i];
@@ -138,7 +138,7 @@ inline string Filter(string input, char c) {
   return temp;
 }
 
-inline int IsInt(string s) {
+inline int IsInt(std::string s) {
   int returnValue = 1;
   unsigned int i = 0;
   if ((s[0] == '+') || (s[0] == '-')) i++;
@@ -157,7 +157,7 @@ inline int IsInt(string s) {
   return returnValue;
 }
 
-inline int IsFloat(string s) {
+inline int IsFloat(std::string s) {
   int returnValue = 1;
   unsigned int i = 0;
 
@@ -191,7 +191,7 @@ inline double Decimal(double d, int ndigit) {
   for (int k = 0; k < ndigit; k++) {
     precision *= 10;
   }
-  return ((double)((int)(precision * d + 0.1 / precision))) / precision;
+  return static_cast<double>((precision * d + 0.1 / precision) / precision);
 }
 
-#endif
+#endif  // SOURCES_STRINGSTREAMUTILS_H_

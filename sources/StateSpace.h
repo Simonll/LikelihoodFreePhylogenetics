@@ -15,22 +15,21 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 <http://www.gnu.org/licenses/>.
 
 **********************/
-
-#ifndef STATESPACE_H
-#define STATESPACE_H
+#ifndef SOURCES_STATESPACE_H_
+#define SOURCES_STATESPACE_H_
+#include <string>
 
 #include "BiologicalSequences.h"
-
 // pure interface
 //
 class StateSpace {
  public:
   virtual ~StateSpace() {}
 
-  virtual string GetState(int state) = 0;
+  virtual std::string GetState(int state) = 0;
   virtual int GetNstate() = 0;
 
-  virtual int GetState(string from) = 0;
+  virtual int GetState(std::string from) = 0;
 };
 
 // simple state space: assumes that states are referred to using a one-letter
@@ -38,11 +37,11 @@ class StateSpace {
 //
 class SimpleStateSpace : public StateSpace {
  public:
-  int GetState(string from);
+  int GetState(std::string from);
 
   int GetNstate() { return Nstate; }
 
-  string GetState(int state);
+  std::string GetState(int state);
 
   char GetCharState(int state) { return AlphabetSet[state]; }
 
@@ -71,4 +70,4 @@ class ProteinStateSpace : public SimpleStateSpace {
   ~ProteinStateSpace();
 };
 
-#endif  // STATESPACE_H
+#endif  // SOURCES_STATESPACE_H_

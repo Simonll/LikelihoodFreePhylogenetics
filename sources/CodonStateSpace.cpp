@@ -35,12 +35,11 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 **********************/
 
+#include "CodonStateSpace.h"
+
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
-using namespace std;
-
-#include "CodonStateSpace.h"
 
 CodonStateSpace::CodonStateSpace(GeneticCodeType type) {
   nucstatespace = new DNAStateSpace;
@@ -166,8 +165,8 @@ CodonStateSpace::CodonStateSpace(GeneticCodeType type) {
       StopPos3[i] = MtMamStopPos3[i];
     }
   } else {
-    cerr << "genetic code not recognised\n";
-    cerr << type << '\n';
+    std::cerr << "genetic code not recognised\n";
+    std::cerr << type << '\n';
     exit(1);
   }
 }
@@ -186,8 +185,8 @@ CodonStateSpace::~CodonStateSpace() {
   delete protstatespace;
 }
 
-string CodonStateSpace::GetState(int codon) {
-  ostringstream s;
+std::string CodonStateSpace::GetState(int codon) {
+  std::ostringstream s;
   if (codon == -1) {
     s << "---";
   } else {
@@ -196,13 +195,13 @@ string CodonStateSpace::GetState(int codon) {
       << DNAletters[GetCodonPosition(2, codon)];
   }
   if (s.str().length() != 3) {
-    cerr << "error in translation\n";
+    std::cerr << "error in translation\n";
     exit(1);
   }
   return s.str();
 }
 
-int CodonStateSpace::GetState(string word) {
+int CodonStateSpace::GetState(std::string word) {
   return GetCodonFromDNA(GetDNAStateSpace()->GetState(word.substr(0, 1)),
                          GetDNAStateSpace()->GetState(word.substr(1, 1)),
                          GetDNAStateSpace()->GetState(word.substr(2, 1)));
@@ -231,23 +230,24 @@ int CodonStateSpace::GetCodonFromDNA(int pos1, int pos2, int pos3) {
     l++;
   }
   if (l == GetNstate()) {
-    // cerr << "warning in CodonStateSpace::GetCodonFromDNA : out of bound : "
+    // std::cerr << "warning in CodonStateSpace::GetCodonFromDNA : out of bound
+    // : "
     // << GetDNAStateSpace()->GetState(pos1) <<
     // GetDNAStateSpace()->GetState(pos2) << GetDNAStateSpace()->GetState(pos3)
     // << '\n';
     return -1;
-    cerr << "warning in CodonStateSpace::GetCodonFromDNA : out of bound : "
-         << GetDNAStateSpace()->GetState(pos1)
-         << GetDNAStateSpace()->GetState(pos2)
-         << GetDNAStateSpace()->GetState(pos3) << '\n';
+    std::cerr << "warning in CodonStateSpace::GetCodonFromDNA : out of bound : "
+              << GetDNAStateSpace()->GetState(pos1)
+              << GetDNAStateSpace()->GetState(pos2)
+              << GetDNAStateSpace()->GetState(pos3) << '\n';
     if (code == Universal) {
-      cerr << "universal\n";
+      std::cerr << "universal\n";
     } else if (code == MtMam) {
-      cerr << "mt mam\n";
+      std::cerr << "mt mam\n";
     } else if (code == MtInv) {
-      cerr << "mt inv\n";
+      std::cerr << "mt inv\n";
     }
-    cerr << "code not recognized\n";
+    std::cerr << "code not recognized\n";
     exit(1);
   }
   return l;
@@ -309,7 +309,7 @@ int CodonStateSpace::GetDegeneracy(int codon) {
 
 void CodonStateSpace::MakeDegeneracyMap() {
   for (int codon = 0; codon < Nstate; codon++) {
-    cerr << codon << '\t' << GetState(codon) << '\t';
+    std::cerr << codon << '\t' << GetState(codon) << '\t';
     int pos1 = GetCodonPosition(0, codon);
     int pos2 = GetCodonPosition(1, codon);
     int aa = Translation(codon);
@@ -319,19 +319,19 @@ void CodonStateSpace::MakeDegeneracyMap() {
       if ((cod != -1) && (Translation(cod) == aa)) {
         d++;
       }
-      cerr << GetState(cod);
+      std::cerr << GetState(cod);
       if (cod == -1) {
-        cerr << " $ ";
+        std::cerr << " $ ";
       } else {
-        cerr << ' ' << GetProteinStateSpace()->GetState(Translation(cod))
-             << ' ';
+        std::cerr << ' ' << GetProteinStateSpace()->GetState(Translation(cod))
+                  << ' ';
       }
     }
-    cerr << '\t';
-    cerr << d << '\n';
+    std::cerr << '\t';
+    std::cerr << d << '\n';
     degeneracy[codon] = d;
   }
-  cerr << "ok\n";
+  std::cerr << "ok\n";
 }
 
 int CodonStateSpace::IsNonCTNearest(int a, int b) {
@@ -375,8 +375,8 @@ unknown;
 codonpos[1][l]) || (pos3 != codonpos[2][l])))	{ l++;
         }
         if (l == Ncodon)	{
-                cerr << "error in CodonStateSpace::GetCodonFromDNAWithStops :
-out of bound : " << pos1 << '\t' << pos2 << '\t' << pos3 << '\n'; exit(1);
+                std::cerr << "error in CodonStateSpace::GetCodonFromDNAWithStops
+: out of bound : " << pos1 << '\t' << pos2 << '\t' << pos3 << '\n'; exit(1);
         }
         return l;
 }
@@ -396,9 +396,9 @@ string GetStateWithStops(int codon)	{
 string CodonStateSpace:TranslateDNASequenceWithStops(string dnaseq)	{
 
         if (dnaseq.length() % 3)	{
-                cerr << "error in CodonStateSpace::Translate: dna sequence not
-multiple of three\n"; cerr << "length is : " << dnaseq.length() << '\n';
-                exit(1);
+                std::cerr << "error in CodonStateSpace::Translate: dna sequence
+not multiple of three\n"; std::cerr << "length is : " << dnaseq.length() <<
+'\n'; exit(1);
         }
         int N = dnaseq.length() / 3;
 
