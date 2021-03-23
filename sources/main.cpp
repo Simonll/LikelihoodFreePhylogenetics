@@ -223,6 +223,16 @@ int main(int argc, char* argv[]) {
                   lparam[l]->GetCurrentSiteSpecificEvoStats(),
                   lparam[l]->GetCurrentDistances(),
                   lparam[l]->GetCurrentWeights());
+
+              if (lparam[l]->tofasta) {
+                ostringstream oss;
+                oss << gparam->output << "-" << post3->Niter << ".fasta";
+                std::string output = oss.str();
+                ofstream fasta_os((output).c_str(), std::ios_base::out);
+                lparam[l]->toFasta(fasta_os,
+                                   simulator[l]->CurrentLeafNodeCodonSequences);
+                fasta_os.close();
+              }
             }
           }
         }
@@ -251,38 +261,12 @@ int main(int argc, char* argv[]) {
         gparam->chainPointEvery;
     Posterior* post3 = new Posterior(gparam);
     LocalParameters** lparam = new LocalParameters*[Npoint];
-
-    if (gparam->verbose) {
-      std::cerr << "debug1\n";
-    }
-
-    if (gparam->verbose) {
-      std::cerr << "debug2\n";
-    }
     std::cerr << "Npoint\t" << Npoint << "\n";
-    if (gparam->verbose) {
-      std::cerr << "debug3\n";
-    }
     SummaryStatistics** ss = new SummaryStatistics*[Npoint];
-    if (gparam->verbose) {
-      std::cerr << "debug4\n";
-    }
     PriorSampler** sampler = new PriorSampler*[Npoint];
-    if (gparam->verbose) {
-      std::cerr << "debug5\n";
-    }
     SiteInterSubMatrix** submatrix = new SiteInterSubMatrix*[Npoint];
-    if (gparam->verbose) {
-      std::cerr << "debug6\n";
-    }
     AncestralSequence** ancestraseq = new AncestralSequence*[Npoint];
-    if (gparam->verbose) {
-      std::cerr << "debug7\n";
-    }
     TreeSimulator** simulator = new TreeSimulator*[Npoint];
-    if (gparam->verbose) {
-      std::cerr << "debug8\n";
-    }
 
     omp_set_dynamic(0);
     omp_set_num_threads(gparam->Nthread);
@@ -292,42 +276,22 @@ int main(int argc, char* argv[]) {
          pt_i += gparam->chainPointEvery) {
       int l = static_cast<int>(pt_i - gparam->chainPointStart) /
               gparam->chainPointEvery;
-      if (gparam->verbose) {
-        std::cerr << "debug9\n";
-        std::cerr << (l) << "\n";
-      }
+
       lparam[l] = new LocalParameters(gparam);
-      if (gparam->verbose) {
-        std::cerr << "debug10\n";
-      }
+
       lparam[l]->readChainCodonMutSelSBDP(pt_i);
-      if (gparam->verbose) {
-        std::cerr << "debug11\n";
-      }
+
       ss[l] = new SummaryStatistics(lparam[l]);
-      if (gparam->verbose) {
-        std::cerr << "debug12\n";
-      }
+
       ss[l]->computeSummaries();
-      if (gparam->verbose) {
-        std::cerr << "debug13\n";
-      }
+
       sampler[l] = new PriorSampler(lparam[l]);
-      if (gparam->verbose) {
-        std::cerr << "debug14\n";
-      }
+
       submatrix[l] = new SiteInterSubMatrix(lparam[l]);
-      if (gparam->verbose) {
-        std::cerr << "debug15\n";
-      }
+
       ancestraseq[l] = new AncestralSequence(lparam[l]);
-      if (gparam->verbose) {
-        std::cerr << "debug16\n";
-      }
+
       simulator[l] = new TreeSimulator(lparam[l], submatrix[l], ancestraseq[l]);
-      if (gparam->verbose) {
-        std::cerr << "debug17\n";
-      }
 
       if (l == 0) {
         post3->SetNsite(lparam[l]->Nsite_codon);
@@ -372,23 +336,9 @@ int main(int argc, char* argv[]) {
       {
 #pragma omp for
         for (int l = 0; l < Npoint; l++) {
-          if (gparam->verbose) {
-            std::cerr << "debug18\n";
-          }
           sampler[l]->sample();
-
-          if (gparam->verbose) {
-            std::cerr << "debug19\n";
-          }
           simulator[l]->GetNewSimulatedCodonAlignment();
-          if (gparam->verbose) {
-            std::cerr << "debug20\n";
-          }
-
           ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
-          if (gparam->verbose) {
-            std::cerr << "debug21\n";
-          }
 
 #pragma omp critical
           {
@@ -852,56 +802,37 @@ int main(int argc, char* argv[]) {
               << "\n";
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
     Posterior* post = new Posterior(gparam);
-    if (gparam->verbose) {
-      std::cerr << "debug1\n";
-    }
     LocalParameters* lparam = new LocalParameters(gparam);
     lparam->readChainCodonMutSelFinite();
-    if (gparam->verbose) {
-      std::cerr << "debug2\n";
-    }
+
     ofstream lparam_os((gparam->output + ".inputparam").c_str());
     lparam->writeParam(lparam_os);
     lparam_os.close();
-    if (gparam->verbose) {
-      std::cerr << "debug3\n";
-    }
+
     SummaryStatistics* ss = new SummaryStatistics(lparam);
     ss->computeSummaries();
-    if (gparam->verbose) {
-      std::cerr << "debug4\n";
-    }
+
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());
     lparam->writeRealDataSummaries(realDataSummaries_os);
     realDataSummaries_os.close();
-    if (gparam->verbose) {
-      std::cerr << "debug5\n";
-    }
+
     PriorSampler* sampler = new PriorSampler(lparam);
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
-    if (gparam->verbose) {
-      std::cerr << "debug6\n";
-    }
+
     std::cerr << "Start simulating \n";
     while (lparam->startPoint < lparam->endPoint) {
       lparam->readChainCodonMutSelFinite();
       int iter = 0;
       while (iter < post->Nrun) {
         sampler->sample();
-        if (gparam->verbose) {
-          std::cerr << "debug7\n";
-        }
+
         simulator->GetNewSimulatedCodonAlignment();
-        if (gparam->verbose) {
-          std::cerr << "debug8\n";
-        }
+
         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-        if (gparam->verbose) {
-          std::cerr << "debug9\n";
-        }
+
         post->registerNewSimulation(
             lparam->startPoint, lparam->GetCurrentParameters(),
             lparam->GetCurrentSummaries(),
@@ -909,17 +840,15 @@ int main(int argc, char* argv[]) {
             lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
             lparam->GetCurrentSiteSpecificEvoStats(),
             lparam->GetCurrentDistances(), lparam->GetCurrentWeights());
-        if (gparam->verbose) {
-          std::cerr << "debug10\n";
-        }
+
         if (lparam->tofasta) {
           ostringstream oss;
           oss << gparam->output << "-pt" << lparam->startPoint << "-" << iter
               << ".phylip";
           std::string output = oss.str();
-          ofstream ali_os((output).c_str(), std::ios_base::out);
-          lparam->toAli(ali_os, simulator->CurrentLeafNodeCodonSequences);
-          ali_os.close();
+          ofstream fasta_os((output).c_str(), std::ios_base::out);
+          lparam->toFasta(fasta_os, simulator->CurrentLeafNodeCodonSequences);
+          fasta_os.close();
         }
         iter++;
       }
@@ -933,17 +862,16 @@ int main(int argc, char* argv[]) {
       std::cerr << ".";
     }
     std::cerr << "End of the simulation process\n";
-    if (gparam->verbose) {
-      std::cerr << "debug11\n";
-    }
+    cerr << "writing .simu file"
+         << "\n";
     ofstream dist_os((gparam->output + ".simu").c_str(), std::ios_base::out);
+
     post->writeHeader(dist_os);
     post->writePosterior(dist_os);
     dist_os.close();
-    if (gparam->verbose) {
-      std::cerr << "debug12\n";
-    }
 
+    cerr << "writing .ppp file"
+         << "\n";
     ofstream ppp_os((gparam->output + ".ppp").c_str(), std::ios_base::out);
     post->writePosteriorPredictiveStatistics(ppp_os, lparam->summariesRealData);
     ppp_os.close();
