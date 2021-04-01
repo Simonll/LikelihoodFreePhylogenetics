@@ -177,6 +177,7 @@ void TreeSimulator::GetNewProbSeq() {
 void TreeSimulator::GetNewSimulatedCodonAlignment() {
   int verbose = lparam->verbose;
   submatrix->resetSubMatrix();
+
   if (verbose) {
     std::cerr << "submatrix->resetSubMatrix()\n";
   }

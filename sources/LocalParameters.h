@@ -109,6 +109,7 @@ class LocalParameters {
   bool getrate1;
   bool getrate2;
 
+  double* omega_site;
   double omega;
   double *nucp, *nucrr, *nucp1, *nucrr1, *nucp2, *nucrr2;  // 6 param
   double **nucrrnr, **nucrrnr1, **nucrrnr2;                // 12 param
@@ -171,6 +172,7 @@ class LocalParameters {
   void readChainCodonMutSelFinite();
   void readFMutSelCodeML();
   void readLocalInstructions();
+  void readParametersCodemlM7M8(int pt_i);
 
   // Setters
   void SetCurrentParametersFromPosterior(

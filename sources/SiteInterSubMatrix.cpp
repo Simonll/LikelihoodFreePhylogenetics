@@ -457,7 +457,8 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
                 S += log(lparam->lambda_R / (1.0 - lparam->lambda_R));
               }
 
-              SubRate = MutRate * lparam->lambda_omega * lparam->omega;
+              SubRate = MutRate * lparam->lambda_omega * lparam->omega *
+                        lparam->omega_site[site_codon_i];
               // MutRateNonSyn = MutRate;
               // SubRateNonSyn = SubRate;
             } else {
@@ -707,7 +708,8 @@ void SiteInterSubMatrix::UpdateSubMatrixSeq(int taxa,
                 S += log(lparam->lambda_R / (1.0 - lparam->lambda_R));
               }
 
-              SubRate = MutRate * lparam->lambda_omega * lparam->omega;
+              SubRate = MutRate * lparam->lambda_omega * lparam->omega *
+                        lparam->omega_site[site_codon_i];
               // MutRateNonSyn = MutRate;
               // SubRateNonSyn = SubRate;
             } else {

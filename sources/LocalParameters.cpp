@@ -44,17 +44,9 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->NEvoStats = gparam->NEvoStats;
   this->NSiteSpecificEvoStats = gparam->NSiteSpecificEvoStats;
 
-  if (gparam->verbose) {
-    std::cerr << "LocalParam1\n";
-  }
-
   this->listParam = new std::string[this->NParam];
   for (int param_i = 0; param_i < this->NParam; param_i++) {
     this->listParam[param_i] = gparam->listParam[param_i];
-  }
-
-  if (gparam->verbose) {
-    std::cerr << "LocalParam2\n";
   }
 
   this->listSummaries = new std::string[this->NSummaries];
@@ -62,17 +54,9 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
     this->listSummaries[summary_i] = gparam->listSummaries[summary_i];
   }
 
-  if (gparam->verbose) {
-    std::cerr << "LocalParam3\n";
-  }
-
   this->listEvoStats = new std::string[this->NEvoStats];
   for (int EvoStats_i = 0; EvoStats_i < this->NEvoStats; EvoStats_i++) {
     this->listEvoStats[EvoStats_i] = gparam->listEvoStats[EvoStats_i];
-  }
-
-  if (gparam->verbose) {
-    std::cerr << "LocalParam4\n";
   }
 
   this->listSiteSpecificEvoStats = new std::string[this->NSiteSpecificEvoStats];
@@ -80,10 +64,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
        EvoStats_i++) {
     this->listSiteSpecificEvoStats[EvoStats_i] =
         gparam->listSiteSpecificEvoStats[EvoStats_i];
-  }
-
-  if (gparam->verbose) {
-    std::cerr << "LocalParam5\n";
   }
 
   this->NusedEvoStats = gparam->NusedEvoStats;
@@ -340,6 +320,11 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
     for (int j = 0; j < this->Nstate_aa; j++) {
       this->ssaaprofiles[i][j] = 0.0;
     }
+  }
+
+  this->omega_site = new double[this->Nsite_codon];
+  for (int i = 0; i < this->Nsite_codon; i++) {
+    this->omega_site[i] = 1.0;
   }
 
   this->newlink = new Link();
@@ -1968,6 +1953,123 @@ void LocalParameters::readChainCodonMutSelSBDP() {
   // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
+void LocalParameters::readParametersCodemlM7M8(int it) {
+  this->MCMCpointID = it;
+  // set parameters
+  ifstream is((this->chain + ".chain").c_str());
+  if (!is) {
+    std::cerr << "error: did not find " << this->chain << ".chain\n";
+    exit(1);
+  }
+
+  // std::cerr << this->chain;
+
+  int j = 0;
+  std::string tmp = "";
+  while (j < it) {
+    is >> tmp;  // tree
+    for (int k = 0; k < this->Nnucp; k++) {
+      is >> tmp;  // nucp
+    }
+    for (int k = 0; k < this->Nnucrr; k++) {
+      is >> tmp;  // nucrr
+    }
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      is >> tmp;  // omega_site
+    }
+    j++;
+  }
+
+  if (j == it) {
+    refTree = new Tree(is);
+    refTree->RegisterWith(taxonset, 0);
+    for (int k = 0; k < this->Nnucp; k++) {
+      is >> nucp[k];
+    }
+    for (int k = 0; k < this->Nnucrr; k++) {
+      is >> nucrr[k];
+    }
+
+    // nucrrnr[0][0]; //AA
+    nucrrnr[0][1] = nucrr[0];  // AC
+    nucrrnr[0][2] = nucrr[1];  // AG
+    nucrrnr[0][3] = nucrr[2];  // AT
+    nucrrnr[1][0] = nucrr[0];  // CA
+    // nucrrnr[1][1]; //CG
+    nucrrnr[1][2] = nucrr[3];  // CG
+    nucrrnr[1][3] = nucrr[4];  // CT
+    nucrrnr[2][0] = nucrr[1];  // GA
+    nucrrnr[2][1] = nucrr[3];  // GC
+    // nucrrnr[2][2]; //GG
+    nucrrnr[2][3] = nucrr[5];  // GT
+    nucrrnr[3][0] = nucrr[2];  // TA
+    nucrrnr[3][1] = nucrr[4];  // TC
+    nucrrnr[3][2] = nucrr[5];  // TG
+    // nucrrnr[3][3]; //TT
+
+    double sum = 0.0;
+    for (int nuc1 = 0; nuc1 < Nnucp; nuc1++) {
+      sum += this->nucp[nuc1];
+    }
+    for (int nuc1 = 0; nuc1 < Nnucp; nuc1++) {
+      this->nucp[nuc1] /= sum;
+    }
+
+    sum = 0.0;
+    for (int nuc1 = 0; nuc1 < 4 - 1; nuc1++) {
+      for (int nuc2 = nuc1 + 1; nuc2 < 4; nuc2++) {
+        sum += this->nucrrnr[nuc1][nuc2];
+      }
+    }
+
+    for (int nuc1 = 0; nuc1 < 4; nuc1++) {
+      for (int nuc2 = 0; nuc2 < 4; nuc2++) {
+        this->nucrrnr[nuc1][nuc2] /= sum;
+      }
+    }
+
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      is >> omega_site[k];
+    }
+  }
+  is.close();
+
+  this->getrate = false;
+
+  gtnr[0][0] = 0.0;           // AA
+  gtnr[0][1] = GetGTR(0, 1);  // ac
+  gtnr[0][2] = GetGTR(0, 2);  // ag
+  gtnr[0][3] = GetGTR(0, 3);  // at
+  gtnr[1][0] = GetGTR(1, 0);  // ca
+  gtnr[1][1] = 0.0;           // cc
+  gtnr[1][2] = GetGTR(1, 2);  // cg
+  gtnr[1][3] = GetGTR(1, 3);  // ct
+  gtnr[2][0] = GetGTR(2, 0);  // ga
+  gtnr[2][1] = GetGTR(2, 1);  // gc
+  gtnr[2][2] = 0.0;           // gg
+  gtnr[2][3] = GetGTR(2, 3);  // gt
+  gtnr[3][0] = GetGTR(3, 0);  // ta
+  gtnr[3][1] = GetGTR(3, 1);  // tc
+  gtnr[3][2] = GetGTR(3, 2);  // tg
+  gtnr[3][3] = 0.0;           // tt
+
+  for (int k = 0; k < this->Nstate_codon; k++) {
+    codonprofile[k] = 1.0 / this->Nstate_codon;
+  }
+
+  // for (int k=0; k<this->Nsite_codon; k++){
+  for (int k = 0; k < Nstate_aa; k++) {
+    ssaaprofiles[0][k] = 0.05;
+  }
+  //}
+
+  for (int k = 0; k < this->Nsite_codon; k++) {
+    alloc[k] = 0;
+  }
+
+  SetTreeStuff();
+}
+
 void LocalParameters::readChainCodonMutSelFinite(int it) {
   this->MCMCpointID = it;
   // set parameters : posterior specific
@@ -2072,16 +2174,6 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
     // is >> tmp;
     for (int k = 0; k < this->Nstate_aa; k++) {
       is >> tmp;
-    }
-
-    // for (int k=0; k<this->Nsite_codon; k++){
-    for (int l = 0; l < Nstate_aa; l++) {
-      is >> ssaaprofiles[0][l];
-    }
-    //}
-
-    for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> alloc[k];
     }
   }
   is.close();
