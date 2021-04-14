@@ -1128,22 +1128,12 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
         }
         testcummul += submatrix->GetSubRate(FromNodeIndex, site_nuc, nucTo);
       }
-      if (verbose) {
-        std::cerr << "CRS6\n";
-      }
 
       int site_codon = static_cast<int>(site_nuc / 3);
 
-      if (verbose) {
-        std::cerr << "CRS7\n";
-      }
       submatrix->ComputePartialRates(FromNodeIndex, site_codon,
                                      CurrentNodeNucSequence);
       RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo);
-
-      if (verbose) {
-        std::cerr << "CRS8\n";
-      }
 
       submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,
                                         CurrentNodeNucSequence);
