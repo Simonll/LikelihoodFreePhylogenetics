@@ -1220,19 +1220,11 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
     }
 
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
-      int state = lparam->codondata->GetState(FromNodeIndex, site_codon);
-      if (state != unknown) {
-        CurrentLeafNodeCodonSequences[FromNodeIndex][site_codon] =
-            CurrentNodeCodonSequence[FromNodeIndex][site_codon];
-        for (int j = 0; j < 3; j++) {
-          CurrentLeafNodeNucSequence[FromNodeIndex][site_codon * 3 + j] =
-              CurrentNodeNucSequence[FromNodeIndex][site_codon * 3 + j];
-        }
-      } else {
-        CurrentLeafNodeCodonSequences[FromNodeIndex][site_codon] = -1;
-        for (int j = 0; j < 3; j++) {
-          CurrentLeafNodeNucSequence[FromNodeIndex][site_codon * 3 + j] = -1;
-        }
+      CurrentLeafNodeCodonSequences[FromNodeIndex][site_codon] =
+          CurrentNodeCodonSequence[FromNodeIndex][site_codon];
+      for (int j = 0; j < 3; j++) {
+        CurrentLeafNodeNucSequence[FromNodeIndex][site_codon * 3 + j] =
+            CurrentNodeNucSequence[FromNodeIndex][site_codon * 3 + j];
       }
     }
   }

@@ -1678,6 +1678,25 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence) {
   if (verbose) {
     std::cerr << "SummaryStatistics::computeSummaries\n";
   }
+
+  int** CurrentLeafNodeCodonSequences_ = new int*[lparam->Ntaxa];
+  for (int taxa = 0; taxa < lparam->Ntaxa; taxa++) {
+    CurrentLeafNodeCodonSequences_[taxa] = new int[lparam->Nsite_codon];
+  }
+
+  for (int taxa = 0; taxa < lparam->Ntaxa; taxa++) {
+    for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
+      int state = lparam->codondata->GetState(taxa, site_codon);
+      if (state != unknown) {
+        CurrentLeafNodeCodonSequences_[taxa][site_codon] =
+            CurrentNodeLeafCodonSequence[taxa][site_codon];
+
+      } else {
+        CurrentLeafNodeCodonSequences_[taxa][site_codon] = -1;
+      }
+    }
+  }
+
   lparam->summariesSimulatedData.clear();
   lparam->summariesSimulatedData.shrink_to_fit();
 
@@ -1761,7 +1780,7 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence) {
   GC3_bool = false;
 
   CodonSequenceAlignment* simulation = new CodonSequenceAlignment(
-      lparam->codondata, CurrentNodeLeafCodonSequence);
+      lparam->codondata, CurrentLeafNodeCodonSequences_);
 
   if (verbose) {
     std::cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)\n";
@@ -1827,9 +1846,10 @@ void SummaryStatistics::computeSummaries(int** CurrentNodeLeafCodonSequence) {
   delete simulation;
   delete[] arrAccSummaries;
   delete[] arrSummaries;
-  if (verbose) {
-    std::cerr << "computeSummaries(int** CurrentNodeLeafCodonSequence)5\n";
+  for (int taxa = 0; taxa < lparam->Ntaxa; taxa++) {
+    delete[] CurrentLeafNodeCodonSequences_[taxa];
   }
+  delete[] CurrentLeafNodeCodonSequences_;
 }
 
 void SummaryStatistics::computeSummaries() {
