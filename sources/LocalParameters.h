@@ -172,7 +172,7 @@ class LocalParameters {
   void readChainCodonMutSelFinite();
   void readFMutSelCodeML();
   void readLocalInstructions();
-  void readParametersCodemlM7M8(int pt_i);
+  int readParametersCodemlM7M8(int pt_i);
 
   // Setters
   void SetCurrentParametersFromPosterior(

@@ -86,50 +86,51 @@ int main(int argc, char* argv[]) {
     post->SetNsite(lparam->Nsite_codon);
     SummaryStatistics* ss = new SummaryStatistics(lparam);
 
+    int size = lparam->readParametersCodemlM7M8(-1);
     lparam->readParametersCodemlM7M8(0);
-
     ss->computeSummaries();
     PriorSampler* prior = new PriorSampler(lparam);
-
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
-
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
-
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());
     lparam->writeRealDataSummaries(realDataSummaries_os);
     realDataSummaries_os.close();
-    cerr << "starting to simulate\n";
-    int k = 0;
-    while (post->Niter < post->Nrun) {
-      lparam->readParametersCodemlM7M8(k);
-      prior->sample();
-      simulator->GetNewSimulatedCodonAlignment();
-      ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-      post->registerNewSimulation(
-          1, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
-          lparam->GetCurrentAccessorySummaries(),
-          lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
-          lparam->GetCurrentSiteSpecificEvoStats(),
-          lparam->GetCurrentDistances(), lparam->GetCurrentWeights());
+    std::cerr << "starting to simulate\n";
+    std::cerr << "Nsimu to be generated: " << gparam->Nsimu << " with Nrep "
+              << gparam->Nrep << "\n";
 
-      if (lparam->tofasta) {
-        ostringstream oss;
-        oss << gparam->output << "-" << post->Niter << ".fasta";
-        std::string output = oss.str();
-        ofstream fasta_os((output).c_str(), std::ios_base::out);
-        lparam->toFasta(fasta_os, simulator->CurrentLeafNodeCodonSequences);
-        fasta_os.close();
+    while (post->Niter < gparam->Nsimu) {
+      int k = static_cast<int>(lparam->rnd->Uniform() * size);
+      lparam->readParametersCodemlM7M8(k);
+      for (int i = 0; i < gparam->Nrep; i++) {
+        prior->sample();
+        simulator->GetNewSimulatedCodonAlignment();
+        ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
+        post->registerSimulation(
+            k, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
+            lparam->GetCurrentAccessorySummaries(),
+            lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
+            lparam->GetCurrentSiteSpecificEvoStats(),
+            lparam->GetCurrentDistances(), lparam->GetCurrentWeights());
+
+        if (lparam->tofasta) {
+          ostringstream oss;
+          oss << gparam->output << "-" << post->Niter << "_" << i << ".fasta";
+          std::string output = oss.str();
+          ofstream fasta_os((output).c_str(), std::ios_base::out);
+          lparam->toFasta(fasta_os, simulator->CurrentLeafNodeCodonSequences);
+          fasta_os.close();
+        }
         std::cerr << ".";
       }
-      k++;
     }
     std::cerr << "End of the simulation process\n";
 
     ofstream dist_os((gparam->output + ".simu").c_str(), std::ios_base::out);
-    post->writeHeader(dist_os);
-    post->writePosterior(dist_os);
+    post->writeHeader_nodist(dist_os);
+    post->writeSimu(dist_os);
     dist_os.close();
 
     ofstream ppp_os((gparam->output + ".ppp").c_str(), std::ios_base::out);

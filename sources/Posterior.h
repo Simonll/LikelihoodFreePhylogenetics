@@ -95,12 +95,13 @@ class Posterior {
   bool sorted;
   // writter
   void writePosterior(ofstream& os);
+  void writeSimu(ofstream& os);
   void writePosterior(ofstream& os, int Nsimu);
   void writeMonitorPosterior(ofstream& os);
   void writePosteriorPredictiveStatistics(
       ofstream& os, std::vector<double> realDataSummaries);
   void writeHeader(ofstream& os);
-
+  void writeHeader_nodist(ofstream& os);
   // readers
   void readPosterior(string posteriorfile);
   void readPosterior(ifstream& is);
@@ -140,7 +141,7 @@ class Posterior {
       std::vector<double> evostat, std::vector<double> ssevostat,
       std::vector<double> distances, std::vector<double> weights);
 
-  void registerOldSimulation(
+  void registerSimulation(
       int chainID, std::vector<double> param, std::vector<double> summaries,
       std::vector<double> accsummaries, std::vector<double> ancevostat,
       std::vector<double> evostat, std::vector<double> ssevostat,

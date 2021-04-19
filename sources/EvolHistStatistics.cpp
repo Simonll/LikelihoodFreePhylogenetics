@@ -380,7 +380,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinucCGAC"] = &EvolHistStatistics::GetDinuc_CGAC;
   // GetEvoStatMap["dinucCGAG"] = &EvolHistStatistics::GetDinuc_CGAG;
   // GetEvoStatMap["dinucCGAT"] = &EvolHistStatistics::GetDinuc_CGAT;
-  // GetEvoStatMap["dinucCGCA"] = &EvolHistStatistics::GetDinuc_CGCA;
+  GetEvoStatMap["dinucCGCA"] = &EvolHistStatistics::GetDinuc_CGCA;
   // GetEvoStatMap["dinucCGCC"] = &EvolHistStatistics::GetDinuc_CGCC;
   // GetEvoStatMap["dinucCGCG"] = &EvolHistStatistics::GetDinuc_CGCG;
   // GetEvoStatMap["dinucCGCT"] = &EvolHistStatistics::GetDinuc_CGCT;
@@ -390,7 +390,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinucCGGT"] = &EvolHistStatistics::GetDinuc_CGGT;
   // GetEvoStatMap["dinucCGTA"] = &EvolHistStatistics::GetDinuc_CGTA;
   // GetEvoStatMap["dinucCGTC"] = &EvolHistStatistics::GetDinuc_CGTC;
-  // GetEvoStatMap["dinucCGTG"] = &EvolHistStatistics::GetDinuc_CGTG;
+  GetEvoStatMap["dinucCGTG"] = &EvolHistStatistics::GetDinuc_CGTG;
   // GetEvoStatMap["dinucCGTT"] = &EvolHistStatistics::GetDinuc_CGTT;
   // GetEvoStatMap["dinucCTAA"] = &EvolHistStatistics::GetDinuc_CTAA;
   // GetEvoStatMap["dinucCTAC"] = &EvolHistStatistics::GetDinuc_CTAC;
@@ -636,7 +636,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc12CGAC"] = &EvolHistStatistics::GetDinuc12_CGAC;
   // GetEvoStatMap["dinuc12CGAG"] = &EvolHistStatistics::GetDinuc12_CGAG;
   // GetEvoStatMap["dinuc12CGAT"] = &EvolHistStatistics::GetDinuc12_CGAT;
-  // GetEvoStatMap["dinuc12CGCA"] = &EvolHistStatistics::GetDinuc12_CGCA;
+  GetEvoStatMap["dinuc12CGCA"] = &EvolHistStatistics::GetDinuc12_CGCA;
   // GetEvoStatMap["dinuc12CGCC"] = &EvolHistStatistics::GetDinuc12_CGCC;
   // GetEvoStatMap["dinuc12CGCG"] = &EvolHistStatistics::GetDinuc12_CGCG;
   // GetEvoStatMap["dinuc12CGCT"] = &EvolHistStatistics::GetDinuc12_CGCT;
@@ -645,8 +645,8 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc12CGGG"] = &EvolHistStatistics::GetDinuc12_CGGG;
   // GetEvoStatMap["dinuc12CGGT"] = &EvolHistStatistics::GetDinuc12_CGGT;
   // GetEvoStatMap["dinuc12CGTA"] = &EvolHistStatistics::GetDinuc12_CGTA;
-  // GetEvoStatMap["dinuc12CGTC"] = &EvolHistStatistics::GetDinuc12_CGTC;
-  // GetEvoStatMap["dinuc12CGTG"] = &EvolHistStatistics::GetDinuc12_CGTG;
+  GetEvoStatMap["dinuc12CGTC"] = &EvolHistStatistics::GetDinuc12_CGTC;
+  GetEvoStatMap["dinuc12CGTG"] = &EvolHistStatistics::GetDinuc12_CGTG;
   // GetEvoStatMap["dinuc12CGTT"] = &EvolHistStatistics::GetDinuc12_CGTT;
   // GetEvoStatMap["dinuc12CTAA"] = &EvolHistStatistics::GetDinuc12_CTAA;
   // GetEvoStatMap["dinuc12CTAC"] = &EvolHistStatistics::GetDinuc12_CTAC;
@@ -892,7 +892,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc23CGAC"] = &EvolHistStatistics::GetDinuc23_CGAC;
   // GetEvoStatMap["dinuc23CGAG"] = &EvolHistStatistics::GetDinuc23_CGAG;
   // GetEvoStatMap["dinuc23CGAT"] = &EvolHistStatistics::GetDinuc23_CGAT;
-  // GetEvoStatMap["dinuc23CGCA"] = &EvolHistStatistics::GetDinuc23_CGCA;
+  GetEvoStatMap["dinuc23CGCA"] = &EvolHistStatistics::GetDinuc23_CGCA;
   // GetEvoStatMap["dinuc23CGCC"] = &EvolHistStatistics::GetDinuc23_CGCC;
   // GetEvoStatMap["dinuc23CGCG"] = &EvolHistStatistics::GetDinuc23_CGCG;
   // GetEvoStatMap["dinuc23CGCT"] = &EvolHistStatistics::GetDinuc23_CGCT;
@@ -902,7 +902,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc23CGGT"] = &EvolHistStatistics::GetDinuc23_CGGT;
   // GetEvoStatMap["dinuc23CGTA"] = &EvolHistStatistics::GetDinuc23_CGTA;
   // GetEvoStatMap["dinuc23CGTC"] = &EvolHistStatistics::GetDinuc23_CGTC;
-  // GetEvoStatMap["dinuc23CGTG"] = &EvolHistStatistics::GetDinuc23_CGTG;
+  GetEvoStatMap["dinuc23CGTG"] = &EvolHistStatistics::GetDinuc23_CGTG;
   // GetEvoStatMap["dinuc23CGTT"] = &EvolHistStatistics::GetDinuc23_CGTT;
   // GetEvoStatMap["dinuc23CTAA"] = &EvolHistStatistics::GetDinuc23_CTAA;
   // GetEvoStatMap["dinuc23CTAC"] = &EvolHistStatistics::GetDinuc23_CTAC;
@@ -1148,7 +1148,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc31CGAC"] = &EvolHistStatistics::GetDinuc31_CGAC;
   // GetEvoStatMap["dinuc31CGAG"] = &EvolHistStatistics::GetDinuc31_CGAG;
   // GetEvoStatMap["dinuc31CGAT"] = &EvolHistStatistics::GetDinuc31_CGAT;
-  // GetEvoStatMap["dinuc31CGCA"] = &EvolHistStatistics::GetDinuc31_CGCA;
+  GetEvoStatMap["dinuc31CGCA"] = &EvolHistStatistics::GetDinuc31_CGCA;
   // GetEvoStatMap["dinuc31CGCC"] = &EvolHistStatistics::GetDinuc31_CGCC;
   // GetEvoStatMap["dinuc31CGCG"] = &EvolHistStatistics::GetDinuc31_CGCG;
   // GetEvoStatMap["dinuc31CGCT"] = &EvolHistStatistics::GetDinuc31_CGCT;
@@ -1158,7 +1158,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc31CGGT"] = &EvolHistStatistics::GetDinuc31_CGGT;
   // GetEvoStatMap["dinuc31CGTA"] = &EvolHistStatistics::GetDinuc31_CGTA;
   // GetEvoStatMap["dinuc31CGTC"] = &EvolHistStatistics::GetDinuc31_CGTC;
-  // GetEvoStatMap["dinuc31CGTG"] = &EvolHistStatistics::GetDinuc31_CGTG;
+  GetEvoStatMap["dinuc31CGTG"] = &EvolHistStatistics::GetDinuc31_CGTG;
   // GetEvoStatMap["dinuc31CGTT"] = &EvolHistStatistics::GetDinuc31_CGTT;
   // GetEvoStatMap["dinuc31CTAA"] = &EvolHistStatistics::GetDinuc31_CTAA;
   // GetEvoStatMap["dinuc31CTAC"] = &EvolHistStatistics::GetDinuc31_CTAC;
@@ -1405,7 +1405,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinucNSCGAC"] = &EvolHistStatistics::GetDinucNSyn_CGAC;
   // GetEvoStatMap["dinucNSCGAG"] = &EvolHistStatistics::GetDinucNSyn_CGAG;
   // GetEvoStatMap["dinucNSCGAT"] = &EvolHistStatistics::GetDinucNSyn_CGAT;
-  // GetEvoStatMap["dinucNSCGCA"] = &EvolHistStatistics::GetDinucNSyn_CGCA;
+  GetEvoStatMap["dinucNSCGCA"] = &EvolHistStatistics::GetDinucNSyn_CGCA;
   // GetEvoStatMap["dinucNSCGCC"] = &EvolHistStatistics::GetDinucNSyn_CGCC;
   // GetEvoStatMap["dinucNSCGCG"] = &EvolHistStatistics::GetDinucNSyn_CGCG;
   // GetEvoStatMap["dinucNSCGCT"] = &EvolHistStatistics::GetDinucNSyn_CGCT;
@@ -1415,7 +1415,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinucNSCGGT"] = &EvolHistStatistics::GetDinucNSyn_CGGT;
   // GetEvoStatMap["dinucNSCGTA"] = &EvolHistStatistics::GetDinucNSyn_CGTA;
   // GetEvoStatMap["dinucNSCGTC"] = &EvolHistStatistics::GetDinucNSyn_CGTC;
-  // GetEvoStatMap["dinucNSCGTG"] = &EvolHistStatistics::GetDinucNSyn_CGTG;
+  GetEvoStatMap["dinucNSCGTG"] = &EvolHistStatistics::GetDinucNSyn_CGTG;
   // GetEvoStatMap["dinucNSCGTT"] = &EvolHistStatistics::GetDinucNSyn_CGTT;
   // GetEvoStatMap["dinucNSCTAA"] = &EvolHistStatistics::GetDinucNSyn_CTAA;
   // GetEvoStatMap["dinucNSCTAC"] = &EvolHistStatistics::GetDinucNSyn_CTAC;
@@ -1661,7 +1661,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc12NSCGAC"] = &EvolHistStatistics::GetDinucNSyn12_CGAC;
   // GetEvoStatMap["dinuc12NSCGAG"] = &EvolHistStatistics::GetDinucNSyn12_CGAG;
   // GetEvoStatMap["dinuc12NSCGAT"] = &EvolHistStatistics::GetDinucNSyn12_CGAT;
-  // GetEvoStatMap["dinuc12NSCGCA"] = &EvolHistStatistics::GetDinucNSyn12_CGCA;
+  GetEvoStatMap["dinuc12NSCGCA"] = &EvolHistStatistics::GetDinucNSyn12_CGCA;
   // GetEvoStatMap["dinuc12NSCGCC"] = &EvolHistStatistics::GetDinucNSyn12_CGCC;
   // GetEvoStatMap["dinuc12NSCGCG"] = &EvolHistStatistics::GetDinucNSyn12_CGCG;
   // GetEvoStatMap["dinuc12NSCGCT"] = &EvolHistStatistics::GetDinucNSyn12_CGCT;
@@ -1671,7 +1671,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc12NSCGGT"] = &EvolHistStatistics::GetDinucNSyn12_CGGT;
   // GetEvoStatMap["dinuc12NSCGTA"] = &EvolHistStatistics::GetDinucNSyn12_CGTA;
   // GetEvoStatMap["dinuc12NSCGTC"] = &EvolHistStatistics::GetDinucNSyn12_CGTC;
-  // GetEvoStatMap["dinuc12NSCGTG"] = &EvolHistStatistics::GetDinucNSyn12_CGTG;
+  GetEvoStatMap["dinuc12NSCGTG"] = &EvolHistStatistics::GetDinucNSyn12_CGTG;
   // GetEvoStatMap["dinuc12NSCGTT"] = &EvolHistStatistics::GetDinucNSyn12_CGTT;
   // GetEvoStatMap["dinuc12NSCTAA"] = &EvolHistStatistics::GetDinucNSyn12_CTAA;
   // GetEvoStatMap["dinuc12NSCTAC"] = &EvolHistStatistics::GetDinucNSyn12_CTAC;
@@ -1917,7 +1917,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc23NSCGAC"] = &EvolHistStatistics::GetDinucNSyn23_CGAC;
   // GetEvoStatMap["dinuc23NSCGAG"] = &EvolHistStatistics::GetDinucNSyn23_CGAG;
   // GetEvoStatMap["dinuc23NSCGAT"] = &EvolHistStatistics::GetDinucNSyn23_CGAT;
-  // GetEvoStatMap["dinuc23NSCGCA"] = &EvolHistStatistics::GetDinucNSyn23_CGCA;
+  GetEvoStatMap["dinuc23NSCGCA"] = &EvolHistStatistics::GetDinucNSyn23_CGCA;
   // GetEvoStatMap["dinuc23NSCGCC"] = &EvolHistStatistics::GetDinucNSyn23_CGCC;
   // GetEvoStatMap["dinuc23NSCGCG"] = &EvolHistStatistics::GetDinucNSyn23_CGCG;
   // GetEvoStatMap["dinuc23NSCGCT"] = &EvolHistStatistics::GetDinucNSyn23_CGCT;
@@ -1927,7 +1927,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc23NSCGGT"] = &EvolHistStatistics::GetDinucNSyn23_CGGT;
   // GetEvoStatMap["dinuc23NSCGTA"] = &EvolHistStatistics::GetDinucNSyn23_CGTA;
   // GetEvoStatMap["dinuc23NSCGTC"] = &EvolHistStatistics::GetDinucNSyn23_CGTC;
-  // GetEvoStatMap["dinuc23NSCGTG"] = &EvolHistStatistics::GetDinucNSyn23_CGTG;
+  GetEvoStatMap["dinuc23NSCGTG"] = &EvolHistStatistics::GetDinucNSyn23_CGTG;
   // GetEvoStatMap["dinuc23NSCGTT"] = &EvolHistStatistics::GetDinucNSyn23_CGTT;
   // GetEvoStatMap["dinuc23NSCTAA"] = &EvolHistStatistics::GetDinucNSyn23_CTAA;
   // GetEvoStatMap["dinuc23NSCTAC"] = &EvolHistStatistics::GetDinucNSyn23_CTAC;
@@ -2173,7 +2173,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc31NSCGAC"] = &EvolHistStatistics::GetDinucNSyn31_CGAC;
   // GetEvoStatMap["dinuc31NSCGAG"] = &EvolHistStatistics::GetDinucNSyn31_CGAG;
   // GetEvoStatMap["dinuc31NSCGAT"] = &EvolHistStatistics::GetDinucNSyn31_CGAT;
-  // GetEvoStatMap["dinuc31NSCGCA"] = &EvolHistStatistics::GetDinucNSyn31_CGCA;
+  GetEvoStatMap["dinuc31NSCGCA"] = &EvolHistStatistics::GetDinucNSyn31_CGCA;
   // GetEvoStatMap["dinuc31NSCGCC"] = &EvolHistStatistics::GetDinucNSyn31_CGCC;
   // GetEvoStatMap["dinuc31NSCGCG"] = &EvolHistStatistics::GetDinucNSyn31_CGCG;
   // GetEvoStatMap["dinuc31NSCGCT"] = &EvolHistStatistics::GetDinucNSyn31_CGCT;
@@ -2183,7 +2183,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc31NSCGGT"] = &EvolHistStatistics::GetDinucNSyn31_CGGT;
   // GetEvoStatMap["dinuc31NSCGTA"] = &EvolHistStatistics::GetDinucNSyn31_CGTA;
   // GetEvoStatMap["dinuc31NSCGTC"] = &EvolHistStatistics::GetDinucNSyn31_CGTC;
-  // GetEvoStatMap["dinuc31NSCGTG"] = &EvolHistStatistics::GetDinucNSyn31_CGTG;
+  GetEvoStatMap["dinuc31NSCGTG"] = &EvolHistStatistics::GetDinucNSyn31_CGTG;
   // GetEvoStatMap["dinuc31NSCGTT"] = &EvolHistStatistics::GetDinucNSyn31_CGTT;
   // GetEvoStatMap["dinuc31NSCTAA"] = &EvolHistStatistics::GetDinucNSyn31_CTAA;
   // GetEvoStatMap["dinuc31NSCTAC"] = &EvolHistStatistics::GetDinucNSyn31_CTAC;
@@ -2430,7 +2430,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinucSCGAC"] = &EvolHistStatistics::GetDinucSyn_CGAC;
   // GetEvoStatMap["dinucSCGAG"] = &EvolHistStatistics::GetDinucSyn_CGAG;
   // GetEvoStatMap["dinucSCGAT"] = &EvolHistStatistics::GetDinucSyn_CGAT;
-  // GetEvoStatMap["dinucSCGCA"] = &EvolHistStatistics::GetDinucSyn_CGCA;
+  GetEvoStatMap["dinucSCGCA"] = &EvolHistStatistics::GetDinucSyn_CGCA;
   // GetEvoStatMap["dinucSCGCC"] = &EvolHistStatistics::GetDinucSyn_CGCC;
   // GetEvoStatMap["dinucSCGCG"] = &EvolHistStatistics::GetDinucSyn_CGCG;
   // GetEvoStatMap["dinucSCGCT"] = &EvolHistStatistics::GetDinucSyn_CGCT;
@@ -2440,7 +2440,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinucSCGGT"] = &EvolHistStatistics::GetDinucSyn_CGGT;
   // GetEvoStatMap["dinucSCGTA"] = &EvolHistStatistics::GetDinucSyn_CGTA;
   // GetEvoStatMap["dinucSCGTC"] = &EvolHistStatistics::GetDinucSyn_CGTC;
-  // GetEvoStatMap["dinucSCGTG"] = &EvolHistStatistics::GetDinucSyn_CGTG;
+  GetEvoStatMap["dinucSCGTG"] = &EvolHistStatistics::GetDinucSyn_CGTG;
   // GetEvoStatMap["dinucSCGTT"] = &EvolHistStatistics::GetDinucSyn_CGTT;
   // GetEvoStatMap["dinucSCTAA"] = &EvolHistStatistics::GetDinucSyn_CTAA;
   // GetEvoStatMap["dinucSCTAC"] = &EvolHistStatistics::GetDinucSyn_CTAC;
@@ -2686,7 +2686,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc12SCGAC"] = &EvolHistStatistics::GetDinucSyn12_CGAC;
   // GetEvoStatMap["dinuc12SCGAG"] = &EvolHistStatistics::GetDinucSyn12_CGAG;
   // GetEvoStatMap["dinuc12SCGAT"] = &EvolHistStatistics::GetDinucSyn12_CGAT;
-  // GetEvoStatMap["dinuc12SCGCA"] = &EvolHistStatistics::GetDinucSyn12_CGCA;
+  GetEvoStatMap["dinuc12SCGCA"] = &EvolHistStatistics::GetDinucSyn12_CGCA;
   // GetEvoStatMap["dinuc12SCGCC"] = &EvolHistStatistics::GetDinucSyn12_CGCC;
   // GetEvoStatMap["dinuc12SCGCG"] = &EvolHistStatistics::GetDinucSyn12_CGCG;
   // GetEvoStatMap["dinuc12SCGCT"] = &EvolHistStatistics::GetDinucSyn12_CGCT;
@@ -2696,7 +2696,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc12SCGGT"] = &EvolHistStatistics::GetDinucSyn12_CGGT;
   // GetEvoStatMap["dinuc12SCGTA"] = &EvolHistStatistics::GetDinucSyn12_CGTA;
   // GetEvoStatMap["dinuc12SCGTC"] = &EvolHistStatistics::GetDinucSyn12_CGTC;
-  // GetEvoStatMap["dinuc12SCGTG"] = &EvolHistStatistics::GetDinucSyn12_CGTG;
+  GetEvoStatMap["dinuc12SCGTG"] = &EvolHistStatistics::GetDinucSyn12_CGTG;
   // GetEvoStatMap["dinuc12SCGTT"] = &EvolHistStatistics::GetDinucSyn12_CGTT;
   // GetEvoStatMap["dinuc12SCTAA"] = &EvolHistStatistics::GetDinucSyn12_CTAA;
   // GetEvoStatMap["dinuc12SCTAC"] = &EvolHistStatistics::GetDinucSyn12_CTAC;
@@ -2942,7 +2942,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc23SCGAC"] = &EvolHistStatistics::GetDinucSyn23_CGAC;
   // GetEvoStatMap["dinuc23SCGAG"] = &EvolHistStatistics::GetDinucSyn23_CGAG;
   // GetEvoStatMap["dinuc23SCGAT"] = &EvolHistStatistics::GetDinucSyn23_CGAT;
-  // GetEvoStatMap["dinuc23SCGCA"] = &EvolHistStatistics::GetDinucSyn23_CGCA;
+  GetEvoStatMap["dinuc23SCGCA"] = &EvolHistStatistics::GetDinucSyn23_CGCA;
   // GetEvoStatMap["dinuc23SCGCC"] = &EvolHistStatistics::GetDinucSyn23_CGCC;
   // GetEvoStatMap["dinuc23SCGCG"] = &EvolHistStatistics::GetDinucSyn23_CGCG;
   // GetEvoStatMap["dinuc23SCGCT"] = &EvolHistStatistics::GetDinucSyn23_CGCT;
@@ -2952,7 +2952,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc23SCGGT"] = &EvolHistStatistics::GetDinucSyn23_CGGT;
   // GetEvoStatMap["dinuc23SCGTA"] = &EvolHistStatistics::GetDinucSyn23_CGTA;
   // GetEvoStatMap["dinuc23SCGTC"] = &EvolHistStatistics::GetDinucSyn23_CGTC;
-  // GetEvoStatMap["dinuc23SCGTG"] = &EvolHistStatistics::GetDinucSyn23_CGTG;
+  GetEvoStatMap["dinuc23SCGTG"] = &EvolHistStatistics::GetDinucSyn23_CGTG;
   // GetEvoStatMap["dinuc23SCGTT"] = &EvolHistStatistics::GetDinucSyn23_CGTT;
   // GetEvoStatMap["dinuc23SCTAA"] = &EvolHistStatistics::GetDinucSyn23_CTAA;
   // GetEvoStatMap["dinuc23SCTAC"] = &EvolHistStatistics::GetDinucSyn23_CTAC;
@@ -3198,7 +3198,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc31SCGAC"] = &EvolHistStatistics::GetDinucSyn31_CGAC;
   // GetEvoStatMap["dinuc31SCGAG"] = &EvolHistStatistics::GetDinucSyn31_CGAG;
   // GetEvoStatMap["dinuc31SCGAT"] = &EvolHistStatistics::GetDinucSyn31_CGAT;
-  // GetEvoStatMap["dinuc31SCGCA"] = &EvolHistStatistics::GetDinucSyn31_CGCA;
+  GetEvoStatMap["dinuc31SCGCA"] = &EvolHistStatistics::GetDinucSyn31_CGCA;
   // GetEvoStatMap["dinuc31SCGCC"] = &EvolHistStatistics::GetDinucSyn31_CGCC;
   // GetEvoStatMap["dinuc31SCGCG"] = &EvolHistStatistics::GetDinucSyn31_CGCG;
   // GetEvoStatMap["dinuc31SCGCT"] = &EvolHistStatistics::GetDinucSyn31_CGCT;
@@ -3208,7 +3208,7 @@ EvolHistStatistics::EvolHistStatistics(LocalParameters* lparam) {
   // GetEvoStatMap["dinuc31SCGGT"] = &EvolHistStatistics::GetDinucSyn31_CGGT;
   // GetEvoStatMap["dinuc31SCGTA"] = &EvolHistStatistics::GetDinucSyn31_CGTA;
   // GetEvoStatMap["dinuc31SCGTC"] = &EvolHistStatistics::GetDinucSyn31_CGTC;
-  // GetEvoStatMap["dinuc31SCGTG"] = &EvolHistStatistics::GetDinucSyn31_CGTG;
+  GetEvoStatMap["dinuc31SCGTG"] = &EvolHistStatistics::GetDinucSyn31_CGTG;
   // GetEvoStatMap["dinuc31SCGTT"] = &EvolHistStatistics::GetDinucSyn31_CGTT;
   // GetEvoStatMap["dinuc31SCTAA"] = &EvolHistStatistics::GetDinucSyn31_CTAA;
   // GetEvoStatMap["dinuc31SCTAC"] = &EvolHistStatistics::GetDinucSyn31_CTAC;

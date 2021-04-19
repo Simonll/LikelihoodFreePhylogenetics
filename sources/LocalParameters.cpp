@@ -1953,7 +1953,7 @@ void LocalParameters::readChainCodonMutSelSBDP() {
   // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
-void LocalParameters::readParametersCodemlM7M8(int it) {
+int LocalParameters::readParametersCodemlM7M8(int it) {
   this->MCMCpointID = it;
   // set parameters
   ifstream is((this->chain + ".chain").c_str());
@@ -1961,11 +1961,29 @@ void LocalParameters::readParametersCodemlM7M8(int it) {
     std::cerr << "error: did not find " << this->chain << ".chain\n";
     exit(1);
   }
-
-  // std::cerr << this->chain;
-
-  int j = 0;
   std::string tmp = "";
+  int j = 0;
+
+  if (it == -1) {
+    std::cerr << "counting number of samples available\n";
+    while (is.peek() != -1) {
+      is >> tmp;  // tree
+      for (int k = 0; k < this->Nnucp; k++) {
+        is >> tmp;  // nucp
+      }
+      for (int k = 0; k < this->Nnucrr; k++) {
+        is >> tmp;  // nucrr
+      }
+      for (int k = 0; k < this->Nsite_codon; k++) {
+        is >> tmp;  // omega_site
+      }
+      j++;
+    }
+    j--;
+    std::cerr << "number of samples available: " << j << "\n";
+    return j;
+  }
+
   while (j < it) {
     is >> tmp;  // tree
     for (int k = 0; k < this->Nnucp; k++) {
@@ -2068,6 +2086,7 @@ void LocalParameters::readParametersCodemlM7M8(int it) {
   }
 
   SetTreeStuff();
+  return j;
 }
 
 void LocalParameters::readChainCodonMutSelFinite(int it) {

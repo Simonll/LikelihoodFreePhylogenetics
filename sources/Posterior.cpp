@@ -439,6 +439,104 @@ void Posterior::writePosterior(ofstream& os) {
   }
 }
 
+void Posterior::writeSimu(ofstream& os) {
+  for (int simu_i = 0; simu_i < static_cast<int>(population_t.size());
+       simu_i++) {
+    // write chainID
+    os << std::get<chainIDGetter>(population_t[simu_i]) << "\t";
+
+    // write parameters
+    if (this->NusedParam > 0) {
+      for (int param_i = 0;
+           param_i <
+           static_cast<int>(std::get<paramGetter>(population_t[simu_i]).size());
+           param_i++) {
+        os << std::get<paramGetter>(population_t[simu_i])[param_i] << "\t";
+      }
+    }
+    // write summaries
+    if (this->NusedSummaries > 0) {
+      for (int summary_i = 0;
+           summary_i <
+           static_cast<int>(
+               std::get<summariesGetter>(population_t[simu_i]).size());
+           summary_i++) {
+        os << std::get<summariesGetter>(population_t[simu_i])[summary_i]
+           << "\t";
+      }
+    }
+    // write accessory summaries
+    if (this->NusedAccessorySummaries > 0) {
+      for (int summary_i = 0;
+           summary_i <
+           static_cast<int>(
+               std::get<accsummariesGetter>(population_t[simu_i]).size());
+           summary_i++) {
+        os << std::get<accsummariesGetter>(population_t[simu_i])[summary_i]
+           << "\t";
+      }
+    }
+    // write mappingstats ancestral sequence
+    if (this->NusedEvoAncStats > 0) {
+      for (int mapping_i = 0;
+           mapping_i <
+           static_cast<int>(
+               std::get<evoancstatsGetter>(population_t[simu_i]).size());
+           mapping_i++) {
+        if (mapping_i <
+            static_cast<int>(
+                std::get<evoancstatsGetter>(population_t[simu_i]).size()) -
+                1) {
+          os << std::get<evoancstatsGetter>(population_t[simu_i])[mapping_i]
+             << "\t";
+        } else {
+          os << std::get<evoancstatsGetter>(population_t[simu_i])[mapping_i]
+             << "\t";
+        }
+      }
+    }
+    // write mappingstats
+    if (this->NusedEvoStats > 0) {
+      for (int mapping_i = 0;
+           mapping_i <
+           static_cast<int>(
+               std::get<evostatsGetter>(population_t[simu_i]).size());
+           mapping_i++) {
+        if (mapping_i <
+            static_cast<int>(
+                std::get<evostatsGetter>(population_t[simu_i]).size()) -
+                1) {
+          os << std::get<evostatsGetter>(population_t[simu_i])[mapping_i]
+             << "\t";
+        } else {
+          os << std::get<evostatsGetter>(population_t[simu_i])[mapping_i]
+             << "\t";
+        }
+      }
+    }
+    // write mappingstats site specific
+    if (this->NusedSiteSpecificEvoStats > 0) {
+      for (int mapping_i = 0;
+           mapping_i <
+           static_cast<int>(
+               std::get<ssevostatsGetter>(population_t[simu_i]).size());
+           mapping_i++) {
+        if (mapping_i <
+            static_cast<int>(
+                std::get<ssevostatsGetter>(population_t[simu_i]).size()) -
+                1) {
+          os << std::get<ssevostatsGetter>(population_t[simu_i])[mapping_i]
+             << "\t";
+        } else {
+          os << std::get<ssevostatsGetter>(population_t[simu_i])[mapping_i]
+             << "\t";
+        }
+      }
+    }
+    os << "\n";
+  }
+}
+
 void Posterior::readPosterior(string posteriorfile) {
   ifstream is(posteriorfile.c_str());
   if (!is) {
@@ -736,8 +834,8 @@ void Posterior::readPosterior(ifstream& is) {
       }
 
       std::vector<double> tmp;
-      registerOldSimulation(chainID, cur_param, cur_summaries, tmp, tmp,
-                            cur_evostats, tmp, cur_distances, tmp);
+      registerSimulation(chainID, cur_param, cur_summaries, tmp, tmp,
+                         cur_evostats, tmp, cur_distances, tmp);
     }
   }
 }
@@ -1065,6 +1163,171 @@ void Posterior::writeHeader(ofstream& os) {
   os << "\n";
 }
 
+void Posterior::writeHeader_nodist(ofstream& os) {
+  // write parameters' header
+  int k = 0;
+  int v = 0;
+  if (verbose) {
+    std::cerr << "writeHeader1 " << this->NusedParam << "\n";
+  }
+  if (this->NusedParam > 0) {
+    string* arrParam = new string[this->NusedParam];
+    for (int param_i = 0; param_i < this->NParam; param_i++) {
+      auto it = this->mapUsedParam.find(this->listParam[param_i]);
+      if (it != this->mapUsedParam.end()) {
+        if (it->second != -1) {
+          arrParam[v] = it->first;
+          v++;
+        }
+      }
+    }
+
+    for (int param_i = 0; param_i < this->NusedParam; param_i++) {
+      if (k == 0) {
+        os << arrParam[param_i];
+        k = 1;
+      } else {
+        os << "\t" << arrParam[param_i];
+      }
+    }
+    delete[] arrParam;
+  }
+
+  if (verbose) {
+    std::cerr << "writeHeader2 " << this->NusedSummaries << "\n";
+  }
+  // write summaires' header
+  if (this->NusedSummaries > 0) {
+    string* arrSummaries = new string[this->NusedSummaries];
+    for (int summary_i = 0; summary_i < this->NSummaries; summary_i++) {
+      auto it = this->mapUsedSummaries.find(this->listSummaries[summary_i]);
+      if (it != this->mapUsedSummaries.end()) {
+        if (it->second != -1) {
+          arrSummaries[it->second] = it->first;
+        }
+      }
+    }
+
+    for (int summary_i = 0; summary_i < this->NusedSummaries; summary_i++) {
+      if (k == 0) {
+        os << arrSummaries[summary_i];
+        k = 1;
+      } else {
+        os << "\t" << arrSummaries[summary_i];
+      }
+    }
+    delete[] arrSummaries;
+  }
+
+  if (this->NusedAccessorySummaries > 0) {
+    string* arrSummaries = new string[this->NusedAccessorySummaries];
+    for (int summary_i = 0; summary_i < this->NSummaries; summary_i++) {
+      auto it =
+          this->mapUsedAccessorySummaries.find(this->listSummaries[summary_i]);
+      if (it != this->mapUsedAccessorySummaries.end()) {
+        if (it->second != -1) {
+          arrSummaries[it->second] = it->first;
+        }
+      }
+    }
+
+    for (int summary_i = 0; summary_i < this->NusedAccessorySummaries;
+         summary_i++) {
+      if (k == 0) {
+        os << "Acc_" << arrSummaries[summary_i];
+        k = 1;
+      } else {
+        os << "\t"
+           << "Acc_" << arrSummaries[summary_i];
+      }
+    }
+    delete[] arrSummaries;
+  }
+
+  // write mappingstats
+  if (verbose) {
+    std::cerr << "writeHeader3 " << this->NusedEvoAncStats << "\n";
+  }
+  if (this->NusedEvoAncStats > 0) {
+    string* arrMapAnc = new string[this->NusedEvoAncStats];
+    for (int map_i = 0; map_i < this->NEvoStats; map_i++) {
+      auto it = this->mapUsedEvoAncStats.find(this->listEvoStats[map_i]);
+      if (it != this->mapUsedEvoAncStats.end()) {
+        if (it->second != -1) {
+          arrMapAnc[it->second] = it->first;
+        }
+      }
+    }
+
+    for (int map_i = 0; map_i < NusedEvoAncStats; map_i++) {
+      if (k == 0) {
+        os << "A_" << arrMapAnc[map_i];
+        k = 1;
+      } else {
+        os << "\t"
+           << "A_" << arrMapAnc[map_i];
+      }
+    }
+    delete[] arrMapAnc;
+  }
+
+  if (verbose) {
+    std::cerr << "writeHeader4 " << this->NusedEvoStats << "\n";
+  }
+  if (this->NusedEvoStats > 0) {
+    string* arrMap = new string[this->NusedEvoStats];
+    for (int map_i = 0; map_i < this->NEvoStats; map_i++) {
+      auto it = this->mapUsedEvoStats.find(this->listEvoStats[map_i]);
+      if (it != this->mapUsedEvoStats.end()) {
+        if (it->second != -1) {
+          arrMap[it->second] = it->first;
+        }
+      }
+    }
+
+    for (int map_i = 0; map_i < this->NusedEvoStats; map_i++) {
+      if (k == 0) {
+        os << "T_" << arrMap[map_i];
+        k = 1;
+      } else {
+        os << "\t"
+           << "T_" << arrMap[map_i];
+      }
+    }
+    delete[] arrMap;
+  }
+
+  if (verbose) {
+    std::cerr << "writeHeader5 " << this->NusedSiteSpecificEvoStats << "\n";
+  }
+  if (this->NusedSiteSpecificEvoStats > 0) {
+    string* arrMap = new string[this->NusedSiteSpecificEvoStats];
+    for (int map_i = 0; map_i < this->NSiteSpecificEvoStats; map_i++) {
+      auto it = this->mapUsedSiteSpecificEvoStats.find(
+          this->listSiteSpecificEvoStats[map_i]);
+      if (it != this->mapUsedSiteSpecificEvoStats.end()) {
+        if (it->second != -1) {
+          arrMap[it->second] = it->first;
+        }
+      }
+    }
+
+    for (int map_i = 0; map_i < this->NusedSiteSpecificEvoStats; map_i++) {
+      for (int bin_i = 0; bin_i < 100; bin_i++) {
+        if (k == 0) {
+          os << "SS_" << bin_i << "_" << arrMap[map_i];
+          k = 1;
+        } else {
+          os << "\t"
+             << "SS_" << bin_i << "_" << arrMap[map_i];
+        }
+      }
+    }
+    delete[] arrMap;
+  }
+  os << "\n";
+}
+
 void Posterior::SetNsite(int i) { this->Nsite_codon = i; }
 
 void Posterior::GetWeights(string kernel) {
@@ -1181,8 +1444,8 @@ void Posterior::registerNewSimulation(
     std::vector<double> evostat, std::vector<double> ssevostat,
     std::vector<double> distances, std::vector<double> weights) {
   if (population_t.empty()) {
-    // std::cerr << "POPULATION IS EMPTY" << Naccepted <<  " "<< threshold <<  "
-    // \n";
+    // std::cerr << "POPULATION IS EMPTY" << Naccepted <<  " "<< threshold <<
+    // " \n";
     population_t.push_back(make_tuple(chainID, param, summaries, accsummaries,
                                       evoancstat, evostat, ssevostat, distances,
                                       weights));
@@ -1248,7 +1511,7 @@ void Posterior::registerNewSimulation(
   // std::cerr << this->Niter << " ";
 }
 
-void Posterior::registerOldSimulation(
+void Posterior::registerSimulation(
     int chainID, std::vector<double> param, std::vector<double> summaries,
     std::vector<double> accsummaries, std::vector<double> evoancstat,
     std::vector<double> evostat, std::vector<double> ssevostat,
@@ -1256,4 +1519,5 @@ void Posterior::registerOldSimulation(
   population_t.push_back(make_tuple(chainID, param, summaries, accsummaries,
                                     evoancstat, evostat, ssevostat, distances,
                                     weights));
+  this->Niter++;
 }
