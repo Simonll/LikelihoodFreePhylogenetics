@@ -202,7 +202,12 @@ void TreeSimulator::GenerateCodonAlignment() {
     std::cerr << "ancestralseq->ComputeStationaryCodon()\n";
   }
 
-  ancestralseq->SampleAncestralCodonSequenceFromStationaryCodon();
+  if (this->lparam->rootlength == -1) {
+    ancestralseq->SampleAncestralCodonSequenceFromCodonData();
+  } else {
+    ancestralseq->SampleAncestralCodonSequenceFromStationaryCodon();
+  }
+
   if (verbose) {
     std::cerr
         << "ancestralseq->SampleAncestralCodonSequenceFromStationaryCodon()\n";
