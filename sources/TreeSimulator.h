@@ -68,11 +68,11 @@ class TreeSimulator {
 
   // Setters
   void SetAncestralSequence();
+  void SetAncestralCodonSequence(int FromNodeIndex, int interval);
 
   // Getters
   void GetNewSimulatedCodonAlignment();
   void GetNewProbSeq();
-  void GetAncestralCodonSequence(int FromNodeIndex, int interval);
 
   TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submatrix,
                 AncestralSequence* ancestralseq);

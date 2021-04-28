@@ -964,7 +964,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
 
     double IntervalLength = 1.0;
     int interval = 0;
-    GetAncestralCodonSequence(FromNodeIndex, interval);
+    SetAncestralCodonSequence(FromNodeIndex, interval);
     interval++;
     while (time < blength) {
       double u =
@@ -1005,7 +1005,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
       time += (lparam->rnd->sExpo()) / rate;
 
       if (time > IntervalLength * interval && interval < lparam->Ninterval) {
-        GetAncestralCodonSequence(FromNodeIndex, interval);
+        SetAncestralCodonSequence(FromNodeIndex, interval);
         interval++;
       }
     }
@@ -1175,7 +1175,7 @@ void TreeSimulator::ComputeSeqProb() {
   }
 }
 
-void TreeSimulator::GetAncestralCodonSequence(int FromNodeIndex, int interval) {
+void TreeSimulator::SetAncestralCodonSequence(int FromNodeIndex, int interval) {
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
     CurrentAncestralCodonSequence[interval][0][site_codon] =
         CurrentNodeCodonSequence[FromNodeIndex][site_codon];
