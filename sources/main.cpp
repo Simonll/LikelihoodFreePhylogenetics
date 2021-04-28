@@ -207,7 +207,7 @@ int main(int argc, char* argv[]) {
         for (int l = 0; l < Npoint; l++) {
           sampler[l]->sample();
 
-          simulator[l]->GetNewSimulatedCodonAlignment();
+          simulator[l]->GenerateCodonAlignment();
 
           ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
 
@@ -337,7 +337,7 @@ int main(int argc, char* argv[]) {
 #pragma omp for
         for (int l = 0; l < Npoint; l++) {
           sampler[l]->sample();
-          simulator[l]->GetNewSimulatedCodonAlignment();
+          simulator[l]->GenerateCodonAlignment();
           ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
 
 #pragma omp critical
@@ -483,7 +483,7 @@ int main(int argc, char* argv[]) {
       for (run = 0; run < runTodo; run++) {
         sampler[l]->sample();
 
-        simulator[l]->GetNewSimulatedCodonAlignment();
+        simulator[l]->GenerateCodonAlignment();
 
         for (int interval_i = 0; interval_i < 11; interval_i++) {
           ss[l]->computeSummariesAncestralSequence(
@@ -551,7 +551,7 @@ int main(int argc, char* argv[]) {
     while (post->Niter < post->Nrun) {
       sampler->sample();
 
-      simulator->GetNewSimulatedCodonAlignment();
+      simulator->GenerateCodonAlignment();
 
       ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
 
@@ -635,7 +635,7 @@ int main(int argc, char* argv[]) {
       int iter = 0;
       while (iter < post->Nrun) {
         sampler->sample();
-        simulator->GetNewSimulatedCodonAlignment();
+        simulator->GenerateCodonAlignment();
 
         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
 
@@ -735,7 +735,7 @@ int main(int argc, char* argv[]) {
       while (iter < post->Nrun) {
         sampler->sample();
 
-        simulator->GetNewSimulatedCodonAlignment();
+        simulator->GenerateCodonAlignment();
 
         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
 
@@ -835,7 +835,7 @@ int main(int argc, char* argv[]) {
         while (rep < post->Nrun) {
           rep++;
 
-          simulator->GetNewSimulatedCodonAlignment();
+          simulator->GenerateCodonAlignment();
 
           ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
 

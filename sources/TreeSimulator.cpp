@@ -174,7 +174,7 @@ void TreeSimulator::GetNewProbSeq() {
   // register mappingstats
 }
 
-void TreeSimulator::GetNewSimulatedCodonAlignment() {
+void TreeSimulator::GenerateCodonAlignment() {
   int verbose = lparam->verbose;
   submatrix->resetSubMatrix();
 
