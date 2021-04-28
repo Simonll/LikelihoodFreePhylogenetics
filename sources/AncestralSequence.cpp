@@ -15,32 +15,32 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 
 AncestralSequence::AncestralSequence(LocalParameters* lparam) {
   this->lparam = lparam;
-  CurrentStationaryCodonSequence = new double*[lparam->Nsite_codon];
+  this->CurrentStationaryCodonSequence = new double*[lparam->Nsite_codon];
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
-    CurrentStationaryCodonSequence[site_codon] =
+    this->CurrentStationaryCodonSequence[site_codon] =
         new double[lparam->Nstate_codon];
   }
-  CurrentCodonSequence = new int[lparam->Nsite_codon];
-  CurrentAncestralCodonSequence = new int[lparam->Nsite_codon];
-  CurrentNucSequence = new int[lparam->Nsite_codon * 3];
-  CurrentAncestralNucSequence = new int[lparam->Nsite_codon * 3];
+  this->CurrentCodonSequence = new int[lparam->Nsite_codon];
+  this->CurrentAncestralCodonSequence = new int[lparam->Nsite_codon];
+  this->CurrentNucSequence = new int[lparam->Nsite_codon * 3];
+  this->CurrentAncestralNucSequence = new int[lparam->Nsite_codon * 3];
 }
 
 AncestralSequence::~AncestralSequence() {
   // dtor
 }
 
-void AncestralSequence::WriteStationary() {
+void AncestralSequence::WriteStationaryCodonSequence() {
   // Write stationary
   ofstream stationary_os((lparam->output + ".stat").c_str(),
                          std::ios_base::app);
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
     for (int state = 0; state < lparam->Nstate_codon; state++) {
       if (state < lparam->Nstate_codon - 1) {
-        stationary_os << CurrentStationaryCodonSequence[site_codon][state]
+        stationary_os << this->CurrentStationaryCodonSequence[site_codon][state]
                       << "\t";
       } else {
-        stationary_os << CurrentStationaryCodonSequence[site_codon][state]
+        stationary_os << this->CurrentStationaryCodonSequence[site_codon][state]
                       << "\n";
       }
     }
@@ -49,11 +49,11 @@ void AncestralSequence::WriteStationary() {
   stationary_os.close();
 }
 
-void AncestralSequence::GetNewStationaryCodonSequence() {
+void AncestralSequence::ComputeStationaryCodon() {
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
     double Z = 0.0;
     for (int state = 0; state < lparam->Nstate_codon; state++) {
-      CurrentStationaryCodonSequence[site_codon][state] =
+      this->CurrentStationaryCodonSequence[site_codon][state] =
           lparam->nucp[lparam->codonstatespace->GetCodonPosition(0, state)] *
           lparam->nucp[lparam->codonstatespace->GetCodonPosition(1, state)] *
           lparam->nucp[lparam->codonstatespace->GetCodonPosition(2, state)] *
@@ -67,30 +67,64 @@ void AncestralSequence::GetNewStationaryCodonSequence() {
       CurrentStationaryCodonSequence[site_codon][state] /= Z;
     }
   }
-  for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
-    double u = lparam->rnd->Uniform();
-    int state = 0;
-    double testcummul = CurrentStationaryCodonSequence[site_codon][state];
-    while (testcummul < u) {
-      state++;
-      testcummul += CurrentStationaryCodonSequence[site_codon][state];
-    }
-    if (state >= lparam->Nstate_codon) {
-      std::cerr << "failed to draw stationary\n";
-      exit(0);
-    }
-    CurrentCodonSequence[site_codon] = state;
-    for (int j = 0; j < 3; j++) {
-      CurrentNucSequence[site_codon * 3 + j] =
-          lparam->codonstatespace->GetCodonPosition(j, state);
-    }
+}
+
+void AncestralSequence::SampleAncestralCodonSequenceFromStationaryCodon(
+    int site_codon) {
+  double u = lparam->rnd->Uniform();
+  int state = 0;
+  double testcummul = this->CurrentStationaryCodonSequence[site_codon][state];
+  while (testcummul < u) {
+    state++;
+    testcummul += this->CurrentStationaryCodonSequence[site_codon][state];
+  }
+  if (state >= lparam->Nstate_codon) {
+    std::cerr << "failed to draw stationary\n";
+    exit(0);
+  }
+  this->CurrentCodonSequence[site_codon] = state;
+  for (int j = 0; j < 3; j++) {
+    this->CurrentNucSequence[site_codon * 3 + j] =
+        lparam->codonstatespace->GetCodonPosition(j, state);
   }
 }
 
+void AncestralSequence::SampleAncestralCodonSequenceFromStationaryCodon() {
+  for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
+    SampleAncestralCodonSequenceFromStationaryCodon(site_codon);
+  }
+}
+
+void AncestralSequence::SampleAncestralCodonSequenceFromCodonData() {
+  int** cur_data = lparam->codondata->GetData();
+  double u = lparam->rnd->Uniform();
+
+  int choosen_taxa = static_cast<int>(lparam->Ntaxa * u);
+
+  for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
+    int codon_state = cur_data[choosen_taxa][site_codon];
+
+    if (codon_state != unknown) {
+      this->CurrentCodonSequence[site_codon] = codon_state;
+      for (int j = 0; j < 3; j++) {
+        this->CurrentNucSequence[site_codon * 3 + j] =
+            lparam->codonstatespace->GetCodonPosition(j, codon_state);
+      }
+    } else {
+      SampleAncestralCodonSequenceFromStationaryCodon(site_codon);
+    }
+  }
+
+  for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
+    delete[] cur_data[taxa_i];
+  }
+  delete[] cur_data;
+}
+
 int AncestralSequence::GetCurrentAncestralCodonSequence(int site_codon) {
-  return CurrentCodonSequence[site_codon];
+  return this->CurrentCodonSequence[site_codon];
 }
 
 int AncestralSequence::GetCurrentAncestralNucSequence(int site_nuc) {
-  return CurrentNucSequence[site_nuc];
+  return this->CurrentNucSequence[site_nuc];
 }

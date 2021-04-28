@@ -44,8 +44,11 @@ class AncestralSequence {
   explicit AncestralSequence(LocalParameters* lparam);
   ~AncestralSequence();
 
-  void WriteStationary();
-  void GetNewStationaryCodonSequence();
+  void WriteStationaryCodonSequence();
+  void ComputeStationaryCodon();
+  void SampleAncestralCodonSequenceFromCodonData();
+  void SampleAncestralCodonSequenceFromStationaryCodon();
+  void SampleAncestralCodonSequenceFromStationaryCodon(int site_codon);
   int GetCurrentAncestralCodonSequence(int site_codon);
   int GetCurrentAncestralNucSequence(int site_nuc);
 

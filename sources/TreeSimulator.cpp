@@ -197,9 +197,15 @@ void TreeSimulator::GetNewSimulatedCodonAlignment() {
     std::cerr << "resetSimulator()\n";
   }
 
-  ancestralseq->GetNewStationaryCodonSequence();
+  ancestralseq->ComputeStationaryCodon();
   if (verbose) {
-    std::cerr << "ancestralseq->GetNewStationaryCodonSequence()\n";
+    std::cerr << "ancestralseq->ComputeStationaryCodon()\n";
+  }
+
+  ancestralseq->SampleAncestralCodonSequenceFromStationaryCodon();
+  if (verbose) {
+    std::cerr
+        << "ancestralseq->SampleAncestralCodonSequenceFromStationaryCodon()\n";
   }
 
   SetAncestralSequence();
