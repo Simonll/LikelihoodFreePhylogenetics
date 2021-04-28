@@ -938,7 +938,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
   ////
   if (from->isRoot()) {
     if (verbose) {
-      std::cerr << "CRS1\n";
+      std::cerr << "isRoot\n";
     }
     submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, -1,
                                       CurrentNodeNucSequence);
@@ -955,7 +955,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
     }
 
     if (verbose) {
-      std::cerr << "TreeSimulator::ComputeRecursiveSimulation1.1\n";
+      std::cerr << "TreeSimulator::rate computed\n";
     }
     ////
     // IF is ROOT
@@ -977,13 +977,6 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
     time = (lparam->rnd->sExpo()) / rate;
 
     blength = lparam->rootlength;
-
-    if (verbose) {
-      std::cerr << "TreeSimulator::ComputeRecursiveSimulation2\n";
-      std::cerr << time << "\n" << blength << "\n";
-      std::cerr << submatrix->GetTotalMutRate(FromNodeIndex) << "\n";
-      std::cerr << submatrix->GetTotalSubRate(FromNodeIndex) << "\n";
-    }
 
     double IntervalLength = 1.0;
     int interval = 0;
@@ -1026,20 +1019,14 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
 
       // std::cerr << submatrix[FromNodeIndex][site_nuc][nucTo] << "\n";
       int site_codon = static_cast<int>(site_nuc / 3);
-      if (verbose) {
-        std::cerr << "TreeSimulator::ComputeRecursiveSimulation3\n";
-      }
+
       submatrix->ComputePartialRates(FromNodeIndex, site_codon,
                                      CurrentNodeNucSequence);
       RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo);
-      if (verbose) {
-        std::cerr << "TreeSimulator::ComputeRecursiveSimulation4\n";
-      }
+
       submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,
                                         CurrentNodeNucSequence);
-      if (verbose) {
-        std::cerr << "TreeSimulator::ComputeRecursiveSimulation5\n";
-      }
+
       // submatrix->UpdateSubMatrixTreeSim(FromNodeIndex,
       // -1,CurrentNodeNucSequence);
       rate = submatrix->GetTotalSubRate(FromNodeIndex);
@@ -1051,18 +1038,10 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
 
       time += (lparam->rnd->sExpo()) / rate;
 
-      if (verbose) {
-        std::cerr << "TreeSimulator::ComputeRecursiveSimulation5.0 " << interval
-                  << "\n";
-      }
       if (time > IntervalLength * interval && interval < lparam->Ninterval) {
         GetSampleAncestralCodonSequence(FromNodeIndex, interval);
         interval++;
       }
-    }
-
-    if (verbose) {
-      std::cerr << "TreeSimulator::ComputeRecursiveSimulation5.1\n";
     }
 
     //        rootBranchEvoStats->MutRate[1][0] =
