@@ -205,12 +205,15 @@ int main(int argc, char* argv[]) {
       {
 #pragma omp for
         for (int l = 0; l < Npoint; l++) {
+          std::cerr << "AAAAA\n";
+
           sampler[l]->sample();
+          std::cerr << "AAAAA\n";
 
           simulator[l]->GenerateCodonAlignment();
 
           ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
-
+          std::cerr << "AAAAA\n";
 #pragma omp critical
           {
             if (post3->Niter < post3->Nrun) {
@@ -722,26 +725,28 @@ int main(int argc, char* argv[]) {
     lparam->writeRealDataSummaries(realDataSummaries_os);
     realDataSummaries_os.close();
 
-    PriorSampler* sampler = new PriorSampler(lparam);
+    PriorSampler* prior = new PriorSampler(lparam);
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
 
     std::cerr << "Start simulating \n";
-    while (lparam->startPoint < lparam->endPoint) {
-      lparam->readChainCodonMutSelFinite();
-      int iter = 0;
-      while (iter < post->Nrun) {
-        sampler->sample();
+    std::cerr << "Nsimu to be generated: " << gparam->Nsimu << " with Nrep "
+              << gparam->Nrep << "\n";
 
+    while (post->Niter < gparam->Nsimu) {
+      int k =
+          static_cast<int>(lparam->rnd->Uniform() * (gparam->chainPointEnd -
+                                                     gparam->chainPointStart) +
+                           gparam->chainPointStart);
+      lparam->readChainCodonMutSelFinite(k);
+      for (int i = 0; i < gparam->Nrep; i++) {
+        prior->sample();
         simulator->GenerateCodonAlignment();
-
         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-
-        post->registerNewSimulation(
-            lparam->startPoint, lparam->GetCurrentParameters(),
-            lparam->GetCurrentSummaries(),
+        post->registerSimulation(
+            k, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
             lparam->GetCurrentAccessorySummaries(),
             lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
             lparam->GetCurrentSiteSpecificEvoStats(),
@@ -749,35 +754,22 @@ int main(int argc, char* argv[]) {
 
         if (lparam->tofasta) {
           ostringstream oss;
-          oss << gparam->output << "-pt" << lparam->startPoint << "-" << iter
-              << ".phylip";
+          oss << gparam->output << "-" << post->Niter << "_" << i << ".fasta";
           std::string output = oss.str();
           ofstream fasta_os((output).c_str(), std::ios_base::out);
           lparam->toFasta(fasta_os, simulator->CurrentLeafNodeCodonSequences);
           fasta_os.close();
         }
-        iter++;
+        std::cerr << ".";
       }
-
-      int rep = 1;
-      while (rep < lparam->everyPoint) {
-        rep++;
-        lparam->incrementStartPoint();
-      }
-      lparam->incrementStartPoint();
-      std::cerr << ".";
     }
     std::cerr << "End of the simulation process\n";
-    cerr << "writing .simu file"
-         << "\n";
-    ofstream dist_os((gparam->output + ".simu").c_str(), std::ios_base::out);
 
-    post->writeHeader(dist_os);
-    post->writePosterior(dist_os);
+    ofstream dist_os((gparam->output + ".simu").c_str(), std::ios_base::out);
+    post->writeHeader_nodist(dist_os);
+    post->writeSimu(dist_os);
     dist_os.close();
 
-    cerr << "writing .ppp file"
-         << "\n";
     ofstream ppp_os((gparam->output + ".ppp").c_str(), std::ios_base::out);
     post->writePosteriorPredictiveStatistics(ppp_os, lparam->summariesRealData);
     ppp_os.close();

@@ -322,7 +322,7 @@ void GlobalParameters::readInstructions() {
       this->Nrep = atoi(w.c_str());
       iss >> w;
       this->Nsimu = atoi(w.c_str());
-      std::cerr << "#Nrep " << this->Nrep << " #Nsimu" << this->Nsimu << "\n";
+      std::cerr << "#Nrep " << this->Nrep << " #Nsimu " << this->Nsimu << "\n";
 
     } else if (!line.empty() && line.substr(0, 5) == "#NRUN") {
       istringstream iss(line);

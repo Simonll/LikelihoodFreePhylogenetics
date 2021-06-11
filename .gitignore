@@ -1,5 +1,5 @@
-sources/*.o
+sources/*.o*
 data/LFP
 data/codemlM7M8
 .vscode/*
-sources/*.d
+sources/*.d*
