@@ -26,7 +26,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "LocalParameters.h"
 #include "Posterior.h"
 #include "PriorSampler.h"
-#include "SiteInterSubMatrix.h"
+#include "SiteInterSubMatrixCodeMLM7M8.h"
 #include "SummaryStatistics.h"
 #include "TreeSimulator.h"
 
