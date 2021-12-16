@@ -22,6 +22,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "CodonSequenceAlignment.h"
@@ -40,16 +41,8 @@ class SiteInterSubMatrix {
   double*** selmatrixTreeSim;
   double* TotalSubRate;
   double* TotalMutRate;
-  double* TotalSubRateNonSyn;
-  double* TotalMutRateNonSyn;
-  double* TotalSubRateSyn;
-  double* TotalMutRateSyn;
   double* PartialSubRate;
   double* PartialMutRate;
-  double* PartialSubRateNonSyn;
-  double* PartialMutRateNonSyn;
-  double* PartialSubRateSyn;
-  double* PartialMutRateSyn;
 
   // parameters
   LocalParameters* lparam;
@@ -59,19 +52,16 @@ class SiteInterSubMatrix {
   SiteInterSubMatrix(LocalParameters* lparam, std::string seq);
   virtual ~SiteInterSubMatrix();
 
+  std::tuple<double, double, double> ComputeCore(double MutRate, double SubRate,
+                                                 double S, int* nucposFrom,
+                                                 int* nucposTo, int codonPos,
+                                                 int NodeIndex, int site_nuc,
+                                                 int site_codon_i,
+                                                 int** CurrentNodeNucSequence);
+
   // Getters
   double GetSubRate(int NodeIndex, int site_codon);
   double GetMutRate(int NodeIndex, int site_codon);
-  double GetSubRateNonSyn(int NodeIndex, int site_codon,
-                          int** CurrentNodeNucSequence);
-  double GetMutRateNonSyn(int NodeIndex, int site_codon,
-                          int** CurrentNodeNucSequence);
-  double GetSubRateSyn(int NodeIndex, int site_codon,
-                       int** CurrentNodeNucSequence);
-  double GetMutRateSyn(int NodeIndex, int site_codon,
-                       int** CurrentNodeNucSequence);
-  double GetMutRateCpG(int NodeIndex, int** CurrentNodeNucSequence);
-  double GetSubRateCpG(int NodeIndex, int** CurrentNodeNucSequence);
 
   // Setters
   void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);
@@ -107,35 +97,12 @@ class SiteInterSubMatrix {
 
   double GetTotalMutRate(int NodeIndex) { return TotalMutRate[NodeIndex]; }
   double GetTotalSubRate(int NodeIndex) { return TotalSubRate[NodeIndex]; }
-  double GetTotalMutRateNonSyn(int NodeIndex) {
-    return TotalMutRateNonSyn[NodeIndex];
-  }
-  double GetTotalSubRateNonSyn(int NodeIndex) {
-    return TotalSubRateNonSyn[NodeIndex];
-  }
-  double GetTotalMutRateSyn(int NodeIndex) {
-    return TotalMutRateSyn[NodeIndex];
-  }
-  double GetTotalSubRateSyn(int NodeIndex) {
-    return TotalSubRateSyn[NodeIndex];
-  }
+
   ////
   // Getters PartialRates
   ////
   double GetPartialMutRate(int NodeIndex) { return PartialMutRate[NodeIndex]; }
   double GetPartialSubRate(int NodeIndex) { return PartialSubRate[NodeIndex]; }
-  double GetPartialMutRateNonSyn(int NodeIndex) {
-    return PartialMutRateNonSyn[NodeIndex];
-  }
-  double GetPartialSubRateNonSyn(int NodeIndex) {
-    return PartialSubRateNonSyn[NodeIndex];
-  }
-  double GetPartialMutRateSyn(int NodeIndex) {
-    return PartialMutRateSyn[NodeIndex];
-  }
-  double GetPartialSubRateSyn(int NodeIndex) {
-    return PartialSubRateSyn[NodeIndex];
-  }
   double GetSubRate(int NodeIndex, int site_nuc, int nucTo) {
     return submatrixTreeSim[NodeIndex][site_nuc][nucTo];
   }

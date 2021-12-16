@@ -330,172 +330,27 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
         double S = 0.0;
         double MutRate = 0.0;
         double SubRate = 0.0;
-
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
-              nucposFrom[0], nucposFrom[1], nucposFrom[2]);
-          int codonTo = lparam->codonstatespace->GetCodonFromDNA(
-              nucposTo[0], nucposTo[1], nucposTo[2]);
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
-            double m;
-
-            auto it = lparam->gtrMap.find(NodeIndex);
-            if (it == lparam->gtrMap.end()) {
-              std::cerr << "Error when looking to the gtr along the tree\n";
-              exit(0);
-            }
-            if (it->second == 1) {
-              // std::cerr << "GTR " << 1 << "\n";
-              m = lparam->gtnr1[nucposFrom[codonPos]][nucposTo[codonPos]];
-            } else if (it->second == 2) {
-              // std::cerr << "GTR " << 2 << "\n";
-              m = lparam->gtnr2[nucposFrom[codonPos]][nucposTo[codonPos]];
-            } else {
-              m = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
-            }
-
-            int CpGcont =
-                testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
-                               nucposTo[codonPos], CurrentNodeNucSequence);
-            int TpAcont =
-                testTpAcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
-                               nucposTo[codonPos], CurrentNodeNucSequence);
-            int GCPref = testGCPref(nucposFrom[codonPos], nucposTo[codonPos]);
-            if (CpGcont == 1 || CpGcont == 2) {
-              // tsCpG
-              m *= lparam->lambda_CpG;
-              m *= lparam->lambda_tstvCpG;
-              // CpG>TpG
-            } else if (CpGcont > 2) {
-              // tvCpG
-              m *= lparam->lambda_tvCpG;
-              m *= lparam->lambda_tstvCpG;
-            }
-
-            if (TpAcont == 1 || TpAcont == 2) {
-              // tsTpA
-              m *= lparam->lambda_TpA;
-              m *= lparam->lambda_tstvTpA;
-            } else if (TpAcont > 2) {
-              // tvTpA
-              m *= lparam->lambda_tvTpA;
-              m *= lparam->lambda_tstvTpA;
-            }
-
-            if (m < lparam->TOOSMALL) {
-              MutRate = lparam->TOOSMALL;
-            } else {
-              MutRate = m;
-            }
-
-            MutRate *= lparam->lambda_TBL;
-
-            if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
-              int aaTo = lparam->codonstatespace->Translation(codonTo);
-              int aaFrom = lparam->codonstatespace->Translation(codonFrom);
-
-              S = log(
-                  std::pow(
-                      lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaTo],
-                      lparam->AAadj[aaTo]) /
-                  std::pow(
-                      lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom],
-                      lparam->AAadj[aaFrom]) *
-                  lparam->codonprofile[codonTo] /
-                  lparam->codonprofile[codonFrom]);
-
-              if (aaTo != 14 && aaFrom == 14) {
-                S += log((1.0 - lparam->lambda_R) / lparam->lambda_R);
-              } else if (aaTo == 14 && aaFrom != 14) {
-                S += log(lparam->lambda_R / (1.0 - lparam->lambda_R));
-              }
-
-              SubRate = MutRate * lparam->lambda_omega * lparam->omega *
-                        lparam->omega_site[site_codon_i];
-
-            } else {
-              S = log(lparam->codonprofile[codonTo] /
-                      lparam->codonprofile[codonFrom]);
-              SubRate = MutRate;
-            }
-
-            if (GCPref > 0) {
-              S += log((1.0 - lparam->fitGC) / lparam->fitGC);
-            } else if (GCPref < 0) {
-              S += log(lparam->fitGC / (1.0 - lparam->fitGC));
-            }
-            // leave from CpG
-            if (CpGcont > 0) {
-              S += log((1.0 - lparam->fitCpG) / lparam->fitCpG);
-            } else if (CpGcont < 0) {  // land on CpG
-              S += log(lparam->fitCpG / (1.0 - lparam->fitCpG));
-            }
-
-            if (TpAcont > 0) {
-              S += log((1.0 - lparam->fitTpA) / lparam->fitTpA);
-            } else if (TpAcont < 0) {
-              S += log(lparam->fitTpA / (1.0 - lparam->fitTpA));
-            }
-
-            // NUMERICAL SECURITY
-            if (fabs(S) < lparam->TOOSMALL) {
-              SubRate /= (1.0 - (S / 2));
-            } else if (S > lparam->TOOLARGE) {
-              SubRate *= S;
-
-            } else if (S < lparam->TOOLARGENEGATIVE) {
-              SubRate = 0.0;
-            } else {
-              SubRate *= (S / (1.0 - exp(-S)));
-            }
-
-            if (SubRate < 0) {
-              std::cerr << "negative entry in matrix\n";
-              std::cerr << "S: " << S << "\n";
-              exit(1);
-            }
-            if (isinf(SubRate)) {
-              std::cerr << "isinf\n";
-              std::cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t"
-                        << S << "\n";
-              exit(1);
-            }
-            if (isnan(SubRate)) {
-              std::cerr << "isnan\n";
-              std::cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t"
-                        << S << "\n";
-              exit(1);
-            }
-            if (lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                   nucposTo[2])) {
-              std::cerr << nucposTo[0] << " " << nucposTo[1] << " "
-                        << nucposTo[2] << " " << MutRate << " " << SubRate
-                        << " " << submatrixTreeSim[0][site_nuc][nucTo] << "\n";
-              exit(0);
-            }
-          }
+          std::tie(MutRate, S, SubRate) = ComputeCore(
+              MutRate, SubRate, S, nucposFrom, nucposTo, codonPos, NodeIndex,
+              site_nuc, site_codon_i, CurrentNodeNucSequence);
           nucposTo[codonPos] = nucposFrom[codonPos];
         }
         deltaTotalSubRate += SubRate;
         deltaTotalMutRate += MutRate;
-
         mutmatrixTreeSim[NodeIndex][site_nuc][nucTo] = MutRate;
         submatrixTreeSim[NodeIndex][site_nuc][nucTo] = SubRate;
       }
     }
   }
-
   if (whole) {
     TotalSubRate[NodeIndex] = deltaTotalSubRate;
     TotalMutRate[NodeIndex] = deltaTotalMutRate;
-
   } else {
     TotalSubRate[NodeIndex] += deltaTotalSubRate;
     TotalMutRate[NodeIndex] += deltaTotalMutRate;
   }
-
   delete[] nucposFrom;
   delete[] nucposTo;
 }
@@ -506,7 +361,6 @@ void SiteInterSubMatrix::UpdateSubMatrixSeq(int taxa,
 
   double deltaTotalSubRate = 0;
   double deltaTotalMutRate = 0;
-
   // if -1, loop over all sites
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
@@ -533,140 +387,16 @@ void SiteInterSubMatrix::UpdateSubMatrixSeq(int taxa,
         double S = 0.0;
         double MutRate = 0.0;
         double SubRate = 0.0;
-
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
-              nucposFrom[0], nucposFrom[1], nucposFrom[2]);
-          int codonTo = lparam->codonstatespace->GetCodonFromDNA(
-              nucposTo[0], nucposTo[1], nucposTo[2]);
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
-            double m;
-
-            m = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
-
-            int CpGcont =
-                testCpGcontext(taxa, site_nuc, nucposFrom[codonPos],
-                               nucposTo[codonPos], CurrentLeafNodeNucSequences);
-            int TpAcont =
-                testTpAcontext(taxa, site_nuc, nucposFrom[codonPos],
-                               nucposTo[codonPos], CurrentLeafNodeNucSequences);
-            int GCPref = testGCPref(nucposFrom[codonPos], nucposTo[codonPos]);
-            if (CpGcont == 1 || CpGcont == 2) {
-              // tsCpG
-              m *= lparam->lambda_CpG;
-              m *= lparam->lambda_tstvCpG;
-              // CpG>TpG
-            } else if (CpGcont > 2) {
-              // tvCpG
-              m *= lparam->lambda_tvCpG;
-              m *= lparam->lambda_tstvCpG;
-            }
-
-            if (TpAcont == 1 || TpAcont == 2) {
-              // tsTpA
-              m *= lparam->lambda_TpA;
-              m *= lparam->lambda_tstvTpA;
-            } else if (TpAcont > 2) {
-              // tvTpA
-              m *= lparam->lambda_tvTpA;
-              m *= lparam->lambda_tstvTpA;
-            }
-
-            if (m < lparam->TOOSMALL) {
-              MutRate = lparam->TOOSMALL;
-            } else {
-              MutRate = m;
-            }
-
-            MutRate *= lparam->lambda_TBL;
-
-            if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
-              int aaTo = lparam->codonstatespace->Translation(codonTo);
-              int aaFrom = lparam->codonstatespace->Translation(codonFrom);
-
-              S = log(
-                  std::pow(
-                      lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaTo],
-                      lparam->AAadj[aaTo]) /
-                  std::pow(
-                      lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom],
-                      lparam->AAadj[aaFrom]) *
-                  lparam->codonprofile[codonTo] /
-                  lparam->codonprofile[codonFrom]);
-
-              if (aaTo != 14 && aaFrom == 14) {
-                S += log((1.0 - lparam->lambda_R) / lparam->lambda_R);
-              } else if (aaTo == 14 && aaFrom != 14) {
-                S += log(lparam->lambda_R / (1.0 - lparam->lambda_R));
-              }
-
-              SubRate = MutRate * lparam->lambda_omega * lparam->omega *
-                        lparam->omega_site[site_codon_i];
-
-            } else {
-              S = log(lparam->codonprofile[codonTo] /
-                      lparam->codonprofile[codonFrom]);
-              SubRate = MutRate;
-            }
-
-            if (GCPref > 0) {
-              S += log((1.0 - lparam->fitGC) / lparam->fitGC);
-            } else if (GCPref < 0) {
-              S += log(lparam->fitGC / (1.0 - lparam->fitGC));
-            }
-            // leave from CpG
-            if (CpGcont > 0) {
-              S += log((1.0 - lparam->fitCpG) / lparam->fitCpG);
-            } else if (CpGcont < 0) {  // land on CpG
-              S += log(lparam->fitCpG / (1.0 - lparam->fitCpG));
-            }
-
-            if (TpAcont > 0) {
-              S += log((1.0 - lparam->fitTpA) / lparam->fitTpA);
-            } else if (TpAcont < 0) {
-              S += log(lparam->fitTpA / (1.0 - lparam->fitTpA));
-            }
-
-            // NUMERICAL SECURITY
-            if (fabs(S) < lparam->TOOSMALL) {
-              SubRate /= (1.0 - (S / 2));
-            } else if (S > lparam->TOOLARGE) {
-              SubRate *= S;
-
-            } else if (S < lparam->TOOLARGENEGATIVE) {
-              SubRate = 0.0;
-            } else {
-              SubRate *= (S / (1.0 - exp(-S)));
-            }
-            if (SubRate < 0) {
-              std::cerr << "negative entry in matrix\n";
-              std::cerr << "S: " << S << "\n";
-              exit(1);
-            }
-            if (isinf(SubRate)) {
-              std::cerr << "isinf\n";
-              std::cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t"
-                        << S << "\n";
-              exit(1);
-            }
-            if (isnan(SubRate)) {
-              std::cerr << "isnan\n";
-              std::cerr << site_nuc << "\t" << nucTo << "\t" << MutRate << "\t"
-                        << S << "\n";
-              exit(1);
-            }
-            if (lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                   nucposTo[2])) {
-              std::cerr << nucposTo[0] << " " << nucposTo[1] << " "
-                        << nucposTo[2] << " " << MutRate << " " << SubRate
-                        << " " << submatrixTreeSim[0][site_nuc][nucTo] << "\n";
-              exit(0);
-            }
-          }
+          std::tie(MutRate, S, SubRate) = ComputeCore(
+              MutRate, SubRate, S, nucposFrom, nucposTo, codonPos, taxa,
+              site_nuc, site_codon_i, CurrentLeafNodeNucSequences);
           nucposTo[codonPos] = nucposFrom[codonPos];
         }
+        ////
+        // IF nucposFrom[codonPos] == nucTo set prob to 0
+        ////
         deltaTotalSubRate += SubRate;
         deltaTotalMutRate += MutRate;
         mutmatrixTreeSim[taxa][site_nuc][nucTo] = MutRate;
@@ -680,6 +410,52 @@ void SiteInterSubMatrix::UpdateSubMatrixSeq(int taxa,
   TotalMutRate[taxa] = deltaTotalMutRate;
   delete[] nucposFrom;
   delete[] nucposTo;
+}
+
+std::tuple<double, double, double> SiteInterSubMatrix::ComputeCore(
+    double MutRate, double SubRate, double S, int* nucposFrom, int* nucposTo,
+    int codonPos, int NodeIndex, int site_nuc, int site_codon_i,
+    int** CurrentNodeNucSequence) {
+  int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
+      nucposFrom[0], nucposFrom[1], nucposFrom[2]);
+  int codonTo = lparam->codonstatespace->GetCodonFromDNA(
+      nucposTo[0], nucposTo[1], nucposTo[2]);
+  if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
+                                          nucposTo[2])) {
+    MutRate = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
+    int CpGcont = testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
+                                 nucposTo[codonPos], CurrentNodeNucSequence);
+
+    if (CpGcont == 1 || CpGcont == 2) {
+      // tsCpG
+      MutRate *= lparam->lambda_CpG;
+      // CpG>TpG
+    }
+
+    if (MutRate < lparam->TOOSMALL) {
+      MutRate = lparam->TOOSMALL;
+    }
+
+    MutRate *= lparam->lambda_TBL;
+
+    if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
+      int aaTo = lparam->codonstatespace->Translation(codonTo);
+      int aaFrom = lparam->codonstatespace->Translation(codonFrom);
+      S = log(
+          (lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaTo] /
+           lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom]) *
+          (lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]));
+
+      SubRate = MutRate * lparam->lambda_omega * lparam->omega;
+    } else {
+      S = log(lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]);
+      SubRate = MutRate;
+    }
+
+    SubRate = ComputeFixationFactor(S, SubRate);
+  }
+
+  return {MutRate, S, SubRate};
 }
 
 void SiteInterSubMatrix::transfertTotalRate(int sourceNodeIndex,

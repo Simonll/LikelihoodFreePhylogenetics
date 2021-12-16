@@ -2,7 +2,7 @@ CC=g++
 CPPFLAGS=-c -g -std=c++11 -O2 -Wall -pedantic -fopenmp -fno-var-tracking -Wfatal-errors
 LDFLAGS=-fopenmp
 SRCS=GlobalParameters.cpp TaxonSet.cpp Tree.cpp  Random.cpp  SequenceAlignment.cpp CodonSequenceAlignment.cpp\
-  StateSpace.cpp CodonStateSpace.cpp  LocalParameters.cpp SummaryStatistics.cpp SiteInterSubMatrix.cpp SiteInterSubMatrixCodeMLM7M8.cpp EvolHistStatistics.cpp\
+  StateSpace.cpp CodonStateSpace.cpp  LocalParameters.cpp SummaryStatistics.cpp SiteInterSubMatrix.cpp SiteInterSubMatrixCodeMLM7M8.cpp SiteInterSubMatrixCABC2018.cpp SiteInterSubMatrixCodeMLFMUTSEL.cpp EvolHistStatistics.cpp\
   PriorSampler.cpp AncestralSequence.cpp TreeSimulator.cpp BranchSpecificParameters.cpp  LocalData.cpp\
   Posterior.cpp
 

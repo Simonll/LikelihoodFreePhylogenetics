@@ -12,11 +12,11 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
 
-#include "SiteInterSubMatrixCodeMLFMUTSEL.h"
+#include "SiteInterSubMatrixCABC2018.h"
 
 #include <string>
 
-std::tuple<double, double, double> SiteInterSubMatrixCodeMLFMUTSEL::ComputeCore(
+std::tuple<double, double, double> SiteInterSubMatrixCABC2018::ComputeCore(
     double MutRate, double SubRate, double S, int* nucposFrom, int* nucposTo,
     int codonPos, int NodeIndex, int site_nuc, int site_codon_i,
     int** CurrentNodeNucSequence) {
@@ -50,8 +50,7 @@ std::tuple<double, double, double> SiteInterSubMatrixCodeMLFMUTSEL::ComputeCore(
            lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom]) *
           (lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]));
 
-      SubRate =
-          MutRate * lparam->lambda_omega * lparam->omega_site[site_codon_i];
+      SubRate = MutRate * lparam->lambda_omega * lparam->omega;
     } else {
       S = log(lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]);
       SubRate = MutRate;
