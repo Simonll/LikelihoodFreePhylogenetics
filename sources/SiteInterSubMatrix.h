@@ -152,33 +152,7 @@ class SiteInterSubMatrix {
     return true;
   }
 
-  double ComputeFixationFactor(double S, double SubRate) {
-    if (fabs(S) < lparam->TOOSMALL) {
-      SubRate /= (1.0 - (S / 2));
-    } else if (S > lparam->TOOLARGE) {
-      SubRate *= S;
-    } else if (S < lparam->TOOLARGENEGATIVE) {
-      SubRate = 0.0;
-    } else {
-      SubRate *= (S / (1.0 - exp(-S)));
-    }
-    if (SubRate < 0) {
-      std::cerr << "negative entry in matrix\n";
-      std::cerr << "S: " << S << "\n";
-      exit(1);
-    }
-    if (isinf(SubRate)) {
-      std::cerr << "isinf\n";
-      std::cerr << "S: " << S << "\n";
-      exit(1);
-    }
-    if (isnan(SubRate)) {
-      std::cerr << "isnan\n";
-      std::cerr << "S: " << S << "\n";
-      exit(1);
-    }
-    return SubRate;
-  }
+  double ComputeFixationFactor(double S, double SubRate);
 };
 
 #endif  // SOURCES_SITEINTERSUBMATRIX_H_
