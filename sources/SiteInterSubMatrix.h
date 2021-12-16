@@ -44,7 +44,6 @@ class SiteInterSubMatrix {
   double* TotalMutRateNonSyn;
   double* TotalSubRateSyn;
   double* TotalMutRateSyn;
-
   double* PartialSubRate;
   double* PartialMutRate;
   double* PartialSubRateNonSyn;
@@ -61,20 +60,16 @@ class SiteInterSubMatrix {
   virtual ~SiteInterSubMatrix();
 
   // Getters
-
   double GetSubRate(int NodeIndex, int site_codon);
   double GetMutRate(int NodeIndex, int site_codon);
-
   double GetSubRateNonSyn(int NodeIndex, int site_codon,
                           int** CurrentNodeNucSequence);
   double GetMutRateNonSyn(int NodeIndex, int site_codon,
                           int** CurrentNodeNucSequence);
-
   double GetSubRateSyn(int NodeIndex, int site_codon,
                        int** CurrentNodeNucSequence);
   double GetMutRateSyn(int NodeIndex, int site_codon,
                        int** CurrentNodeNucSequence);
-
   double GetMutRateCpG(int NodeIndex, int** CurrentNodeNucSequence);
   double GetSubRateCpG(int NodeIndex, int** CurrentNodeNucSequence);
 
@@ -111,55 +106,78 @@ class SiteInterSubMatrix {
   ////
 
   double GetTotalMutRate(int NodeIndex) { return TotalMutRate[NodeIndex]; }
-
   double GetTotalSubRate(int NodeIndex) { return TotalSubRate[NodeIndex]; }
-
   double GetTotalMutRateNonSyn(int NodeIndex) {
     return TotalMutRateNonSyn[NodeIndex];
   }
-
   double GetTotalSubRateNonSyn(int NodeIndex) {
     return TotalSubRateNonSyn[NodeIndex];
   }
-
   double GetTotalMutRateSyn(int NodeIndex) {
     return TotalMutRateSyn[NodeIndex];
   }
-
   double GetTotalSubRateSyn(int NodeIndex) {
     return TotalSubRateSyn[NodeIndex];
   }
-
   ////
   // Getters PartialRates
   ////
-
   double GetPartialMutRate(int NodeIndex) { return PartialMutRate[NodeIndex]; }
-
   double GetPartialSubRate(int NodeIndex) { return PartialSubRate[NodeIndex]; }
-
   double GetPartialMutRateNonSyn(int NodeIndex) {
     return PartialMutRateNonSyn[NodeIndex];
   }
-
   double GetPartialSubRateNonSyn(int NodeIndex) {
     return PartialSubRateNonSyn[NodeIndex];
   }
-
   double GetPartialMutRateSyn(int NodeIndex) {
     return PartialMutRateSyn[NodeIndex];
   }
-
   double GetPartialSubRateSyn(int NodeIndex) {
     return PartialSubRateSyn[NodeIndex];
   }
-
   double GetSubRate(int NodeIndex, int site_nuc, int nucTo) {
     return submatrixTreeSim[NodeIndex][site_nuc][nucTo];
   }
-
   double GetMutRate(int NodeIndex, int site_nuc, int nucTo) {
     return mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+  }
+  bool CheckStop(int pos1, int pos2, int pos3) {
+    if (lparam->codonstatespace->CheckStop(pos1 = pos1, pos2 = pos2,
+                                           pos3 = pos3)) {
+      std::cerr << pos1 << " " << pos2 << " " << pos3 << " "
+                << "\n";
+      exit(0);
+    }
+    return true;
+  }
+
+  double ComputeFixationFactor(double S, double SubRate) {
+    if (fabs(S) < lparam->TOOSMALL) {
+      SubRate /= (1.0 - (S / 2));
+    } else if (S > lparam->TOOLARGE) {
+      SubRate *= S;
+    } else if (S < lparam->TOOLARGENEGATIVE) {
+      SubRate = 0.0;
+    } else {
+      SubRate *= (S / (1.0 - exp(-S)));
+    }
+    if (SubRate < 0) {
+      std::cerr << "negative entry in matrix\n";
+      std::cerr << "S: " << S << "\n";
+      exit(1);
+    }
+    if (isinf(SubRate)) {
+      std::cerr << "isinf\n";
+      std::cerr << "S: " << S << "\n";
+      exit(1);
+    }
+    if (isnan(SubRate)) {
+      std::cerr << "isnan\n";
+      std::cerr << "S: " << S << "\n";
+      exit(1);
+    }
+    return SubRate;
   }
 };
 

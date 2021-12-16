@@ -271,8 +271,6 @@ void TreeSimulator::SetAncestralSequence() {
 }
 
 void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
-  int verbose = lparam->verbose;
-
   int nucFrom = CurrentNodeNucSequence[NodeIndex][site_nuc];
   int CodonPos = site_nuc % 3;
   // 3 codons length context
