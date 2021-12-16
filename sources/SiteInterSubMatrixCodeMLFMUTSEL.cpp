@@ -12,11 +12,11 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
 
-#include "SiteInterSubMatrixCodeMLM7M8.h"
+#include "SiteInterSubMatrixCodeMLFMUTSEL.h"
 
 #include <string>
 
-void SiteInterSubMatrixCodeMLM7M8::UpdateSubMatrixTreeSim(
+void SiteInterSubMatrixCodeMLFMUTSEL::UpdateSubMatrixTreeSim(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
   // int verbose = lparam->verbose;
   bool whole = false;
@@ -88,7 +88,7 @@ void SiteInterSubMatrixCodeMLM7M8::UpdateSubMatrixTreeSim(
   delete[] nucposTo;
 }
 
-void SiteInterSubMatrixCodeMLM7M8::UpdateSubMatrixSeq(
+void SiteInterSubMatrixCodeMLFMUTSEL::UpdateSubMatrixSeq(
     int taxa, int** CurrentLeafNodeNucSequences) {
   // int verbose = lparam->verbose;
 
@@ -145,7 +145,7 @@ void SiteInterSubMatrixCodeMLM7M8::UpdateSubMatrixSeq(
   delete[] nucposTo;
 }
 
-std::tuple<double, double, double> SiteInterSubMatrixCodeMLM7M8::ComputeCore(
+std::tuple<double, double, double> SiteInterSubMatrixCodeMLFMUTSEL::ComputeCore(
     double MutRate, double SubRate, double S, int* nucposFrom, int* nucposTo,
     int codonPos, int NodeIndex, int site_nuc, int site_codon_i,
     int** CurrentNodeNucSequence) {
@@ -179,7 +179,8 @@ std::tuple<double, double, double> SiteInterSubMatrixCodeMLM7M8::ComputeCore(
            lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom]) *
           (lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]));
 
-      SubRate = MutRate * lparam->lambda_omega * lparam->omega;
+      SubRate =
+          MutRate * lparam->lambda_omega * lparam->omega_site[site_codon_i];
     } else {
       S = log(lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]);
       SubRate = MutRate;
