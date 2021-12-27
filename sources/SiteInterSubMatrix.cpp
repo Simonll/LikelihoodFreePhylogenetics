@@ -485,14 +485,7 @@ double SiteInterSubMatrix::GetMutRate(int NodeIndex, int site_codon) {
   double sum = 0.0;
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
-  if (site_codon > -1) {
-    if (site_codon < lparam->Nsite_codon - 1) {
-      site_codon_end = site_codon + 2;
-    }
-    if (site_codon > 0) {
-      site_codon_start = site_codon - 1;
-    }
-  }
+  std::tie(site_codon_start, site_codon_end) = getStartEndCodons(site_codon);
   int site_nuc_start = site_codon_start * 3;
   int site_nuc_end = site_codon_end * 3;
   for (int site_nuc = site_nuc_start; site_nuc < site_nuc_end; site_nuc++) {
@@ -507,14 +500,7 @@ double SiteInterSubMatrix::GetSubRate(int NodeIndex, int site_codon) {
   double sum = 0;
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
-  if (site_codon > -1) {
-    if (site_codon < lparam->Nsite_codon - 1) {
-      site_codon_end = site_codon + 2;
-    }
-    if (site_codon > 0) {
-      site_codon_start = site_codon - 1;
-    }
-  }
+  std::tie(site_codon_start, site_codon_end) = getStartEndCodons(site_codon);
   int site_nuc_start = site_codon_start * 3;
   int site_nuc_end = site_codon_end * 3;
   for (int site_nuc = site_nuc_start; site_nuc < site_nuc_end; site_nuc++) {
@@ -525,8 +511,7 @@ double SiteInterSubMatrix::GetSubRate(int NodeIndex, int site_codon) {
   return sum;
 }
 
-void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,
-                                             int** CurrentNodeNucSequence) {
+std::tuple<int, int> SiteInterSubMatrix::getStartEndCodons(int site_codon) {
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
   if (site_codon > -1) {
@@ -537,6 +522,14 @@ void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,
       site_codon_start = site_codon - 1;
     }
   }
+  return {site_codon_start, site_codon_end};
+}
+
+void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,
+                                             int** CurrentNodeNucSequence) {
+  int site_codon_start = 0;
+  int site_codon_end = lparam->Nsite_codon;
+  std::tie(site_codon_start, site_codon_end) = getStartEndCodons(site_codon);
   PartialSubRate[NodeIndex] = 0.0;
   PartialMutRate[NodeIndex] = 0.0;
   int* nucposFrom = new int[3];
