@@ -38,7 +38,6 @@ class SiteInterSubMatrix {
   // SiteInterSubMatrix
   double*** submatrixTreeSim;
   double*** mutmatrixTreeSim;
-  double*** selmatrixTreeSim;
   double* TotalSubRate;
   double* TotalMutRate;
   double* PartialSubRate;
@@ -64,6 +63,9 @@ class SiteInterSubMatrix {
   double GetMutRate(int NodeIndex, int site_codon);
 
   // Setters
+  void setSubMatrix();
+  void resetSubMatrix();
+  void resetSubMatrixSeq();
   void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);
   void findCodonContext(int NodeIndex, int site_nuc, int nucFrom, int nucTo,
                         int& pos1From, int& pos2From, int& pos3From,
@@ -83,8 +85,7 @@ class SiteInterSubMatrix {
   int testGCPref(int innucFrom, int innucTo);
   int testContextDinuc(int NodeIndex, int site_nuc, int* context, int nucTo,
                        int** CurrentNodeNucSequence);
-  void resetSubMatrix();
-  void resetSubMatrixSeq();
+
   void transfertNodeMatrix(int sourceNodeIndex, int sinkNodeIndex,
                            int site_nuc);
 

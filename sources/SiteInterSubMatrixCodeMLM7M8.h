@@ -36,9 +36,6 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 
 class SiteInterSubMatrixCodeMLM7M8 : SiteInterSubMatrix {
  public:
-  //   void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon,
-  //                               int** CurrentNodeNucSequence);
-  //   void UpdateSubMatrixSeq(int NnodeIndex, int** CurrentNodeNucSequence);
   std::tuple<double, double, double> ComputeCore(double MutRate, double SubRate,
                                                  double S, int* nucposFrom,
                                                  int* nucposTo, int codonPos,

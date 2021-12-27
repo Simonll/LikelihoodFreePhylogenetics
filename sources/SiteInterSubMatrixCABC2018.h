@@ -36,12 +36,50 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 
 class SiteInterSubMatrixCABC2018 : SiteInterSubMatrix {
  public:
+  double*** selmatrixTreeSim;
+  double* TotalSubRateNonSyn;
+  double* TotalMutRateNonSyn;
+  double* TotalSubRateSyn;
+  double* TotalMutRateSyn;
+  double* PartialSubRateNonSyn;
+  double* PartialMutRateNonSyn;
+  double* PartialSubRateSyn;
+  double* PartialMutRateSyn;
+  void setSubMatrix();
+  void resetSubMatrix();
+  void resetSubMatrixSeq();
   std::tuple<double, double, double> ComputeCore(double MutRate, double SubRate,
                                                  double S, int* nucposFrom,
                                                  int* nucposTo, int codonPos,
                                                  int NodeIndex, int site_nuc,
                                                  int site_codon_i,
                                                  int** CurrentNodeNucSequence);
+
+  void ComputePartialRates(int NodeIndex, int site_codon,
+                           int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesCpG(int NodeIndex,
+                                         int** CurrentNodeNucSequence);
+  std::tuple<double, double> GetRatesNonSyn(int NodeIndex, int site_codon,
+                                            int** CurrentNodeNucSequence);
+  std::tuple<double, double> GetRatesSyn(int NodeIndex, int site_codon,
+                                         int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesWeakStrong(int NodeIndex, int site_codon,
+                                                int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesStrongWeak(int NodeIndex, int site_codon,
+                                                int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesTransition(int NodeIndex, int site_codon,
+                                                int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesTransversion(int NodeIndex, int site_codon,
+                                                  int** CurrentNodeNucSequence);
+
+  bool isWeakStrong(int nucFrom, int nucTo);
+  bool isTransition(int nucFrom, int nucTo);
+  bool isStrongWeak(int nucFrom, int nucTo);
 };
 
 #endif  // SOURCES_SITEINTERSUBMATRIXCABC2018_H_

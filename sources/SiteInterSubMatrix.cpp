@@ -16,36 +16,16 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 
 #include <string>
 
-double SiteInterSubMatrix::ComputeFixationFactor(double S, double SubRate) {
-  if (fabs(S) < lparam->TOOSMALL) {
-    SubRate /= (1.0 - (S / 2));
-  } else if (S > lparam->TOOLARGE) {
-    SubRate *= S;
-  } else if (S < lparam->TOOLARGENEGATIVE) {
-    SubRate = 0.0;
-  } else {
-    SubRate *= (S / (1.0 - exp(-S)));
-  }
-  if (SubRate < 0) {
-    std::cerr << "negative entry in matrix\n";
-    std::cerr << "S: " << S << "\n";
-    exit(1);
-  }
-  if (isinf(SubRate)) {
-    std::cerr << "isinf\n";
-    std::cerr << "S: " << S << "\n";
-    exit(1);
-  }
-  if (isnan(SubRate)) {
-    std::cerr << "isnan\n";
-    std::cerr << "S: " << S << "\n";
-    exit(1);
-  }
-  return SubRate;
-}
-
 SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam) {
   this->lparam = lparam;
+  setSubMatrix();
+}
+
+SiteInterSubMatrix::~SiteInterSubMatrix() {
+  // dtor
+}
+
+void SiteInterSubMatrix::setSubMatrix() {
   submatrixTreeSim = new double**[lparam->refTree->GetNnode()];
   mutmatrixTreeSim = new double**[lparam->refTree->GetNnode()];
   for (int node = 0; node < lparam->refTree->GetNnode(); node++) {
@@ -56,38 +36,10 @@ SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam) {
       mutmatrixTreeSim[node][site_nuc] = new double[lparam->Nnucp];
     }
   }
-
   TotalSubRate = new double[lparam->refTree->GetNnode()];
   TotalMutRate = new double[lparam->refTree->GetNnode()];
   PartialSubRate = new double[lparam->refTree->GetNnode()];
   PartialMutRate = new double[lparam->refTree->GetNnode()];
-}
-
-SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam,
-                                       std::string seq) {
-  this->lparam = lparam;
-  submatrixTreeSim = new double**[lparam->Ntaxa];
-  mutmatrixTreeSim = new double**[lparam->Ntaxa];
-  selmatrixTreeSim = new double**[lparam->Ntaxa];
-  for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
-    submatrixTreeSim[taxa_i] = new double*[lparam->Nsite_nuc];
-    mutmatrixTreeSim[taxa_i] = new double*[lparam->Nsite_nuc];
-    selmatrixTreeSim[taxa_i] = new double*[lparam->Nsite_nuc];
-    for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++) {
-      submatrixTreeSim[taxa_i][site_nuc] = new double[lparam->Nnucp];
-      mutmatrixTreeSim[taxa_i][site_nuc] = new double[lparam->Nnucp];
-      selmatrixTreeSim[taxa_i][site_nuc] = new double[lparam->Nnucp];
-    }
-  }
-
-  TotalSubRate = new double[lparam->Ntaxa];
-  TotalMutRate = new double[lparam->Ntaxa];
-  PartialSubRate = new double[lparam->Ntaxa];
-  PartialMutRate = new double[lparam->Ntaxa];
-}
-
-SiteInterSubMatrix::~SiteInterSubMatrix() {
-  // dtor
 }
 
 void SiteInterSubMatrix::resetSubMatrix() {
@@ -116,10 +68,37 @@ void SiteInterSubMatrix::resetSubMatrixSeq() {
       for (int nuc = 0; nuc < Nnuc; nuc++) {
         submatrixTreeSim[taxa_i][site_nuc][nuc] = 0.0;
         mutmatrixTreeSim[taxa_i][site_nuc][nuc] = 0.0;
-        selmatrixTreeSim[taxa_i][site_nuc][nuc] = 0.0;
       }
     }
   }
+}
+
+double SiteInterSubMatrix::ComputeFixationFactor(double S, double SubRate) {
+  if (fabs(S) < lparam->TOOSMALL) {
+    SubRate /= (1.0 - (S / 2));
+  } else if (S > lparam->TOOLARGE) {
+    SubRate *= S;
+  } else if (S < lparam->TOOLARGENEGATIVE) {
+    SubRate = 0.0;
+  } else {
+    SubRate *= (S / (1.0 - exp(-S)));
+  }
+  if (SubRate < 0) {
+    std::cerr << "negative entry in matrix\n";
+    std::cerr << "S: " << S << "\n";
+    exit(1);
+  }
+  if (isinf(SubRate)) {
+    std::cerr << "isinf\n";
+    std::cerr << "S: " << S << "\n";
+    exit(1);
+  }
+  if (isnan(SubRate)) {
+    std::cerr << "isnan\n";
+    std::cerr << "S: " << S << "\n";
+    exit(1);
+  }
+  return SubRate;
 }
 
 int SiteInterSubMatrix::testGpTcontext(int inNnodeIndex, int insite,
@@ -400,7 +379,6 @@ void SiteInterSubMatrix::UpdateSubMatrixSeq(int taxa,
         deltaTotalSubRate += SubRate;
         deltaTotalMutRate += MutRate;
         mutmatrixTreeSim[taxa][site_nuc][nucTo] = MutRate;
-        selmatrixTreeSim[taxa][site_nuc][nucTo] = S;
         submatrixTreeSim[taxa][site_nuc][nucTo] = SubRate;
       }
     }
@@ -602,13 +580,14 @@ void SiteInterSubMatrix::WriteSubMatrix(ostream& mutation_os,
                                         ostream& selection_os, int nucTo) {
   for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
     mutation_os << lparam->taxonset->GetTaxon(taxa_i) << "\t";
-    selection_os << lparam->taxonset->GetTaxon(taxa_i) << "\t";
+    //    selection_os << lparam->taxonset->GetTaxon(taxa_i) << "\t";
 
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
       mutation_os << mutmatrixTreeSim[taxa_i][site_codon][nucTo] << "\t";
-      selection_os << selmatrixTreeSim[taxa_i][site_codon][nucTo] << "\t";
+      //      selection_os << selmatrixTreeSim[taxa_i][site_codon][nucTo] <<
+      //      "\t";
     }
     mutation_os << "\n";
-    selection_os << "\n";
+    //    selection_os << "\n";
   }
 }
