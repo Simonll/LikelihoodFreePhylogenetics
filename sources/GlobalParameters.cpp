@@ -340,6 +340,7 @@ void GlobalParameters::readInstructions() {
       istringstream iss(line);
       string w;
       iss >> w;
+      iss >> w;
       this->seed = atoi(w.c_str());
       std::cerr << "#SEED " << this->seed << "\n";
 
