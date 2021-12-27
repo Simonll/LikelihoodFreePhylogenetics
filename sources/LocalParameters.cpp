@@ -92,7 +92,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->mapUsedEvoAncStats.insert(gparam->mapUsedEvoAncStats.begin(),
                                   gparam->mapUsedEvoAncStats.end());
 
-  this->randomseed = -1;
+  this->randomseed = gparam->seed;
   this->rnd = new Random(randomseed);
   this->MutationNormFactor = this->MutationNormFactor1 =
       this->MutationNormFactor2 = 1;
@@ -169,7 +169,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->fixss = 1;
   this->rooted = 0;
   this->fixroot = -1;
-  this->randomseed = -1;
+  // this->randomseed = -1;
   this->rootlength = 10.0;
   this->Ninterval = static_cast<int>(this->rootlength);
   this->sampleAncSeq = 0;
@@ -806,9 +806,9 @@ void LocalParameters::readLocalInstructions() {
     } else if (s == "-tofasta" || s == "-tophylip") {
       this->tofasta = 1;
 
-    } else if (s == "-randomfix") {
-      this->randomseed = 12345;
-      std::cerr << "randomseed " << this->randomseed << "\n";
+      // } else if (s == "-randomfix") {
+      //   this->randomseed = 12345;
+      //   std::cerr << "randomseed " << this->randomseed << "\n";
 
     } else if (s == "-verbose") {
       iss >> s;

@@ -110,7 +110,7 @@ Posterior::Posterior(GlobalParameters* gparam) {
 
   this->sorted = false;
   this->Naccepted = 0;
-  this->randomseed = -1;
+  this->randomseed = gparam->seed;
   this->rnd = new Random(randomseed);
 
   population_t.reserve(this->threshold);

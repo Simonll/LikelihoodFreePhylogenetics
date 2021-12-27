@@ -2355,7 +2355,7 @@ class GlobalParameters {
       NusedSiteSpecificEvoStats, NusedEvoStats, NusedEvoAncStats, NusedParam,
       NusedSummaries, NusedAncSummaries, Ngenes, chainPointStart, chainPointEnd,
       chainPointEvery, Nthread, Niter, Nrun, threshold, Nrep, Nsite_codon,
-      Ntaxa, Nsimu, Ncon;
+      Ntaxa, Nsimu, Ncon, seed;
 
   std::vector<std::string> listGenes;
   std::vector<std::string> listChains;

@@ -24,6 +24,7 @@ GlobalParameters::GlobalParameters(string model, string controlfile) {
   this->Niter = 0;
   this->threshold = 10000;
   this->verbose = 0;
+  this->seed = -1;
 
   this->chainPointStart = 1;
   this->chainPointEnd = 101;
@@ -334,6 +335,13 @@ void GlobalParameters::readInstructions() {
       this->threshold = atoi(w.c_str());
       std::cerr << "#Nrun " << this->Nrun << " threshold " << this->threshold
                 << "\n";
+
+    } else if (!line.empty() && line.substr(0, 5) == "#SEED") {
+      istringstream iss(line);
+      string w;
+      iss >> w;
+      this->seed = atoi(w.c_str());
+      std::cerr << "#SEED " << this->seed << "\n";
 
     } else if (!line.empty() && line.substr(0, 9) == "#NTHREADS") {
       istringstream iss(line);
