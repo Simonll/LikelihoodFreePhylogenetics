@@ -13,7 +13,7 @@ ALL_OBJS=$(patsubst %.cpp,%.o,$(ALL_SRCS))
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=../data/LFP
 PROGSDIR=../data
-ALL= LFP codemlM7M8
+ALL= LFP codemlM7M8 codemlFMutSel
 #all: $(SOURCES) $(EXECUTABLE)
 PROGS=$(addprefix $(PROGSDIR)/, $(ALL))
 
@@ -47,6 +47,9 @@ codemlM8M7$(EXEEXT): $(PROGSDIR)/codemlM7M8$(EXEEXT)
 $(PROGSDIR)/codemlM7M8$(EXEEXT): codemlM7M8.o $(OBJS)
 	$(CC) codemlM7M8.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 
+codemlFMutSel$(EXEEXT): $(PROGSDIR)/codemlFMutSel$(EXEEXT)
+$(PROGSDIR)/codemlFMutSel$(EXEEXT): codemlFMutSel.o $(OBJS)
+	$(CC) codemlFMutSel.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 
 #$(EXECUTABLE): $(OBJECTS)
 #	$(CC) $(LDFLAGS) $(OBJECTS) -o $@

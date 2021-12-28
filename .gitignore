@@ -1,5 +1,6 @@
 sources/*.o*
 data/LFP
 data/codemlM7M8
+data/codemlFMutSel
 .vscode/*
 sources/*.d*
