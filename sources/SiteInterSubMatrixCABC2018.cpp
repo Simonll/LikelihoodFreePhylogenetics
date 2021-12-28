@@ -117,7 +117,7 @@ void SiteInterSubMatrixCABC2018::resetSubMatrix() {
   }
 }
 
-void SiteInterSubMatrixCABC2018::resetSubMatrixSeq() {
+void SiteInterSubMatrixCABC2018::resetSubMatrixFromLeaves() {
   for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
     TotalMutRate[taxa_i] = 0.0;
     TotalSubRate[taxa_i] = 0.0;

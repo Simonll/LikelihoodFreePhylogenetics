@@ -19,6 +19,30 @@ TreeSimulator::TreeSimulator(LocalParameters* lparam,
   this->lparam = lparam;
   this->submatrix = submatrix;
   this->ancestralseq = ancestralseq;
+  setSimulator();
+}
+
+TreeSimulator::TreeSimulator(LocalParameters* lparam,
+                             SiteInterSubMatrix* submatrix) {
+  this->lparam = lparam;
+  this->submatrix = submatrix;
+  setSimulatorFromLeaves();
+}
+
+TreeSimulator::~TreeSimulator() {
+  // dtor
+}
+
+void TreeSimulator::setSimulatorFromLeaves() {
+  CurrentLeafNodeCodonSequences = new int*[lparam->Ntaxa];
+  CurrentLeafNodeNucSequence = new int*[lparam->Ntaxa];
+
+  for (int taxa = 0; taxa < lparam->Ntaxa; taxa++) {
+    CurrentLeafNodeCodonSequences[taxa] = new int[lparam->Nsite_codon];
+    CurrentLeafNodeNucSequence[taxa] = new int[lparam->Nsite_nuc];
+  }
+}
+void TreeSimulator::setSimulator() {
   this->treeEvoStats = new EvolHistStatistics(this->lparam);
   this->rootBranchEvoStats = new EvolHistStatistics(this->lparam);
   CurrentNodeCodonSequence = new int*[lparam->refTree->GetNnode()];
@@ -42,24 +66,6 @@ TreeSimulator::TreeSimulator(LocalParameters* lparam,
     CurrentAncestralCodonSequence[point_i] = new int*[1];
     CurrentAncestralCodonSequence[point_i][0] = new int[lparam->Nsite_codon];
   }
-}
-
-TreeSimulator::TreeSimulator(LocalParameters* lparam,
-                             SiteInterSubMatrix* submatrix) {
-  this->lparam = lparam;
-  this->submatrix = submatrix;
-
-  CurrentLeafNodeCodonSequences = new int*[lparam->Ntaxa];
-  CurrentLeafNodeNucSequence = new int*[lparam->Ntaxa];
-
-  for (int taxa = 0; taxa < lparam->Ntaxa; taxa++) {
-    CurrentLeafNodeCodonSequences[taxa] = new int[lparam->Nsite_codon];
-    CurrentLeafNodeNucSequence[taxa] = new int[lparam->Nsite_nuc];
-  }
-}
-
-TreeSimulator::~TreeSimulator() {
-  // dtor
 }
 
 void TreeSimulator::resetSimulator() {
@@ -90,7 +96,7 @@ void TreeSimulator::resetSimulator() {
   }
 }
 
-void TreeSimulator::resetSimulatorSeq() {
+void TreeSimulator::resetSimulatorFromLeaves() {
   int** cur_data = lparam->codondata->GetData();
   // reset nodeleaf sequences
   for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
@@ -127,11 +133,11 @@ void TreeSimulator::resetSimulatorSeq() {
   delete[] cur_data;
 }
 
-void TreeSimulator::GetNewProbSeq() {
+void TreeSimulator::GenerateFromLeaves() {
   submatrix->resetSubMatrix();
-  resetSimulatorSeq();
+  resetSimulatorFromLeaves();
   // launch recursive simulation on a phylogenetic tree
-  ComputeSeqProb();
+  computeFromLeaves();
   // register mappingstats
 }
 
@@ -827,9 +833,9 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
   }
 }
 
-void TreeSimulator::ComputeSeqProb() {
+void TreeSimulator::computeFromLeaves() {
   for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
-    submatrix->UpdateSubMatrixSeq(taxa_i, CurrentLeafNodeCodonSequences);
+    submatrix->UpdateSubMatrixFromLeaves(taxa_i, CurrentLeafNodeCodonSequences);
   }
 }
 

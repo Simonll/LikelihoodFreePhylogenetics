@@ -21,6 +21,11 @@ SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam) {
   setSubMatrix();
 }
 
+SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam, std::string s) {
+  this->lparam = lparam;
+  setSubMatrixFromLeaves();
+}
+
 SiteInterSubMatrix::~SiteInterSubMatrix() {
   // dtor
 }
@@ -57,8 +62,24 @@ void SiteInterSubMatrix::resetSubMatrix() {
     }
   }
 }
+void SiteInterSubMatrix::setSubMatrixFromLeaves() {
+  submatrixTreeSim = new double**[lparam->Ntaxa];
+  mutmatrixTreeSim = new double**[lparam->Ntaxa];
+  for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
+    submatrixTreeSim[taxa_i] = new double*[lparam->Nsite_nuc];
+    mutmatrixTreeSim[taxa_i] = new double*[lparam->Nsite_nuc];
+    for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++) {
+      submatrixTreeSim[taxa_i][site_nuc] = new double[lparam->Nnucp];
+      mutmatrixTreeSim[taxa_i][site_nuc] = new double[lparam->Nnucp];
+    }
+  }
+  TotalSubRate = new double[lparam->Ntaxa];
+  TotalMutRate = new double[lparam->Ntaxa];
+  PartialSubRate = new double[lparam->Ntaxa];
+  PartialMutRate = new double[lparam->Ntaxa];
+}
 
-void SiteInterSubMatrix::resetSubMatrixSeq() {
+void SiteInterSubMatrix::resetSubMatrixFromLeaves() {
   for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
     TotalMutRate[taxa_i] = 0.0;
     TotalSubRate[taxa_i] = 0.0;
@@ -334,8 +355,8 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
   delete[] nucposTo;
 }
 
-void SiteInterSubMatrix::UpdateSubMatrixSeq(int taxa,
-                                            int** CurrentLeafNodeNucSequences) {
+void SiteInterSubMatrix::UpdateSubMatrixFromLeaves(
+    int taxa, int** CurrentLeafNodeNucSequences) {
   // int verbose = lparam->verbose;
 
   double deltaTotalSubRate = 0;

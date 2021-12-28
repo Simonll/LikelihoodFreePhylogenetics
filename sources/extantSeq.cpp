@@ -91,21 +91,16 @@ int main(int argc, char* argv[]) {
     } else if (model == "CodonMutSelFiniteSeq") {
       lparam->readChainCodonMutSelFinite();
     }
-
     SummaryStatistics* ss = new SummaryStatistics(lparam);
     ss->computeSummaries();
-
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());
     lparam->writeRealDataSummaries(realDataSummaries_os);
     realDataSummaries_os.close();
     std::string s = "seq";
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrixCABC2018(lparam, s);
-
     std::cerr << lparam->Nsite_codon << "\n";
     TreeSimulator* simulator = new TreeSimulator(lparam, submatrix);
-
     post->readPosterior(lparam->posteriorfile);
-
     std::cerr << "The simulation process started\n";
     if (!post->posterior.empty()) {
       int it = 0;
@@ -154,7 +149,7 @@ int main(int argc, char* argv[]) {
                                     std::ios_base::out);
             ofstream selmatrix_T_os((gparam->output + ".selmatrix_T").c_str(),
                                     std::ios_base::out);
-            submatrix->WriteSubMatrix(mutmatrix_T_os, selmatrix_T_os, 0);
+            submatrix->WriteSubMatrix(mutmatrix_T_os, selmatrix_T_os, 3);
             mutmatrix_T_os.close();
             selmatrix_T_os.close();
           } else {

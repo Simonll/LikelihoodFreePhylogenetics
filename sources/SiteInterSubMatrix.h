@@ -65,8 +65,9 @@ class SiteInterSubMatrix {
 
   // Setters
   void setSubMatrix();
+  void setSubMatrixFromLeaves();
   void resetSubMatrix();
-  void resetSubMatrixSeq();
+  void resetSubMatrixFromLeaves();
   void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);
   void findCodonContext(int NodeIndex, int site_nuc, int nucFrom, int nucTo,
                         int& pos1From, int& pos2From, int& pos3From,
@@ -76,7 +77,7 @@ class SiteInterSubMatrix {
                            int** CurrentNodeNucSequence);
   void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon,
                               int** CurrentNodeNucSequence);
-  void UpdateSubMatrixSeq(int NnodeIndex, int** CurrentNodeNucSequence);
+  void UpdateSubMatrixFromLeaves(int NnodeIndex, int** CurrentNodeNucSequence);
   int testGpTcontext(int NnodeIndex, int site, int nucFrom, int nucTo,
                      int** CurrentNodeNucSequence);
   int testCpGcontext(int NnodeIndex, int site, int nucFrom, int nucTo,

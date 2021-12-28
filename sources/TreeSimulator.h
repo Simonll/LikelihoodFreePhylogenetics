@@ -60,9 +60,11 @@ class TreeSimulator {
   void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon);
   void RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo);
   void ComputeRecursiveSimulation(Link* from);
-  void ComputeSeqProb();
+  void computeFromLeaves();
+  void setSimulator();
   void resetSimulator();
-  void resetSimulatorSeq();
+  void setSimulatorFromLeaves();
+  void resetSimulatorFromLeaves();
   void resetEvoStatVectors();
   void WriteAncestral();
 
@@ -72,7 +74,7 @@ class TreeSimulator {
 
   // Getters
   void GenerateCodonAlignment();
-  void GetNewProbSeq();
+  void GenerateFromLeaves();
 
   TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submatrix,
                 AncestralSequence* ancestralseq);

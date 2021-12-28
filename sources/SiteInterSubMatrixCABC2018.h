@@ -45,9 +45,13 @@ class SiteInterSubMatrixCABC2018 : SiteInterSubMatrix {
   double* PartialMutRateNonSyn;
   double* PartialSubRateSyn;
   double* PartialMutRateSyn;
+
+  SiteInterSubMatrixCABC2018(LocalParameters* lparam, std::string s);
+
   void setSubMatrix();
   void resetSubMatrix();
-  void resetSubMatrixSeq();
+  void setSubMatrixFromLeaves();
+  void resetSubMatrixFromLeaves();
   std::tuple<double, double, double> ComputeCore(double MutRate, double SubRate,
                                                  double S, int* nucposFrom,
                                                  int* nucposTo, int codonPos,
