@@ -124,10 +124,7 @@ int main(int argc, char* argv[]) {
         int rep = 0;
 
         while (rep < post->Nrun) {
-          rep++;
-
           simulator->GetNewProbSeq();
-
           if (it == 0) {
             ofstream mutmatrix_A_os((gparam->output + ".mutmatrix_A").c_str(),
                                     std::ios_base::out);
@@ -193,7 +190,7 @@ int main(int argc, char* argv[]) {
             mutmatrix_T_os.close();
             selmatrix_T_os.close();
           }
-
+          rep++;
           it++;
         }
         std::cerr << ".";

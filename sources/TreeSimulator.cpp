@@ -21,7 +21,6 @@ TreeSimulator::TreeSimulator(LocalParameters* lparam,
   this->ancestralseq = ancestralseq;
   this->treeEvoStats = new EvolHistStatistics(this->lparam);
   this->rootBranchEvoStats = new EvolHistStatistics(this->lparam);
-
   CurrentNodeCodonSequence = new int*[lparam->refTree->GetNnode()];
   CurrentNodeNucSequence = new int*[lparam->refTree->GetNnode()];
 
@@ -64,13 +63,6 @@ TreeSimulator::~TreeSimulator() {
 }
 
 void TreeSimulator::resetSimulator() {
-  int verbose = lparam->verbose;
-  if (verbose) {
-    std::cerr << "resetSimulator1\n";
-  }
-  if (verbose) {
-    std::cerr << lparam->refTree->GetNnode() << "resetSimulator1.1\n";
-  }
   for (int node = 0; node < lparam->refTree->GetNnode(); node++) {
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
       CurrentNodeCodonSequence[node][site_codon] = -2;
@@ -80,9 +72,6 @@ void TreeSimulator::resetSimulator() {
     }
   }
 
-  if (verbose) {
-    std::cerr << "resetSimulator2\n";
-  }
   // reset nodeleaf sequences
   for (int taxa = 0; taxa < lparam->Ntaxa; taxa++) {
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
@@ -93,9 +82,7 @@ void TreeSimulator::resetSimulator() {
     }
   }
 
-  if (verbose) {
-    std::cerr << "resetSimulator3\n";
-  }
+  // reset ancestral sequences
   for (int point_i = 0; point_i < lparam->Ninterval; point_i++) {
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
       CurrentAncestralCodonSequence[point_i][0][site_codon] = -2;
@@ -105,18 +92,10 @@ void TreeSimulator::resetSimulator() {
 
 void TreeSimulator::resetSimulatorSeq() {
   int** cur_data = lparam->codondata->GetData();
-
-  int verbose = lparam->verbose;
-  if (verbose) {
-    std::cerr << "resetSimulator1\n";
-  }
-
   // reset nodeleaf sequences
-
   for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
       int codon_state = cur_data[taxa_i][site_codon];
-
       if (codon_state != unknown) {
         CurrentLeafNodeCodonSequences[taxa_i][site_codon] = codon_state;
         for (int j = 0; j < 3; j++) {
@@ -125,20 +104,15 @@ void TreeSimulator::resetSimulatorSeq() {
         }
       } else {
         double u = lparam->rnd->Uniform();
-
         std::vector<int> cur_vec;
-
         for (int taxa_j = 0; taxa_j < lparam->Ntaxa; taxa_j++) {
           codon_state = cur_data[taxa_j][site_codon];
           if (codon_state != unknown) {
             cur_vec.push_back(codon_state);
           }
         }
-
         int p = static_cast<int>(cur_vec.size() * u);
-
         codon_state = cur_vec[p];
-
         CurrentLeafNodeCodonSequences[taxa_i][site_codon] = codon_state;
         for (int j = 0; j < 3; j++) {
           CurrentLeafNodeNucSequence[taxa_i][site_codon * 3 + j] =
@@ -154,53 +128,19 @@ void TreeSimulator::resetSimulatorSeq() {
 }
 
 void TreeSimulator::GetNewProbSeq() {
-  int verbose = lparam->verbose;
   submatrix->resetSubMatrix();
-  if (verbose) {
-    std::cerr << "submatrix->resetSubMatrix()\n";
-  }
-
   resetSimulatorSeq();
-  if (verbose) {
-    std::cerr << "resetSimulator()\n";
-  }
-
   // launch recursive simulation on a phylogenetic tree
-
   ComputeSeqProb();
-  if (verbose) {
-    std::cerr << "ComputeRecursiveSimulation\n";
-  }
   // register mappingstats
 }
 
 void TreeSimulator::GenerateCodonAlignment() {
-  int verbose = lparam->verbose;
   submatrix->resetSubMatrix();
-
-  if (verbose) {
-    std::cerr << "submatrix->resetSubMatrix()\n";
-  }
-
   rootBranchEvoStats->resetEvoStats();
-  if (verbose) {
-    std::cerr << "rootBranchEvoStats->resetEvoStats()\n";
-  }
-
   treeEvoStats->resetEvoStats();
-  if (verbose) {
-    std::cerr << "treeEvoStats->resetEvoStats()\n";
-  }
-
   resetSimulator();
-  if (verbose) {
-    std::cerr << "resetSimulator()\n";
-  }
-
   ancestralseq->ComputeStationaryCodon();
-  if (verbose) {
-    std::cerr << "ancestralseq->ComputeStationaryCodon()\n";
-  }
 
   if (this->lparam->rootlength == -1) {
     ancestralseq->SampleAncestralCodonSequenceFromCodonData();
@@ -208,42 +148,15 @@ void TreeSimulator::GenerateCodonAlignment() {
     ancestralseq->SampleAncestralCodonSequenceFromStationaryCodon();
   }
 
-  if (verbose) {
-    std::cerr
-        << "ancestralseq->SampleAncestralCodonSequenceFromStationaryCodon()\n";
-  }
-
   SetAncestralSequence();
-  if (verbose) {
-    std::cerr << "SetAncestralSequence()\n";
-  }
-
   // launch recursive simulation on a phylogenetic tree
   ComputeRecursiveSimulation(lparam->refTree->GetRoot());
-  if (verbose) {
-    std::cerr << "ComputeRecursiveSimulation\n";
-  }
   // register mappingstats
 
   resetEvoStatVectors();
-  if (verbose) {
-    std::cerr << "resetEvoStatVectors()\n";
-  }
-
   rootBranchEvoStats->GetEvoAncStats();
-  if (verbose) {
-    std::cerr << "ancestralSequenceEvohist->GetEvoAncStats()\n";
-  }
-
   treeEvoStats->GetEvoStats();
-  if (verbose) {
-    std::cerr << "evohist->GetEvoStats()\n";
-  }
-
   treeEvoStats->GetSiteSpecificEvoStats();
-  if (verbose) {
-    std::cerr << "evohist->GetSiteSpecificEvoStats()\n";
-  }
 }
 
 void TreeSimulator::resetEvoStatVectors() {
