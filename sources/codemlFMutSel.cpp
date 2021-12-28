@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     std::cerr << "\n";
     std::cerr << "version 1.0\n";
     std::cerr << "###########################\n";
-    std::cerr << "-m < show | M7 | M8 | M8a > < controlfile >\n";
+    std::cerr << "-m < show | FMutSelSimu | > < controlfile >\n";
     std::cerr << "###########################\n";
     std::cerr << "#SUMMARIES\n";
     std::cerr << "#ANCSUMMARIES\n";
@@ -77,66 +77,70 @@ int main(int argc, char* argv[]) {
     std::cerr << "###########################\n";
     exit(1);
   }
-  if (model == "M7" || model == "M8" || model == "M8a") {
-    cerr << "simulating under " << model << "\n";
-
+  if (model == "FMutSelSimu") {
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
     LocalParameters* lparam = new LocalParameters(gparam);
+    lparam->readFMutSelCodeML();
     Posterior* post = new Posterior(gparam);
     post->SetNsite(lparam->Nsite_codon);
     SummaryStatistics* ss = new SummaryStatistics(lparam);
-
-    int size = lparam->readParametersCodemlM7M8(-1);
-    lparam->readParametersCodemlM7M8(0);
     ss->computeSummaries();
-    PriorSampler* prior = new PriorSampler(lparam);
+    PriorSampler* sampler = new PriorSampler(lparam);
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
+    ofstream lparam_os((gparam->output + ".inputparam").c_str());
+    lparam->writeParam(lparam_os);
+    lparam_os.close();
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());
     lparam->writeRealDataSummaries(realDataSummaries_os);
     realDataSummaries_os.close();
-    std::cerr << "starting to simulate\n";
-    std::cerr << "Nsimu to be generated: " << gparam->Nsimu << " with Nrep "
-              << gparam->Nrep << "\n";
 
-    while (post->Niter < gparam->Nsimu) {
-      int k = static_cast<int>(lparam->rnd->Uniform() * size);
-      lparam->readParametersCodemlM7M8(k);
-      for (int i = 0; i < gparam->Nrep; i++) {
-        prior->sample();
-        simulator->GenerateCodonAlignment();
-        ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
-        post->registerSimulation(
-            k, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
-            lparam->GetCurrentAccessorySummaries(),
-            lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
-            lparam->GetCurrentSiteSpecificEvoStats(),
-            lparam->GetCurrentDistances(), lparam->GetCurrentWeights());
-
-        if (lparam->tofasta) {
-          ostringstream oss;
-          oss << gparam->output << "-" << post->Niter << "_" << i << ".fasta";
-          std::string output = oss.str();
-          ofstream fasta_os((output).c_str(), std::ios_base::out);
-          lparam->toFasta(fasta_os, simulator->CurrentLeafNodeCodonSequences);
-          fasta_os.close();
-        }
-        std::cerr << ".";
+    while (post->Niter < post->Nrun) {
+      sampler->sample();
+      simulator->GenerateCodonAlignment();
+      ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
+      ss->computeSummariesAncestralSequence(
+          simulator->CurrentAncestralCodonSequence[10]);
+      if (post->Niter == 0) {
+        ofstream AncestralDataSummaries_os(
+            (gparam->output + ".ancestral").c_str(), std::ios_base::out);
+        bool headers = true;
+        lparam->writeAncestralDataSummaries(AncestralDataSummaries_os, headers);
+        AncestralDataSummaries_os.close();
+      } else {
+        ofstream AncestralDataSummaries_os(
+            (gparam->output + ".ancestral").c_str(), std::ios_base::app);
+        bool headers = false;
+        lparam->writeAncestralDataSummaries(AncestralDataSummaries_os, headers);
+        AncestralDataSummaries_os.close();
       }
+
+      post->registerNewSimulation(
+          1, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
+          lparam->GetCurrentAccessorySummaries(),
+          lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
+          lparam->GetCurrentSiteSpecificEvoStats(),
+          lparam->GetCurrentDistances(), lparam->GetCurrentWeights());
+      if (lparam->tofasta) {
+        std::ostringstream oss;
+        oss << gparam->output << "-" << post->Niter << ".phylip";
+        std::string output = oss.str();
+        std::ofstream ali_os((output).c_str(), std::ios_base::out);
+        lparam->toAli(ali_os, simulator->CurrentLeafNodeCodonSequences);
+        ali_os.close();
+      }
+      std::cerr << ".";
     }
     std::cerr << "End of the simulation process\n";
-
     ofstream dist_os((gparam->output + ".simu").c_str(), std::ios_base::out);
-    post->writeHeader_nodist(dist_os);
-    post->writeSimu(dist_os);
+    post->writeHeader(dist_os);
+    post->writePosterior(dist_os);
     dist_os.close();
-
     ofstream ppp_os((gparam->output + ".ppp").c_str(), std::ios_base::out);
     post->writePosteriorPredictiveStatistics(ppp_os, lparam->summariesRealData);
     ppp_os.close();
-
     exit(0);
   }
 }
