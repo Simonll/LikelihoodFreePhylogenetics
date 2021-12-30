@@ -144,35 +144,30 @@ void SiteInterSubMatrixCABC2018::resetSubMatrixFromLeaves() {
 
 std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesCpG(
     int NodeIndex, int** CurrentNodeNucSequence) {
-  double SumSubRateCpG = 0.0;
-  double SumMutRateCpG = 0.0;
+  double SubRate = 0.0;
+  double MutRate = 0.0;
   for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++) {
     int nucFrom = CurrentNodeNucSequence[NodeIndex][site_nuc];
     for (int nucTo = 0; nucTo < 4; nucTo++) {
-      if (testCpGcontext(NodeIndex, site_nuc, nucFrom, nucTo,
-                         CurrentNodeNucSequence) > 0) {
-        SumSubRateCpG += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
-        SumMutRateCpG += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+      if (nucFrom != nucTo) {
+        if (testCpGcontext(NodeIndex, site_nuc, nucFrom, nucTo,
+                           CurrentNodeNucSequence) > 0) {
+          SubRate += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+          MutRate += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+        }
       }
     }
   }
-  return std::make_tuple(SumSubRateCpG, SumMutRateCpG);
+  return std::make_tuple(MutRate, SubRate);
 }
 
 std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesNonSyn(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
-  double SumMutNonSyn = 0.0;
-  double SumSubNonSyn = 0.0;
+  double MutRate = 0.0;
+  double SubRate = 0.0;
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
-  if (site_codon > -1) {
-    if (site_codon < lparam->Nsite_codon - 1) {
-      site_codon_end = site_codon + 2;
-    }
-    if (site_codon > 0) {
-      site_codon_start = site_codon - 1;
-    }
-  }
+  std::tie(site_codon_start, site_codon_end) = getStartEndCodons(site_codon);
   int* nucposFrom = new int[3];
   int* nucposTo = new int[3];
   for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end;
@@ -196,8 +191,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesNonSyn(
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
                 nucposTo[0], nucposTo[1], nucposTo[2]);
             if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
-              SumSubNonSyn += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
-              SumMutNonSyn += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+              SubRate += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+              MutRate += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
             }
           }
         }
@@ -206,23 +201,17 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesNonSyn(
   }
   delete[] nucposFrom;
   delete[] nucposTo;
-  return std::make_tuple(SumSubNonSyn, SumMutNonSyn);
+  return std::make_tuple(MutRate, SubRate);
 }
 
 std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesSyn(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
-  double SumMutSyn = 0.0;
-  double SumSubSyn = 0.0;
+  double MutRate = 0.0;
+  double SubRate = 0.0;
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
-  if (site_codon > -1) {
-    if (site_codon < lparam->Nsite_codon - 1) {
-      site_codon_end = site_codon + 2;
-    }
-    if (site_codon > 0) {
-      site_codon_start = site_codon - 1;
-    }
-  }
+  std::tie(site_codon_start, site_codon_end) = getStartEndCodons(site_codon);
+
   int* nucposFrom = new int[3];
   int* nucposTo = new int[3];
   for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end;
@@ -246,8 +235,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesSyn(
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
                 nucposTo[0], nucposTo[1], nucposTo[2]);
             if (lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
-              SumSubSyn += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
-              SumMutSyn += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+              SubRate += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+              MutRate += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
             }
           }
         }
@@ -256,23 +245,17 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesSyn(
   }
   delete[] nucposFrom;
   delete[] nucposTo;
-  return std::make_tuple(SumSubSyn, SumMutSyn);
+  return std::make_tuple(MutRate, SubRate);
 }
 
 std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesStrongWeak(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
-  double SumMutSW = 0.0;
-  double SumSubSW = 0.0;
+  double MutRate = 0.0;
+  double SubRate = 0.0;
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
-  if (site_codon > -1) {
-    if (site_codon < lparam->Nsite_codon - 1) {
-      site_codon_end = site_codon + 2;
-    }
-    if (site_codon > 0) {
-      site_codon_start = site_codon - 1;
-    }
-  }
+  std::tie(site_codon_start, site_codon_end) = getStartEndCodons(site_codon);
+
   int* nucposFrom = new int[3];
   int* nucposTo = new int[3];
   for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end;
@@ -296,8 +279,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesStrongWeak(
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
                 nucposTo[0], nucposTo[1], nucposTo[2]);
             if (isStrongWeak(nucposFrom[codonPos], nucTo)) {
-              SumSubSW += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
-              SumMutSW += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+              SubRate += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+              MutRate += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
             }
           }
         }
@@ -306,23 +289,17 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesStrongWeak(
   }
   delete[] nucposFrom;
   delete[] nucposTo;
-  return std::make_tuple(SumSubSW, SumMutSW);
+  return std::make_tuple(MutRate, SubRate);
 }
 
 std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesWeakStrong(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
-  double SumMutWS = 0.0;
-  double SumSubWS = 0.0;
+  double MutRate = 0.0;
+  double SubRate = 0.0;
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
-  if (site_codon > -1) {
-    if (site_codon < lparam->Nsite_codon - 1) {
-      site_codon_end = site_codon + 2;
-    }
-    if (site_codon > 0) {
-      site_codon_start = site_codon - 1;
-    }
-  }
+  std::tie(site_codon_start, site_codon_end) = getStartEndCodons(site_codon);
+
   int* nucposFrom = new int[3];
   int* nucposTo = new int[3];
   for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end;
@@ -346,8 +323,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesWeakStrong(
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
                 nucposTo[0], nucposTo[1], nucposTo[2]);
             if (isWeakStrong(nucposFrom[codonPos], nucTo)) {
-              SumSubWS += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
-              SumMutWS += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
+              SubRate += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
+              MutRate += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
             }
           }
         }
@@ -356,7 +333,7 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesWeakStrong(
   }
   delete[] nucposFrom;
   delete[] nucposTo;
-  return std::make_tuple(SumSubWS, SumMutWS);
+  return std::make_tuple(MutRate, SubRate);
 }
 
 bool SiteInterSubMatrixCABC2018::isTransition(int nucFrom, int nucTo) {

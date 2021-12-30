@@ -129,11 +129,9 @@ int main(int argc, char* argv[]) {
           int taxaID = static_cast<int>(lparam->Ntaxa * u);
           double MutRate = 0.0;
           double SubRate = 0.0;
-          for (int site_codon = 0; site_codon < lparam->Nsite_codon;
-               site_codon++) {
-            MutRate += submatrix->GetMutRate(taxaID, site_codon);
-            SubRate += submatrix->GetSubRate(taxaID, site_codon);
-          }
+
+          std::tie(MutRate, SubRate) = submatrix->GetRates(
+              taxaID, -1, simulator->CurrentLeafNodeNucSequence);
           ofstream rates_os((gparam->output + ".rates").c_str(),
                             std::ios_base::app);
           rates_os << chainID << "\t" << lparam->taxonset->GetTaxon(taxaID)
@@ -141,8 +139,8 @@ int main(int argc, char* argv[]) {
           rep++;
           std::cerr << ".";
         }
-        it++;
       }
+      it++;
     }
   }
 }

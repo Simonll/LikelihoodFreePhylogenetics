@@ -59,8 +59,8 @@ class SiteInterSubMatrix {
                                                  int** CurrentNodeNucSequence);
 
   // Getters
-  double GetSubRate(int NodeIndex, int site_codon);
-  double GetMutRate(int NodeIndex, int site_codon);
+  std::tuple<double, double> GetRates(int NodeIndex, int site_codon,
+                                      int** CurrentNodeNucSequence);
   std::tuple<int, int> getStartEndCodons(int site_codon);
 
   // Setters
