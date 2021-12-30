@@ -134,11 +134,10 @@ void TreeSimulator::resetSimulatorFromLeaves() {
 }
 
 void TreeSimulator::GenerateFromLeaves() {
-  submatrix->resetSubMatrix();
+  submatrix->resetSubMatrixFromLeaves();
   resetSimulatorFromLeaves();
   // launch recursive simulation on a phylogenetic tree
   computeFromLeaves();
-  // register mappingstats
 }
 
 void TreeSimulator::GenerateCodonAlignment() {

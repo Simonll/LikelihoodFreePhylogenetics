@@ -48,7 +48,7 @@ class SiteInterSubMatrix {
 
   // Constructor
   explicit SiteInterSubMatrix(LocalParameters* lparam);
-  SiteInterSubMatrix(LocalParameters* lparam, std::string seq);
+  SiteInterSubMatrix(LocalParameters* lparam, std::string s);
   virtual ~SiteInterSubMatrix();
 
   std::tuple<double, double, double> ComputeCore(double MutRate, double SubRate,

@@ -22,6 +22,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "AncestralSequence.h"

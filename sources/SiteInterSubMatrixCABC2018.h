@@ -46,8 +46,6 @@ class SiteInterSubMatrixCABC2018 : SiteInterSubMatrix {
   double* PartialSubRateSyn;
   double* PartialMutRateSyn;
 
-  SiteInterSubMatrixCABC2018(LocalParameters* lparam, std::string s);
-
   void setSubMatrix();
   void resetSubMatrix();
   void setSubMatrixFromLeaves();

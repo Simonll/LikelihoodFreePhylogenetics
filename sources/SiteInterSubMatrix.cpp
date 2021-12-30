@@ -22,6 +22,7 @@ SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam) {
 }
 
 SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam, std::string s) {
+  std::cout << s << "\n";
   this->lparam = lparam;
   setSubMatrixFromLeaves();
 }
