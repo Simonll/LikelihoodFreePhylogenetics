@@ -158,6 +158,7 @@ int main(int argc, char* argv[]) {
       ss[l]->computeSummaries();
       sampler[l] = new PriorSampler(lparam[l]);
       submatrix[l] = new SiteInterSubMatrix(lparam[l]);
+      submatrix[l]->init();
       ancestraseq[l] = new AncestralSequence(lparam[l]);
       simulator[l] = new TreeSimulator(lparam[l], submatrix[l], ancestraseq[l]);
 
@@ -205,15 +206,9 @@ int main(int argc, char* argv[]) {
       {
 #pragma omp for
         for (int l = 0; l < Npoint; l++) {
-          std::cerr << "AAAAA\n";
-
           sampler[l]->sample();
-          std::cerr << "AAAAA\n";
-
           simulator[l]->GenerateCodonAlignment();
-
           ss[l]->computeSummaries(simulator[l]->CurrentLeafNodeCodonSequences);
-          std::cerr << "AAAAA\n";
 #pragma omp critical
           {
             if (post3->Niter < post3->Nrun) {
@@ -279,26 +274,17 @@ int main(int argc, char* argv[]) {
          pt_i += gparam->chainPointEvery) {
       int l = static_cast<int>(pt_i - gparam->chainPointStart) /
               gparam->chainPointEvery;
-
       lparam[l] = new LocalParameters(gparam);
-
       lparam[l]->readChainCodonMutSelSBDP(pt_i);
-
       ss[l] = new SummaryStatistics(lparam[l]);
-
       ss[l]->computeSummaries();
-
       sampler[l] = new PriorSampler(lparam[l]);
-
       submatrix[l] = new SiteInterSubMatrix(lparam[l]);
-
+      submatrix[l]->init();
       ancestraseq[l] = new AncestralSequence(lparam[l]);
-
       simulator[l] = new TreeSimulator(lparam[l], submatrix[l], ancestraseq[l]);
-
       if (l == 0) {
         post3->SetNsite(lparam[l]->Nsite_codon);
-
         std::ostringstream ost1;
         ost1 << gparam->output << ".inputparam";
         ofstream lparam_os(ost1.str());
@@ -385,15 +371,10 @@ int main(int argc, char* argv[]) {
     Posterior* postMaster = new Posterior(gparam);
     Posterior** postSlave = new Posterior*[Npoint];
     LocalParameters** lparam = new LocalParameters*[Npoint];
-
     SummaryStatistics** ss = new SummaryStatistics*[Npoint];
-
     PriorSampler** sampler = new PriorSampler*[Npoint];
-
     SiteInterSubMatrix** submatrix = new SiteInterSubMatrix*[Npoint];
-
     AncestralSequence** ancestraseq = new AncestralSequence*[Npoint];
-
     TreeSimulator** simulator = new TreeSimulator*[Npoint];
 
     omp_set_dynamic(0);
@@ -406,19 +387,13 @@ int main(int argc, char* argv[]) {
               gparam->chainPointEvery;
 
       postSlave[l] = new Posterior(gparam);
-
       lparam[l] = new LocalParameters(gparam);
-
       lparam[l]->readChainCodonMutSelSBDP(pt_i);
-
       ss[l] = new SummaryStatistics(lparam[l]);
-
       ss[l]->computeSummaries();
-
       sampler[l] = new PriorSampler(lparam[l]);
-
       submatrix[l] = new SiteInterSubMatrix(lparam[l]);
-
+      submatrix[l]->init();
       ancestraseq[l] = new AncestralSequence(lparam[l]);
 
       simulator[l] = new TreeSimulator(lparam[l], submatrix[l], ancestraseq[l]);
@@ -523,26 +498,18 @@ int main(int argc, char* argv[]) {
 
   } else if (model == "FMutSelSimu") {
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-
     LocalParameters* lparam = new LocalParameters(gparam);
     lparam->readFMutSelCodeML();
-
     Posterior* post = new Posterior(gparam);
     post->SetNsite(lparam->Nsite_codon);
-
     SummaryStatistics* ss = new SummaryStatistics(lparam);
-
     ss->computeSummaries();
-
     PriorSampler* sampler = new PriorSampler(lparam);
-
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
-
+    submatrix->init();
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
-
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
-
     ofstream lparam_os((gparam->output + ".inputparam").c_str());
     lparam->writeParam(lparam_os);
     lparam_os.close();
@@ -627,6 +594,7 @@ int main(int argc, char* argv[]) {
 
     PriorSampler* sampler = new PriorSampler(lparam);
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
+    submatrix->init();
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
@@ -727,6 +695,7 @@ int main(int argc, char* argv[]) {
 
     PriorSampler* prior = new PriorSampler(lparam);
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
+    submatrix->init();
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
@@ -791,24 +760,18 @@ int main(int argc, char* argv[]) {
     } else if (model == "CodonMutSelFinitePPred") {
       lparam->readChainCodonMutSelFinite();
     }
-
     SummaryStatistics* ss = new SummaryStatistics(lparam);
     ss->computeSummaries();
-
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());
     lparam->writeRealDataSummaries(realDataSummaries_os);
     realDataSummaries_os.close();
-
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
-
+    submatrix->init();
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
-
     std::cerr << lparam->Nsite_codon << "\n";
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
-
     post->readPosterior(lparam->posteriorfile);
-
     std::cerr << "The simulation process started\n";
     if (!post->posterior.empty()) {
       int it = 0;

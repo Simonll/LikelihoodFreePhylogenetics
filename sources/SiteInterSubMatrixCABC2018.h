@@ -34,7 +34,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "SiteInterSubMatrix.h"
 #include "Tree.h"
 
-class SiteInterSubMatrixCABC2018 : SiteInterSubMatrix {
+class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
  public:
   double*** selmatrixTreeSim;
   double* TotalSubRateNonSyn;
@@ -46,21 +46,27 @@ class SiteInterSubMatrixCABC2018 : SiteInterSubMatrix {
   double* PartialSubRateSyn;
   double* PartialMutRateSyn;
 
-  void setSubMatrix();
-  void resetSubMatrix();
-  void setSubMatrixFromLeaves();
-  void resetSubMatrixFromLeaves();
-  std::tuple<double, double, double> ComputeCore(double MutRate, double SubRate,
-                                                 double S, int* nucposFrom,
-                                                 int* nucposTo, int codonPos,
-                                                 int NodeIndex, int site_nuc,
-                                                 int site_codon_i,
+  void setSubMatrix() override;
+  void resetSubMatrix() override;
+  void setSubMatrixFromLeaves() override;
+  void resetSubMatrixFromLeaves() override;
+  void init() override;
+  void initFromLeaves() override;
+
+  explicit SiteInterSubMatrixCABC2018(LocalParameters* lparam)
+      : SiteInterSubMatrix(lparam) {}
+  virtual ~SiteInterSubMatrixCABC2018();
+
+  std::tuple<double, double, double> ComputeCore(int* nucposFrom, int* nucposTo,
+                                                 int codonPos, int NodeIndex,
+                                                 int site_nuc, int site_codon_i,
                                                  int** CurrentNodeNucSequence);
 
-  void ComputePartialRates(int NodeIndex, int site_codon,
-                           int** CurrentNodeNucSequence);
-
-  std::tuple<double, double> GetRatesCpG(int NodeIndex,
+  // void ComputePartialRates(int NodeIndex, int site_codon,
+  //                          int** CurrentNodeNucSequence);
+  void UpdateSubMatrixFromLeaves(int taxa,
+                                 int** CurrentLeafNodeNucSequences) override;
+  std::tuple<double, double> GetRatesCpG(int NodeIndex, int site_codon,
                                          int** CurrentNodeNucSequence);
   std::tuple<double, double> GetRatesNonSyn(int NodeIndex, int site_codon,
                                             int** CurrentNodeNucSequence);

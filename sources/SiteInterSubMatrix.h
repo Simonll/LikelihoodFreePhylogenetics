@@ -48,15 +48,14 @@ class SiteInterSubMatrix {
 
   // Constructor
   explicit SiteInterSubMatrix(LocalParameters* lparam);
-  SiteInterSubMatrix(LocalParameters* lparam, std::string s);
   virtual ~SiteInterSubMatrix();
 
-  std::tuple<double, double, double> ComputeCore(double MutRate, double SubRate,
-                                                 double S, int* nucposFrom,
-                                                 int* nucposTo, int codonPos,
-                                                 int NodeIndex, int site_nuc,
-                                                 int site_codon_i,
-                                                 int** CurrentNodeNucSequence);
+  virtual std::tuple<double, double, double> ComputeCore(
+      int* nucposFrom, int* nucposTo, int codonPos, int NodeIndex, int site_nuc,
+      int site_codon_i, int** CurrentNodeNucSequence);
+
+  virtual void init();
+  virtual void initFromLeaves();
 
   // Getters
   std::tuple<double, double> GetRates(int NodeIndex, int site_codon,
@@ -64,10 +63,11 @@ class SiteInterSubMatrix {
   std::tuple<int, int> getStartEndCodons(int site_codon);
 
   // Setters
-  void setSubMatrix();
-  void setSubMatrixFromLeaves();
-  void resetSubMatrix();
-  void resetSubMatrixFromLeaves();
+  virtual void setSubMatrix();
+  virtual void setSubMatrixFromLeaves();
+  virtual void resetSubMatrix();
+  virtual void resetSubMatrixFromLeaves();
+  virtual double ComputeFixationFactor(double S, double SubRate);
   void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);
   void findCodonContext(int NodeIndex, int site_nuc, int nucFrom, int nucTo,
                         int& pos1From, int& pos2From, int& pos3From,
@@ -77,7 +77,8 @@ class SiteInterSubMatrix {
                            int** CurrentNodeNucSequence);
   void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon,
                               int** CurrentNodeNucSequence);
-  void UpdateSubMatrixFromLeaves(int NnodeIndex, int** CurrentNodeNucSequence);
+  virtual void UpdateSubMatrixFromLeaves(int NnodeIndex,
+                                         int** CurrentNodeNucSequence);
   int testGpTcontext(int NnodeIndex, int site, int nucFrom, int nucTo,
                      int** CurrentNodeNucSequence);
   int testCpGcontext(int NnodeIndex, int site, int nucFrom, int nucTo,
@@ -121,8 +122,6 @@ class SiteInterSubMatrix {
     }
     return true;
   }
-
-  double ComputeFixationFactor(double S, double SubRate);
 };
 
 #endif  // SOURCES_SITEINTERSUBMATRIX_H_

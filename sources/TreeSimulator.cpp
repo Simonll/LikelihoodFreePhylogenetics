@@ -97,11 +97,11 @@ void TreeSimulator::resetSimulator() {
 }
 
 void TreeSimulator::resetSimulatorFromLeaves() {
-  int** cur_data = lparam->codondata->GetData();
   // reset nodeleaf sequences
   for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
     for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
-      int codon_state = cur_data[taxa_i][site_codon];
+      int codon_state = lparam->codondata->GetData()[taxa_i][site_codon];
+
       if (codon_state != unknown) {
         CurrentLeafNodeCodonSequences[taxa_i][site_codon] = codon_state;
         for (int j = 0; j < 3; j++) {
@@ -112,12 +112,15 @@ void TreeSimulator::resetSimulatorFromLeaves() {
         double u = lparam->rnd->Uniform();
         std::vector<int> cur_vec;
         for (int taxa_j = 0; taxa_j < lparam->Ntaxa; taxa_j++) {
-          codon_state = cur_data[taxa_j][site_codon];
+          codon_state = lparam->codondata->GetData()[taxa_j][site_codon];
           if (codon_state != unknown) {
             cur_vec.push_back(codon_state);
           }
         }
-        int p = static_cast<int>(cur_vec.size() * u);
+        if (cur_vec.size() == 0) {
+          std::cerr << "warning column " << site_codon << " all missing\n";
+        }
+        int p = static_cast<int>((cur_vec.size() - 1) * u);
         codon_state = cur_vec[p];
         CurrentLeafNodeCodonSequences[taxa_i][site_codon] = codon_state;
         for (int j = 0; j < 3; j++) {
@@ -127,10 +130,6 @@ void TreeSimulator::resetSimulatorFromLeaves() {
       }
     }
   }
-  for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
-    delete[] cur_data[taxa_i];
-  }
-  delete[] cur_data;
 }
 
 void TreeSimulator::GenerateFromLeaves() {
@@ -834,7 +833,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
 
 void TreeSimulator::computeFromLeaves() {
   for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
-    submatrix->UpdateSubMatrixFromLeaves(taxa_i, CurrentLeafNodeCodonSequences);
+    submatrix->UpdateSubMatrixFromLeaves(taxa_i, CurrentLeafNodeNucSequence);
   }
 }
 

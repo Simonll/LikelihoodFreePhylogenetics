@@ -18,18 +18,15 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 
 SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam) {
   this->lparam = lparam;
-  setSubMatrix();
-}
-
-SiteInterSubMatrix::SiteInterSubMatrix(LocalParameters* lparam, std::string s) {
-  std::cout << s << "\n";
-  this->lparam = lparam;
-  setSubMatrixFromLeaves();
 }
 
 SiteInterSubMatrix::~SiteInterSubMatrix() {
   // dtor
 }
+
+void SiteInterSubMatrix::init() { setSubMatrix(); }
+
+void SiteInterSubMatrix::initFromLeaves() { setSubMatrixFromLeaves(); }
 
 void SiteInterSubMatrix::setSubMatrix() {
   submatrixTreeSim = new double**[lparam->refTree->GetNnode()];
@@ -333,9 +330,9 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
         double SubRate = 0.0;
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          std::tie(MutRate, S, SubRate) = ComputeCore(
-              MutRate, SubRate, S, nucposFrom, nucposTo, codonPos, NodeIndex,
-              site_nuc, site_codon_i, CurrentNodeNucSequence);
+          std::tie(MutRate, S, SubRate) =
+              ComputeCore(nucposFrom, nucposTo, codonPos, NodeIndex, site_nuc,
+                          site_codon_i, CurrentNodeNucSequence);
           nucposTo[codonPos] = nucposFrom[codonPos];
         }
         deltaTotalSubRate += SubRate;
@@ -358,16 +355,10 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
 
 void SiteInterSubMatrix::UpdateSubMatrixFromLeaves(
     int taxa, int** CurrentLeafNodeNucSequences) {
-  // int verbose = lparam->verbose;
-
   double deltaTotalSubRate = 0;
   double deltaTotalMutRate = 0;
-  // if -1, loop over all sites
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
-  // else loop over site_codon-1 to site_codon+1: 3 codons to take CpG into
-  // account, which is in fact the worst case.
-
   int* nucposFrom = new int[3];
   int* nucposTo = new int[3];
   for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end;
@@ -379,10 +370,7 @@ void SiteInterSubMatrix::UpdateSubMatrixFromLeaves(
       nucposTo[codonPos] =
           CurrentLeafNodeNucSequences[taxa][site_nuc_start + codonPos];
     }
-
     for (int codonPos = 0; codonPos < 3; codonPos++) {
-      // for each nucleotide codon postions [0,2] we will be
-      // computing adjacent nucleotide.
       int site_nuc = site_nuc_start + codonPos;
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         double S = 0.0;
@@ -390,9 +378,9 @@ void SiteInterSubMatrix::UpdateSubMatrixFromLeaves(
         double SubRate = 0.0;
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          std::tie(MutRate, S, SubRate) = ComputeCore(
-              MutRate, SubRate, S, nucposFrom, nucposTo, codonPos, taxa,
-              site_nuc, site_codon_i, CurrentLeafNodeNucSequences);
+          std::tie(MutRate, S, SubRate) =
+              ComputeCore(nucposFrom, nucposTo, codonPos, taxa, site_nuc,
+                          site_codon_i, CurrentLeafNodeNucSequences);
           nucposTo[codonPos] = nucposFrom[codonPos];
         }
         ////
@@ -405,7 +393,6 @@ void SiteInterSubMatrix::UpdateSubMatrixFromLeaves(
       }
     }
   }
-
   TotalSubRate[taxa] = deltaTotalSubRate;
   TotalMutRate[taxa] = deltaTotalMutRate;
   delete[] nucposFrom;
@@ -413,9 +400,12 @@ void SiteInterSubMatrix::UpdateSubMatrixFromLeaves(
 }
 
 std::tuple<double, double, double> SiteInterSubMatrix::ComputeCore(
-    double MutRate, double SubRate, double S, int* nucposFrom, int* nucposTo,
-    int codonPos, int NodeIndex, int site_nuc, int site_codon_i,
-    int** CurrentNodeNucSequence) {
+    int* nucposFrom, int* nucposTo, int codonPos, int NodeIndex, int site_nuc,
+    int site_codon_i, int** CurrentNodeNucSequence) {
+  double MutRate = 0.0;
+  double SubRate = 0.0;
+  double S = 0.0;
+
   int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
       nucposFrom[0], nucposFrom[1], nucposFrom[2]);
   int codonTo = lparam->codonstatespace->GetCodonFromDNA(
@@ -425,19 +415,16 @@ std::tuple<double, double, double> SiteInterSubMatrix::ComputeCore(
     MutRate = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
     int CpGcont = testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
                                  nucposTo[codonPos], CurrentNodeNucSequence);
-
     if (CpGcont == 1 || CpGcont == 2) {
       // tsCpG
       MutRate *= lparam->lambda_CpG;
       // CpG>TpG
     }
-
     if (MutRate < lparam->TOOSMALL) {
       MutRate = lparam->TOOSMALL;
     }
 
     MutRate *= lparam->lambda_TBL;
-
     if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
       int aaTo = lparam->codonstatespace->Translation(codonTo);
       int aaFrom = lparam->codonstatespace->Translation(codonFrom);
@@ -451,7 +438,6 @@ std::tuple<double, double, double> SiteInterSubMatrix::ComputeCore(
       S = log(lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]);
       SubRate = MutRate;
     }
-
     SubRate = ComputeFixationFactor(S, SubRate);
   }
 
@@ -526,8 +512,8 @@ std::tuple<double, double> SiteInterSubMatrix::GetRates(
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          if (lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                 nucposTo[2])) {
+          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
+                                                  nucposTo[2])) {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
@@ -536,10 +522,12 @@ std::tuple<double, double> SiteInterSubMatrix::GetRates(
             SubRate += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
             MutRate += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
           }
+          nucposTo[codonPos] = nucposFrom[codonPos];
         }
       }
     }
   }
+
   delete[] nucposFrom;
   delete[] nucposTo;
   return std::make_tuple(MutRate, SubRate);

@@ -87,6 +87,7 @@ int main(int argc, char* argv[]) {
     ss->computeSummaries();
     PriorSampler* sampler = new PriorSampler(lparam);
     SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
+    submatrix->init();
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);

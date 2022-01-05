@@ -17,9 +17,11 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <string>
 
 std::tuple<double, double, double> SiteInterSubMatrixCodeMLFMUTSEL::ComputeCore(
-    double MutRate, double SubRate, double S, int* nucposFrom, int* nucposTo,
-    int codonPos, int NodeIndex, int site_nuc, int site_codon_i,
-    int** CurrentNodeNucSequence) {
+    int* nucposFrom, int* nucposTo, int codonPos, int NodeIndex, int site_nuc,
+    int site_codon_i, int** CurrentNodeNucSequence) {
+  double MutRate = 0.0;
+  double SubRate = 0.0;
+  double S = 0.0;
   int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
       nucposFrom[0], nucposFrom[1], nucposFrom[2]);
   int codonTo = lparam->codonstatespace->GetCodonFromDNA(

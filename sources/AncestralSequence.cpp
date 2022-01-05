@@ -98,9 +98,7 @@ void AncestralSequence::SampleAncestralCodonSequenceFromStationaryCodon() {
 void AncestralSequence::SampleAncestralCodonSequenceFromCodonData() {
   int** cur_data = lparam->codondata->GetData();
   double u = lparam->rnd->Uniform();
-
-  int choosen_taxa = static_cast<int>(lparam->Ntaxa * u);
-
+  int choosen_taxa = static_cast<int>((lparam->Ntaxa - 1) * u);
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
     int codon_state = cur_data[choosen_taxa][site_codon];
 
