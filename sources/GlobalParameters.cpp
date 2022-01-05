@@ -13,9 +13,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 */
 #include "GlobalParameters.h"
 
-GlobalParameters::GlobalParameters(string model, string controlfile) {
-  this->model = model;
-  this->controlfile = controlfile;
+void GlobalParameters::init() {
   this->Nrun = 1;
   this->Ncon = 1000;
   this->Nsimu = 1;
@@ -76,8 +74,12 @@ GlobalParameters::GlobalParameters(string model, string controlfile) {
   for (unsigned int i = 0; i < this->NEvoStats; i++) {
     mapUsedEvoAncStats[listEvoStats[i]] = -1;
   }
+}
 
-  std::cerr << "Reading instructions\n";
+GlobalParameters::GlobalParameters(string model, string controlfile) {
+  this->model = model;
+  this->controlfile = controlfile;
+  init();
   readInstructions();
 }
 GlobalParameters::GlobalParameters() {}

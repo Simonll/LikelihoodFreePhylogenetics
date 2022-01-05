@@ -35,7 +35,19 @@ int main(int argc, char* argv[]) {
 
   // program options
   std::string model = "";
-  std::string controlfile = "";
+  int start = 0;
+  int every = 0;
+  int until = 0;
+  std::string output = "";
+  std::string code = "Universal";
+  std::string taxa_a = "";
+  std::string taxa_b = "";
+  int rootlength = 100;
+  std::string phylip = "";
+  std::string mcmc = "";
+  std::string abc = "";
+  int Nrep = 0;
+  int Nrun = 0;
 
   try {
     if (argc < 2) {
@@ -46,11 +58,43 @@ int main(int argc, char* argv[]) {
       std::string s = argv[i];
       if (s == "-v" || s == "--version") {
         throw(0);
-      } else if (s == "-m") {
+      } else if (s == "-model") {
         i++;
         model = argv[i];
+      } else if (s == "-x") {
         i++;
-        controlfile = argv[i];
+        start = atoi(argv[i]);
+        i++;
+        every = atoi(argv[i]);
+        i++;
+        until = atoi(argv[i]);
+      } else if (s == "-output") {
+        i++;
+        output = argv[i];
+      } else if (s == "-code") {
+        i++;
+        code = argv[i];
+      } else if (s == "-root") {
+        i++;
+        taxa_a = argv[i];
+        i++;
+        taxa_b = argv[i];
+      } else if (s == "-rep") {
+        i++;
+        Nrep = atoi(argv[i]);
+      } else if (s == "-run") {
+        i++;
+        Nrun = atoi(argv[i]);
+      } else if (s == "-mcmc") {
+        i++;
+        mcmc = argv[i];
+      } else if (s == "-abc") {
+        i++;
+        abc = argv[i];
+
+      } else if (s == "-d") {
+        i++;
+        phylip = argv[i];
       }
       i++;
     }  // end while
@@ -61,43 +105,48 @@ int main(int argc, char* argv[]) {
     std::cerr << "###########################\n";
     std::cerr << "-m < show | CodonMutSelFinite | CodonMutSelSBDP \n";
     std::cerr << "###########################\n";
-    std::cerr << "#SUMMARIES\n";
-    std::cerr << "#ANCSUMMARIES\n";
-    std::cerr << "#ACCSUMMARIES\n";
-    std::cerr << "#PARAM\n";
-    std::cerr << "#SSMAP\n";
-    std::cerr << "#MAP\n";
-    std::cerr << "#ANCESTRALMAP\n";
-    std::cerr << "#DIST\n";
-    std::cerr << "#TRANS\n";
-    std::cerr << "#SPEUDODATA\n";
-    std::cerr << "#NRUN\n";
-    std::cerr << "#SAMPLING\n";
-    std::cerr << "#LOCALPARAM\n";
-    std::cerr << "###########################\n";
+
     exit(1);
   }
   if (model == "CodonMutSelFinite" || model == "CodonMutSelSBDP") {
     // the chain pointS are extract from the posterior file according to chainID
     std::cerr << model << "\n";
 
-    GlobalParameters* gparam = new GlobalParameters(model, controlfile);
-    Posterior* post = new Posterior(gparam);
+    GlobalParameters* gparam = new GlobalParameters();
+    gparam->model = model;
+    gparam->chainPointStart = start;
+    gparam->chainPointEvery = every;
+    gparam->chainPointEnd = until;
+    gparam->Nrun = Nrun;
+    gparam->Nrep = Nrep;
+    gparam->output = output;
+
+    std::cerr << "global parameters registred"
+              << "\n";
     LocalParameters* lparam = new LocalParameters(gparam);
+    lparam->taxa_a = taxa_a;
+    lparam->taxa_b = taxa_b;
+    lparam->posteriorfile = abc;
+    lparam->chain = mcmc;
+    lparam->code = code;
+    lparam->data = phylip;
+    lparam->rootlength = rootlength;
+    std::cerr << "local parameters registred"
+              << "\n";
 
     if (model == "CodonMutSelSBDP") {
       lparam->readChainCodonMutSelSBDP();
     } else if (model == "CodonMutSelFinite") {
       lparam->readChainCodonMutSelFinite();
     }
-    std::string s =
-        "compute MutRate and SubRate from leaves given posterior values";
 
     SiteInterSubMatrixCABC2018* submatrix =
         new SiteInterSubMatrixCABC2018(lparam);
     submatrix->initFromLeaves();
     std::cerr << lparam->Nsite_codon << "\n";
     TreeSimulator* simulator = new TreeSimulator(lparam, submatrix);
+
+    Posterior* post = new Posterior(gparam);
     post->readPosterior(lparam->posteriorfile);
     std::cerr << "The simulation process started\n";
 
@@ -141,7 +190,7 @@ int main(int argc, char* argv[]) {
     rates_os.close();
     if (!post->posterior.empty()) {
       int it = 0;
-      while (it < post->threshold) {
+      while (it < gparam->Nrun) {
         int chainID =
             static_cast<int>(lparam->rnd->Uniform() * post->posterior.size());
         lparam->SetCurrentParametersFromPosterior(post->posterior, chainID);
@@ -153,7 +202,7 @@ int main(int argc, char* argv[]) {
         }
 
         int rep = 0;
-        while (rep < post->Nrun) {
+        while (rep < gparam->Nrep) {
           simulator->GenerateFromLeaves();
 
           double u = lparam->rnd->Uniform();

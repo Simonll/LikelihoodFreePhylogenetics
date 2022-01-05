@@ -40,11 +40,11 @@ class LocalParameters {
   static const int Nnucrr = 6;
   static const int Ndinuc = 16;
   static const int Nstate_aa = 20;
+  static constexpr double TOOSMALL = 1e-30;
+  static constexpr double TOOLARGE = 500;
+  static constexpr double TOOLARGENEGATIVE = -500;
 
   // to be set by global param
-  double TOOSMALL;
-  double TOOLARGE;
-  double TOOLARGENEGATIVE;
 
   int NSummaries;
   int NParam;
@@ -183,6 +183,7 @@ class LocalParameters {
   void SetRootLCA();
   void SetTreeStuff();
   void SetTreeStuffRecursively(Link* from, int notNodeIndex, int gtrIndex);
+  void Setgtr2gtnr();
 
   // Getters
   int GetPointID();
@@ -196,7 +197,6 @@ class LocalParameters {
   std::vector<double> GetCurrentWeights();
   void GetGTR1();
   void GetGTR2();
-
   void incrementStartPoint() { this->startPoint++; }
 
   int GetNsiteCodon() { return Nsite_codon; }
