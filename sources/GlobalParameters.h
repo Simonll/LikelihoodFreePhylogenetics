@@ -2366,6 +2366,7 @@ class GlobalParameters {
   std::string model, controlfile, localcontrolfile, output, distance,
       transformation;
 
+  void init();
   void readInstructions();
   GlobalParameters(std::string model, std::string controlfile);
   GlobalParameters();

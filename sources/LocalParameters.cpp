@@ -24,9 +24,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->model = gparam->model;
   this->distance = gparam->distance;
   this->transformation = gparam->transformation;
-  this->TOOSMALL = gparam->TOOSMALL;
-  this->TOOLARGE = gparam->TOOLARGE;
-  this->TOOLARGENEGATIVE = gparam->TOOLARGENEGATIVE;
   this->Ntaxa = gparam->Ntaxa;
   this->Nsite_codon = gparam->Nsite_codon;
   this->Nsite_nuc = 3 * this->Nsite_codon;
@@ -1272,23 +1269,7 @@ void LocalParameters::SetCurrentParametersFromPosterior(
     }
   }
 
-  this->getrate = false;
-
-  this->gtnr[0][1] = GetGTR(0, 1);  // ac
-  this->gtnr[0][2] = GetGTR(0, 2);  // ag
-  this->gtnr[0][3] = GetGTR(0, 3);  // at
-  this->gtnr[1][0] = GetGTR(1, 0);  // ca
-  // gtnr[1][1] = 0.0; //cc
-  this->gtnr[1][2] = GetGTR(1, 2);  // cg
-  this->gtnr[1][3] = GetGTR(1, 3);  // ct
-  this->gtnr[2][0] = GetGTR(2, 0);  // ga
-  this->gtnr[2][1] = GetGTR(2, 1);  // gc
-  // gtnr[2][2] = 0.0; //gg
-  this->gtnr[2][3] = GetGTR(2, 3);  // gt
-  this->gtnr[3][0] = GetGTR(3, 0);  // ta
-  this->gtnr[3][1] = GetGTR(3, 1);  // tc
-  this->gtnr[3][2] = GetGTR(3, 2);  // tg
-  // gtnr[3][3] = 0.0; //tt
+  Setgtr2gtnr();
 }
 
 std::vector<double> LocalParameters::GetCurrentWeights() { return weights; }
@@ -1520,15 +1501,11 @@ void LocalParameters::readFMutSelCodeML() {
 
   for (int k = 0; k < this->Nnucp; k++) {
     is >> this->nucp[k];
-    // std::cerr << nucp[k] << "\t";
   }
 
   for (int k = 0; k < this->Nnucrr; k++) {
     is >> this->nucrr[k];
-    // std::cerr << nucrr[k] << "\t";
   }
-
-  // std::cerr << "\n\n\n";
 
   // nucrrnr[0][0]; //AA
   this->nucrrnr[0][1] = nucrr[0];  // AC
@@ -1582,79 +1559,11 @@ void LocalParameters::readFMutSelCodeML() {
     alloc[k] = 0;
   }
 
-  //    if (this->model == "FMutSel0Simu") {
-  //
-  //        double *aa_vec = new double[20];
-  //
-  //        for (int l = 0; l< this->Nstate_aa; l++){
-  //            aa_vec[l] = 0.0;
-  //        }
-  //
-  //
-  //        double Z = 0.0;
-  //        for (int k=0; k<this->Nstate_codon; k++){
-  //            double tmp;
-  //            is >>  tmp;
-  //            aa_vec[codonstatespace->Translation(k)] = tmp;
-  //            this->codonprofile[k] = (double) 1/this->Nstate_codon;
-  //            Z += tmp;
-  //            //std::cerr << this->codonprofile[k] << "\t";
-  //
-  //        }
-  //        for (int l=0; l<this->Nstate_aa; l++){
-  //            aa_vec[l] /= Z;
-  //        }
-  //
-  //        for (int k=0; k<this->Nsite_codon; k++){
-  //            for (int l=0; l<this->Nstate_aa; l++){
-  //                this->ssaaprofiles[k][l] = aa_vec[l];
-  //                //std::cerr << this->ssaaprofiles[k][l] << "\t";
-  //            }
-  //        }
-  //        delete [] aa_vec;
-  //
-  //    } else if (this->model == "FMutSelSimu") {
-  //
-  //        double Z = 0.0;
-  //        for (int k=0; k<this->Nstate_codon; k++){
-  //            is >>  this->codonprofile[k];
-  //            Z += this->codonprofile[k];
-  //
-  //        }
-  //        for (int l=0; l<this->Nstate_codon; l++){
-  //            this->codonprofile[l] /= Z;
-  //        }
-  //
-  //        for (int k=0; k<this->Nsite_codon; k++){
-  //            for (int l=0; l<this->Nstate_aa; l++){
-  //                this->ssaaprofiles[k][l] = (double) 1/this->Nstate_aa;
-  //            }
-  //        }
-  //    }
-
   for (int k = 0; k < this->Nsite_codon; k++) {
     this->alloc[k] = 0;
   }
 
-  this->getrate = false;
-
-  this->gtnr[0][0] = 0.0;           // AA
-  this->gtnr[0][1] = GetGTR(0, 1);  // ac
-  this->gtnr[0][2] = GetGTR(0, 2);  // ag
-  this->gtnr[0][3] = GetGTR(0, 3);  // at
-  this->gtnr[1][0] = GetGTR(1, 0);  // ca
-  this->gtnr[1][1] = 0.0;           // cc
-  this->gtnr[1][2] = GetGTR(1, 2);  // cg
-  this->gtnr[1][3] = GetGTR(1, 3);  // ct
-  this->gtnr[2][0] = GetGTR(2, 0);  // ga
-  this->gtnr[2][1] = GetGTR(2, 1);  // gc
-  this->gtnr[2][2] = 0.0;           // gg
-  this->gtnr[2][3] = GetGTR(2, 3);  // gt
-  this->gtnr[3][0] = GetGTR(3, 0);  // ta
-  this->gtnr[3][1] = GetGTR(3, 1);  // tc
-  this->gtnr[3][2] = GetGTR(3, 2);  // tg
-  this->gtnr[3][3] = 0.0;           // tt
-
+  Setgtr2gtnr();
   SetTreeStuff();
 }
 
@@ -1666,9 +1575,6 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
     std::cerr << "error: did not find " << this->chain << ".chain\n";
     exit(1);
   }
-
-  // std::cerr << this->chain;
-
   int j = 0;
   std::string tmp = "";
   while (j < pt_i) {
@@ -1755,29 +1661,8 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
     }
   }
   is.close();
-
-  this->getrate = false;
-
-  gtnr[0][0] = 0.0;           // AA
-  gtnr[0][1] = GetGTR(0, 1);  // ac
-  gtnr[0][2] = GetGTR(0, 2);  // ag
-  gtnr[0][3] = GetGTR(0, 3);  // at
-  gtnr[1][0] = GetGTR(1, 0);  // ca
-  gtnr[1][1] = 0.0;           // cc
-  gtnr[1][2] = GetGTR(1, 2);  // cg
-  gtnr[1][3] = GetGTR(1, 3);  // ct
-  gtnr[2][0] = GetGTR(2, 0);  // ga
-  gtnr[2][1] = GetGTR(2, 1);  // gc
-  gtnr[2][2] = 0.0;           // gg
-  gtnr[2][3] = GetGTR(2, 3);  // gt
-  gtnr[3][0] = GetGTR(3, 0);  // ta
-  gtnr[3][1] = GetGTR(3, 1);  // tc
-  gtnr[3][2] = GetGTR(3, 2);  // tg
-  gtnr[3][3] = 0.0;           // tt
-
+  Setgtr2gtnr();
   SetTreeStuff();
-
-  // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
 void LocalParameters::readChainCodonMutSelSBDP() {
@@ -1876,25 +1761,7 @@ void LocalParameters::readChainCodonMutSelSBDP() {
   }
   is.close();
 
-  this->getrate = false;
-
-  gtnr[0][0] = 0.0;           // AA
-  gtnr[0][1] = GetGTR(0, 1);  // ac
-  gtnr[0][2] = GetGTR(0, 2);  // ag
-  gtnr[0][3] = GetGTR(0, 3);  // at
-  gtnr[1][0] = GetGTR(1, 0);  // ca
-  gtnr[1][1] = 0.0;           // cc
-  gtnr[1][2] = GetGTR(1, 2);  // cg
-  gtnr[1][3] = GetGTR(1, 3);  // ct
-  gtnr[2][0] = GetGTR(2, 0);  // ga
-  gtnr[2][1] = GetGTR(2, 1);  // gc
-  gtnr[2][2] = 0.0;           // gg
-  gtnr[2][3] = GetGTR(2, 3);  // gt
-  gtnr[3][0] = GetGTR(3, 0);  // ta
-  gtnr[3][1] = GetGTR(3, 1);  // tc
-  gtnr[3][2] = GetGTR(3, 2);  // tg
-  gtnr[3][3] = 0.0;           // tt
-
+  Setgtr2gtnr();
   SetTreeStuff();
 
   // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
@@ -1999,24 +1866,7 @@ int LocalParameters::readParametersCodemlM7M8(int it) {
   }
   is.close();
 
-  this->getrate = false;
-
-  gtnr[0][0] = 0.0;           // AA
-  gtnr[0][1] = GetGTR(0, 1);  // ac
-  gtnr[0][2] = GetGTR(0, 2);  // ag
-  gtnr[0][3] = GetGTR(0, 3);  // at
-  gtnr[1][0] = GetGTR(1, 0);  // ca
-  gtnr[1][1] = 0.0;           // cc
-  gtnr[1][2] = GetGTR(1, 2);  // cg
-  gtnr[1][3] = GetGTR(1, 3);  // ct
-  gtnr[2][0] = GetGTR(2, 0);  // ga
-  gtnr[2][1] = GetGTR(2, 1);  // gc
-  gtnr[2][2] = 0.0;           // gg
-  gtnr[2][3] = GetGTR(2, 3);  // gt
-  gtnr[3][0] = GetGTR(3, 0);  // ta
-  gtnr[3][1] = GetGTR(3, 1);  // tc
-  gtnr[3][2] = GetGTR(3, 2);  // tg
-  gtnr[3][3] = 0.0;           // tt
+  Setgtr2gtnr();
 
   for (int k = 0; k < this->Nstate_codon; k++) {
     codonprofile[k] = 1.0 / this->Nstate_codon;
@@ -2144,28 +1994,30 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
   }
   is.close();
 
-  this->getrate = false;
-
-  gtnr[0][0] = 0.0;           // AA
-  gtnr[0][1] = GetGTR(0, 1);  // ac
-  gtnr[0][2] = GetGTR(0, 2);  // ag
-  gtnr[0][3] = GetGTR(0, 3);  // at
-  gtnr[1][0] = GetGTR(1, 0);  // ca
-  gtnr[1][1] = 0.0;           // cc
-  gtnr[1][2] = GetGTR(1, 2);  // cg
-  gtnr[1][3] = GetGTR(1, 3);  // ct
-  gtnr[2][0] = GetGTR(2, 0);  // ga
-  gtnr[2][1] = GetGTR(2, 1);  // gc
-  gtnr[2][2] = 0.0;           // gg
-  gtnr[2][3] = GetGTR(2, 3);  // gt
-  gtnr[3][0] = GetGTR(3, 0);  // ta
-  gtnr[3][1] = GetGTR(3, 1);  // tc
-  gtnr[3][2] = GetGTR(3, 2);  // tg
-  gtnr[3][3] = 0.0;           // tt
-
+  Setgtr2gtnr();
   SetTreeStuff();
 
   // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
+}
+
+void LocalParameters::Setgtr2gtnr() {
+  this->getrate = false;
+  this->gtnr[0][0] = 0.0;           // aa
+  this->gtnr[0][1] = GetGTR(0, 1);  // ac
+  this->gtnr[0][2] = GetGTR(0, 2);  // ag
+  this->gtnr[0][3] = GetGTR(0, 3);  // at
+  this->gtnr[1][0] = GetGTR(1, 0);  // ca
+  this->gtnr[1][1] = 0.0;           // cc
+  this->gtnr[1][2] = GetGTR(1, 2);  // cg
+  this->gtnr[1][3] = GetGTR(1, 3);  // ct
+  this->gtnr[2][0] = GetGTR(2, 0);  // ga
+  this->gtnr[2][1] = GetGTR(2, 1);  // gc
+  this->gtnr[2][2] = 0.0;           // gg
+  this->gtnr[2][3] = GetGTR(2, 3);  // gt
+  this->gtnr[3][0] = GetGTR(3, 0);  // ta
+  this->gtnr[3][1] = GetGTR(3, 1);  // tc
+  this->gtnr[3][2] = GetGTR(3, 2);  // tg
+  this->gtnr[3][3] = 0.0;           // tt
 }
 
 void LocalParameters::readChainCodonMutSelFinite() {
@@ -2285,28 +2137,8 @@ void LocalParameters::readChainCodonMutSelFinite() {
   }
   is.close();
 
-  this->getrate = false;
-
-  gtnr[0][0] = 0.0;           // AA
-  gtnr[0][1] = GetGTR(0, 1);  // ac
-  gtnr[0][2] = GetGTR(0, 2);  // ag
-  gtnr[0][3] = GetGTR(0, 3);  // at
-  gtnr[1][0] = GetGTR(1, 0);  // ca
-  gtnr[1][1] = 0.0;           // cc
-  gtnr[1][2] = GetGTR(1, 2);  // cg
-  gtnr[1][3] = GetGTR(1, 3);  // ct
-  gtnr[2][0] = GetGTR(2, 0);  // ga
-  gtnr[2][1] = GetGTR(2, 1);  // gc
-  gtnr[2][2] = 0.0;           // gg
-  gtnr[2][3] = GetGTR(2, 3);  // gt
-  gtnr[3][0] = GetGTR(3, 0);  // ta
-  gtnr[3][1] = GetGTR(3, 1);  // tc
-  gtnr[3][2] = GetGTR(3, 2);  // tg
-  gtnr[3][3] = 0.0;           // tt
-
+  Setgtr2gtnr();
   SetTreeStuff();
-
-  // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
 void LocalParameters::SetTreeStuff() {
