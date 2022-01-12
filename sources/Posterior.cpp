@@ -35,17 +35,9 @@ Posterior::Posterior(GlobalParameters* gparam) {
   this->NEvoStats = gparam->NEvoStats;
   this->NSiteSpecificEvoStats = gparam->NSiteSpecificEvoStats;
 
-  if (verbose) {
-    std::cerr << "Posterior1\n";
-  }
-
   this->listParam = new string[this->NParam];
   for (int param_i = 0; param_i < this->NParam; param_i++) {
     this->listParam[param_i] = gparam->listParam[param_i];
-  }
-
-  if (verbose) {
-    std::cerr << "Posterior2\n";
   }
 
   this->listSummaries = new string[this->NSummaries];
@@ -53,17 +45,9 @@ Posterior::Posterior(GlobalParameters* gparam) {
     this->listSummaries[summary_i] = gparam->listSummaries[summary_i];
   }
 
-  if (verbose) {
-    std::cerr << "Posterior3\n";
-  }
-
   this->listEvoStats = new string[this->NEvoStats];
   for (int EvoStats_i = 0; EvoStats_i < this->NEvoStats; EvoStats_i++) {
     this->listEvoStats[EvoStats_i] = gparam->listEvoStats[EvoStats_i];
-  }
-
-  if (verbose) {
-    std::cerr << "Posterior4\n";
   }
 
   this->listSiteSpecificEvoStats = new string[this->NSiteSpecificEvoStats];
@@ -73,10 +57,6 @@ Posterior::Posterior(GlobalParameters* gparam) {
         gparam->listSiteSpecificEvoStats[EvoStats_i];
   }
 
-  if (verbose) {
-    std::cerr << "Posterior5\n";
-  }
-
   this->NusedEvoStats = gparam->NusedEvoStats;
   this->NusedSiteSpecificEvoStats = gparam->NusedSiteSpecificEvoStats;
   this->NusedEvoAncStats = gparam->NusedEvoAncStats;
@@ -84,10 +64,6 @@ Posterior::Posterior(GlobalParameters* gparam) {
   this->NusedSummaries = gparam->NusedSummaries;
   this->NusedAccessorySummaries = gparam->NusedAccessorySummaries;
   this->Ngenes = gparam->Ngenes;
-
-  if (verbose) {
-    std::cerr << "Posterior6\n";
-  }
 
   this->mapUsedParam.insert(gparam->mapUsedParam.begin(),
                             gparam->mapUsedParam.end());
@@ -103,10 +79,6 @@ Posterior::Posterior(GlobalParameters* gparam) {
       gparam->mapUsedSiteSpecificEvoStats.end());
   this->mapUsedEvoAncStats.insert(gparam->mapUsedEvoAncStats.begin(),
                                   gparam->mapUsedEvoAncStats.end());
-
-  if (verbose) {
-    std::cerr << "Posterior7\n";
-  }
 
   this->sorted = false;
   this->Naccepted = 0;
@@ -128,88 +100,6 @@ Posterior::~Posterior() {
 }
 
 int Posterior::PosteriorGetSize() { return posterior.size(); }
-
-std::vector<std::vector<double>> Posterior::GetPartialDistances() {
-  std::vector<std::vector<double>> X;
-  for (int simu_i = 0; simu_i < static_cast<int>(population_t.size());
-       simu_i++) {
-    std::vector<double> X_i;
-    for (int distance_i = 0; distance_i < NusedSummaries + 1; distance_i++) {
-      if (distance_i == 0) {
-        X_i.push_back(1.0);
-      } else {
-        X_i.push_back(
-            std::get<distancesGetter>(population_t[simu_i])[distance_i]);
-      }
-    }
-    X.push_back(X_i);
-  }
-  return X;
-}
-
-std::vector<std::vector<double>> Posterior::GetPartialDistancesT() {
-  std::vector<std::vector<double>> X_T;
-  for (int distance_i = 0; distance_i < NusedSummaries + 1; distance_i++) {
-    std::vector<double> X_Ti;
-    for (int simu_i = 0; simu_i < static_cast<int>(population_t.size());
-         simu_i++) {
-      if (distance_i == 0) {
-        X_Ti[simu_i] = 1.0;
-      } else {
-        X_Ti.push_back(
-            std::get<distancesGetter>(population_t[simu_i])[distance_i]);
-      }
-    }
-    X_T.push_back(X_Ti);
-  }
-  return X_T;
-}
-
-std::vector<std::vector<double>> Posterior::GetTheta() {
-  std::vector<std::vector<double>> theta;
-  for (int simu_i = 0; simu_i < static_cast<int>(population_t.size());
-       simu_i++) {
-    theta.push_back(std::get<paramGetter>(population_t[simu_i]));
-  }
-  return theta;
-}
-
-double Posterior::GetEpanechnikov(double x, double y) {
-  return 1 - (x * x) / (y * y);
-}
-
-std::vector<double> Posterior::GetWeights() {
-  std::vector<double> W;
-  double max_ = std::get<distancesGetter>(
-      population_t[population_t.size() - 1])[NusedSummaries];
-  for (int simu_i = 0; simu_i < static_cast<int>(population_t.size());
-       simu_i++) {
-    W.push_back(GetEpanechnikov(
-        std::get<distancesGetter>(population_t[simu_i])[NusedSummaries], max_));
-  }
-  return W;
-}
-
-std::vector<std::vector<double>> Posterior::GetLocalWeights() {
-  std::vector<std::vector<double>> W;
-
-  double* max_ = new double[NusedSummaries];
-  for (int distance_i = 0; distance_i < NusedSummaries; distance_i++) {
-    max_[distance_i] = std::get<distancesGetter>(
-        population_t[population_t.size() - 1])[distance_i];
-  }
-  for (int simu_i = 0; simu_i < static_cast<int>(population_t.size());
-       simu_i++) {
-    std::vector<double> W_i;
-    for (int distance_i = 0; distance_i < NusedSummaries; distance_i++) {
-      W_i.push_back(GetEpanechnikov(
-          std::get<distancesGetter>(population_t[simu_i])[distance_i],
-          max_[distance_i]));
-    }
-    W.push_back(W_i);
-  }
-  return W;
-}
 
 void Posterior::writePosterior(ofstream& os, int Nsimu) {
   for (int simu_i = 0; simu_i < Nsimu; simu_i++) {
@@ -233,23 +123,6 @@ void Posterior::writePosterior(ofstream& os, int Nsimu) {
                std::get<summariesGetter>(population_t[simu_i]).size());
            summary_i++) {
         os << std::get<summariesGetter>(population_t[simu_i])[summary_i]
-           << "\t";
-      }
-    }
-    // write distances (sum of square discrepancies)
-    if (this->NusedSummaries > 0) {
-      if (this->OutPartialDistance) {
-        for (int distance_i = 0;
-             distance_i <
-             static_cast<int>(
-                 std::get<distancesGetter>(population_t[simu_i]).size());
-             distance_i++) {
-          os << std::get<distancesGetter>(population_t[simu_i])[distance_i]
-             << "\t";
-        }
-      } else {
-        os << std::get<distancesGetter>(population_t[simu_i])
-                  [std::get<distancesGetter>(population_t[simu_i]).size() - 1]
            << "\t";
       }
     }
@@ -347,23 +220,6 @@ void Posterior::writePosterior(ofstream& os) {
                std::get<summariesGetter>(population_t[simu_i]).size());
            summary_i++) {
         os << std::get<summariesGetter>(population_t[simu_i])[summary_i]
-           << "\t";
-      }
-    }
-    // write distances (sum of square discrepancies)
-    if (this->NusedSummaries > 0) {
-      if (this->OutPartialDistance) {
-        for (int distance_i = 0;
-             distance_i <
-             static_cast<int>(
-                 std::get<distancesGetter>(population_t[simu_i]).size());
-             distance_i++) {
-          os << std::get<distancesGetter>(population_t[simu_i])[distance_i]
-             << "\t";
-        }
-      } else {
-        os << std::get<distancesGetter>(population_t[simu_i])
-                  [std::get<distancesGetter>(population_t[simu_i]).size() - 1]
            << "\t";
       }
     }

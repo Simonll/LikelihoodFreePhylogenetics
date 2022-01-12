@@ -91,9 +91,6 @@ int main(int argc, char* argv[]) {
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
-    ofstream lparam_os((gparam->output + ".inputparam").c_str());
-    lparam->writeParam(lparam_os);
-    lparam_os.close();
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());
     lparam->writeRealDataSummaries(realDataSummaries_os);
     realDataSummaries_os.close();

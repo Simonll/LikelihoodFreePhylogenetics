@@ -164,13 +164,6 @@ int main(int argc, char* argv[]) {
 
       if (l == 0) {
         post3->SetNsite(lparam[l]->Nsite_codon);
-
-        std::ostringstream ost1;
-        ost1 << gparam->output << ".inputparam";
-        ofstream lparam_os(ost1.str());
-        lparam[l]->writeParam(lparam_os);
-        lparam_os.close();
-
         std::ostringstream ost2;
         ost2 << gparam->output << ".realdata";
         ofstream realDataSummaries_os(ost2.str());
@@ -285,12 +278,6 @@ int main(int argc, char* argv[]) {
       simulator[l] = new TreeSimulator(lparam[l], submatrix[l], ancestraseq[l]);
       if (l == 0) {
         post3->SetNsite(lparam[l]->Nsite_codon);
-        std::ostringstream ost1;
-        ost1 << gparam->output << ".inputparam";
-        ofstream lparam_os(ost1.str());
-        lparam[l]->writeParam(lparam_os);
-        lparam_os.close();
-
         std::ostringstream ost2;
         ost2 << gparam->output << ".realdata";
         ofstream realDataSummaries_os(ost2.str());
@@ -401,12 +388,6 @@ int main(int argc, char* argv[]) {
       postSlave[l]->SetNsite(lparam[l]->Nsite_codon);
 
       if (l == 0) {
-        std::ostringstream ost1;
-        ost1 << gparam->output << ".inputparam";
-        ofstream lparam_os(ost1.str());
-        lparam[l]->writeParam(lparam_os);
-        lparam_os.close();
-
         std::ostringstream ost2;
         ost2 << gparam->output << ".realdata";
         ofstream realDataSummaries_os(ost2.str());
@@ -510,9 +491,6 @@ int main(int argc, char* argv[]) {
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
-    ofstream lparam_os((gparam->output + ".inputparam").c_str());
-    lparam->writeParam(lparam_os);
-    lparam_os.close();
 
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());
     lparam->writeRealDataSummaries(realDataSummaries_os);
@@ -580,10 +558,6 @@ int main(int argc, char* argv[]) {
 
     LocalParameters* lparam = new LocalParameters(gparam);
     lparam->readChainCodonMutSelSBDP();
-
-    ofstream lparam_os((gparam->output + ".inputparam").c_str());
-    lparam->writeParam(lparam_os);
-    lparam_os.close();
 
     SummaryStatistics* ss = new SummaryStatistics(lparam);
     ss->computeSummaries();
@@ -681,10 +655,6 @@ int main(int argc, char* argv[]) {
     Posterior* post = new Posterior(gparam);
     LocalParameters* lparam = new LocalParameters(gparam);
     lparam->readChainCodonMutSelFinite();
-
-    ofstream lparam_os((gparam->output + ".inputparam").c_str());
-    lparam->writeParam(lparam_os);
-    lparam_os.close();
 
     SummaryStatistics* ss = new SummaryStatistics(lparam);
     ss->computeSummaries();
