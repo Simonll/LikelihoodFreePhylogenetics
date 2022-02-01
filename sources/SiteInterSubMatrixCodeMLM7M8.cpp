@@ -52,7 +52,8 @@ std::tuple<double, double, double> SiteInterSubMatrixCodeMLM7M8::ComputeCore(
            lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom]) *
           (lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]));
 
-      SubRate = MutRate * lparam->lambda_omega * lparam->omega;
+      SubRate =
+          MutRate * lparam->lambda_omega * lparam->omega_site[site_codon_i];
     } else {
       S = log(lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]);
       SubRate = MutRate;

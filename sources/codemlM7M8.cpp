@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
               << gparam->Nrep << "\n";
 
     while (post->Niter < gparam->Nsimu) {
-      int k = static_cast<int>(lparam->rnd->Uniform() * size);
+      int k = static_cast<int>(lparam->rnd->Uniform() * size - 1);
       lparam->readParametersCodemlM7M8(k);
       for (int i = 0; i < gparam->Nrep; i++) {
         prior->sample();

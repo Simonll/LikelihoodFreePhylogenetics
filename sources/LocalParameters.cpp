@@ -1767,6 +1767,18 @@ void LocalParameters::readChainCodonMutSelSBDP() {
   // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
+int get_number_of_samplesCodemlM7M8(std::ifstream& is) {
+  std::string line = "";
+  int k = 0;
+  while (std::getline(is, line)) {
+    std::getline(is, line);
+    std::getline(is, line);
+    std::getline(is, line);
+    k++;
+  }
+  return k;
+}
+
 int LocalParameters::readParametersCodemlM7M8(int it) {
   this->MCMCpointID = it;
   // set parameters
@@ -1780,20 +1792,7 @@ int LocalParameters::readParametersCodemlM7M8(int it) {
 
   if (it == -1) {
     std::cerr << "counting number of samples available\n";
-    while (is.peek() != -1) {
-      is >> tmp;  // tree
-      for (int k = 0; k < this->Nnucp; k++) {
-        is >> tmp;  // nucp
-      }
-      for (int k = 0; k < this->Nnucrr; k++) {
-        is >> tmp;  // nucrr
-      }
-      for (int k = 0; k < this->Nsite_codon; k++) {
-        is >> tmp;  // omega_site
-      }
-      j++;
-    }
-    j--;
+    j = get_number_of_samplesCodemlM7M8(is);
     std::cerr << "number of samples available: " << j << "\n";
     return j;
   }
