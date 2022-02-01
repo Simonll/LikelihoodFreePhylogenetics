@@ -16,7 +16,6 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <tuple>
 
 Posterior::Posterior(GlobalParameters* gparam) {
-  this->verbose = gparam->verbose;
   this->Niter = gparam->Niter;
   this->Nrun = gparam->Nrun;
   this->threshold = gparam->threshold;
@@ -479,12 +478,7 @@ void Posterior::readPosterior(string posteriorfile) {
 void Posterior::readPosterior(ifstream& is) {
   is.clear();  // clear fail and eof bits
   is.seekg(0, std::ios::beg);
-  int verbose = 0;
   // check correspondence between control file and posterior file
-  if (verbose) {
-    std::cerr << "readPosterior NusedParam" << this->NusedParam << "\n";
-  }
-
   std::map<int, string> mapHeader;
   int mapHeaderIndex = 0;
   if (this->NusedParam > 0) {
@@ -524,11 +518,6 @@ void Posterior::readPosterior(ifstream& is) {
     }
     delete[] arr;
   }
-
-  if (verbose) {
-    std::cerr << "readPosterior NusedSummaries" << this->NusedSummaries << "\n";
-  }
-
   if (this->NusedSummaries > 0) {
     is.clear();                  // clear fail and eof bits
     is.seekg(0, std::ios::beg);  // back to the start!
@@ -552,68 +541,12 @@ void Posterior::readPosterior(ifstream& is) {
           k++;
           mapHeaderIndex++;
         }
-      } else if (w == "D_sum") {
-        if (k != this->NusedSummaries) {
-          std::cerr << k << " " << this->NusedSummaries << " " << w << " "
-                    << "\n";
-          exit(0);
-        }
-        arr[this->NusedSummaries] = "D_sum";
-        mapHeader[mapHeaderIndex] = "D_sum";
-        k++;
-        mapHeaderIndex++;
       }
     }
     for (int v = 0; v < this->NusedSummaries; v++) {
       std::cerr << "S " << arr[v] << "\n";
     }
-    std::cerr << "D_sum " << arr[this->NusedSummaries] << "\n";
     delete[] arr;
-  }
-
-  //    if (this->OutPartialDistance)
-  //    {
-  //        is.clear();                 // clear fail and eof bits
-  //        is.seekg(0, std::ios::beg); // back to the start!
-  //        string line;
-  //        std::getline(is, line);
-  //        istringstream iss(line);
-  //        string w;
-  //        int k = 0;
-  //        string* arr = new string[this->NusedSummaries];
-  //        while(iss >> w || k < this->NusedSummaries)
-  //        {
-  //
-  //
-  //            w = w.erase(0,2);
-  //            auto it = mapUsedSummaries.find(w);
-  //
-  //            if (it != mapUsedSummaries.end())
-  //            {
-  //                if(it->second != -1)
-  //                {
-  //                    if(k!=it->second)
-  //                    {
-  //                        std::cerr << k << " "<< it->second << " " << w << "
-  //                        " << it->first << "\n"; exit(0);
-  //                    }
-  //                    arr[it->second] = it->first;
-  //                    mapHeader[mapHeaderIndex] = "D";
-  //                    k++;
-  //                    mapHeaderIndex++;
-  //                }
-  //            }
-  //
-  //        }
-  //        for(int v = 0 ; v < this->NusedSummaries; v++)
-  //        {
-  //            std::cerr << "D_"<< arr[v] << "\n";
-  //        }
-  //        delete[] arr;
-  //    }
-
-  if (verbose) {
-    std::cerr << "readPosterior NusedEvoStats" << this->NusedEvoStats << "\n";
   }
 
   if (this->NusedEvoStats > 0) {
@@ -664,7 +597,6 @@ void Posterior::readPosterior(ifstream& is) {
       std::vector<double> cur_param;
       std::vector<double> cur_summaries;
       std::vector<double> cur_evostats;
-      std::vector<double> cur_distances;
       mapHeaderIndex = 0;
       string w;
 
@@ -681,9 +613,6 @@ void Posterior::readPosterior(ifstream& is) {
 
           } else if (it->second == "ES") {
             cur_evostats.push_back(std::stof(w));
-
-          } else if (it->second == "D_sum") {
-            cur_distances.push_back(std::stof(w));
           }
           mapHeaderIndex++;
         }
@@ -691,7 +620,7 @@ void Posterior::readPosterior(ifstream& is) {
 
       std::vector<double> tmp;
       registerSimulation(chainID, cur_param, cur_summaries, tmp, tmp,
-                         cur_evostats, tmp, cur_distances, tmp);
+                         cur_evostats, tmp);
     }
   }
 }
@@ -808,45 +737,11 @@ void Posterior::writePosteriorPredictiveStatistics(
   delete[] b;
   delete[] K;
 }
-void Posterior::readMonitor(ifstream& is) {
-  is.clear();  // clear fail and eof bits
-  is.seekg(0, std::ios::beg);
-
-  string line;
-  std::getline(is, line);
-  if (!line.empty()) {
-    istringstream iss1(line);
-    iss1 >> this->Niter;
-    std::getline(is, line);
-    istringstream iss2(line);
-    iss2 >> this->Naccepted;
-    std::cerr << "Niter " << this->Niter << " "
-              << "Naccepted " << this->Naccepted << "\n";
-
-  } else {
-    this->Niter = 0;
-    std::cerr << "Monitor file is empty "
-              << "\n";
-  }
-}
-
-void Posterior::writeMonitorPosterior(ofstream& os) {
-  os << this->Niter << "\n";
-  os << this->Naccepted << "\n";
-  os << GetAcceptanceRate() << "\n";
-}
-
-double Posterior::GetAcceptanceRate() {
-  return static_cast<double>(Naccepted / Niter);
-}
 
 void Posterior::writeHeader(ofstream& os) {
   // write parameters' header
   int k = 0;
   int v = 0;
-  if (verbose) {
-    std::cerr << "writeHeader1 " << this->NusedParam << "\n";
-  }
   if (this->NusedParam > 0) {
     string* arrParam = new string[this->NusedParam];
     for (int param_i = 0; param_i < this->NParam; param_i++) {
@@ -869,10 +764,6 @@ void Posterior::writeHeader(ofstream& os) {
     }
     delete[] arrParam;
   }
-
-  if (verbose) {
-    std::cerr << "writeHeader2 " << this->NusedSummaries << "\n";
-  }
   // write summaires' header
   if (this->NusedSummaries > 0) {
     string* arrSummaries = new string[this->NusedSummaries];
@@ -893,20 +784,6 @@ void Posterior::writeHeader(ofstream& os) {
         os << "\t" << arrSummaries[summary_i];
       }
     }
-
-    // write distance header
-    if (this->OutPartialDistance) {
-      for (int summary_i = 0; summary_i < this->NusedSummaries; summary_i++) {
-        if (k == 0) {
-          os << "D_" << arrSummaries[summary_i];
-          k = 1;
-        } else {
-          os << "\t"
-             << "D_" << arrSummaries[summary_i];
-        }
-      }
-    }
-    os << "\tD_sum";
     delete[] arrSummaries;
   }
 
@@ -936,9 +813,6 @@ void Posterior::writeHeader(ofstream& os) {
   }
 
   // write mappingstats
-  if (verbose) {
-    std::cerr << "writeHeader3 " << this->NusedEvoAncStats << "\n";
-  }
   if (this->NusedEvoAncStats > 0) {
     string* arrMapAnc = new string[this->NusedEvoAncStats];
     for (int map_i = 0; map_i < this->NEvoStats; map_i++) {
@@ -961,10 +835,6 @@ void Posterior::writeHeader(ofstream& os) {
     }
     delete[] arrMapAnc;
   }
-
-  if (verbose) {
-    std::cerr << "writeHeader4 " << this->NusedEvoStats << "\n";
-  }
   if (this->NusedEvoStats > 0) {
     string* arrMap = new string[this->NusedEvoStats];
     for (int map_i = 0; map_i < this->NEvoStats; map_i++) {
@@ -986,10 +856,6 @@ void Posterior::writeHeader(ofstream& os) {
       }
     }
     delete[] arrMap;
-  }
-
-  if (verbose) {
-    std::cerr << "writeHeader5 " << this->NusedSiteSpecificEvoStats << "\n";
   }
   if (this->NusedSiteSpecificEvoStats > 0) {
     string* arrMap = new string[this->NusedSiteSpecificEvoStats];
@@ -1023,9 +889,6 @@ void Posterior::writeHeader_nodist(ofstream& os) {
   // write parameters' header
   int k = 0;
   int v = 0;
-  if (verbose) {
-    std::cerr << "writeHeader1 " << this->NusedParam << "\n";
-  }
   if (this->NusedParam > 0) {
     string* arrParam = new string[this->NusedParam];
     for (int param_i = 0; param_i < this->NParam; param_i++) {
@@ -1049,9 +912,6 @@ void Posterior::writeHeader_nodist(ofstream& os) {
     delete[] arrParam;
   }
 
-  if (verbose) {
-    std::cerr << "writeHeader2 " << this->NusedSummaries << "\n";
-  }
   // write summaires' header
   if (this->NusedSummaries > 0) {
     string* arrSummaries = new string[this->NusedSummaries];
@@ -1101,9 +961,6 @@ void Posterior::writeHeader_nodist(ofstream& os) {
   }
 
   // write mappingstats
-  if (verbose) {
-    std::cerr << "writeHeader3 " << this->NusedEvoAncStats << "\n";
-  }
   if (this->NusedEvoAncStats > 0) {
     string* arrMapAnc = new string[this->NusedEvoAncStats];
     for (int map_i = 0; map_i < this->NEvoStats; map_i++) {
@@ -1127,9 +984,6 @@ void Posterior::writeHeader_nodist(ofstream& os) {
     delete[] arrMapAnc;
   }
 
-  if (verbose) {
-    std::cerr << "writeHeader4 " << this->NusedEvoStats << "\n";
-  }
   if (this->NusedEvoStats > 0) {
     string* arrMap = new string[this->NusedEvoStats];
     for (int map_i = 0; map_i < this->NEvoStats; map_i++) {
@@ -1153,9 +1007,6 @@ void Posterior::writeHeader_nodist(ofstream& os) {
     delete[] arrMap;
   }
 
-  if (verbose) {
-    std::cerr << "writeHeader5 " << this->NusedSiteSpecificEvoStats << "\n";
-  }
   if (this->NusedSiteSpecificEvoStats > 0) {
     string* arrMap = new string[this->NusedSiteSpecificEvoStats];
     for (int map_i = 0; map_i < this->NSiteSpecificEvoStats; map_i++) {
@@ -1185,22 +1036,6 @@ void Posterior::writeHeader_nodist(ofstream& os) {
 }
 
 void Posterior::SetNsite(int i) { this->Nsite_codon = i; }
-
-void Posterior::GetWeights(string kernel) {
-  int pop_size = population_t.size();
-  if (kernel == "sNormal") {
-    for (int param_i = 0; param_i < NusedParam; param_i++) {
-      double new_weight = 0.0;
-      for (int simu_i = 0; simu_i < pop_size; simu_i++) {
-        new_weight += std::get<weightsGetter>(population_t[simu_i])[param_i] *
-                      (std::get<paramGetter>(population_t[simu_i])[param_i] +
-                       2.0 * (empVar[param_i]) * rnd->sNormal());
-      }
-      new_weight /= pop_size;
-      //            std::get<4>(population_t[simu_i])[param_i] = new_weight;
-    }
-  }
-}
 
 void Posterior::GetEmpVar() {
   int pop_size = population_t.size();
@@ -1253,127 +1088,28 @@ void Posterior::GetEmpVar() {
   delete[] sum3;
 }
 
-void Posterior::slaveToMaster(
-    std::vector<std::tuple<int, std::vector<double>, std::vector<double>,
-                           std::vector<double>, std::vector<double>,
-                           std::vector<double>, std::vector<double>,
-                           std::vector<double>, std::vector<double>>>
-        population_i) {
-  population_t.insert(population_t.end(), population_i.begin(),
-                      population_i.end());
-}
-
-void Posterior::sortPopulation() {
-  if (!sorted) {
-    std::sort(
-        population_t.begin(), population_t.end(),
-        [](const std::tuple<int, std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>>& left,
-           const std::tuple<int, std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>>& right) {
-          return std::get<distancesGetter>(left).back() <
-                 std::get<distancesGetter>(right).back();
-        });
-    sorted = true;
-  }
-}
-
-void Posterior::slaveRegisterNewSimulation(
-    int chainID, std::vector<double> param, std::vector<double> summaries,
-    std::vector<double> accsummaries, std::vector<double> evoancstat,
-    std::vector<double> evostat, std::vector<double> ssevostat,
-    std::vector<double> distances, std::vector<double> weights) {
+void Posterior::registerNewSimulation(int chainID, std::vector<double> param,
+                                      std::vector<double> summaries,
+                                      std::vector<double> accsummaries,
+                                      std::vector<double> evoancstat,
+                                      std::vector<double> evostat,
+                                      std::vector<double> ssevostat) {
+  // std::cerr << "POPULATION IS EMPTY" << Naccepted <<  " "<< threshold <<
+  // " \n";
   population_t.push_back(make_tuple(chainID, param, summaries, accsummaries,
-                                    evoancstat, evostat, ssevostat, distances,
-                                    weights));
+                                    evoancstat, evostat, ssevostat));
   Naccepted++;
+
   this->Niter++;
 }
 
-void Posterior::registerNewSimulation(
-    int chainID, std::vector<double> param, std::vector<double> summaries,
-    std::vector<double> accsummaries, std::vector<double> evoancstat,
-    std::vector<double> evostat, std::vector<double> ssevostat,
-    std::vector<double> distances, std::vector<double> weights) {
-  if (population_t.empty()) {
-    // std::cerr << "POPULATION IS EMPTY" << Naccepted <<  " "<< threshold <<
-    // " \n";
-    population_t.push_back(make_tuple(chainID, param, summaries, accsummaries,
-                                      evoancstat, evostat, ssevostat, distances,
-                                      weights));
-    Naccepted++;
-  } else if (static_cast<int>(population_t.size()) < threshold) {
-    // std::cerr << "POPULATION IS LESS THAN THRESHOLD" << " " <<
-    // population_t.size()
-    // << " "<< Naccepted  << " "<< threshold << " \n";
-    population_t.push_back(make_tuple(chainID, param, summaries, accsummaries,
-                                      evoancstat, evostat, ssevostat, distances,
-                                      weights));
-    Naccepted++;
-  } else {
-    if (!sorted) {
-      std::sort(
-          population_t.begin(), population_t.end(),
-          [](const std::tuple<int, std::vector<double>, std::vector<double>,
-                              std::vector<double>, std::vector<double>,
-                              std::vector<double>, std::vector<double>,
-                              std::vector<double>, std::vector<double>>& left,
-             const std::tuple<int, std::vector<double>, std::vector<double>,
-                              std::vector<double>, std::vector<double>,
-                              std::vector<double>, std::vector<double>,
-                              std::vector<double>, std::vector<double>>&
-                 right) {
-            return std::get<distancesGetter>(left).back() <
-                   std::get<distancesGetter>(right).back();
-          });
-      sorted = true;
-    }
-    std::tuple<int, std::vector<double>, std::vector<double>,
-               std::vector<double>, std::vector<double>, std::vector<double>,
-               std::vector<double>, std::vector<double>, std::vector<double>>
-        cur_tuple =
-            make_tuple(chainID, param, summaries, accsummaries, evoancstat,
-                       evostat, ssevostat, distances, weights);
-
-    auto it = std::lower_bound(
-        population_t.begin(), population_t.end(), cur_tuple,
-        [](const std::tuple<int, std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>>& left,
-           const std::tuple<int, std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>,
-                            std::vector<double>, std::vector<double>>& right) {
-          return std::get<distancesGetter>(left).back() <
-                 std::get<distancesGetter>(right).back();
-        });
-    // compute acceptance rate
-    if (it != population_t.end()) {
-      // std::cerr << "INSERTED" << " " << population_t.size()  << " "<<
-      // Naccepted
-      // << " "<< threshold << " \n";
-      population_t.insert(it, cur_tuple);
-      population_t.pop_back();
-      population_t.shrink_to_fit();
-      Naccepted++;
-    }
-  }
-  this->Niter++;
-  // std::cerr << this->Niter << " ";
-}
-
-void Posterior::registerSimulation(
-    int chainID, std::vector<double> param, std::vector<double> summaries,
-    std::vector<double> accsummaries, std::vector<double> evoancstat,
-    std::vector<double> evostat, std::vector<double> ssevostat,
-    std::vector<double> distances, std::vector<double> weights) {
+void Posterior::registerSimulation(int chainID, std::vector<double> param,
+                                   std::vector<double> summaries,
+                                   std::vector<double> accsummaries,
+                                   std::vector<double> evoancstat,
+                                   std::vector<double> evostat,
+                                   std::vector<double> ssevostat) {
   population_t.push_back(make_tuple(chainID, param, summaries, accsummaries,
-                                    evoancstat, evostat, ssevostat, distances,
-                                    weights));
+                                    evoancstat, evostat, ssevostat));
   this->Niter++;
 }

@@ -113,8 +113,7 @@ int main(int argc, char* argv[]) {
             k, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
             lparam->GetCurrentAccessorySummaries(),
             lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
-            lparam->GetCurrentSiteSpecificEvoStats(),
-            lparam->GetCurrentDistances(), lparam->GetCurrentWeights());
+            lparam->GetCurrentSiteSpecificEvoStats());
 
         if (lparam->tofasta) {
           ostringstream oss;

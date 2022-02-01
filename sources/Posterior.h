@@ -41,8 +41,6 @@ class Posterior {
   static const int evoancstatsGetter = 4;
   static const int evostatsGetter = 5;
   static const int ssevostatsGetter = 6;
-  static const int distancesGetter = 7;
-  static const int weightsGetter = 8;
 
   double TOOSMALL;
   double TOOLARGE;
@@ -78,10 +76,9 @@ class Posterior {
 
   string localcontrolfile, output, model;
 
-  std::vector<
-      std::tuple<int, std::vector<double>, std::vector<double>,
-                 std::vector<double>, std::vector<double>, std::vector<double>,
-                 std::vector<double>, std::vector<double>, std::vector<double>>>
+  std::vector<std::tuple<int, std::vector<double>, std::vector<double>,
+                         std::vector<double>, std::vector<double>,
+                         std::vector<double>, std::vector<double>>>
       population_t;
   std::vector<std::vector<double>> posterior;
   double* empVar;
@@ -97,7 +94,6 @@ class Posterior {
   void writePosterior(ofstream& os);
   void writeSimu(ofstream& os);
   void writePosterior(ofstream& os, int Nsimu);
-  void writeMonitorPosterior(ofstream& os);
   void writePosteriorPredictiveStatistics(
       ofstream& os, std::vector<double> realDataSummaries);
   void writeHeader(ofstream& os);
@@ -105,58 +101,30 @@ class Posterior {
   // readers
   void readPosterior(string posteriorfile);
   void readPosterior(ifstream& is);
-  void readMonitor();
-  void readMonitor(ifstream& is);
 
   // Getters
   int PosteriorGetSize();
-  double GetAcceptanceRate();
-  std::vector<std::vector<double>> GetPartialDistances();
-  std::vector<std::vector<double>> GetPartialDistancesT();
-  std::vector<double> GetTheta_i(int theta_i);
-  std::vector<std::vector<double>> GetTheta();
   void GetEmpVar();
-  void GetWeights(string kernel);
-  std::vector<std::vector<double>> GetLocalWeights();
-  std::vector<double> GetWeights();
-  double GetEpanechnikov(double x, double y);
-  void sortPopulation();
-  void slaveToMaster(
-      std::vector<std::tuple<int, std::vector<double>, std::vector<double>,
-                             std::vector<double>, std::vector<double>,
-                             std::vector<double>, std::vector<double>,
-                             std::vector<double>, std::vector<double>>>
-          population_i);
+
   // Setters
 
-  void slaveRegisterNewSimulation(
-      int chainID, std::vector<double> param, std::vector<double> summaries,
-      std::vector<double> accsummaries, std::vector<double> ancevostat,
-      std::vector<double> evostat, std::vector<double> ssevostat,
-      std::vector<double> distances, std::vector<double> weights);
+  void registerNewSimulation(int chainID, std::vector<double> param,
+                             std::vector<double> summaries,
+                             std::vector<double> accsummaries,
+                             std::vector<double> ancevostat,
+                             std::vector<double> evostat,
+                             std::vector<double> ssevostat);
 
-  void registerNewSimulation(
-      int chainID, std::vector<double> param, std::vector<double> summaries,
-      std::vector<double> accsummaries, std::vector<double> ancevostat,
-      std::vector<double> evostat, std::vector<double> ssevostat,
-      std::vector<double> distances, std::vector<double> weights);
-
-  void registerSimulation(
-      int chainID, std::vector<double> param, std::vector<double> summaries,
-      std::vector<double> accsummaries, std::vector<double> ancevostat,
-      std::vector<double> evostat, std::vector<double> ssevostat,
-      std::vector<double> distances, std::vector<double> weights);
+  void registerSimulation(int chainID, std::vector<double> param,
+                          std::vector<double> summaries,
+                          std::vector<double> accsummaries,
+                          std::vector<double> ancevostat,
+                          std::vector<double> evostat,
+                          std::vector<double> ssevostat);
 
   void SetNsite(int i);
 
   int GetSize() { return population_t.size(); }
-  bool thresholdAchieved() {
-    bool test = false;
-    if (this->Niter == threshold) {
-      test = true;
-    }
-    return test;
-  }
 };
 
 #endif  // SOURCES_POSTERIOR_H_

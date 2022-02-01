@@ -119,8 +119,7 @@ int main(int argc, char* argv[]) {
           1, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
           lparam->GetCurrentAccessorySummaries(),
           lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
-          lparam->GetCurrentSiteSpecificEvoStats(),
-          lparam->GetCurrentDistances(), lparam->GetCurrentWeights());
+          lparam->GetCurrentSiteSpecificEvoStats());
       if (lparam->tofasta) {
         std::ostringstream oss;
         oss << gparam->output << "-" << post->Niter << ".phylip";
