@@ -241,24 +241,6 @@ void GlobalParameters::readInstructions() {
       }
       std::cerr << "\n";
 
-    } else if (!line.empty() && line.substr(0, 6) == "#TRANS") {
-      istringstream iss(line);
-      string w;
-      int k = 0;
-      while (iss >> w) {
-        if (w != "#TRANS") {
-          k++;
-          this->transformation = w;
-        }
-      }
-
-      std::cerr << "#TRANS\t" << this->transformation << "\n";
-
-    } else if (!line.empty() && line.substr(0, 8) == "#OUTDIST") {
-      this->OutPartialDistance = 1;
-
-      std::cerr << "#OUTDIST\t" << this->distance << "\n";
-
     } else if (!line.empty() && line.substr(0, 11) == "#SPEUDODATA") {
       istringstream iss(line);
       string w;
@@ -286,36 +268,6 @@ void GlobalParameters::readInstructions() {
         std::cerr << i << " ";
       }
       std::cerr << "\n";
-
-    } else if (!line.empty() && line.substr(0, 5) == "#DIST") {
-      istringstream iss(line);
-      string w;
-      int k = 0;
-      while (iss >> w) {
-        if (w != "#DIST") {
-          k++;
-          this->distance = w;
-        }
-      }
-
-      std::cerr << "#DIST\t" << this->distance << "\n";
-
-    } else if (!line.empty() && line.substr(0, 7) == "#CHAINS") {
-      istringstream iss(line);
-      string w;
-      while (iss >> w) {
-        listChains.push_back(w);
-        iss >> w;
-        listPoints.push_back(atoi(w.c_str()));
-      }
-
-    } else if (!line.empty() && line.substr(0, 15) == "#HYPERMUT-DINUC") {
-      std::cerr << "### HYPERMUT-DINUC ###\n";
-      istringstream iss(line);
-      string w;
-      while (iss >> w) {
-        std::cerr << w << "\n";
-      }
 
     } else if (!line.empty() && line.substr(0, 4) == "#RUN") {
       istringstream iss(line);
@@ -378,10 +330,6 @@ void GlobalParameters::readInstructions() {
       this->chainPointEnd = atoi(w.c_str());
       std::cerr << "#SAMPLING " << this->chainPointStart << " "
                 << this->chainPointEvery << " " << this->chainPointEnd << "\n";
-
-    } else if (!line.empty() && line.substr(0, 10) == "#OLDPARAMS") {
-      std::cerr << "### OLDPARAMS ### \n";
-      localcontrolfile = line;
 
     } else if (!line.empty() && line.substr(0, 11) == "#LOCALPARAM") {
       // localcontrolfile should be a list so different localcontrolfile could
