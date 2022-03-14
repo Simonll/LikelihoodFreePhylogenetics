@@ -22,7 +22,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->verbose = gparam->verbose;
   this->output = gparam->output;
   this->model = gparam->model;
-  this->distance = gparam->distance;
   this->transformation = gparam->transformation;
   this->Ntaxa = gparam->Ntaxa;
   this->Nsite_codon = gparam->Nsite_codon;
@@ -306,7 +305,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
 
   this->codonprofile = new double[this->Nstate_codon];
   for (int i = 0; i < this->Nstate_codon; i++) {
-    this->codonprofile[i] = 0.0;
+    this->codonprofile[i] = 1 / this->Nstate_codon;
   }
 
   this->ssaaprofiles = new double*[this->N_profile];
@@ -315,7 +314,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   }
   for (int i = 0; i < this->N_profile; i++) {
     for (int j = 0; j < this->Nstate_aa; j++) {
-      this->ssaaprofiles[i][j] = 0.0;
+      this->ssaaprofiles[i][j] = 1 / this->Nstate_aa;
     }
   }
 
@@ -840,7 +839,6 @@ void LocalParameters::SetTree() {
     SetRootLCA();
   }
 }
-
 void LocalParameters::SetRootBetweenInAndOutGroup() {
   if (refTree->GetLCA(taxa_a, taxa_b)->isRoot()) {
     if (!refTree->CheckRootDegree()) {
@@ -920,42 +918,6 @@ void LocalParameters::SetRootBetweenInAndOutGroup() {
                                           branchLengthToOutGroup));
   branchToOutGroup->SetName(std::to_string(branchLengthToOutGroup));
 }
-
-std::vector<double> LocalParameters::GetCurrentDistances() {
-  std::vector<double> cur_dist;
-  double dist = 0.0;
-  // squared Euclidian
-  if (this->distance == "Euclidian") {
-    for (int i_summary = 0; i_summary < this->NusedSummaries; i_summary++) {
-      double sqdisc = this->summariesRealData[i_summary] -
-                      summariesSimulatedData[i_summary];
-      sqdisc *= sqdisc;
-      dist += sqdisc;
-      cur_dist.push_back(sqdisc);
-    }
-    cur_dist.push_back(dist);
-  } else if (this->distance == "normalized") {
-    for (int i_summary = 0; i_summary < this->NusedSummaries; i_summary++) {
-      double sqdisc = (this->summariesRealData[i_summary] -
-                       summariesSimulatedData[i_summary]) /
-                      this->summariesRealData[i_summary];
-      sqdisc *= sqdisc;
-      dist += sqdisc;
-      cur_dist.push_back(sqdisc);
-    }
-    cur_dist.push_back(dist);
-  } else if (this->distance == "dist1") {
-    for (int i_summary = 0; i_summary < this->NusedSummaries; i_summary++) {
-      double sqdisc = this->summariesRealData[i_summary] -
-                      summariesSimulatedData[i_summary];
-      dist += sqdisc;
-      cur_dist.push_back(sqdisc);
-    }
-    cur_dist.push_back(dist);
-  }
-  return cur_dist;
-}
-
 void LocalParameters::SetBranchesLengthsBetweenInAndOutGroup() {
   double branchLengthToOutGroup =
       branchLengthBetweenInAndOutGroup * percentFromOutGroup;
@@ -1272,8 +1234,6 @@ void LocalParameters::SetCurrentParametersFromPosterior(
   Setgtr2gtnr();
 }
 
-std::vector<double> LocalParameters::GetCurrentWeights() { return weights; }
-
 std::vector<double> LocalParameters::GetCurrentEvoStats() { return evostats; }
 
 std::vector<double> LocalParameters::GetCurrentAncEvoStats() {
@@ -1411,84 +1371,6 @@ std::vector<double> LocalParameters::GetCurrentParameters() {
   return cur_param;
 }
 
-void LocalParameters::writeParam(ofstream& os) {
-  os << "\n";
-  os << fixlambda_TBL << "\t" << lambda_TBL << "\n";
-  os << fixlambda_omega << "\t" << lambda_omega << "\n";
-  os << fixlambda_CpG << "\t" << lambda_CpG << "\n";
-  os << fixlambda_TpA << "\t" << lambda_TpA << "\n";
-  os << fixgtr << "\t" << fixgtr1 << "\t" << fixgtr2 << "\n";
-  os << fixroot << "\n";
-  os << rootlength << "\n";
-  os << "#####\n";
-
-  refTree->Print(os);
-  os << "\n";
-
-  for (int i = 0; i < Nnucp; i++) {
-    os << nucp[i] << "\t";
-  }
-  os << "\n";
-
-  for (int i = 0; i < Nnucrr; i++) {
-    os << nucrr[i] << "\t";
-  }
-  os << "\n";
-  os << omega << "\n";
-  for (int i = 0; i < Nstate_codon; i++) {
-    if (i < Nstate_codon - 1) {
-      os << codonprofile[i] << "\t";
-    } else {
-      os << codonprofile[i] << "\n";
-    }
-  }
-  os << "\n";
-  for (int j = 0; j < this->N_profile; j++) {
-    for (int i = 0; i < Nstate_aa; i++) {
-      if (i < Nstate_aa - 1) {
-        os << ssaaprofiles[j][i] << "\t";
-      } else {
-        os << ssaaprofiles[j][i] << "\n";
-      }
-    }
-  }
-  for (int i = 0; i < this->Nsite_codon; i++) {
-    if (i < this->Nsite_codon - 1) {
-      os << alloc[i] << "\t";
-    } else {
-      os << alloc[i] << "\n";
-    }
-  }
-
-  if (this->model == "FMutSelSimu" || this->model == "FMutSel0Simu") {
-    os << "stationary distribution\n";
-    double* stat = new double[Nstate_codon];
-    double Z = 0.0;
-
-    for (int state = 0; state < Nstate_codon; state++) {
-      stat[state] = nucp[codonstatespace->GetCodonPosition(0, state)] *
-                    nucp[codonstatespace->GetCodonPosition(1, state)] *
-                    nucp[codonstatespace->GetCodonPosition(2, state)] *
-                    codonprofile[state] *
-                    ssaaprofiles[alloc[0]][codonstatespace->Translation(state)];
-
-      Z += stat[state];
-    }
-
-    for (int state = 0; state < Nstate_codon; state++) {
-      stat[state] /= Z;
-    }
-
-    for (int i = 0; i < Nstate_codon; i++) {
-      if (i < Nstate_codon - 1) {
-        os << stat[i] << "\t";
-      } else {
-        os << stat[i] << "\n";
-      }
-    }
-  }
-}
-
 void LocalParameters::readFMutSelCodeML() {
   ifstream is((this->chain + ".chain").c_str());
   if (!is) {
@@ -1551,16 +1433,12 @@ void LocalParameters::readFMutSelCodeML() {
     is >> codonprofile[k];
   }
 
-  for (int l = 0; l < Nstate_aa; l++) {
-    is >> ssaaprofiles[0][l];
+  for (int k = 0; k < Nstate_aa; k++) {
+    is >> ssaaprofiles[0][k];
   }
 
-  for (int k = 0; k < this->Nsite_codon; k++) {
+  for (int k = 0; k < Nsite_codon; k++) {
     alloc[k] = 0;
-  }
-
-  for (int k = 0; k < this->Nsite_codon; k++) {
-    this->alloc[k] = 0;
   }
 
   Setgtr2gtnr();
@@ -1871,11 +1749,9 @@ int LocalParameters::readParametersCodemlM7M8(int it) {
     codonprofile[k] = 1.0 / this->Nstate_codon;
   }
 
-  // for (int k=0; k<this->Nsite_codon; k++){
-  for (int k = 0; k < Nstate_aa; k++) {
-    ssaaprofiles[0][k] = 0.05;
+  for (int k = 0; k < this->Nstate_aa; k++) {
+    ssaaprofiles[0][k] = 1.0 / this->Nstate_aa;
   }
-  //}
 
   for (int k = 0; k < this->Nsite_codon; k++) {
     alloc[k] = 0;
@@ -1914,15 +1790,15 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
     }
     is >> tmp;  // omega
     is >> tmp;  // kappa
-    // is >> tmp; // Ncomponents
+
     for (int k = 0; k < this->Nstate_aa; k++) {
       is >> tmp;
     }
-    // for (int k=0; k<this->Nsite_codon; k++){
+
     for (int l = 0; l < this->Nstate_aa; l++) {
       is >> tmp;  // ssprofiles
     }
-    //}
+
     for (int k = 0; k < this->Nsite_codon; k++) {
       is >> tmp;  // alloc
     }
@@ -1931,14 +1807,15 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
 
   if (j == it) {
     refTree = new Tree(is);
-
     refTree->RegisterWith(taxonset, 0);
 
     is >> tmp;  // branchalpha
     is >> tmp;  // branchbeta
+
     for (int k = 0; k < this->Nnucp; k++) {
       is >> nucp[k];
     }
+
     for (int k = 0; k < this->Nnucrr; k++) {
       is >> nucrr[k];
     }
@@ -1964,6 +1841,7 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
     for (int nuc1 = 0; nuc1 < Nnucp; nuc1++) {
       sum += this->nucp[nuc1];
     }
+
     for (int nuc1 = 0; nuc1 < Nnucp; nuc1++) {
       this->nucp[nuc1] /= sum;
     }
@@ -1984,11 +1862,14 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
     for (int k = 0; k < this->Nstate_codon; k++) {
       is >> codonprofile[k];
     }
+
     is >> omega;
     is >> tmp;
-    // is >> tmp;
     for (int k = 0; k < this->Nstate_aa; k++) {
-      is >> tmp;
+      is >> ssaaprofiles[0][k];
+    }
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      is >> alloc[k];  // alloc
     }
   }
   is.close();
@@ -2119,16 +2000,13 @@ void LocalParameters::readChainCodonMutSelFinite() {
     }
     is >> omega;
     is >> tmp;
-    // is >> tmp;
     for (int k = 0; k < this->Nstate_aa; k++) {
       is >> tmp;
     }
 
-    // for (int k=0; k<this->Nsite_codon; k++){
-    for (int l = 0; l < Nstate_aa; l++) {
-      is >> ssaaprofiles[0][l];
+    for (int k = 0; k < Nstate_aa; k++) {
+      is >> ssaaprofiles[0][k];
     }
-    //}
 
     for (int k = 0; k < this->Nsite_codon; k++) {
       is >> alloc[k];

@@ -102,7 +102,7 @@ class LocalParameters {
   int Nsite_codon, Nsite_nuc, Ntaxa, Nstate_codon, startPoint, endPoint,
       everyPoint, tofasta, Nrep, N_profile;
   string controlfile, code, chain, posteriorfile, taxa_a, taxa_b, taxa_gtr1_a,
-      taxa_gtr1_b, taxa_gtr1_c, taxa_gtr2_a, taxa_gtr2_b, taxa_gtr2_c, distance,
+      taxa_gtr1_b, taxa_gtr1_c, taxa_gtr2_a, taxa_gtr2_b, taxa_gtr2_c,
       transformation;
 
   bool getrate;
@@ -147,17 +147,14 @@ class LocalParameters {
   std::vector<double> evostats;
   std::vector<double> ancevostats;
   std::vector<double> sitespecificevostats;
-  std::vector<double> weights;
 
   // Constructor
   explicit LocalParameters(GlobalParameters* gparam);
-  void initContainers();
   virtual ~LocalParameters();
 
   // Writers
   void writeRealDataSummaries(ofstream& os, bool headers = true);
   void writeAncestralDataSummaries(ofstream& os, bool headers);
-  void writeParam(ofstream& os);
 
   void tobstats(ofstream& os);
   void tobstats(ofstream& os, const Link* from);
@@ -166,10 +163,12 @@ class LocalParameters {
   void toAli(ofstream& os, int** currentNodeleafCodonSequence);
 
   // Readers
-  void readChainCodonMutSelSBDP(int pt_i);
-  void readChainCodonMutSelFinite(int pt_i);
   void readChainCodonMutSelSBDP();
+  void readChainCodonMutSelSBDP(int pt_i);
+
   void readChainCodonMutSelFinite();
+  void readChainCodonMutSelFinite(int pt_i);
+
   void readFMutSelCodeML();
   void readLocalInstructions();
   int readParametersCodemlM7M8(int pt_i);
@@ -193,8 +192,6 @@ class LocalParameters {
   std::vector<double> GetCurrentEvoStats();
   std::vector<double> GetCurrentAncEvoStats();
   std::vector<double> GetCurrentSiteSpecificEvoStats();
-  std::vector<double> GetCurrentDistances();
-  std::vector<double> GetCurrentWeights();
   void GetGTR1();
   void GetGTR2();
   void incrementStartPoint() { this->startPoint++; }
