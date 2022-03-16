@@ -38,7 +38,6 @@ class GlobalParameters {
   static const int NParam = 50;
   static const int NEvoStats = 1358;
   static const int NSiteSpecificEvoStats = 2;
-  static const int NDistances = 3;
   static const int NTransformations = 3;
   static const int NCodes = 3;
 
@@ -46,9 +45,6 @@ class GlobalParameters {
 
   const std::string listTransformtations[NTransformations] = {"none", "log2",
                                                               "log10"};
-
-  const std::string listDistances[NDistances] = {"Euclidian", "dist1",
-                                                 "normalized"};
 
   const std::string listParam[NParam] = {"chainID",      "root",
                                          "lambda_CpG",   "lambda_TpA",
@@ -2351,9 +2347,9 @@ class GlobalParameters {
   std::map<std::string, int> mapUsedEvoAncStats;
   std::map<std::string, int> mapUsedSiteSpecificEvoStats;
 
-  int OutPartialDistance, verbose, NusedAccessorySummaries,
-      NusedSiteSpecificEvoStats, NusedEvoStats, NusedEvoAncStats, NusedParam,
-      NusedSummaries, NusedAncSummaries, Ngenes, chainPointStart, chainPointEnd,
+  int verbose, NusedAccessorySummaries, NusedSiteSpecificEvoStats,
+      NusedEvoStats, NusedEvoAncStats, NusedParam, NusedSummaries,
+      NusedAncSummaries, Ngenes, chainPointStart, chainPointEnd,
       chainPointEvery, Nthread, Niter, Nrun, threshold, Nrep, Nsite_codon,
       Ntaxa, Nsimu, Ncon, seed;
 
@@ -2363,8 +2359,7 @@ class GlobalParameters {
   std::vector<std::string> listOutput;
   std::vector<std::string> listSpecies;
 
-  std::string model, controlfile, localcontrolfile, output, distance,
-      transformation;
+  std::string model, controlfile, localcontrolfile, output, transformation;
 
   void init();
   void readInstructions();

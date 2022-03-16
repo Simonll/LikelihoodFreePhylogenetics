@@ -87,8 +87,7 @@ class Posterior {
   Random* rnd;
   int randomseed;
 
-  int OutPartialDistance, Niter, Nrun, Naccepted, threshold, Nthread,
-      Nsite_codon;
+  int Niter, Nrun, Naccepted, threshold, Nthread, Nsite_codon;
   bool sorted;
   // writter
   void writePosterior(ofstream& os);

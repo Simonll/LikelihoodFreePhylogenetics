@@ -120,12 +120,6 @@ int main(int argc, char* argv[]) {
     std::cerr << "#EVOLSTATS\n";
     for (auto i : gparam->listEvoStats) std::cerr << i << "\t";
     std::cerr << "\n";
-    std::cerr << "#DIST\n";
-    for (auto i : gparam->listDistances) std::cerr << i << "\t";
-    std::cerr << "\n";
-    std::cerr << "#TRANS\n";
-    for (auto i : gparam->listTransformtations) std::cerr << i << "\t";
-    std::cerr << "\n";
   } else if (model == "CodonMutSelSBDP") {
     std::cerr << "CodonMutSelSBDP"
               << "\n";

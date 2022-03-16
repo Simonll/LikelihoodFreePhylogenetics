@@ -23,7 +23,6 @@ Posterior::Posterior(GlobalParameters* gparam) {
   this->localcontrolfile = gparam->localcontrolfile;
   this->output = gparam->output;
   this->model = gparam->model;
-  this->OutPartialDistance = gparam->OutPartialDistance;
 
   this->TOOSMALL = gparam->TOOSMALL;
   this->TOOLARGE = gparam->TOOLARGE;

@@ -36,9 +36,7 @@ void GlobalParameters::init() {
   this->NusedAccessorySummaries = 0;
   this->Ngenes = 0;
 
-  this->distance = "Euclidian";
   this->transformation = "log2";
-  this->OutPartialDistance = 0;
 
   std::cerr << "Constructing mapUsedParam\n";
   for (unsigned int i = 0; i < this->NParam; i++) {
