@@ -320,8 +320,8 @@ int main(int argc, char* argv[]) {
     if (!post->posterior.empty()) {
       int it = 0;
       while (it < post->threshold) {
-        int point =
-            static_cast<int>(lparam->rnd->Uniform() * post->posterior.size());
+        int point = static_cast<int>(
+            lparam->rnd->Uniform() * post->posterior.size() - 1);
         lparam->SetCurrentParametersFromPosterior(post->posterior, point);
 
         if (model == "CodonMutSelSBDPPPred") {
