@@ -114,8 +114,8 @@ class SiteInterSubMatrix {
     return mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
   }
   bool CheckStop(int pos1, int pos2, int pos3) {
-    if (lparam->codonstatespace->CheckStop(pos1 = pos1, pos2 = pos2,
-                                           pos3 = pos3)) {
+    if (lparam->codonstatespace->isStop(pos1 = pos1, pos2 = pos2,
+                                        pos3 = pos3)) {
       std::cerr << pos1 << " " << pos2 << " " << pos3 << " "
                 << "\n";
       exit(0);

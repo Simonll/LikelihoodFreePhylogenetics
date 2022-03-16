@@ -207,7 +207,7 @@ int CodonStateSpace::GetState(std::string word) {
                          GetDNAStateSpace()->GetState(word.substr(2, 1)));
 }
 
-bool CodonStateSpace::CheckStop(int pos1, int pos2, int pos3) {
+bool CodonStateSpace::isStop(int pos1, int pos2, int pos3) {
   if ((pos1 == unknown) || (pos2 == unknown) || (pos3 == unknown)) {
     return false;
   }

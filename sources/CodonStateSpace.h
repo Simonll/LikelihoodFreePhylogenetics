@@ -127,7 +127,7 @@ class CodonStateSpace : public StateSpace {
   // code, alphabetical order)
   int TranslationWithStops(int codon) { return CodonCodeWithStops[codon]; }
 
-  bool CheckStop(int pos1, int pos2, int pos3);
+  bool isStop(int pos1, int pos2, int pos3);
 
   /*
   cannot exist: indexing system excludes stop codons anyway...

@@ -241,8 +241,7 @@ void TreeSimulator::RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo) {
   codonTo[1] = lparam->codonstatespace->GetCodonFromDNA(
       nucposTo[3], nucposTo[4], nucposTo[5]);
 
-  if (lparam->codonstatespace->CheckStop(nucposTo[3], nucposTo[4],
-                                         nucposTo[5])) {
+  if (lparam->codonstatespace->isStop(nucposTo[3], nucposTo[4], nucposTo[5])) {
     std::cerr << "error while registring a substitution\n";
     std::cerr << nucTo << "\n";
     std::cerr << nucposTo[3] << " " << nucposTo[4] << " " << nucposTo[5] << " "

@@ -410,8 +410,7 @@ std::tuple<double, double, double> SiteInterSubMatrix::ComputeCore(
       nucposFrom[0], nucposFrom[1], nucposFrom[2]);
   int codonTo = lparam->codonstatespace->GetCodonFromDNA(
       nucposTo[0], nucposTo[1], nucposTo[2]);
-  if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                          nucposTo[2])) {
+  if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1], nucposTo[2])) {
     MutRate = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
     int CpGcont = testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
                                  nucposTo[codonPos], CurrentNodeNucSequence);
@@ -512,8 +511,8 @@ std::tuple<double, double> SiteInterSubMatrix::GetRates(
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
+          if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
+                                               nucposTo[2])) {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
@@ -575,8 +574,8 @@ void SiteInterSubMatrix::ComputePartialRates(int NodeIndex, int site_codon,
 
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
+          if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
+                                               nucposTo[2])) {
             SubRate = submatrixTreeSim[NodeIndex][site_nuc][nucTo];
             MutRate = mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
           }

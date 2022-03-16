@@ -151,48 +151,12 @@ int main(int argc, char* argv[]) {
     std::cerr << "The simulation process started\n";
 
     ofstream rates_os((gparam->output + ".rates").c_str(), std::ios_base::out);
-    rates_os << "chainID"
-             << "\t"
-             << "taxaID"
-             << "\t"
-             << "MutRate"
-             << "\t"
-             << "SubRate"
-             << "\t"
-             << "MutRateNonSyn"
-             << "\t"
-             << "SubRateNonSyn"
-             << "\t"
-             << "MutRateSyn"
-             << "\t"
-             << "SubRateSyn"
-             << "\t"
-             << "MutRateCpG"
-             << "\t"
-             << "SubRateCpG"
-             << "\t"
-             << "MutRateWeakStrong"
-             << "\t"
-             << "SubRateWeakStrong"
-             << "\t"
-             << "MutRateStrongWeak"
-             << "\t"
-             << "SubRateStrongWeak"
-             << "\t"
-             << "MutRateTransition"
-             << "\t"
-             << "SubRateTransition"
-             << "\t"
-             << "MutRateTransversion"
-             << "\t"
-             << "SubRateTransversion"
-             << "\n";
-    rates_os.close();
+    writeHeader(rates_os) rates_os.close();
     if (!post->posterior.empty()) {
       int it = 0;
       while (it < gparam->Nrun) {
-        int chainID =
-            static_cast<int>(lparam->rnd->Uniform() * post->posterior.size());
+        int chainID = static_cast<int>(
+            lparam->rnd->Uniform() * post->posterior.size() - 1);
         lparam->SetCurrentParametersFromPosterior(post->posterior, chainID);
         if (model == "CodonMutSelSBDP") {
           lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
@@ -271,4 +235,43 @@ int main(int argc, char* argv[]) {
       it++;
     }
   }
+}
+
+void writeHeader(ofstream& os) {
+  os << "chainID"
+     << "\t"
+     << "taxaID"
+     << "\t"
+     << "MutRate"
+     << "\t"
+     << "SubRate"
+     << "\t"
+     << "MutRateNonSyn"
+     << "\t"
+     << "SubRateNonSyn"
+     << "\t"
+     << "MutRateSyn"
+     << "\t"
+     << "SubRateSyn"
+     << "\t"
+     << "MutRateCpG"
+     << "\t"
+     << "SubRateCpG"
+     << "\t"
+     << "MutRateWeakStrong"
+     << "\t"
+     << "SubRateWeakStrong"
+     << "\t"
+     << "MutRateStrongWeak"
+     << "\t"
+     << "SubRateStrongWeak"
+     << "\t"
+     << "MutRateTransition"
+     << "\t"
+     << "SubRateTransition"
+     << "\t"
+     << "MutRateTransversion"
+     << "\t"
+     << "SubRateTransversion"
+     << "\n";
 }

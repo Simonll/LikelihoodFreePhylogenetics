@@ -34,8 +34,7 @@ std::tuple<double, double, double> SiteInterSubMatrixCABC2018::ComputeCore(
       nucposFrom[0], nucposFrom[1], nucposFrom[2]);
   int codonTo = lparam->codonstatespace->GetCodonFromDNA(
       nucposTo[0], nucposTo[1], nucposTo[2]);
-  if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                          nucposTo[2])) {
+  if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1], nucposTo[2])) {
     MutRate = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
     int CpGcont = testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
                                  nucposTo[codonPos], CurrentNodeNucSequence);
@@ -195,8 +194,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesCpG(
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
+          if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
+                                               nucposTo[2])) {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
@@ -243,8 +242,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesNonSyn(
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
+          if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
+                                               nucposTo[2])) {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
@@ -288,8 +287,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesSyn(
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
+          if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
+                                               nucposTo[2])) {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
@@ -333,8 +332,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesStrongWeak(
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
+          if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
+                                               nucposTo[2])) {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
@@ -378,8 +377,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesWeakStrong(
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
+          if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
+                                               nucposTo[2])) {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
@@ -423,8 +422,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesTransition(
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
+          if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
+                                               nucposTo[2])) {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
@@ -468,8 +467,8 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesTransversion(
       for (int nucTo = 0; nucTo < 4; nucTo++) {
         if (nucposFrom[codonPos] != nucTo) {
           nucposTo[codonPos] = nucTo;
-          if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                                  nucposTo[2])) {
+          if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
+                                               nucposTo[2])) {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(

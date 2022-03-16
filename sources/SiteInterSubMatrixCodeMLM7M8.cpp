@@ -26,8 +26,7 @@ std::tuple<double, double, double> SiteInterSubMatrixCodeMLM7M8::ComputeCore(
       nucposFrom[0], nucposFrom[1], nucposFrom[2]);
   int codonTo = lparam->codonstatespace->GetCodonFromDNA(
       nucposTo[0], nucposTo[1], nucposTo[2]);
-  if (!lparam->codonstatespace->CheckStop(nucposTo[0], nucposTo[1],
-                                          nucposTo[2])) {
+  if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1], nucposTo[2])) {
     MutRate = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
     int CpGcont = testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
                                  nucposTo[codonPos], CurrentNodeNucSequence);
