@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
         AncestralDataSummaries_os.close();
       }
 
-      post->registerNewSimulation(
+      post->registerSimulation(
           1, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
           lparam->GetCurrentAccessorySummaries(),
           lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),

@@ -87,7 +87,7 @@ class Posterior {
   Random* rnd;
   int randomseed;
 
-  int Niter, Nrun, Naccepted, threshold, Nthread, Nsite_codon;
+  int Niter, Nrun, threshold, Nthread, Nsite_codon;
   bool sorted;
   // writter
   void writePosterior(ofstream& os);
@@ -96,7 +96,6 @@ class Posterior {
   void writePosteriorPredictiveStatistics(
       ofstream& os, std::vector<double> realDataSummaries);
   void writeHeader(ofstream& os);
-  void writeHeader_nodist(ofstream& os);
   // readers
   void readPosterior(string posteriorfile);
   void readPosterior(ifstream& is);
@@ -106,14 +105,6 @@ class Posterior {
   void GetEmpVar();
 
   // Setters
-
-  void registerNewSimulation(int chainID, std::vector<double> param,
-                             std::vector<double> summaries,
-                             std::vector<double> accsummaries,
-                             std::vector<double> ancevostat,
-                             std::vector<double> evostat,
-                             std::vector<double> ssevostat);
-
   void registerSimulation(int chainID, std::vector<double> param,
                           std::vector<double> summaries,
                           std::vector<double> accsummaries,

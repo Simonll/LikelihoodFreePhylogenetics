@@ -129,7 +129,7 @@ int main(int argc, char* argv[]) {
     std::cerr << "End of the simulation process\n";
 
     ofstream dist_os((gparam->output + ".simu").c_str(), std::ios_base::out);
-    post->writeHeader_nodist(dist_os);
+    post->writeHeader(dist_os);
     post->writeSimu(dist_os);
     dist_os.close();
 
