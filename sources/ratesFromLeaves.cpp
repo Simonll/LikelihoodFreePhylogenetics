@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
   std::string phylip = "";
   std::string mcmc = "";
   std::string abc = "";
+  std::string seqtype = "";
   int Nrep = 0;
   int Nrun = 0;
 
@@ -91,10 +92,12 @@ int main(int argc, char* argv[]) {
       } else if (s == "-abc") {
         i++;
         abc = argv[i];
-
       } else if (s == "-d") {
         i++;
         phylip = argv[i];
+      } else if (s == "-seqtype") {
+        i++;
+        seqtype = argv[i];
       }
       i++;
     }  // end while
@@ -105,7 +108,18 @@ int main(int argc, char* argv[]) {
     std::cerr << "###########################\n";
     std::cerr << "-m < show | CodonMutSelFinite | CodonMutSelSBDP \n";
     std::cerr << "###########################\n";
-
+    std::cerr << "--version\n"
+              << "-model <CodonMutSelFinite|CodonMutSelSBDP>\n"
+              << "-x <start> <every> <until>\n"
+              << "-output <>\n"
+              << "-code <>\n"
+              << "-root <taxa_a> <taxa_b>\n"
+              << "-rep <int>\n"
+              << "-run <int>\n"
+              << "-mcmc <chain>\n"
+              << "-abc <post>\n"
+              << "-d <phylip>\n"
+              << "-seqtype <stationary|data>\n";
     exit(1);
   }
   if (model == "CodonMutSelFinite" || model == "CodonMutSelSBDP") {
