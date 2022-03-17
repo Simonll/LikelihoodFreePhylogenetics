@@ -52,7 +52,7 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
   void resetSubMatrixFromLeaves() override;
   void init() override;
   void initFromLeaves() override;
-
+  void writeHeaderFromLeaves(ofstream& os);
   explicit SiteInterSubMatrixCABC2018(LocalParameters* lparam)
       : SiteInterSubMatrix(lparam) {}
   virtual ~SiteInterSubMatrixCABC2018();

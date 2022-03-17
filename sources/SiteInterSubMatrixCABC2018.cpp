@@ -555,3 +555,42 @@ void SiteInterSubMatrixCABC2018::UpdateSubMatrixFromLeaves(
   delete[] nucposFrom;
   delete[] nucposTo;
 }
+
+void SiteInterSubMatrixCABC2018::writeHeaderFromLeaves(ofstream& os) {
+  os << "chainID"
+     << "\t"
+     << "taxaID"
+     << "\t"
+     << "MutRate"
+     << "\t"
+     << "SubRate"
+     << "\t"
+     << "MutRateNonSyn"
+     << "\t"
+     << "SubRateNonSyn"
+     << "\t"
+     << "MutRateSyn"
+     << "\t"
+     << "SubRateSyn"
+     << "\t"
+     << "MutRateCpG"
+     << "\t"
+     << "SubRateCpG"
+     << "\t"
+     << "MutRateWeakStrong"
+     << "\t"
+     << "SubRateWeakStrong"
+     << "\t"
+     << "MutRateStrongWeak"
+     << "\t"
+     << "SubRateStrongWeak"
+     << "\t"
+     << "MutRateTransition"
+     << "\t"
+     << "SubRateTransition"
+     << "\t"
+     << "MutRateTransversion"
+     << "\t"
+     << "SubRateTransversion"
+     << "\n";
+}

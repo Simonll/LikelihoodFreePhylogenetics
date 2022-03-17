@@ -927,7 +927,7 @@ void LocalParameters::SetBranchesLengthsBetweenInAndOutGroup() {
 }
 
 void LocalParameters::SetCurrentParametersFromPosterior(
-    std::vector<std::vector<double>> posterior, int it) {
+    std::vector<std::vector<double>> posterior, int pointID) {
   int k = 0;
   std::string* arrParam = new std::string[this->NusedParam];
   for (int param_i = 0; param_i < this->NParam; param_i++) {
@@ -941,10 +941,10 @@ void LocalParameters::SetCurrentParametersFromPosterior(
   }
   for (int param_i = 0; param_i < this->NusedParam; param_i++) {
     if (arrParam[param_i] == "chainID") {
-      this->MCMCpointID = static_cast<int>(posterior[it][param_i]);
+      this->MCMCpointID = static_cast<int>(posterior[pointID][param_i]);
       std::cerr << "chainID " << this->MCMCpointID << "\n";
     } else if (arrParam[param_i] == "root") {
-      this->percentFromOutGroup = posterior[it][param_i];
+      this->percentFromOutGroup = posterior[pointID][param_i];
       if (percentFromOutGroup >= 1.0) {
         std::cerr << "percentFromOutGroup >= 1\n";
         this->percentFromOutGroup = 0.9999999999;
@@ -954,58 +954,58 @@ void LocalParameters::SetCurrentParametersFromPosterior(
       }
       this->SetBranchesLengthsBetweenInAndOutGroup();
     } else if (arrParam[param_i] == "fitGC") {
-      this->fitGC = posterior[it][param_i];
+      this->fitGC = posterior[pointID][param_i];
       if (this->fitGC >= 1.0) {
         this->fitGC = 0.9999999999;
       } else if (this->fitGC <= 0.0) {
         this->fitGC = 0.0000000001;
       }
     } else if (arrParam[param_i] == "fitCpG") {
-      this->fitCpG = posterior[it][param_i];
+      this->fitCpG = posterior[pointID][param_i];
       if (fitCpG >= 1.0) {
         this->fitCpG = 0.9999999999;
       } else if (fitCpG <= 0.0) {
         this->fitCpG = 0.0000000001;
       }
     } else if (arrParam[param_i] == "fitTpA") {
-      this->fitTpA = posterior[it][param_i];
+      this->fitTpA = posterior[pointID][param_i];
       if (fitTpA >= 1.0) {
         this->fitTpA = 0.9999999999;
       } else if (fitTpA <= 0.0) {
         this->fitTpA = 0.0000000001;
       }
     } else if (arrParam[param_i] == "lambda_CpG") {
-      this->lambda_CpG = posterior[it][param_i];
+      this->lambda_CpG = posterior[pointID][param_i];
       if (this->lambda_CpG <= 0) {
         this->lambda_CpG = 0.0000000001;
       }
     } else if (arrParam[param_i] == "lambda_TpA") {
-      this->lambda_TpA = posterior[it][param_i];
+      this->lambda_TpA = posterior[pointID][param_i];
       if (this->lambda_TpA <= 0) {
         this->lambda_TpA = 0.0000000001;
       }
     } else if (arrParam[param_i] == "lambda_tvTpA") {
-      this->lambda_tvTpA = posterior[it][param_i];
+      this->lambda_tvTpA = posterior[pointID][param_i];
       if (this->lambda_tvTpA <= 0) {
         this->lambda_tvTpA = 0.0000000001;
       }
     } else if (arrParam[param_i] == "lambda_tvCpG") {
-      this->lambda_tvCpG = posterior[it][param_i];
+      this->lambda_tvCpG = posterior[pointID][param_i];
       if (this->lambda_tvCpG <= 0) {
         this->lambda_tvCpG = 0.0000000001;
       }
     } else if (arrParam[param_i] == "lambda_tstvTpA") {
-      this->lambda_tstvTpA = posterior[it][param_i];
+      this->lambda_tstvTpA = posterior[pointID][param_i];
       if (this->lambda_tstvTpA <= 0) {
         this->lambda_tstvTpA = 0.0000000001;
       }
     } else if (arrParam[param_i] == "lambda_tstvCpG") {
-      this->lambda_tstvCpG = posterior[it][param_i];
+      this->lambda_tstvCpG = posterior[pointID][param_i];
       if (this->lambda_tstvCpG <= 0) {
         this->lambda_tstvCpG = 0.0000000001;
       }
     } else if (arrParam[param_i] == "lambda_TBL") {
-      this->lambda_TBL = posterior[it][param_i];
+      this->lambda_TBL = posterior[pointID][param_i];
       if (this->lambda_TBL <= 0) {
         this->lambda_TBL = 0.0000000001;
       }
@@ -1013,12 +1013,12 @@ void LocalParameters::SetCurrentParametersFromPosterior(
       //                this->muBranch[node] = this->lambda_TBL;
       //            }
     } else if (arrParam[param_i] == "lambda_omega") {
-      this->lambda_omega = posterior[it][param_i];
+      this->lambda_omega = posterior[pointID][param_i];
       if (this->lambda_omega <= 0) {
         this->lambda_omega = 0.0000000001;
       }
     } else if (arrParam[param_i] == "lambda_R") {
-      this->lambda_R = posterior[it][param_i];
+      this->lambda_R = posterior[pointID][param_i];
       if (this->lambda_R <= 0) {
         this->lambda_R = 0.0000000001;
       }
@@ -1027,182 +1027,182 @@ void LocalParameters::SetCurrentParametersFromPosterior(
       }
 
     } else if (arrParam[param_i] == "nucsA") {
-      this->nucp[0] = posterior[it][param_i];
+      this->nucp[0] = posterior[pointID][param_i];
       if (this->nucp[0] <= 0) {
         this->nucp[0] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucsC") {
-      this->nucp[1] = posterior[it][param_i];
+      this->nucp[1] = posterior[pointID][param_i];
       if (this->nucp[1] <= 0) {
         this->nucp[1] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucsG") {
-      this->nucp[2] = posterior[it][param_i];
+      this->nucp[2] = posterior[pointID][param_i];
       if (this->nucp[2] <= 0) {
         this->nucp[2] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucsT") {
-      this->nucp[3] = posterior[it][param_i];
+      this->nucp[3] = posterior[pointID][param_i];
       if (this->nucp[3] <= 0) {
         this->nucp[3] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrAC") {
-      this->nucrrnr[0][1] = posterior[it][param_i];
+      this->nucrrnr[0][1] = posterior[pointID][param_i];
       if (this->nucrrnr[0][1] <= 0) {
         this->nucrrnr[0][1] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrAG") {
-      this->nucrrnr[0][2] = posterior[it][param_i];
+      this->nucrrnr[0][2] = posterior[pointID][param_i];
       if (this->nucrrnr[0][2] <= 0) {
         this->nucrrnr[0][2] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrAT") {
-      this->nucrrnr[0][3] = posterior[it][param_i];
+      this->nucrrnr[0][3] = posterior[pointID][param_i];
       if (this->nucrrnr[0][3] <= 0) {
         this->nucrrnr[0][3] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrCA") {
-      this->nucrrnr[1][0] = posterior[it][param_i];
+      this->nucrrnr[1][0] = posterior[pointID][param_i];
       if (this->nucrrnr[1][0] <= 0) {
         this->nucrrnr[1][0] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrCG") {
-      this->nucrrnr[1][2] = posterior[it][param_i];
+      this->nucrrnr[1][2] = posterior[pointID][param_i];
       if (this->nucrrnr[1][2] <= 0) {
         this->nucrrnr[1][2] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrCT") {
-      this->nucrrnr[1][3] = posterior[it][param_i];
+      this->nucrrnr[1][3] = posterior[pointID][param_i];
       if (this->nucrrnr[1][3] <= 0) {
         this->nucrrnr[1][3] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrGA") {
-      this->nucrrnr[2][0] = posterior[it][param_i];
+      this->nucrrnr[2][0] = posterior[pointID][param_i];
       if (this->nucrrnr[2][0] <= 0) {
         this->nucrrnr[2][0] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrGC") {
-      this->nucrrnr[2][1] = posterior[it][param_i];
+      this->nucrrnr[2][1] = posterior[pointID][param_i];
       if (this->nucrrnr[2][1] <= 0) {
         this->nucrrnr[2][1] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrGT") {
-      this->nucrrnr[2][3] = posterior[it][param_i];
+      this->nucrrnr[2][3] = posterior[pointID][param_i];
       if (this->nucrrnr[2][3] <= 0) {
         this->nucrrnr[2][3] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrTA") {
-      this->nucrrnr[3][0] = posterior[it][param_i];
+      this->nucrrnr[3][0] = posterior[pointID][param_i];
       if (this->nucrrnr[3][0] <= 0) {
         this->nucrrnr[3][0] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrTC") {
-      this->nucrrnr[3][1] = posterior[it][param_i];
+      this->nucrrnr[3][1] = posterior[pointID][param_i];
       if (this->nucrrnr[3][1] <= 0) {
         this->nucrrnr[3][1] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "nucrrTG") {
-      this->nucrrnr[3][2] = posterior[it][param_i];
+      this->nucrrnr[3][2] = posterior[pointID][param_i];
       if (this->nucrrnr[3][2] <= 0) {
         this->nucrrnr[3][2] = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Aadj") {
-      this->Aadj = posterior[it][param_i];
+      this->Aadj = posterior[pointID][param_i];
       if (this->Aadj <= 0) {
         this->Aadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Cadj") {
-      this->Cadj = posterior[it][param_i];
+      this->Cadj = posterior[pointID][param_i];
       if (this->Cadj <= 0) {
         this->Cadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Dadj") {
-      this->Dadj = posterior[it][param_i];
+      this->Dadj = posterior[pointID][param_i];
       if (this->Dadj <= 0) {
         this->Dadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Eadj") {
-      this->Eadj = posterior[it][param_i];
+      this->Eadj = posterior[pointID][param_i];
       if (this->Eadj <= 0) {
         this->Eadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Fadj") {
-      this->Fadj = posterior[it][param_i];
+      this->Fadj = posterior[pointID][param_i];
       if (this->Fadj <= 0) {
         this->Fadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Gadj") {
-      this->Gadj = posterior[it][param_i];
+      this->Gadj = posterior[pointID][param_i];
       if (this->Gadj <= 0) {
         this->Gadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Hadj") {
-      this->Hadj = posterior[it][param_i];
+      this->Hadj = posterior[pointID][param_i];
       if (this->Hadj <= 0) {
         this->Hadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Iadj") {
-      this->Iadj = posterior[it][param_i];
+      this->Iadj = posterior[pointID][param_i];
       if (this->Iadj <= 0) {
         this->Iadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Kadj") {
-      this->Kadj = posterior[it][param_i];
+      this->Kadj = posterior[pointID][param_i];
       if (this->Kadj <= 0) {
         this->Kadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Ladj") {
-      this->Ladj = posterior[it][param_i];
+      this->Ladj = posterior[pointID][param_i];
       if (this->Ladj <= 0) {
         this->Ladj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Madj") {
-      this->Madj = posterior[it][param_i];
+      this->Madj = posterior[pointID][param_i];
       if (this->Madj <= 0) {
         this->Madj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Nadj") {
-      this->Nadj = posterior[it][param_i];
+      this->Nadj = posterior[pointID][param_i];
       if (this->Nadj <= 0) {
         this->Nadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Padj") {
-      this->Padj = posterior[it][param_i];
+      this->Padj = posterior[pointID][param_i];
       if (this->Padj <= 0) {
         this->Padj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Qadj") {
-      this->Qadj = posterior[it][param_i];
+      this->Qadj = posterior[pointID][param_i];
       if (this->Qadj <= 0) {
         this->Qadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Radj") {
-      this->Radj = posterior[it][param_i];
+      this->Radj = posterior[pointID][param_i];
       if (this->Radj <= 0) {
         this->Radj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Sadj") {
-      this->Sadj = posterior[it][param_i];
+      this->Sadj = posterior[pointID][param_i];
       if (this->Sadj <= 0) {
         this->Sadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Tadj") {
-      this->Tadj = posterior[it][param_i];
+      this->Tadj = posterior[pointID][param_i];
       if (this->Tadj <= 0) {
         this->Tadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Vadj") {
-      this->Vadj = posterior[it][param_i];
+      this->Vadj = posterior[pointID][param_i];
       if (this->Vadj <= 0) {
         this->Vadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Wadj") {
-      this->Wadj = posterior[it][param_i];
+      this->Wadj = posterior[pointID][param_i];
       if (this->Wadj <= 0) {
         this->Wadj = 0.0000000001;
       }
     } else if (arrParam[param_i] == "Yadj") {
-      this->Yadj = posterior[it][param_i];
+      this->Yadj = posterior[pointID][param_i];
       if (this->Yadj <= 0) {
         this->Yadj = 0.0000000001;
       }

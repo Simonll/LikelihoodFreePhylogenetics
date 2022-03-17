@@ -151,13 +151,14 @@ int main(int argc, char* argv[]) {
     std::cerr << "The simulation process started\n";
 
     ofstream rates_os((gparam->output + ".rates").c_str(), std::ios_base::out);
-    writeHeader(rates_os) rates_os.close();
+    submatrix->writeHeaderFromLeaves(rates_os);
+    rates_os.close();
     if (!post->posterior.empty()) {
       int it = 0;
       while (it < gparam->Nrun) {
-        int chainID = static_cast<int>(
+        int pointID = static_cast<int>(
             lparam->rnd->Uniform() * post->posterior.size() - 1);
-        lparam->SetCurrentParametersFromPosterior(post->posterior, chainID);
+        lparam->SetCurrentParametersFromPosterior(post->posterior, pointID);
         if (model == "CodonMutSelSBDP") {
           lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
 
@@ -217,7 +218,7 @@ int main(int argc, char* argv[]) {
 
           ofstream rates_os((gparam->output + ".rates").c_str(),
                             std::ios_base::app);
-          rates_os << chainID << "\t" << lparam->taxonset->GetTaxon(taxaID)
+          rates_os << pointID << "\t" << lparam->taxonset->GetTaxon(taxaID)
                    << "\t" << MutRate << "\t" << SubRate << "\t"
                    << MutRateNonSyn << "\t" << SubRateNonSyn << "\t"
                    << MutRateSyn << "\t" << SubRateSyn << "\t" << MutRateCpG
@@ -235,43 +236,4 @@ int main(int argc, char* argv[]) {
       it++;
     }
   }
-}
-
-void writeHeader(ofstream& os) {
-  os << "chainID"
-     << "\t"
-     << "taxaID"
-     << "\t"
-     << "MutRate"
-     << "\t"
-     << "SubRate"
-     << "\t"
-     << "MutRateNonSyn"
-     << "\t"
-     << "SubRateNonSyn"
-     << "\t"
-     << "MutRateSyn"
-     << "\t"
-     << "SubRateSyn"
-     << "\t"
-     << "MutRateCpG"
-     << "\t"
-     << "SubRateCpG"
-     << "\t"
-     << "MutRateWeakStrong"
-     << "\t"
-     << "SubRateWeakStrong"
-     << "\t"
-     << "MutRateStrongWeak"
-     << "\t"
-     << "SubRateStrongWeak"
-     << "\t"
-     << "MutRateTransition"
-     << "\t"
-     << "SubRateTransition"
-     << "\t"
-     << "MutRateTransversion"
-     << "\t"
-     << "SubRateTransversion"
-     << "\n";
 }
