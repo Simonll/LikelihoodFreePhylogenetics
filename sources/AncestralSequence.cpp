@@ -102,20 +102,15 @@ void AncestralSequence::SampleAncestralCodonSequenceFromCodonData() {
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
     int codon_state = cur_data[choosen_taxa][site_codon];
 
-    if (codon_state != unknown) {
-      this->CurrentCodonSequence[site_codon] = codon_state;
-      for (int j = 0; j < 3; j++) {
-        this->CurrentNucSequence[site_codon * 3 + j] =
-            lparam->codonstatespace->GetCodonPosition(j, codon_state);
-      }
-    } else {
+    if (codon_state == unknown) {
       SampleAncestralCodonSequenceFromStationaryCodon(site_codon);
       codon_state = GetCurrentAncestralCodonSequence(site_codon);
-      this->CurrentCodonSequence[site_codon] = codon_state;
-      for (int j = 0; j < 3; j++) {
-        this->CurrentNucSequence[site_codon * 3 + j] =
-            lparam->codonstatespace->GetCodonPosition(j, codon_state);
-      }
+    }
+
+    this->CurrentCodonSequence[site_codon] = codon_state;
+    for (int j = 0; j < 3; j++) {
+      this->CurrentNucSequence[site_codon * 3 + j] =
+          lparam->codonstatespace->GetCodonPosition(j, codon_state);
     }
   }
 
