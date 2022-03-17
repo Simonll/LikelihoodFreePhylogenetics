@@ -110,6 +110,12 @@ void AncestralSequence::SampleAncestralCodonSequenceFromCodonData() {
       }
     } else {
       SampleAncestralCodonSequenceFromStationaryCodon(site_codon);
+      codon_state = GetCurrentAncestralCodonSequence(site_codon);
+      this->CurrentCodonSequence[site_codon] = codon_state;
+      for (int j = 0; j < 3; j++) {
+        this->CurrentNucSequence[site_codon * 3 + j] =
+            lparam->codonstatespace->GetCodonPosition(j, codon_state);
+      }
     }
   }
 
