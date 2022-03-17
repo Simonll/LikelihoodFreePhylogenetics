@@ -89,7 +89,7 @@ void AncestralSequence::SampleAncestralCodonSequenceFromStationaryCodon(
   }
 }
 
-void AncestralSequence::SampleAncestralCodonSequenceFromStationaryCodon() {
+void AncestralSequence::SampleAncestralCodonSequenceFromStationary() {
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
     SampleAncestralCodonSequenceFromStationaryCodon(site_codon);
   }

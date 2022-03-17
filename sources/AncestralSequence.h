@@ -47,7 +47,7 @@ class AncestralSequence {
   void WriteStationaryCodonSequence();
   void ComputeStationaryCodon();
   void SampleAncestralCodonSequenceFromLeaves();
-  void SampleAncestralCodonSequenceFromStationaryCodon();
+  void SampleAncestralCodonSequenceFromStationary();
   void SampleAncestralCodonSequenceFromStationaryCodon(int site_codon);
   int GetCurrentAncestralCodonSequence(int site_codon);
   int GetCurrentAncestralNucSequence(int site_nuc);

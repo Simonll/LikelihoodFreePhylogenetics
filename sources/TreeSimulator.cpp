@@ -148,7 +148,7 @@ void TreeSimulator::run_jump_chain_over_seq(std::string seqType) {
   if (seqType == "data") {
     ancestralseq->SampleAncestralCodonSequenceFromLeaves();
   } else if (seqType == "stationary") {
-    ancestralseq->SampleAncestralCodonSequenceFromStationaryCodon();
+    ancestralseq->SampleAncestralCodonSequenceFromStationary();
   }
   SetAncestralSequence();
   // launch recursive simulation on a phylogenetic tree
@@ -171,7 +171,7 @@ void TreeSimulator::run_jump_chain_over_tree() {
   if (this->lparam->rootlength == -1) {
     ancestralseq->SampleAncestralCodonSequenceFromLeaves();
   } else {
-    ancestralseq->SampleAncestralCodonSequenceFromStationaryCodon();
+    ancestralseq->SampleAncestralCodonSequenceFromStationary();
   }
 
   SetAncestralSequence();
