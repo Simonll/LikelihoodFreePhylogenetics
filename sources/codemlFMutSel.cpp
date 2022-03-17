@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
 
     while (post->Niter < post->Nrun) {
       sampler->sample();
-      simulator->GenerateCodonAlignment();
+      simulator->run_jump_chain_over_tree();
       ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
       ss->computeSummariesAncestralSequence(
           simulator->CurrentAncestralCodonSequence[10]);

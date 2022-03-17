@@ -68,13 +68,15 @@ class TreeSimulator {
   void resetSimulatorFromLeaves();
   void resetEvoStatVectors();
   void WriteAncestral();
-
+  void run_jump_chain_over_tree();
+  void run_jump_chain_over_seq(std::string seqType);
+  void link_out(Link* from);
   // Setters
   void SetAncestralSequence();
   void SetAncestralCodonSequence(int FromNodeIndex, int interval);
 
   // Getters
-  void run_jump_chain_over_tree();
+
   void call_update_submatrix_from_leaves(int taxa);
   void call_update_submatrix_from_stationary();
 

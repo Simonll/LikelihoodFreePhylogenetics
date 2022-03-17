@@ -150,7 +150,7 @@ int main(int argc, char* argv[]) {
       int iter = 0;
       while (iter < post->Nrun) {
         sampler->sample();
-        simulator->GenerateCodonAlignment();
+        simulator->run_jump_chain_over_tree();
 
         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
 
@@ -251,7 +251,7 @@ int main(int argc, char* argv[]) {
       lparam->readChainCodonMutSelFinite(k);
       for (int i = 0; i < gparam->Nrep; i++) {
         prior->sample();
-        simulator->GenerateCodonAlignment();
+        simulator->run_jump_chain_over_tree();
         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
         post->registerSimulation(
             k, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
@@ -328,7 +328,7 @@ int main(int argc, char* argv[]) {
         while (rep < post->Nrun) {
           rep++;
 
-          simulator->GenerateCodonAlignment();
+          simulator->run_jump_chain_over_tree();
 
           ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
 

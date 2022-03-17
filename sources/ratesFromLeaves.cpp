@@ -189,7 +189,7 @@ int main(int argc, char* argv[]) {
           if (seqtype == "data") {
             simulator->call_update_submatrix_from_leaves(taxaID);
           } else if (seqtype == "stationary") {
-            simulator->call_update_submatrix_from_stationary();
+            // simulator->call_update_submatrix_from_stationary();
           }
 
           double MutRate = 0.0;

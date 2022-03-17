@@ -95,7 +95,7 @@ void AncestralSequence::SampleAncestralCodonSequenceFromStationaryCodon() {
   }
 }
 
-void AncestralSequence::SampleAncestralCodonSequenceFromCodonData() {
+void AncestralSequence::SampleAncestralCodonSequenceFromLeaves() {
   int** cur_data = lparam->codondata->GetData();
   double u = lparam->rnd->Uniform();
   int choosen_taxa = static_cast<int>((lparam->Ntaxa - 1) * u);

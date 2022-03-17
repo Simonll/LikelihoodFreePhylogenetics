@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
       lparam->readParametersCodemlM7M8(k);
       for (int i = 0; i < gparam->Nrep; i++) {
         prior->sample();
-        simulator->GenerateCodonAlignment();
+        simulator->run_jump_chain_over_tree();
         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
         post->registerSimulation(
             k, lparam->GetCurrentParameters(), lparam->GetCurrentSummaries(),
