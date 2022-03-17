@@ -158,7 +158,9 @@ int main(int argc, char* argv[]) {
         new SiteInterSubMatrixCABC2018(lparam);
     submatrix->initFromLeaves();
     std::cerr << lparam->Nsite_codon << "\n";
-    TreeSimulator* simulator = new TreeSimulator(lparam, submatrix);
+    AncestralSequence* ancestraseq = new AncestralSequence(lparam);
+    TreeSimulator* simulator =
+        new TreeSimulator(lparam, submatrix, ancestraseq);
 
     Posterior* post = new Posterior(gparam);
     post->readPosterior(lparam->posteriorfile);
