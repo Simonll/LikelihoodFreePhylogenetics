@@ -139,7 +139,7 @@ void TreeSimulator::GenerateFromLeaves() {
   computeFromLeaves();
 }
 
-void TreeSimulator::GenerateCodonAlignment() {
+void TreeSimulator::run_jump_chain_over_tree() {
   submatrix->resetSubMatrix();
   rootBranchEvoStats->resetEvoStats();
   treeEvoStats->resetEvoStats();
@@ -147,7 +147,7 @@ void TreeSimulator::GenerateCodonAlignment() {
   ancestralseq->ComputeStationaryCodon();
 
   if (this->lparam->rootlength == -1) {
-    ancestralseq->SampleAncestralCodonSequenceFromCodonData();
+    ancestralseq->SampleAncestralCodonSequenceFromLeaves();
   } else {
     ancestralseq->SampleAncestralCodonSequenceFromStationaryCodon();
   }
@@ -830,10 +830,12 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
   }
 }
 
-void TreeSimulator::computeFromLeaves() {
-  for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
-    submatrix->UpdateSubMatrixFromLeaves(taxa_i, CurrentLeafNodeNucSequence);
-  }
+void TreeSimulator::call_update_submatrix_from_leaves(int taxa) {
+  submatrix->UpdateSubMatrixFromLeaves(taxa, CurrentLeafNodeNucSequence);
+}
+
+void TreeSimulator::call_update_submatrix_from_stationary() {
+  submatrix->UpdateSubMatrixFromLeaves(taxa, CurrentLeafNodeNucSequence);
 }
 
 void TreeSimulator::SetAncestralCodonSequence(int FromNodeIndex, int interval) {

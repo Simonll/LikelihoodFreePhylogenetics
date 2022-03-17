@@ -74,8 +74,9 @@ class TreeSimulator {
   void SetAncestralCodonSequence(int FromNodeIndex, int interval);
 
   // Getters
-  void GenerateCodonAlignment();
-  void GenerateFromLeaves();
+  void run_jump_chain_over_tree();
+  void call_update_submatrix_from_leaves(int taxa);
+  void call_update_submatrix_from_stationary();
 
   TreeSimulator(LocalParameters* lparam, SiteInterSubMatrix* submatrix,
                 AncestralSequence* ancestralseq);

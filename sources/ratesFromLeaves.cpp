@@ -184,10 +184,14 @@ int main(int argc, char* argv[]) {
 
         int rep = 0;
         while (rep < gparam->Nrep) {
-          simulator->GenerateFromLeaves();
-
           double u = lparam->rnd->Uniform();
           int taxaID = static_cast<int>((lparam->Ntaxa - 1) * u);
+          if (seqtype == "data") {
+            simulator->call_update_submatrix_from_leaves(taxaID);
+          } else if (seqtype == "stationary") {
+            simulator->call_update_submatrix_from_stationary();
+          }
+
           double MutRate = 0.0;
           double SubRate = 0.0;
           std::tie(MutRate, SubRate) = submatrix->GetRates(
