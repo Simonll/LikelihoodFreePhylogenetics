@@ -55,7 +55,6 @@ class SiteInterSubMatrix {
       int site_codon_i, int** CurrentNodeNucSequence);
 
   virtual void init();
-  virtual void initFromLeaves();
 
   // Getters
   std::tuple<double, double> GetRates(int NodeIndex, int site_codon,
@@ -64,9 +63,7 @@ class SiteInterSubMatrix {
 
   // Setters
   virtual void setSubMatrix();
-  virtual void setSubMatrixFromLeaves();
   virtual void resetSubMatrix();
-  virtual void resetSubMatrixFromLeaves();
   virtual double ComputeFixationFactor(double S, double SubRate);
   void transfertTotalRate(int sourceNodeIndex, int sinkNodeIndex);
   void findCodonContext(int NodeIndex, int site_nuc, int nucFrom, int nucTo,
@@ -77,8 +74,6 @@ class SiteInterSubMatrix {
                            int** CurrentNodeNucSequence);
   void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon,
                               int** CurrentNodeNucSequence);
-  virtual void UpdateSubMatrixFromLeaves(int NnodeIndex,
-                                         int** CurrentNodeNucSequence);
   int testGpTcontext(int NnodeIndex, int site, int nucFrom, int nucTo,
                      int** CurrentNodeNucSequence);
   int testCpGcontext(int NnodeIndex, int site, int nucFrom, int nucTo,

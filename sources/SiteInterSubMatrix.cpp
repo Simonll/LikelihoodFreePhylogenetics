@@ -26,8 +26,6 @@ SiteInterSubMatrix::~SiteInterSubMatrix() {
 
 void SiteInterSubMatrix::init() { setSubMatrix(); }
 
-void SiteInterSubMatrix::initFromLeaves() { setSubMatrixFromLeaves(); }
-
 void SiteInterSubMatrix::setSubMatrix() {
   submatrixTreeSim = new double**[lparam->refTree->GetNnode()];
   mutmatrixTreeSim = new double**[lparam->refTree->GetNnode()];
@@ -56,37 +54,6 @@ void SiteInterSubMatrix::resetSubMatrix() {
       for (int nuc = 0; nuc < Nnuc; nuc++) {
         submatrixTreeSim[node][site_nuc][nuc] = 0.0;
         mutmatrixTreeSim[node][site_nuc][nuc] = 0.0;
-      }
-    }
-  }
-}
-void SiteInterSubMatrix::setSubMatrixFromLeaves() {
-  submatrixTreeSim = new double**[lparam->Ntaxa];
-  mutmatrixTreeSim = new double**[lparam->Ntaxa];
-  for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
-    submatrixTreeSim[taxa_i] = new double*[lparam->Nsite_nuc];
-    mutmatrixTreeSim[taxa_i] = new double*[lparam->Nsite_nuc];
-    for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++) {
-      submatrixTreeSim[taxa_i][site_nuc] = new double[lparam->Nnucp];
-      mutmatrixTreeSim[taxa_i][site_nuc] = new double[lparam->Nnucp];
-    }
-  }
-  TotalSubRate = new double[lparam->Ntaxa];
-  TotalMutRate = new double[lparam->Ntaxa];
-  PartialSubRate = new double[lparam->Ntaxa];
-  PartialMutRate = new double[lparam->Ntaxa];
-}
-
-void SiteInterSubMatrix::resetSubMatrixFromLeaves() {
-  for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
-    TotalMutRate[taxa_i] = 0.0;
-    TotalSubRate[taxa_i] = 0.0;
-    PartialMutRate[taxa_i] = 0.0;
-    PartialSubRate[taxa_i] = 0.0;
-    for (int site_nuc = 0; site_nuc < lparam->Nsite_nuc; site_nuc++) {
-      for (int nuc = 0; nuc < Nnuc; nuc++) {
-        submatrixTreeSim[taxa_i][site_nuc][nuc] = 0.0;
-        mutmatrixTreeSim[taxa_i][site_nuc][nuc] = 0.0;
       }
     }
   }
@@ -349,52 +316,6 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
     TotalSubRate[NodeIndex] += deltaTotalSubRate;
     TotalMutRate[NodeIndex] += deltaTotalMutRate;
   }
-  delete[] nucposFrom;
-  delete[] nucposTo;
-}
-
-void SiteInterSubMatrix::UpdateSubMatrixFromLeaves(
-    int taxa, int** CurrentLeafNodeNucSequences) {
-  double deltaTotalSubRate = 0;
-  double deltaTotalMutRate = 0;
-  int site_codon_start = 0;
-  int site_codon_end = lparam->Nsite_codon;
-  int* nucposFrom = new int[3];
-  int* nucposTo = new int[3];
-  for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end;
-       site_codon_i++) {
-    int site_nuc_start = (site_codon_i * 3);  // site_codon to site_nuc
-    for (int codonPos = 0; codonPos < 3; codonPos++) {
-      nucposFrom[codonPos] =
-          CurrentLeafNodeNucSequences[taxa][site_nuc_start + codonPos];
-      nucposTo[codonPos] =
-          CurrentLeafNodeNucSequences[taxa][site_nuc_start + codonPos];
-    }
-    for (int codonPos = 0; codonPos < 3; codonPos++) {
-      int site_nuc = site_nuc_start + codonPos;
-      for (int nucTo = 0; nucTo < 4; nucTo++) {
-        double S = 0.0;
-        double MutRate = 0.0;
-        double SubRate = 0.0;
-        if (nucposFrom[codonPos] != nucTo) {
-          nucposTo[codonPos] = nucTo;
-          std::tie(MutRate, S, SubRate) =
-              ComputeCore(nucposFrom, nucposTo, codonPos, taxa, site_nuc,
-                          site_codon_i, CurrentLeafNodeNucSequences);
-          nucposTo[codonPos] = nucposFrom[codonPos];
-        }
-        ////
-        // IF nucposFrom[codonPos] == nucTo set prob to 0
-        ////
-        deltaTotalSubRate += SubRate;
-        deltaTotalMutRate += MutRate;
-        mutmatrixTreeSim[taxa][site_nuc][nucTo] = MutRate;
-        submatrixTreeSim[taxa][site_nuc][nucTo] = SubRate;
-      }
-    }
-  }
-  TotalSubRate[taxa] = deltaTotalSubRate;
-  TotalMutRate[taxa] = deltaTotalMutRate;
   delete[] nucposFrom;
   delete[] nucposTo;
 }

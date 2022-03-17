@@ -22,26 +22,10 @@ TreeSimulator::TreeSimulator(LocalParameters* lparam,
   setSimulator();
 }
 
-TreeSimulator::TreeSimulator(LocalParameters* lparam,
-                             SiteInterSubMatrix* submatrix) {
-  this->lparam = lparam;
-  this->submatrix = submatrix;
-  setSimulatorFromLeaves();
-}
-
 TreeSimulator::~TreeSimulator() {
   // dtor
 }
 
-void TreeSimulator::setSimulatorFromLeaves() {
-  CurrentLeafNodeCodonSequences = new int*[lparam->Ntaxa];
-  CurrentLeafNodeNucSequence = new int*[lparam->Ntaxa];
-
-  for (int taxa = 0; taxa < lparam->Ntaxa; taxa++) {
-    CurrentLeafNodeCodonSequences[taxa] = new int[lparam->Nsite_codon];
-    CurrentLeafNodeNucSequence[taxa] = new int[lparam->Nsite_nuc];
-  }
-}
 void TreeSimulator::setSimulator() {
   this->treeEvoStats = new EvolHistStatistics(this->lparam);
   this->rootBranchEvoStats = new EvolHistStatistics(this->lparam);
@@ -96,63 +80,20 @@ void TreeSimulator::resetSimulator() {
   }
 }
 
-void TreeSimulator::resetSimulatorFromLeaves() {
-  // reset nodeleaf sequences
-  for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
-    for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
-      int codon_state = lparam->codondata->GetData()[taxa_i][site_codon];
-
-      if (codon_state != unknown) {
-        CurrentLeafNodeCodonSequences[taxa_i][site_codon] = codon_state;
-        for (int j = 0; j < 3; j++) {
-          CurrentLeafNodeNucSequence[taxa_i][site_codon * 3 + j] =
-              lparam->codonstatespace->GetCodonPosition(j, codon_state);
-        }
-      } else {
-        double u = lparam->rnd->Uniform();
-        std::vector<int> cur_vec;
-        for (int taxa_j = 0; taxa_j < lparam->Ntaxa; taxa_j++) {
-          codon_state = lparam->codondata->GetData()[taxa_j][site_codon];
-          if (codon_state != unknown) {
-            cur_vec.push_back(codon_state);
-          }
-        }
-        if (cur_vec.size() == 0) {
-          std::cerr << "warning column " << site_codon << " all missing\n";
-        }
-        int p = static_cast<int>((cur_vec.size() - 1) * u);
-        codon_state = cur_vec[p];
-        CurrentLeafNodeCodonSequences[taxa_i][site_codon] = codon_state;
-        for (int j = 0; j < 3; j++) {
-          CurrentLeafNodeNucSequence[taxa_i][site_codon * 3 + j] =
-              lparam->codonstatespace->GetCodonPosition(j, codon_state);
-        }
-      }
-    }
-  }
-}
-
-// void TreeSimulator::call_update_submatrix_from_leaves() {
-//   submatrix->resetSubMatrixFromLeaves();
-//   resetSimulatorFromLeaves();
-//   // launch recursive simulation on a phylogenetic tree
-//   computeFromLeaves();
-// }
-
-void TreeSimulator::run_jump_chain_over_seq(std::string seqType) {
+void TreeSimulator::run_jump_chain_over_seq(std::string seqtype) {
   submatrix->resetSubMatrix();
   rootBranchEvoStats->resetEvoStats();
   treeEvoStats->resetEvoStats();
   resetSimulator();
   ancestralseq->ComputeStationaryCodon();
-  if (seqType == "data") {
+  if (seqtype == "data") {
     ancestralseq->SampleAncestralCodonSequenceFromLeaves();
-  } else if (seqType == "stationary") {
+  } else if (seqtype == "stationary") {
     ancestralseq->SampleAncestralCodonSequenceFromStationary();
   }
   SetAncestralSequence();
   // launch recursive simulation on a phylogenetic tree
-  ComputeRecursiveSimulation(lparam->refTree->GetRoot());
+  jump_chain_over_seq();
   // register mappingstats
 
   resetEvoStatVectors();
@@ -803,13 +744,60 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
   }
 }
 
-void TreeSimulator::call_update_submatrix_from_leaves(int taxa) {
-  submatrix->UpdateSubMatrixFromLeaves(taxa, CurrentLeafNodeNucSequence);
-}
+void TreeSimulator::jump_chain_over_seq() {
+  int FromNodeIndex = 0;
+  submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, -1, CurrentNodeNucSequence);
+  double rate = 0.0;
+  double time = 0.0;
+  double blength = 0.0;
+  rate = submatrix->GetTotalSubRate(FromNodeIndex);
+  if (lparam->model == "FMutSelSimu") {
+    rate = submatrix->GetTotalMutRate(FromNodeIndex);
+  }
+  time = (lparam->rnd->sExpo()) / rate;
+  blength = lparam->rootlength;
+  double IntervalLength = 1.0;
+  int interval = 0;
+  SetAncestralCodonSequence(FromNodeIndex, interval);
+  interval++;
+  while (time < blength) {
+    double u =
+        lparam->rnd->Uniform() * submatrix->GetTotalSubRate(FromNodeIndex);
+    int site_nuc = 0;
+    int nucTo = 0;
+    double testcummul = submatrix->GetSubRate(FromNodeIndex, site_nuc, nucTo);
 
-// void TreeSimulator::call_update_submatrix_from_stationary() {
-//   submatrix->UpdateSubMatrixFromLeaves(taxa, CurrentLeafNodeNucSequence);
-// }
+    int k = 0;
+    while (testcummul < u) {
+      k++;
+      site_nuc = static_cast<int>(k / 4);
+      nucTo = k % 4;
+
+      if (site_nuc >= lparam->Nsite_nuc) {
+        std::cerr << "error " << site_nuc << " > " << lparam->Nsite_nuc
+                  << "testcummul " << testcummul << "\n";
+        exit(0);
+      }
+
+      testcummul += submatrix->GetSubRate(FromNodeIndex, site_nuc, nucTo);
+    }
+    int site_codon = static_cast<int>(site_nuc / 3);
+    submatrix->ComputePartialRates(FromNodeIndex, site_codon,
+                                   CurrentNodeNucSequence);
+    RegisterSubTreeSim(FromNodeIndex, site_nuc, nucTo);
+    submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, site_codon,
+                                      CurrentNodeNucSequence);
+    rate = submatrix->GetTotalSubRate(FromNodeIndex);
+    if (lparam->model == "FMutSelSimu") {
+      rate = submatrix->GetTotalMutRate(FromNodeIndex);
+    }
+    time += (lparam->rnd->sExpo()) / rate;
+    if (time > IntervalLength * interval && interval < lparam->Ninterval) {
+      SetAncestralCodonSequence(FromNodeIndex, interval);
+      interval++;
+    }
+  }
+}
 
 void TreeSimulator::SetAncestralCodonSequence(int FromNodeIndex, int interval) {
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {

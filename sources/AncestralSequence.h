@@ -38,7 +38,7 @@ class AncestralSequence {
   int* CurrentNucSequence;
   int* CurrentAncestralCodonSequence;
   int* CurrentAncestralNucSequence;
-
+  int choosen_taxa;
   LocalParameters* lparam;
 
   explicit AncestralSequence(LocalParameters* lparam);

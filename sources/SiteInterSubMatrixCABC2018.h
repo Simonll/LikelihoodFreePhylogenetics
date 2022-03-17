@@ -48,11 +48,7 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
 
   void setSubMatrix() override;
   void resetSubMatrix() override;
-  void setSubMatrixFromLeaves() override;
-  void resetSubMatrixFromLeaves() override;
   void init() override;
-  void initFromLeaves() override;
-  void writeHeaderFromLeaves(ofstream& os);
   explicit SiteInterSubMatrixCABC2018(LocalParameters* lparam)
       : SiteInterSubMatrix(lparam) {}
   virtual ~SiteInterSubMatrixCABC2018();
@@ -62,10 +58,6 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
                                                  int site_nuc, int site_codon_i,
                                                  int** CurrentNodeNucSequence);
 
-  // void ComputePartialRates(int NodeIndex, int site_codon,
-  //                          int** CurrentNodeNucSequence);
-  void UpdateSubMatrixFromLeaves(int taxa,
-                                 int** CurrentLeafNodeNucSequences) override;
   std::tuple<double, double> GetRatesCpG(int NodeIndex, int site_codon,
                                          int** CurrentNodeNucSequence);
   std::tuple<double, double> GetRatesNonSyn(int NodeIndex, int site_codon,

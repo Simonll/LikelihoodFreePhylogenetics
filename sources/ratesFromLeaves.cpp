@@ -30,6 +30,45 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "SummaryStatistics.h"
 #include "TreeSimulator.h"
 
+void writeHeaderFromLeaves(ofstream& os) {
+  os << "chainID"
+     << "\t"
+     << "taxaID"
+     << "\t"
+     << "MutRate"
+     << "\t"
+     << "SubRate"
+     << "\t"
+     << "MutRateNonSyn"
+     << "\t"
+     << "SubRateNonSyn"
+     << "\t"
+     << "MutRateSyn"
+     << "\t"
+     << "SubRateSyn"
+     << "\t"
+     << "MutRateCpG"
+     << "\t"
+     << "SubRateCpG"
+     << "\t"
+     << "MutRateWeakStrong"
+     << "\t"
+     << "SubRateWeakStrong"
+     << "\t"
+     << "MutRateStrongWeak"
+     << "\t"
+     << "SubRateStrongWeak"
+     << "\t"
+     << "MutRateTransition"
+     << "\t"
+     << "SubRateTransition"
+     << "\t"
+     << "MutRateTransversion"
+     << "\t"
+     << "SubRateTransversion"
+     << "\n";
+}
+
 int main(int argc, char* argv[]) {
   // Comments
 
@@ -156,7 +195,7 @@ int main(int argc, char* argv[]) {
 
     SiteInterSubMatrixCABC2018* submatrix =
         new SiteInterSubMatrixCABC2018(lparam);
-    submatrix->initFromLeaves();
+    submatrix->init();
     std::cerr << lparam->Nsite_codon << "\n";
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =
@@ -167,7 +206,7 @@ int main(int argc, char* argv[]) {
     std::cerr << "The simulation process started\n";
 
     ofstream rates_os((gparam->output + ".rates").c_str(), std::ios_base::out);
-    submatrix->writeHeaderFromLeaves(rates_os);
+    writeHeaderFromLeaves(rates_os);
     rates_os.close();
     if (!post->posterior.empty()) {
       int it = 0;
@@ -182,63 +221,58 @@ int main(int argc, char* argv[]) {
           lparam->readChainCodonMutSelFinite(lparam->GetPointID());
         }
 
+        int NodeIndex = 0;
         int rep = 0;
         while (rep < gparam->Nrep) {
-          double u = lparam->rnd->Uniform();
-          int taxaID = static_cast<int>((lparam->Ntaxa - 1) * u);
-          if (seqtype == "data") {
-            simulator->call_update_submatrix_from_leaves(taxaID);
-          } else if (seqtype == "stationary") {
-            // simulator->call_update_submatrix_from_stationary();
-          }
-
+          simulator->run_jump_chain_over_seq(seqtype);
           double MutRate = 0.0;
           double SubRate = 0.0;
           std::tie(MutRate, SubRate) = submatrix->GetRates(
-              taxaID, -1, simulator->CurrentLeafNodeNucSequence);
+              NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
 
           double MutRateNonSyn = 0.0;
           double SubRateNonSyn = 0.0;
           std::tie(MutRateNonSyn, SubRateNonSyn) = submatrix->GetRatesNonSyn(
-              taxaID, -1, simulator->CurrentLeafNodeNucSequence);
+              NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
 
           double MutRateSyn = 0.0;
           double SubRateSyn = 0.0;
           std::tie(MutRateSyn, SubRateSyn) = submatrix->GetRatesSyn(
-              taxaID, -1, simulator->CurrentLeafNodeNucSequence);
+              NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
 
           double MutRateCpG = 0.0;
           double SubRateCpG = 0.0;
           std::tie(MutRateCpG, SubRateCpG) = submatrix->GetRatesCpG(
-              taxaID, -1, simulator->CurrentLeafNodeNucSequence);
+              NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
 
           double MutRateWeakStrong = 0.0;
           double SubRateWeakStrong = 0.0;
           std::tie(MutRateWeakStrong, SubRateWeakStrong) =
               submatrix->GetRatesWeakStrong(
-                  taxaID, -1, simulator->CurrentLeafNodeNucSequence);
+                  NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
 
           double MutRateStrongWeak = 0.0;
           double SubRateStrongWeak = 0.0;
           std::tie(MutRateStrongWeak, SubRateStrongWeak) =
               submatrix->GetRatesStrongWeak(
-                  taxaID, -1, simulator->CurrentLeafNodeNucSequence);
+                  NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
 
           double MutRateTransition = 0.0;
           double SubRateTransition = 0.0;
           std::tie(MutRateTransition, SubRateTransition) =
               submatrix->GetRatesTransition(
-                  taxaID, -1, simulator->CurrentLeafNodeNucSequence);
+                  NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
 
           double MutRateTransversion = 0.0;
           double SubRateTransversion = 0.0;
           std::tie(MutRateTransversion, SubRateTransversion) =
               submatrix->GetRatesTransversion(
-                  taxaID, -1, simulator->CurrentLeafNodeNucSequence);
+                  NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
 
           ofstream rates_os((gparam->output + ".rates").c_str(),
                             std::ios_base::app);
-          rates_os << pointID << "\t" << lparam->taxonset->GetTaxon(taxaID)
+          rates_os << pointID << "\t"
+                   << lparam->taxonset->GetTaxon(ancestraseq->choosen_taxa)
                    << "\t" << MutRate << "\t" << SubRate << "\t"
                    << MutRateNonSyn << "\t" << SubRateNonSyn << "\t"
                    << MutRateSyn << "\t" << SubRateSyn << "\t" << MutRateCpG

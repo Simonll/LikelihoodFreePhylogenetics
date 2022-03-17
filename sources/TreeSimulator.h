@@ -61,16 +61,15 @@ class TreeSimulator {
   void UpdateSubMatrixTreeSim(int NnodeIndex, int site_codon);
   void RegisterSubTreeSim(int NodeIndex, int site_nuc, int nucTo);
   void ComputeRecursiveSimulation(Link* from);
-  void computeFromLeaves();
   void setSimulator();
   void resetSimulator();
-  void setSimulatorFromLeaves();
-  void resetSimulatorFromLeaves();
   void resetEvoStatVectors();
   void WriteAncestral();
   void run_jump_chain_over_tree();
-  void run_jump_chain_over_seq(std::string seqType);
+  void run_jump_chain_over_seq(std::string seqtype);
+  void jump_chain_over_seq();
   void link_out(Link* from);
+
   // Setters
   void SetAncestralSequence();
   void SetAncestralCodonSequence(int FromNodeIndex, int interval);
