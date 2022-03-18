@@ -96,11 +96,10 @@ void AncestralSequence::SampleAncestralCodonSequenceFromStationary() {
 }
 
 void AncestralSequence::SampleAncestralCodonSequenceFromLeaves() {
-  int** cur_data = lparam->codondata->GetData();
   double u = lparam->rnd->Uniform();
   choosen_taxa = static_cast<int>((lparam->Ntaxa - 1) * u);
   for (int site_codon = 0; site_codon < lparam->Nsite_codon; site_codon++) {
-    int codon_state = cur_data[choosen_taxa][site_codon];
+    int codon_state = lparam->codondata->GetData()[choosen_taxa][site_codon];
 
     if (codon_state == unknown) {
       SampleAncestralCodonSequenceFromStationaryCodon(site_codon);
@@ -114,10 +113,10 @@ void AncestralSequence::SampleAncestralCodonSequenceFromLeaves() {
     }
   }
 
-  for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
-    delete[] cur_data[taxa_i];
-  }
-  delete[] cur_data;
+  // for (int taxa_i = 0; taxa_i < lparam->Ntaxa; taxa_i++) {
+  //   delete[] cur_data[taxa_i];
+  // }
+  // delete[] cur_data;
 }
 
 int AncestralSequence::GetCurrentAncestralCodonSequence(int site_codon) {

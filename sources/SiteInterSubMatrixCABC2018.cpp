@@ -46,9 +46,7 @@ std::tuple<double, double, double> SiteInterSubMatrixCABC2018::ComputeCore(
     if (MutRate < lparam->TOOSMALL) {
       MutRate = lparam->TOOSMALL;
     }
-
     MutRate *= lparam->lambda_TBL;
-
     if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
       int aaTo = lparam->codonstatespace->Translation(codonTo);
       int aaFrom = lparam->codonstatespace->Translation(codonFrom);
@@ -56,7 +54,6 @@ std::tuple<double, double, double> SiteInterSubMatrixCABC2018::ComputeCore(
           (lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaTo] /
            lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom]) *
           (lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]));
-
       SubRate = MutRate * lparam->lambda_omega * lparam->omega;
     } else {
       S = log(lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]);
@@ -64,7 +61,6 @@ std::tuple<double, double, double> SiteInterSubMatrixCABC2018::ComputeCore(
     }
     SubRate = ComputeFixationFactor(S, SubRate);
   }
-
   return {MutRate, S, SubRate};
 }
 

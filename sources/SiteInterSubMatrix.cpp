@@ -250,14 +250,12 @@ int SiteInterSubMatrix::testTpAcontext(int inNnodeIndex, int insite,
 
 void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
                                                 int** CurrentNodeNucSequence) {
-  // int verbose = lparam->verbose;
   bool whole = false;
   if (site_codon == -1) {
     whole = true;
   }
   double deltaTotalSubRate = 0;
   double deltaTotalMutRate = 0;
-
   // if -1, loop over all sites
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
@@ -274,7 +272,6 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
     deltaTotalSubRate -= GetPartialSubRate(NodeIndex);
     deltaTotalMutRate -= GetPartialMutRate(NodeIndex);
   }
-
   int* nucposFrom = new int[3];
   int* nucposTo = new int[3];
   for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end;
@@ -286,7 +283,6 @@ void SiteInterSubMatrix::UpdateSubMatrixTreeSim(int NodeIndex, int site_codon,
       nucposTo[codonPos] =
           CurrentNodeNucSequence[NodeIndex][site_nuc_start + codonPos];
     }
-
     for (int codonPos = 0; codonPos < 3; codonPos++) {
       // for each nucleotide codon postions [0,2] we will be
       // computing adjacent nucleotide.
@@ -434,11 +430,6 @@ std::tuple<double, double> SiteInterSubMatrix::GetRates(
           nucposTo[codonPos] = nucTo;
           if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
                                                nucposTo[2])) {
-            int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
-                nucposFrom[0], nucposFrom[1], nucposFrom[2]);
-            int codonTo = lparam->codonstatespace->GetCodonFromDNA(
-                nucposTo[0], nucposTo[1], nucposTo[2]);
-
             SubRate += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
             MutRate += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
           }

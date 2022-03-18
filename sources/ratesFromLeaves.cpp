@@ -86,6 +86,7 @@ int main(int argc, char* argv[]) {
   std::string mcmc = "";
   std::string abc = "";
   std::string seqtype = "";
+  std::string controlfile = "";
   int Nrep = 0;
   int Nrun = 0;
 
@@ -98,7 +99,7 @@ int main(int argc, char* argv[]) {
       std::string s = argv[i];
       if (s == "-v" || s == "--version") {
         throw(0);
-      } else if (s == "-model") {
+      } else if (s == "-m") {
         i++;
         model = argv[i];
       } else if (s == "-x") {
@@ -137,6 +138,9 @@ int main(int argc, char* argv[]) {
       } else if (s == "-seqtype") {
         i++;
         seqtype = argv[i];
+      } else if (s == "-conf") {
+        i++;
+        controlfile = argv[i];
       }
       i++;
     }  // end while
@@ -158,32 +162,31 @@ int main(int argc, char* argv[]) {
               << "-mcmc <chain>\n"
               << "-abc <post>\n"
               << "-d <phylip>\n"
-              << "-seqtype <stationary|data>\n";
+              << "-seqtype <stationary|data>\n"
+              << "-conf <configfile>";
     exit(1);
   }
   if (model == "CodonMutSelFinite" || model == "CodonMutSelSBDP") {
     // the chain pointS are extract from the posterior file according to chainID
     std::cerr << model << "\n";
 
-    GlobalParameters* gparam = new GlobalParameters();
-    gparam->model = model;
-    gparam->chainPointStart = start;
-    gparam->chainPointEvery = every;
-    gparam->chainPointEnd = until;
-    gparam->Nrun = Nrun;
-    gparam->Nrep = Nrep;
-    gparam->output = output;
-
+    GlobalParameters* gparam = new GlobalParameters(model, controlfile);
+    // gparam->chainPointStart = start;
+    // gparam->chainPointEvery = every;
+    // gparam->chainPointEnd = until;
+    // gparam->Nrun = Nrun;
+    // gparam->Nrep = Nrep;
+    // gparam->output = output;
     std::cerr << "global parameters registred"
               << "\n";
     LocalParameters* lparam = new LocalParameters(gparam);
-    lparam->taxa_a = taxa_a;
-    lparam->taxa_b = taxa_b;
-    lparam->posteriorfile = abc;
-    lparam->chain = mcmc;
-    lparam->code = code;
-    lparam->data = phylip;
-    lparam->rootlength = rootlength;
+    // lparam->taxa_a = taxa_a;
+    // lparam->taxa_b = taxa_b;
+    // lparam->posteriorfile = abc;
+    // lparam->chain = mcmc;
+    // lparam->code = code;
+    // lparam->data = phylip;
+    // lparam->rootlength = rootlength;
     std::cerr << "local parameters registred"
               << "\n";
 
@@ -196,7 +199,6 @@ int main(int argc, char* argv[]) {
     SiteInterSubMatrixCABC2018* submatrix =
         new SiteInterSubMatrixCABC2018(lparam);
     submatrix->init();
-    std::cerr << lparam->Nsite_codon << "\n";
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
@@ -210,7 +212,7 @@ int main(int argc, char* argv[]) {
     rates_os.close();
     if (!post->posterior.empty()) {
       int it = 0;
-      while (it < gparam->Nrun) {
+      while (it < gparam->Nsimu) {
         int pointID = static_cast<int>(
             lparam->rnd->Uniform() * post->posterior.size() - 1);
         lparam->SetCurrentParametersFromPosterior(post->posterior, pointID);
@@ -220,59 +222,60 @@ int main(int argc, char* argv[]) {
         } else if (model == "CodonMutSelFinite") {
           lparam->readChainCodonMutSelFinite(lparam->GetPointID());
         }
-
-        int NodeIndex = 0;
+        int NodeIndex = lparam->refTree->GetRoot()->GetNode()->GetIndex();
         int rep = 0;
         while (rep < gparam->Nrep) {
           simulator->run_jump_chain_over_seq(seqtype);
           double MutRate = 0.0;
           double SubRate = 0.0;
           std::tie(MutRate, SubRate) = submatrix->GetRates(
-              NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
-
+              NodeIndex, -1, simulator->CurrentNodeNucSequence);
           double MutRateNonSyn = 0.0;
           double SubRateNonSyn = 0.0;
           std::tie(MutRateNonSyn, SubRateNonSyn) = submatrix->GetRatesNonSyn(
-              NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
+              NodeIndex, -1, simulator->CurrentNodeNucSequence);
 
           double MutRateSyn = 0.0;
           double SubRateSyn = 0.0;
           std::tie(MutRateSyn, SubRateSyn) = submatrix->GetRatesSyn(
-              NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
+              NodeIndex, -1, simulator->CurrentNodeNucSequence);
 
           double MutRateCpG = 0.0;
           double SubRateCpG = 0.0;
           std::tie(MutRateCpG, SubRateCpG) = submatrix->GetRatesCpG(
-              NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
+              NodeIndex, -1, simulator->CurrentNodeNucSequence);
 
           double MutRateWeakStrong = 0.0;
           double SubRateWeakStrong = 0.0;
           std::tie(MutRateWeakStrong, SubRateWeakStrong) =
-              submatrix->GetRatesWeakStrong(
-                  NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
+              submatrix->GetRatesWeakStrong(NodeIndex, -1,
+                                            simulator->CurrentNodeNucSequence);
 
           double MutRateStrongWeak = 0.0;
           double SubRateStrongWeak = 0.0;
           std::tie(MutRateStrongWeak, SubRateStrongWeak) =
-              submatrix->GetRatesStrongWeak(
-                  NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
+              submatrix->GetRatesStrongWeak(NodeIndex, -1,
+                                            simulator->CurrentNodeNucSequence);
 
           double MutRateTransition = 0.0;
           double SubRateTransition = 0.0;
           std::tie(MutRateTransition, SubRateTransition) =
-              submatrix->GetRatesTransition(
-                  NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
+              submatrix->GetRatesTransition(NodeIndex, -1,
+                                            simulator->CurrentNodeNucSequence);
 
           double MutRateTransversion = 0.0;
           double SubRateTransversion = 0.0;
           std::tie(MutRateTransversion, SubRateTransversion) =
               submatrix->GetRatesTransversion(
-                  NodeIndex, -1, simulator->CurrentLeafNodeNucSequence);
+                  NodeIndex, -1, simulator->CurrentNodeNucSequence);
 
           ofstream rates_os((gparam->output + ".rates").c_str(),
                             std::ios_base::app);
           rates_os << pointID << "\t"
-                   << lparam->taxonset->GetTaxon(ancestraseq->choosen_taxa)
+                   << ((seqtype == "stationary")
+                           ? "NA"
+                           : lparam->taxonset->GetTaxon(
+                                 ancestraseq->choosen_taxa))
                    << "\t" << MutRate << "\t" << SubRate << "\t"
                    << MutRateNonSyn << "\t" << SubRateNonSyn << "\t"
                    << MutRateSyn << "\t" << SubRateSyn << "\t" << MutRateCpG
@@ -286,8 +289,8 @@ int main(int argc, char* argv[]) {
           rep++;
           std::cerr << ".";
         }
+        it++;
       }
-      it++;
     }
   }
 }

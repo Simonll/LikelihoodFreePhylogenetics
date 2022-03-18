@@ -95,7 +95,6 @@ void TreeSimulator::run_jump_chain_over_seq(std::string seqtype) {
   // launch recursive simulation on a phylogenetic tree
   jump_chain_over_seq();
   // register mappingstats
-
   resetEvoStatVectors();
   rootBranchEvoStats->GetEvoAncStats();
   treeEvoStats->GetEvoStats();
@@ -114,7 +113,6 @@ void TreeSimulator::run_jump_chain_over_tree() {
   } else {
     ancestralseq->SampleAncestralCodonSequenceFromStationary();
   }
-
   SetAncestralSequence();
   // launch recursive simulation on a phylogenetic tree
   ComputeRecursiveSimulation(lparam->refTree->GetRoot());
@@ -745,7 +743,7 @@ void TreeSimulator::ComputeRecursiveSimulation(Link* from) {
 }
 
 void TreeSimulator::jump_chain_over_seq() {
-  int FromNodeIndex = 0;
+  int FromNodeIndex = lparam->refTree->GetRoot()->GetNode()->GetIndex();
   submatrix->UpdateSubMatrixTreeSim(FromNodeIndex, -1, CurrentNodeNucSequence);
   double rate = 0.0;
   double time = 0.0;

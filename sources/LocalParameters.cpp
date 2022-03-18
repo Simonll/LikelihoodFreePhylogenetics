@@ -1488,10 +1488,7 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
 
   if (j == pt_i) {
     refTree = new Tree(is);
-    if (verbose) std::cerr << "READCHAIN1\n";
     refTree->RegisterWith(taxonset, 0);
-    if (verbose) std::cerr << "READCHAIN2\n";
-
     is >> tmp;  // branchalpha
     is >> tmp;  // branchbeta
     for (int k = 0; k < this->Nnucp; k++) {
@@ -1550,8 +1547,6 @@ void LocalParameters::readChainCodonMutSelSBDP() {
     std::cerr << "error: did not find " << this->chain << ".chain\n";
     exit(1);
   }
-
-  // std::cerr << this->chain;
 
   int j = 0;
   std::string tmp = "";
