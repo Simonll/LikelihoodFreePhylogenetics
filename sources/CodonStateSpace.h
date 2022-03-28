@@ -122,6 +122,13 @@ class CodonStateSpace : public StateSpace {
     return (CodonCode[codon1] == CodonCode[codon2]);
   }
 
+  bool ConsVol(int codon1, int codon2) {
+    return (VolTable[CodonCode[codon1]] == VolTable[CodonCode[codon2]]);
+  }
+  bool ConsPol(int codon1, int codon2) {
+    return (PolTable[CodonCode[codon1]] == PolTable[CodonCode[codon2]]);
+  }
+
   // returns -1 if stop codon
   // otherwise returns integer in [0,19] standing for an amino-acid (one letter
   // code, alphabetical order)

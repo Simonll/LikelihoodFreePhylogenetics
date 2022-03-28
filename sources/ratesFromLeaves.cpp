@@ -66,6 +66,14 @@ void writeHeaderFromLeaves(ofstream& os) {
      << "MutRateTransversion"
      << "\t"
      << "SubRateTransversion"
+     << "\t"
+     << "MutRateConsPol"
+     << "\t"
+     << "SubRateConsPol"
+     << "\t"
+     << "MutRateRadPol"
+     << "\t"
+     << "SubRateRadPol"
      << "\n";
 }
 
@@ -269,6 +277,16 @@ int main(int argc, char* argv[]) {
               submatrix->GetRatesTransversion(
                   NodeIndex, -1, simulator->CurrentNodeNucSequence);
 
+          double MutRateConsPol = 0.0;
+          double SubRateConsPol = 0.0;
+          std::tie(MutRateConsPol, SubRateConsPol) = submatrix->GetRatesConsPol(
+              NodeIndex, -1, simulator->CurrentNodeNucSequence);
+
+          double MutRateRadPol = 0.0;
+          double SubRateRadPol = 0.0;
+          std::tie(MutRateRadPol, SubRateRadPol) = submatrix->GetRatesRadPol(
+              NodeIndex, -1, simulator->CurrentNodeNucSequence);
+
           ofstream rates_os((gparam->output + ".rates").c_str(),
                             std::ios_base::app);
           rates_os << pointID << "\t"
@@ -283,7 +301,9 @@ int main(int argc, char* argv[]) {
                    << SubRateWeakStrong << "\t" << MutRateStrongWeak << "\t"
                    << SubRateStrongWeak << "\t" << MutRateTransition << "\t"
                    << SubRateTransition << "\t" << MutRateTransversion << "\t"
-                   << SubRateTransversion << "\n";
+                   << SubRateTransversion << "\t" << MutRateConsPol << "\t"
+                   << SubRateConsPol << "\t" << MutRateRadPol << "\t"
+                   << SubRateRadPol << "\n";
 
           rates_os.close();
           rep++;

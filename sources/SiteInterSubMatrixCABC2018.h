@@ -77,14 +77,11 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
   std::tuple<double, double> GetRatesTransversion(int NodeIndex, int site_codon,
                                                   int** CurrentNodeNucSequence);
 
-  std::tuple<double, double> GetRatesKrKcPol(int NodeIndex, int site_codon,
+  std::tuple<double, double> GetRatesConsPol(int NodeIndex, int site_codon,
                                              int** CurrentNodeNucSequence);
 
-  std::tuple<double, double> GetRatesKrKcVol(int NodeIndex, int site_codon,
-                                             int** CurrentNodeNucSequence);
-
-  std::tuple<double, double> GetRatesKrKcPolVol(int NodeIndex, int site_codon,
-                                                int** CurrentNodeNucSequence);
+  std::tuple<double, double> GetRatesRadPol(int NodeIndex, int site_codon,
+                                            int** CurrentNodeNucSequence);
 
   bool isWeakStrong(int nucFrom, int nucTo);
   bool isTransition(int nucFrom, int nucTo);

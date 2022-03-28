@@ -77,6 +77,13 @@ const char dnaletters[] = {'a', 'c', 'g', 't'};
 const char RNAletters[] = {'A', 'C', 'G', 'U'};
 const char rnaletters[] = {'a', 'c', 'g', 'u'};
 
+const int VolTable[] = {0, 0, 0, 1, 1, 0, 1, 1, 1, 1,
+                        1, 0, 0, 1, 1, 0, 0, 0, 1, 1};
+const int PolTable[] = {0, 1, 1, 1, 0, 0, 1, 0, 1, 0,
+                        0, 1, 0, 1, 1, 1, 1, 0, 1, 1};
+const int ChrTable[] = {2, 2, 1, 1, 2, 2, 0, 2, 0, 2,
+                        2, 2, 2, 2, 0, 2, 2, 2, 2, 2};
+
 const int Dayhoff6Table[] = {3, 5, 2, 2, 4, 3, 1, 0, 1, 0,
                              0, 2, 3, 2, 1, 3, 3, 0, 4, 4};
 const int Dayhoff4Table[] = {3, -1, 2, 2, 0, 3, 1, 0, 1, 0,
