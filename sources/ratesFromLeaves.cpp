@@ -318,8 +318,8 @@ int main(int argc, char* argv[]) {
           std::tie(MutRateTransversion_, SubRateTransversion_) =
               submatrix->GetRatesTransversion(
                   NodeIndex, -1, simulator->CurrentNodeNucSequence);
-          MutRateTransversion += MutRateTransversion;
-          SubRateTransversion += SubRateTransversion;
+          MutRateTransversion += MutRateTransversion_;
+          SubRateTransversion += SubRateTransversion_;
 
           double MutRateConsPol_ = 0.0;
           double SubRateConsPol_ = 0.0;
