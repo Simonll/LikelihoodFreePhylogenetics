@@ -96,9 +96,6 @@ void TreeSimulator::run_jump_chain_over_seq(std::string seqtype) {
   jump_chain_over_seq();
   // register mappingstats
   resetEvoStatVectors();
-  rootBranchEvoStats->GetEvoAncStats();
-  treeEvoStats->GetEvoStats();
-  treeEvoStats->GetSiteSpecificEvoStats();
 }
 
 void TreeSimulator::run_jump_chain_over_tree() {

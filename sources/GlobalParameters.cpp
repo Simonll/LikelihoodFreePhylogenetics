@@ -36,7 +36,7 @@ void GlobalParameters::init() {
   this->NusedAccessorySummaries = 0;
   this->Ngenes = 0;
 
-  this->transformation = "log2";
+  this->transformation = "none";
 
   std::cerr << "Constructing mapUsedParam\n";
   for (unsigned int i = 0; i < this->NParam; i++) {

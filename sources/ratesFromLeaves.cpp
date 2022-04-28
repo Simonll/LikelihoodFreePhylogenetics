@@ -215,9 +215,17 @@ int main(int argc, char* argv[]) {
     post->readPosterior(lparam->posteriorfile);
     std::cerr << "The simulation process started\n";
 
+    SummaryStatistics* ss = new SummaryStatistics(lparam);
+
     ofstream rates_os((gparam->output + ".rates").c_str(), std::ios_base::out);
     writeHeaderFromLeaves(rates_os);
     rates_os.close();
+
+    ofstream ancestral_ss_os((gparam->output + ".anc").c_str(),
+                             std::ios_base::out);
+    ancestral_ss_os.close();
+    bool writeHeaderAnc = true;
+
     if (!post->posterior.empty()) {
       int it = 0;
       while (it < gparam->Nsimu) {
@@ -231,85 +239,163 @@ int main(int argc, char* argv[]) {
           lparam->readChainCodonMutSelFinite(lparam->GetPointID());
         }
         int NodeIndex = lparam->refTree->GetRoot()->GetNode()->GetIndex();
+
+        double MutRate = 0.0;
+        double SubRate = 0.0;
+        double MutRateNonSyn = 0.0;
+        double SubRateNonSyn = 0.0;
+        double MutRateSyn = 0.0;
+        double SubRateSyn = 0.0;
+        double MutRateSyn = 0.0;
+        double SubRateSyn = 0.0;
+        double MutRateCpG = 0.0;
+        double SubRateCpG = 0.0;
+        double MutRateWeakStrong = 0.0;
+        double SubRateWeakStrong = 0.0;
+        double MutRateStrongWeak = 0.0;
+        double SubRateStrongWeak = 0.0;
+        double MutRateTransition = 0.0;
+        double SubRateTransition = 0.0;
+        double MutRateTransversion = 0.0;
+        double SubRateTransversion = 0.0;
+        double MutRateConsPol = 0.0;
+        double SubRateConsPol = 0.0;
+        double MutRateRadPol = 0.0;
+        double SubRateRadPol = 0.0;
         int rep = 0;
         while (rep < gparam->Nrep) {
           simulator->run_jump_chain_over_seq(seqtype);
-          double MutRate = 0.0;
-          double SubRate = 0.0;
-          std::tie(MutRate, SubRate) = submatrix->GetRates(
-              NodeIndex, -1, simulator->CurrentNodeNucSequence);
-          double MutRateNonSyn = 0.0;
-          double SubRateNonSyn = 0.0;
-          std::tie(MutRateNonSyn, SubRateNonSyn) = submatrix->GetRatesNonSyn(
+          double MutRate_ = 0.0;
+          double SubRate_ = 0.0;
+          std::tie(MutRate_, SubRate_) = submatrix->GetRates(
               NodeIndex, -1, simulator->CurrentNodeNucSequence);
 
-          double MutRateSyn = 0.0;
-          double SubRateSyn = 0.0;
-          std::tie(MutRateSyn, SubRateSyn) = submatrix->GetRatesSyn(
-              NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          MutRate += MutRate_;
+          SubRate += SubRate_;
 
-          double MutRateCpG = 0.0;
-          double SubRateCpG = 0.0;
-          std::tie(MutRateCpG, SubRateCpG) = submatrix->GetRatesCpG(
+          double MutRateNonSyn_ = 0.0;
+          double SubRateNonSyn_ = 0.0;
+          std::tie(MutRateNonSyn_, SubRateNonSyn_) = submatrix->GetRatesNonSyn(
               NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          MutRateNonSyn + = MutRateNonSyn_;
+          SubRateNonSyn += SubRateNonSyn_;
+          double MutRateSyn_ = 0.0;
+          double SubRateSyn_ = 0.0;
+          std::tie(MutRateSyn_, SubRateSyn_) = submatrix->GetRatesSyn(
+              NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          MutRateSyn += MutRateSyn_;
+          SubRateSyn += SubRateSyn_;
 
-          double MutRateWeakStrong = 0.0;
-          double SubRateWeakStrong = 0.0;
-          std::tie(MutRateWeakStrong, SubRateWeakStrong) =
+          double MutRateCpG_ = 0.0;
+          double SubRateCpG_ = 0.0;
+          std::tie(MutRateCpG_, SubRateCpG_) = submatrix->GetRatesCpG(
+              NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          MutRateCpG += MutRateCpG_;
+          SubRateCpG + = SubRateCpG_;
+          double MutRateWeakStrong_ = 0.0;
+          double SubRateWeakStrong_ = 0.0;
+          std::tie(MutRateWeakStrong_, SubRateWeakStrong_) =
               submatrix->GetRatesWeakStrong(NodeIndex, -1,
                                             simulator->CurrentNodeNucSequence);
-
-          double MutRateStrongWeak = 0.0;
-          double SubRateStrongWeak = 0.0;
-          std::tie(MutRateStrongWeak, SubRateStrongWeak) =
+          MutRateWeakStrong + = MutRateWeakStrong_;
+          SubRateWeakStrong += SubRateWeakStrong_;
+          double MutRateStrongWeak_ = 0.0;
+          double SubRateStrongWeak_ = 0.0;
+          std::tie(MutRateStrongWeak_, SubRateStrongWeak_) =
               submatrix->GetRatesStrongWeak(NodeIndex, -1,
                                             simulator->CurrentNodeNucSequence);
+          MutRateStrongWeak += MutRateStrongWeak_;
+          SubRateStrongWeak += SubRateStrongWeak_;
 
-          double MutRateTransition = 0.0;
-          double SubRateTransition = 0.0;
-          std::tie(MutRateTransition, SubRateTransition) =
+          double MutRateTransition_ = 0.0;
+          double SubRateTransition_ = 0.0;
+          std::tie(MutRateTransition_, SubRateTransition_) =
               submatrix->GetRatesTransition(NodeIndex, -1,
                                             simulator->CurrentNodeNucSequence);
+          MutRateTransition += MutRateTransition_;
+          SubRateTransition += SubRateTransition_;
 
-          double MutRateTransversion = 0.0;
-          double SubRateTransversion = 0.0;
-          std::tie(MutRateTransversion, SubRateTransversion) =
+          double MutRateTransversion_ = 0.0;
+          double SubRateTransversion_ = 0.0;
+          std::tie(MutRateTransversion_, SubRateTransversion_) =
               submatrix->GetRatesTransversion(
                   NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          MutRateTransversion += MutRateTransversion;
+          SubRateTransversion += SubRateTransversion;
 
-          double MutRateConsPol = 0.0;
-          double SubRateConsPol = 0.0;
-          std::tie(MutRateConsPol, SubRateConsPol) = submatrix->GetRatesConsPol(
+          double MutRateConsPol_ = 0.0;
+          double SubRateConsPol_ = 0.0;
+          std::tie(MutRateConsPol_, SubRateConsPol_) =
+              submatrix->GetRatesConsPol(NodeIndex, -1,
+                                         simulator->CurrentNodeNucSequence);
+          MutRateConsPol += MutRateConsPol_;
+          SubRateConsPol += SubRateConsPol_;
+
+          double MutRateRadPol_ = 0.0;
+          double SubRateRadPol_ = 0.0;
+          std::tie(MutRateRadPol_, SubRateRadPol_) = submatrix->GetRatesRadPol(
               NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          MutRateRadPol += MutRateRadPol_;
+          SubRateRadPol += SubRateRadPol_;
+          int** ancestralCodonSequence_ = new int*[1];
+          ancestralCodonSequence_[0] = new int[lparam->Nsite_codon];
+          for (int site_codon = 0; site_codon < lparam->Nsite_codon;
+               site_codon++) {
+            ancestralCodonSequence_[0][site_codon] =
+                simulator->CurrentNodeCodonSequence[NodeIndex][site_codon];
+          }
 
-          double MutRateRadPol = 0.0;
-          double SubRateRadPol = 0.0;
-          std::tie(MutRateRadPol, SubRateRadPol) = submatrix->GetRatesRadPol(
-              NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          ss->computeSummariesAncestralSequence(ancestralCodonSequence_);
+          ofstream ancestral_ss_os((gparam->output + ".anc").c_str(),
+                                   std::ios_base::app);
 
-          ofstream rates_os((gparam->output + ".rates").c_str(),
-                            std::ios_base::app);
-          rates_os << pointID << "\t"
-                   << ((seqtype == "stationary")
-                           ? "NA"
-                           : lparam->taxonset->GetTaxon(
-                                 ancestraseq->choosen_taxa))
-                   << "\t" << MutRate << "\t" << SubRate << "\t"
-                   << MutRateNonSyn << "\t" << SubRateNonSyn << "\t"
-                   << MutRateSyn << "\t" << SubRateSyn << "\t" << MutRateCpG
-                   << "\t" << SubRateCpG << "\t" << MutRateWeakStrong << "\t"
-                   << SubRateWeakStrong << "\t" << MutRateStrongWeak << "\t"
-                   << SubRateStrongWeak << "\t" << MutRateTransition << "\t"
-                   << SubRateTransition << "\t" << MutRateTransversion << "\t"
-                   << SubRateTransversion << "\t" << MutRateConsPol << "\t"
-                   << SubRateConsPol << "\t" << MutRateRadPol << "\t"
-                   << SubRateRadPol << "\n";
+          lparam->writeAncestralDataSummaries(ancestral_ss_os, writeHeaderAnc);
+          ancestral_ss_os.close();
+          writeHeaderAnc = false;
 
-          rates_os.close();
+          it++;
           rep++;
           std::cerr << ".";
         }
-        it++;
+        MutRate /= rep;
+        SubRate /= rep;
+        MutRateNonSyn /= rep;
+        SubRateNonSyn /= rep;
+        MutRateSyn /= rep;
+        SubRateSyn /= rep;
+        MutRateSyn /= rep;
+        SubRateSyn /= rep;
+        MutRateCpG /= rep;
+        SubRateCpG /= rep;
+        MutRateWeakStrong /= rep;
+        SubRateWeakStrong /= rep;
+        MutRateStrongWeak /= rep;
+        SubRateStrongWeak /= rep;
+        MutRateTransition /= rep;
+        SubRateTransition /= rep;
+        MutRateTransversion /= rep;
+        SubRateTransversion /= rep;
+        MutRateConsPol /= rep;
+        SubRateConsPol /= rep;
+        MutRateRadPol /= rep;
+        SubRateRadPol /= rep;
+        ofstream rates_os((gparam->output + ".rates").c_str(),
+                          std::ios_base::app);
+        rates_os << pointID << "\t"
+                 << ((seqtype == "stationary") ? "NA"
+                                               : lparam->taxonset->GetTaxon(
+                                                     ancestraseq->choosen_taxa))
+                 << "\t" << MutRate << "\t" << SubRate << "\t" << MutRateNonSyn
+                 << "\t" << SubRateNonSyn << "\t" << MutRateSyn << "\t"
+                 << SubRateSyn << "\t" << MutRateCpG << "\t" << SubRateCpG
+                 << "\t" << MutRateWeakStrong << "\t" << SubRateWeakStrong
+                 << "\t" << MutRateStrongWeak << "\t" << SubRateStrongWeak
+                 << "\t" << MutRateTransition << "\t" << SubRateTransition
+                 << "\t" << MutRateTransversion << "\t" << SubRateTransversion
+                 << "\t" << MutRateConsPol << "\t" << SubRateConsPol << "\t"
+                 << MutRateRadPol << "\t" << SubRateRadPol << "\n";
+
+        rates_os.close();
       }
     }
   }
