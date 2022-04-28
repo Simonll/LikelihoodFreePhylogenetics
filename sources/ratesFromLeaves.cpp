@@ -246,8 +246,6 @@ int main(int argc, char* argv[]) {
         double SubRateNonSyn = 0.0;
         double MutRateSyn = 0.0;
         double SubRateSyn = 0.0;
-        double MutRateSyn = 0.0;
-        double SubRateSyn = 0.0;
         double MutRateCpG = 0.0;
         double SubRateCpG = 0.0;
         double MutRateWeakStrong = 0.0;
@@ -277,7 +275,7 @@ int main(int argc, char* argv[]) {
           double SubRateNonSyn_ = 0.0;
           std::tie(MutRateNonSyn_, SubRateNonSyn_) = submatrix->GetRatesNonSyn(
               NodeIndex, -1, simulator->CurrentNodeNucSequence);
-          MutRateNonSyn + = MutRateNonSyn_;
+          MutRateNonSyn += MutRateNonSyn_;
           SubRateNonSyn += SubRateNonSyn_;
           double MutRateSyn_ = 0.0;
           double SubRateSyn_ = 0.0;
@@ -291,13 +289,13 @@ int main(int argc, char* argv[]) {
           std::tie(MutRateCpG_, SubRateCpG_) = submatrix->GetRatesCpG(
               NodeIndex, -1, simulator->CurrentNodeNucSequence);
           MutRateCpG += MutRateCpG_;
-          SubRateCpG + = SubRateCpG_;
+          SubRateCpG += SubRateCpG_;
           double MutRateWeakStrong_ = 0.0;
           double SubRateWeakStrong_ = 0.0;
           std::tie(MutRateWeakStrong_, SubRateWeakStrong_) =
               submatrix->GetRatesWeakStrong(NodeIndex, -1,
                                             simulator->CurrentNodeNucSequence);
-          MutRateWeakStrong + = MutRateWeakStrong_;
+          MutRateWeakStrong += MutRateWeakStrong_;
           SubRateWeakStrong += SubRateWeakStrong_;
           double MutRateStrongWeak_ = 0.0;
           double SubRateStrongWeak_ = 0.0;
