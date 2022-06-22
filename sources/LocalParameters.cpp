@@ -583,7 +583,7 @@ void LocalParameters::readLocalInstructions() {
     } else if (s == "-freefitTpA") {
       this->fixfitTpA = 0;
       std::cerr << "free fitTpA\n";
-    } else if (s == "-lambdaTBL") {
+    } else if (s == "-lambdaTBL" || s == "-fixlambdaTBL") {
       iss >> s;
       this->lambda_TBL = atof(s.c_str());
       this->fixlambda_TBL = 1;
