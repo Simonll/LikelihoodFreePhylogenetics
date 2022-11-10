@@ -2,7 +2,7 @@ CC=g++
 CPPFLAGS=-c -g -std=c++11 -O2 -Wall -pedantic -fopenmp -fno-var-tracking -Wfatal-errors
 LDFLAGS=-fopenmp
 SRCS=GlobalParameters.cpp TaxonSet.cpp Tree.cpp  Random.cpp  SequenceAlignment.cpp CodonSequenceAlignment.cpp\
-  StateSpace.cpp CodonStateSpace.cpp  LocalParameters.cpp SummaryStatistics.cpp SiteInterSubMatrix.cpp SiteInterSubMatrixCodeMLM7M8.cpp SiteInterSubMatrixCABC2018.cpp SiteInterSubMatrixCodeMLFMUTSEL.cpp EvolHistStatistics.cpp\
+  StateSpace.cpp CodonStateSpace.cpp  LocalParameters.cpp SummaryStatistics.cpp SiteInterSubMatrix.cpp SiteInterSubMatrixCodeMLM7M8.cpp SiteInterSubMatrixCodeMLM7M8TpA.cpp SiteInterSubMatrixCABC2018.cpp SiteInterSubMatrixCodeMLFMUTSEL.cpp EvolHistStatistics.cpp\
   PriorSampler.cpp AncestralSequence.cpp TreeSimulator.cpp BranchSpecificParameters.cpp  LocalData.cpp\
   Posterior.cpp
 
@@ -13,7 +13,7 @@ ALL_OBJS=$(patsubst %.cpp,%.o,$(ALL_SRCS))
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=../data/LFP
 PROGSDIR=../data
-ALL= LFP codemlM7M8 codemlFMutSel ratesFromLeaves
+ALL= LFP codemlM7M8 codemlM7M8TpA codemlFMutSel ratesFromLeaves
 #all: $(SOURCES) $(EXECUTABLE)
 PROGS=$(addprefix $(PROGSDIR)/, $(ALL))
 
@@ -46,6 +46,10 @@ $(PROGSDIR)/LFP$(EXEEXT): main.o $(OBJS)
 codemlM8M7$(EXEEXT): $(PROGSDIR)/codemlM7M8$(EXEEXT)
 $(PROGSDIR)/codemlM7M8$(EXEEXT): codemlM7M8.o $(OBJS)
 	$(CC) codemlM7M8.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
+
+codemlM8M7TpA$(EXEEXT): $(PROGSDIR)/codemlM7M8TpA$(EXEEXT)
+$(PROGSDIR)/codemlM7M8TpA$(EXEEXT): codemlM7M8TpA.o $(OBJS)
+	$(CC) codemlM7M8TpA.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 
 codemlFMutSel$(EXEEXT): $(PROGSDIR)/codemlFMutSel$(EXEEXT)
 $(PROGSDIR)/codemlFMutSel$(EXEEXT): codemlFMutSel.o $(OBJS)
