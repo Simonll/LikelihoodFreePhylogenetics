@@ -28,17 +28,20 @@ std::tuple<double, double, double> SiteInterSubMatrixCodeMLM7M8TpA::ComputeCore(
       nucposTo[0], nucposTo[1], nucposTo[2]);
   if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1], nucposTo[2])) {
     MutRate = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
-    int CpGcont = testTpAcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
+    int CpGcont = testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
                                  nucposTo[codonPos], CurrentNodeNucSequence);
 
-    if (CpGcont == 0 || CpGcont == 3) {
+    int TpAcont = testTpAcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
+                                 nucposTo[codonPos], CurrentNodeNucSequence);
+
+    if (TpAcont == 1 || TpAcont == 2) {
       // tsTpA
       MutRate *= lparam->lambda_TpA;      
     }
 
     if (CpGcont == 1 || CpGcont == 2) {
       // tsCpG
-      MutRate *= lparam->lambda_TpA;
+      MutRate *= lparam->lambda_CpG;
     }
 
     if (MutRate < lparam->TOOSMALL) {
