@@ -33,6 +33,7 @@ std::tuple<double, double, double> SiteInterSubMatrixCodeMLM7M8::ComputeCore(
 
     if (CpGcont == 1 || CpGcont == 2) {
       // tsCpG
+      std::cerr << lparam->lambda_CpG << "\n";
       MutRate *= lparam->lambda_CpG;
       // CpG>TpG
     }

@@ -1,6 +1,7 @@
 sources/*.o*
 data/LFP
 data/codemlM7M8
+data/codemlM7M8TpA
 data/codemlFMutSel
 data/ratesFromLeaves
 .vscode/*

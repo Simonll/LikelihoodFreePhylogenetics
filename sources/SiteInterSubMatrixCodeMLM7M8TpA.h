@@ -34,12 +34,12 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "SiteInterSubMatrix.h"
 #include "Tree.h"
 
-class SiteInterSubMatrixCodeMLM7M8TpA : SiteInterSubMatrix {
+class SiteInterSubMatrixCodeMLM7M8TpA : public SiteInterSubMatrix {
  public:
-  std::tuple<double, double, double> ComputeCore(int* nucposFrom, int* nucposTo,
-                                                 int codonPos, int NodeIndex,
-                                                 int site_nuc, int site_codon_i,
-                                                 int** CurrentNodeNucSequence);
+  using SiteInterSubMatrix::SiteInterSubMatrix;
+  std::tuple<double, double, double> ComputeCore(
+      int* nucposFrom, int* nucposTo, int codonPos, int NodeIndex, int site_nuc,
+      int site_codon_i, int** CurrentNodeNucSequence) override;
 };
 
 #endif  // SOURCES_SITEINTERSUBMATRIXCODEMLM7M8TPA_H_

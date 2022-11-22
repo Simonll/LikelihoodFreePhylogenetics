@@ -135,10 +135,16 @@ int SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite,
     if (((innucFrom + innucTo) % 2) == 0) {
       // we are leaving XY, coordinate 0,1
       // trought ts
+      // std::cerr << "0,1" << CurrentNodeNucSequence[inNnodeIndex][insite] <<
+      // CurrentNodeNucSequence[inNnodeIndex][insite + 1] << innucTo << 1 <<
+      // "\n";
       return 1;
     } else {
       // we are leaving XY, coordinate 0,1
       // trought tv
+      // std::cerr << "0,1" << CurrentNodeNucSequence[inNnodeIndex][insite] <<
+      // CurrentNodeNucSequence[inNnodeIndex][insite + 1] << innucTo << 9
+      // <<"\n";
       return 9;
     }
   } else if (insite > 0 &&
@@ -147,10 +153,16 @@ int SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite,
     if (((innucFrom + innucTo) % 2) == 0) {  // from XpY to XpN
       // we are leaving XY, coordinate -1,0
       // trought ts
+      // std::cerr << "-1,0" << CurrentNodeNucSequence[inNnodeIndex][insite - 1]
+      // << CurrentNodeNucSequence[inNnodeIndex][insite] << innucTo << 2 <<
+      // "\n";
       return 2;
     } else {
       // we are leaving XY, coordinate -1,0
       // trought tv
+      // std::cerr << "-1,0" << CurrentNodeNucSequence[inNnodeIndex][insite - 1]
+      // << CurrentNodeNucSequence[inNnodeIndex][insite] << innucTo << 9 <<
+      // "\n";
       return 9;
     }
   } else if (insite < lparam->Nsite_codon * 3 - 1 &&
@@ -331,6 +343,9 @@ std::tuple<double, double, double> SiteInterSubMatrix::ComputeCore(
     MutRate = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
     int CpGcont = testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
                                  nucposTo[codonPos], CurrentNodeNucSequence);
+
+    std::cerr << CpGcont << "AAA\n";
+
     if (CpGcont == 1 || CpGcont == 2) {
       // tsCpG
       MutRate *= lparam->lambda_CpG;

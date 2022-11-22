@@ -90,7 +90,8 @@ int main(int argc, char* argv[]) {
     lparam->readParametersCodemlM7M8(0);
     ss->computeSummaries();
     PriorSampler* prior = new PriorSampler(lparam);
-    SiteInterSubMatrix* submatrix = new SiteInterSubMatrix(lparam);
+    SiteInterSubMatrixCodeMLM7M8* submatrix =
+        new SiteInterSubMatrixCodeMLM7M8(lparam);
     submatrix->init();
     AncestralSequence* ancestraseq = new AncestralSequence(lparam);
     TreeSimulator* simulator =

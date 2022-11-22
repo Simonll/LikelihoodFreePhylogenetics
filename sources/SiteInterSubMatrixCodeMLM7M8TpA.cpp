@@ -36,7 +36,7 @@ std::tuple<double, double, double> SiteInterSubMatrixCodeMLM7M8TpA::ComputeCore(
 
     if (TpAcont == 1 || TpAcont == 2) {
       // tsTpA
-      MutRate *= lparam->lambda_TpA;      
+      MutRate *= lparam->lambda_TpA;
     }
 
     if (CpGcont == 1 || CpGcont == 2) {
