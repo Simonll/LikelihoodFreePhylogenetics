@@ -51,11 +51,11 @@ class LocalParameters {
   int NEvoStats;
   int NSiteSpecificEvoStats;
 
-  string* listParam;
-  string* listSummaries;
-  string* listEvoStats;
-  string* listSiteSpecificEvoStats;
-  string* listSpecies;
+  string *listParam;
+  string *listSummaries;
+  string *listEvoStats;
+  string *listSiteSpecificEvoStats;
+  string *listSpecies;
 
   std::map<string, int> mapUsedParam;
   std::map<string, int> mapUsedSummaries;
@@ -76,20 +76,20 @@ class LocalParameters {
 
   string data, localcontrolfile, output, model;
 
-  BranchSpecificParameters** bparam;
+  BranchSpecificParameters **bparam;
 
-  FileSequenceAlignment* dnadata;
-  CodonStateSpace* codonstatespace;
-  CodonSequenceAlignment* codondata;
-  Tree* refTree;
-  const TaxonSet* taxonset;
-  Link* outgroupLink;
-  Link* newlink;
-  Link* newnext;
-  Branch* branchToInGroup;
-  Branch* branchToOutGroup;
-  Node* newnode;
-  Random* rnd;
+  FileSequenceAlignment *dnadata;
+  CodonStateSpace *codonstatespace;
+  CodonSequenceAlignment *codondata;
+  Tree *refTree;
+  const TaxonSet *taxonset;
+  Link *outgroupLink;
+  Link *newlink;
+  Link *newnext;
+  Branch *branchToInGroup;
+  Branch *branchToOutGroup;
+  Node *newnode;
+  Random *rnd;
 
   bool iscodon, isdata;
   std::map<int, int> gtrMap;
@@ -109,21 +109,22 @@ class LocalParameters {
   bool getrate1;
   bool getrate2;
 
-  double* omega_site;
+  double *omega_site;
   double omega;
   double *nucp, *nucrr, *nucp1, *nucrr1, *nucp2, *nucrr2;  // 6 param
   double **nucrrnr, **nucrrnr1, **nucrrnr2;                // 12 param
   double **gtnr, **gtnr1, **gtnr2;
-  double** ssaaprofiles;
-  double* codonprofile;
-  int* alloc;
+  double **ssaaprofiles;
+  double **sscodonprofiles;
+  double *codonprofile;
+  int *alloc;
 
   // param value
   double lambda_TBL, lambda_omega, lambda_CpG, lambda_TpA, MutationNormFactor,
       MutationNormFactor1, MutationNormFactor2, fitCpG, fitTpA, lambda_tvCpG,
       lambda_tvTpA, lambda_tstvCpG, lambda_tstvTpA, fitGC, lambda_R;
-  double* muBranch;
-  double* AAadj;
+  double *muBranch;
+  double *AAadj;
   double Aadj, Cadj, Dadj, Eadj, Fadj, Gadj, Hadj, Iadj, Kadj, Ladj, Madj, Nadj,
       Padj, Qadj, Radj, Sadj, Tadj, Vadj, Wadj, Yadj;
 
@@ -149,22 +150,23 @@ class LocalParameters {
   std::vector<double> sitespecificevostats;
 
   // Constructor
-  explicit LocalParameters(GlobalParameters* gparam);
+  explicit LocalParameters(GlobalParameters *gparam);
   virtual ~LocalParameters();
 
   // Writers
-  void writeRealDataSummaries(ofstream& os, bool headers = true);
-  void writeAncestralDataSummaries(ofstream& os, bool headers);
+  void writeRealDataSummaries(ofstream &os, bool headers = true);
+  void writeAncestralDataSummaries(ofstream &os, bool headers);
 
-  void tobstats(ofstream& os);
-  void tobstats(ofstream& os, const Link* from);
-  void toSsstats(ofstream& os);
-  void toFasta(ofstream& os, int** currentNodeleafCodonSequence);
-  void toAli(ofstream& os, int** currentNodeleafCodonSequence);
+  void tobstats(ofstream &os);
+  void tobstats(ofstream &os, const Link *from);
+  void toSsstats(ofstream &os);
+  void toFasta(ofstream &os, int **currentNodeleafCodonSequence);
+  void toAli(ofstream &os, int **currentNodeleafCodonSequence);
 
   // Readers
   void readChainCodonMutSelSBDP();
   void readChainCodonMutSelSBDP(int pt_i);
+  int readParametersMutSelC(int pt_i);
 
   void readChainCodonMutSelFinite();
   void readChainCodonMutSelFinite(int pt_i);
@@ -181,7 +183,7 @@ class LocalParameters {
   void SetRootBetweenInAndOutGroup();
   void SetRootLCA();
   void SetTreeStuff();
-  void SetTreeStuffRecursively(Link* from, int notNodeIndex, int gtrIndex);
+  void SetTreeStuffRecursively(Link *from, int notNodeIndex, int gtrIndex);
   void Setgtr2gtnr();
 
   // Getters

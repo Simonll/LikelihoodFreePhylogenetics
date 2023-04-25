@@ -318,6 +318,16 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
     }
   }
 
+  this->sscodonprofiles = new double*[this->N_profile];
+  for (int i = 0; i < this->N_profile; i++) {
+    this->sscodonprofiles[i] = new double[Nstate_codon];
+  }
+  for (int i = 0; i < this->N_profile; i++) {
+    for (int j = 0; j < this->Nstate_codon; j++) {
+      this->sscodonprofiles[i][j] = 1 / this->Nstate_codon;
+    }
+  }
+
   this->omega_site = new double[this->Nsite_codon];
   for (int i = 0; i < this->Nsite_codon; i++) {
     this->omega_site[i] = 1.0;
@@ -1650,6 +1660,117 @@ int get_number_of_samplesCodemlM7M8(std::ifstream& is) {
     k++;
   }
   return k;
+}
+
+int get_number_of_samplesMutSelC(std::ifstream& is) {
+  std::string line;
+  int k = 0;
+  std::getline(is, line);
+  while (getline(is, line)) {
+    while (getline(is, line)) {
+      if (line.empty()) continue;
+      if (line[0] == '(') break;
+    }
+    k++;
+  }
+  return k;
+}
+
+int LocalParameters::readParametersMutSelC(int it) {
+  this->MCMCpointID = it;
+  // set parameters : posterior specific
+  ifstream is((this->chain + ".chain").c_str());
+  if (!is) {
+    std::cerr << "error: did not find " << this->chain << ".chain\n";
+    exit(1);
+  }
+  int j = 0;
+  std::string tmp = "";
+
+  if (it == -1) {
+    std::cerr << "counting number of samples available\n";
+    j = get_number_of_samplesMutSelC(is);
+    std::cerr << "number of samples available: " << j << "\n";
+    return j;
+  }
+
+  while (j < it) {
+    is >> tmp;  // tree
+    is >> tmp;  // branchalpha
+    is >> tmp;  // branchbeta
+    for (int k = 0; k < this->Nnucp; k++) {
+      is >> tmp;  // nucp
+    }
+    for (int k = 0; k < this->Nnucrr; k++) {
+      is >> tmp;  // nucrr
+    }
+
+    is >> tmp;  // omega
+    is >> tmp;  // kappa
+    is >> tmp;  // Ncomponents
+    for (int k = 0; k < this->Nstate_codon; k++) {
+      is >> tmp;
+    }
+    for (int k = 0; k < this->N_profile; k++) {
+      for (int l = 0; l < this->Nstate_codon; l++) {
+        is >> tmp;  // ssprofiles
+      }
+    }
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      is >> tmp;  // alloc
+    }
+    j++;
+  }
+
+  if (j == it) {
+    refTree = new Tree(is);
+    refTree->RegisterWith(taxonset, 0);
+    is >> tmp;  // branchalpha
+    is >> tmp;  // branchbeta
+    for (int k = 0; k < this->Nnucp; k++) {
+      is >> nucp[k];
+    }
+    for (int k = 0; k < this->Nnucrr; k++) {
+      is >> nucrr[k];
+    }
+
+    // nucrrnr[0][0]; //AA
+    nucrrnr[0][1] = nucrr[0];  // AC
+    nucrrnr[0][2] = nucrr[1];  // AG
+    nucrrnr[0][3] = nucrr[2];  // AT
+    nucrrnr[1][0] = nucrr[0];  // CA
+    // nucrrnr[1][1]; //CG
+    nucrrnr[1][2] = nucrr[3];  // CG
+    nucrrnr[1][3] = nucrr[4];  // CT
+    nucrrnr[2][0] = nucrr[1];  // GA
+    nucrrnr[2][1] = nucrr[3];  // GC
+    // nucrrnr[2][2]; //GG
+    nucrrnr[2][3] = nucrr[5];  // GT
+    nucrrnr[3][0] = nucrr[2];  // TA
+    nucrrnr[3][1] = nucrr[4];  // TC
+    nucrrnr[3][2] = nucrr[5];  // TG
+    // nucrrnr[3][3]; //TT
+
+    is >> omega;
+    is >> tmp;
+    is >> tmp;
+    for (int k = 0; k < this->Nstate_codon; k++) {
+      is >> tmp;
+    }
+
+    for (int k = 0; k < this->N_profile; k++) {
+      for (int l = 0; l < Nstate_codon; l++) {
+        is >> sscodonprofiles[k][l];
+      }
+    }
+
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      is >> alloc[k];
+    }
+  }
+  is.close();
+  Setgtr2gtnr();
+  SetTreeStuff();
 }
 
 int LocalParameters::readParametersCodemlM7M8(int it) {

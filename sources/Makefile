@@ -61,6 +61,11 @@ ratesFromLeaves$(EXEEXT): $(PROGSDIR)/ratesFromLeaves$(EXEEXT)
 $(PROGSDIR)/ratesFromLeaves$(EXEEXT): ratesFromLeaves.o $(OBJS)
 	$(CC) ratesFromLeaves.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 
+
+MutSelC$(EXEEXT): $(PROGSDIR)/MutSelC$(EXEEXT)
+$(PROGSDIR)/MutSelC$(EXEEXT): MutSelC.o $(OBJS)
+	$(CC) MutSelC.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
+
 #$(EXECUTABLE): $(OBJECTS)
 #	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 

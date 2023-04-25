@@ -11,8 +11,8 @@ Public License for more details. You should have received a copy of the GNU
 General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
-#ifndef SOURCES_SITEINTERSUBMATRIXCODEMLM7M8TPA_H_
-#define SOURCES_SITEINTERSUBMATRIXCODEMLM7M8TPA_H_
+#ifndef SOURCES_SITEINTERSUBMATRIXMUTSELC_H_
+#define SOURCES_SITEINTERSUBMATRIXMUTSELC_H_
 
 #include <algorithm>
 #include <cmath>
@@ -34,7 +34,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "SiteInterSubMatrix.h"
 #include "Tree.h"
 
-class SiteInterSubMatrixCodeMLM7M8TpA : public SiteInterSubMatrix {
+class SiteInterSubMatrixMutSelC : public SiteInterSubMatrix {
  public:
   using SiteInterSubMatrix::SiteInterSubMatrix;
   std::tuple<double, double, double> ComputeCore(
@@ -42,4 +42,4 @@ class SiteInterSubMatrixCodeMLM7M8TpA : public SiteInterSubMatrix {
       int site_codon_i, int** CurrentNodeNucSequence) override;
 };
 
-#endif  // SOURCES_SITEINTERSUBMATRIXCODEMLM7M8TPA_H_
+#endif  // SOURCES_SITEINTERSUBMATRIXMUTSELC_H_
