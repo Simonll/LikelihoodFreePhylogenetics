@@ -60,8 +60,16 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
 
   std::tuple<double, double> GetRatesCpG(int NodeIndex, int site_codon,
                                          int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesNonSynCpG(int NodeIndex, int site_codon,
+                                               int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesSynCpG(int NodeIndex, int site_codon,
+                                            int** CurrentNodeNucSequence);
+
   std::tuple<double, double> GetRatesNonSyn(int NodeIndex, int site_codon,
                                             int** CurrentNodeNucSequence);
+
   std::tuple<double, double> GetRatesSyn(int NodeIndex, int site_codon,
                                          int** CurrentNodeNucSequence);
 
@@ -70,6 +78,12 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
 
   std::tuple<double, double> GetRatesStrongWeak(int NodeIndex, int site_codon,
                                                 int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesWeakWeak(int NodeIndex, int site_codon,
+                                              int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesStrongStrong(int NodeIndex, int site_codon,
+                                                  int** CurrentNodeNucSequence);
 
   std::tuple<double, double> GetRatesTransition(int NodeIndex, int site_codon,
                                                 int** CurrentNodeNucSequence);
@@ -83,9 +97,17 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
   std::tuple<double, double> GetRatesRadPol(int NodeIndex, int site_codon,
                                             int** CurrentNodeNucSequence);
 
+  std::tuple<double, double> GetRatesConsVol(int NodeIndex, int site_codon,
+                                             int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesRadVol(int NodeIndex, int site_codon,
+                                            int** CurrentNodeNucSequence);
+
   bool isWeakStrong(int nucFrom, int nucTo);
   bool isTransition(int nucFrom, int nucTo);
   bool isStrongWeak(int nucFrom, int nucTo);
+  bool isStrongStrong(int nucFrom, int nucTo);
+  bool isWeakWeak(int nucFrom, int nucTo);
 };
 
 #endif  // SOURCES_SITEINTERSUBMATRIXCABC2018_H_
