@@ -103,6 +103,42 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
   std::tuple<double, double> GetRatesRadVol(int NodeIndex, int site_codon,
                                             int** CurrentNodeNucSequence);
 
+  std::tuple<double, double> GetRatesConsPolTs(int NodeIndex, int site_codon,
+                                               int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesRadPolTs(int NodeIndex, int site_codon,
+                                              int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesConsVolTs(int NodeIndex, int site_codon,
+                                               int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesRadVolTs(int NodeIndex, int site_codon,
+                                              int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesConsPolTr(int NodeIndex, int site_codon,
+                                               int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesRadPolTr(int NodeIndex, int site_codon,
+                                              int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesConsVolTr(int NodeIndex, int site_codon,
+                                               int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesRadVolTr(int NodeIndex, int site_codon,
+                                              int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesConsPolCpG(int NodeIndex, int site_codon,
+                                                int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesRadPolCpG(int NodeIndex, int site_codon,
+                                               int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesConsVolCpG(int NodeIndex, int site_codon,
+                                                int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesRadVolCpG(int NodeIndex, int site_codon,
+                                               int** CurrentNodeNucSequence);
+
   bool isWeakStrong(int nucFrom, int nucTo);
   bool isTransition(int nucFrom, int nucTo);
   bool isStrongWeak(int nucFrom, int nucTo);
