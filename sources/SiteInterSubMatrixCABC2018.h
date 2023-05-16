@@ -70,6 +70,12 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
   std::tuple<double, double> GetRatesNonSyn(int NodeIndex, int site_codon,
                                             int** CurrentNodeNucSequence);
 
+  std::tuple<double, double> GetRatesNonSynTs(int NodeIndex, int site_codon,
+                                              int** CurrentNodeNucSequence);
+
+  std::tuple<double, double> GetRatesNonSynTr(int NodeIndex, int site_codon,
+                                              int** CurrentNodeNucSequence);
+
   std::tuple<double, double> GetRatesSyn(int NodeIndex, int site_codon,
                                          int** CurrentNodeNucSequence);
 
