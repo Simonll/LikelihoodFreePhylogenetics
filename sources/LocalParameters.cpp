@@ -15,7 +15,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 
 #include "BiologicalSequences.h"
 
-LocalParameters::LocalParameters(GlobalParameters* gparam) {
+LocalParameters::LocalParameters(GlobalParameters *gparam) {
   // input info
   // this->gparam = gparam;
   this->localcontrolfile = gparam->localcontrolfile;
@@ -191,12 +191,12 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->lambda_TpA_prior = "log10Unif";
   this->lambda_omega_prior = "log2Unif";
 
-  this->nucrrnr = new double*[this->Nnucp];
-  this->nucrrnr1 = new double*[this->Nnucp];
-  this->nucrrnr2 = new double*[this->Nnucp];
-  this->gtnr = new double*[this->Nnucp];
-  this->gtnr1 = new double*[this->Nnucp];
-  this->gtnr2 = new double*[this->Nnucp];
+  this->nucrrnr = new double *[this->Nnucp];
+  this->nucrrnr1 = new double *[this->Nnucp];
+  this->nucrrnr2 = new double *[this->Nnucp];
+  this->gtnr = new double *[this->Nnucp];
+  this->gtnr1 = new double *[this->Nnucp];
+  this->gtnr2 = new double *[this->Nnucp];
   for (int i = 0; i < this->Nnucp; i++) {
     this->gtnr[i] = new double[this->Nnucp];
     this->nucrrnr[i] = new double[this->Nnucp];
@@ -293,7 +293,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
   this->Nstate_codon = this->codondata->GetNstate();
   if (this->Nsite_codon > 4999) {
     this->N_profile = 5000;
-
   } else {
     this->N_profile = this->Nsite_codon;
   }
@@ -308,7 +307,7 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
     this->codonprofile[i] = 1 / this->Nstate_codon;
   }
 
-  this->ssaaprofiles = new double*[this->N_profile];
+  this->ssaaprofiles = new double *[this->N_profile];
   for (int i = 0; i < this->N_profile; i++) {
     this->ssaaprofiles[i] = new double[Nstate_aa];
   }
@@ -318,7 +317,12 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
     }
   }
 
-  this->sscodonprofiles = new double*[this->N_profile];
+  this->site_omega = new double[this->Nsite_codon];
+  for (int i = 0; i < this->Nsite_codon; i++) {
+    this->site_omega[i] = 1.0;
+  }
+
+  this->sscodonprofiles = new double *[this->N_profile];
   for (int i = 0; i < this->N_profile; i++) {
     this->sscodonprofiles[i] = new double[Nstate_codon];
   }
@@ -326,11 +330,6 @@ LocalParameters::LocalParameters(GlobalParameters* gparam) {
     for (int j = 0; j < this->Nstate_codon; j++) {
       this->sscodonprofiles[i][j] = 1 / this->Nstate_codon;
     }
-  }
-
-  this->omega_site = new double[this->Nsite_codon];
-  for (int i = 0; i < this->Nsite_codon; i++) {
-    this->omega_site[i] = 1.0;
   }
 
   this->newlink = new Link();
@@ -754,73 +753,58 @@ void LocalParameters::readLocalInstructions() {
     } else if (s == "-freelambdaCpG" || s == "-freelambdatsCpG") {
       this->fixlambda_CpG = 0;
       std::cerr << "freelambdatsCpG\n";
-
     } else if (s == "-priorlambdaCpG") {
       iss >> s;
       this->lambda_CpG_prior = s;
       std::cerr << "prior CpG " << this->lambda_CpG_prior << "\n";
-
     } else if (s == "-freelambdaTpA" || s == "-freelambdatsTpA") {
       this->fixlambda_TpA = 0;
       std::cerr << "freelambdatsTpA\n";
-
     } else if (s == "-priorlambdaTpA") {
       iss >> s;
       this->lambda_TpA_prior = s;
       std::cerr << "prior TpA " << this->lambda_TpA_prior << "\n";
-
     } else if (s == "-freegtnr") {
       this->fixgtnr = 0;
       std::cerr << "fixgtnr\n";
-
     } else if (s == "-freehky") {
       this->fixhky = 0;
       std::cerr << "freehky\n";
-
     } else if (s == "-freeAAadj") {
       this->fixAAadj = 0;
       std::cerr << "freeAAadj\n";
     } else if (s == "-freegtr") {
       this->fixgtr = 0;
       std::cerr << "freegtr\n";
-
     } else if (s == "-freestat") {
       this->fixstat = 0;
       std::cerr << "freestat\n";
-
     } else if (s == "-freets") {
       this->fixts = 0;
       std::cerr << "freets\n";
-
     } else if (s == "-freetr") {
       this->fixtr = 0;
       std::cerr << "freetr\n";
-
     } else if (s == "-freekappa") {
       this->fixkappa = 0;
       std::cerr << "freekappa\n";
-
     } else if (s == "-freerr") {
       this->fixrr = 0;
       std::cerr << "freerr\n";
-
     } else if (s == "-rootlength") {
       iss >> s;
       this->rootlength = atof(s.c_str());
       std::cerr << "rootlength " << this->rootlength << "\n";
-
     } else if (s == "-tofasta" || s == "-tophylip") {
       this->tofasta = 1;
 
       // } else if (s == "-randomfix") {
       //   this->randomseed = 12345;
       //   std::cerr << "randomseed " << this->randomseed << "\n";
-
     } else if (s == "-verbose") {
       iss >> s;
       this->verbose = 1;
       std::cerr << "verbose " << this->verbose << "\n";
-
     } else if (s == "-fixNsite") {
       iss >> s;
       this->fixNsite = 1;
@@ -892,7 +876,6 @@ void LocalParameters::SetRootBetweenInAndOutGroup() {
       outgroupLink =
           refTree->GetLCA(taxa_a, taxa_b)->Next()->Next()->Next()->Out();
     }
-
   } else {
     outgroupLink = refTree->GetLCA(taxa_a, taxa_b);
   }
@@ -939,7 +922,7 @@ void LocalParameters::SetBranchesLengthsBetweenInAndOutGroup() {
 void LocalParameters::SetCurrentParametersFromPosterior(
     std::vector<std::vector<double>> posterior, int pointID) {
   int k = 0;
-  std::string* arrParam = new std::string[this->NusedParam];
+  std::string *arrParam = new std::string[this->NusedParam];
   for (int param_i = 0; param_i < this->NParam; param_i++) {
     auto it_ = this->mapUsedParam.find(this->listParam[param_i]);
     if (it_ != this->mapUsedParam.end()) {
@@ -1035,7 +1018,6 @@ void LocalParameters::SetCurrentParametersFromPosterior(
       if (this->lambda_R >= 1) {
         this->lambda_R = 0.9999999999;
       }
-
     } else if (arrParam[param_i] == "nucsA") {
       this->nucp[0] = posterior[pointID][param_i];
       if (this->nucp[0] <= 0) {
@@ -1263,7 +1245,7 @@ std::vector<double> LocalParameters::GetCurrentAccessorySummaries() {
 }
 
 std::vector<double> LocalParameters::GetCurrentParameters() {
-  std::string* arrParam = new std::string[this->NusedParam];
+  std::string *arrParam = new std::string[this->NusedParam];
   int k = 0;
   for (int param_i = 0; param_i < this->NParam; param_i++) {
     auto it = this->mapUsedParam.find(this->listParam[param_i]);
@@ -1650,74 +1632,43 @@ void LocalParameters::readChainCodonMutSelSBDP() {
   // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
-int get_number_of_samplesCodemlM7M8(std::ifstream& is) {
-  std::string line = "";
-  int k = 0;
-  while (std::getline(is, line)) {
-    std::getline(is, line);
-    std::getline(is, line);
-    std::getline(is, line);
-    k++;
-  }
-  return k;
-}
-
-int get_number_of_samplesMutSelC(std::ifstream& is) {
-  std::string line;
-  int k = 0;
-  std::getline(is, line);
-  while (getline(is, line)) {
-    while (getline(is, line)) {
-      if (line.empty()) continue;
-      if (line[0] == '(') break;
-    }
-    k++;
-  }
-  return k;
-}
-
-int LocalParameters::readParametersMutSelC(int it) {
+int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
   this->MCMCpointID = it;
   // set parameters : posterior specific
-  ifstream is((this->chain + ".chain").c_str());
+  ifstream is((this->chain + ".pvalues").c_str());
   if (!is) {
-    std::cerr << "error: did not find " << this->chain << ".chain\n";
+    std::cerr << "error: did not find " << this->chain << ".pvalues\n";
     exit(1);
   }
   int j = 0;
   std::string tmp = "";
+  is >> tmp;  // Nsite
+
+  assert(this->Nsite_codon == atoi(tmp.c_str()));
 
   if (it == -1) {
     std::cerr << "counting number of samples available\n";
-    j = get_number_of_samplesMutSelC(is);
+    j = get_number_of_samples(is);
     std::cerr << "number of samples available: " << j << "\n";
     return j;
   }
 
   while (j < it) {
     is >> tmp;  // tree
-    is >> tmp;  // branchalpha
-    is >> tmp;  // branchbeta
     for (int k = 0; k < this->Nnucp; k++) {
       is >> tmp;  // nucp
     }
     for (int k = 0; k < this->Nnucrr; k++) {
       is >> tmp;  // nucrr
     }
-
-    is >> tmp;  // omega
-    is >> tmp;  // kappa
-    is >> tmp;  // Ncomponents
-    for (int k = 0; k < this->Nstate_codon; k++) {
-      is >> tmp;
-    }
-    for (int k = 0; k < this->N_profile; k++) {
-      for (int l = 0; l < this->Nstate_codon; l++) {
-        is >> tmp;  // ssprofiles
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      // site profiles
+      for (int l = 0; l < this->Nstate_aa; l++) {
+        is >> tmp;  // aa fitness
       }
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // alloc
+      is >> tmp;  // site omega
     }
     j++;
   }
@@ -1725,8 +1676,6 @@ int LocalParameters::readParametersMutSelC(int it) {
   if (j == it) {
     refTree = new Tree(is);
     refTree->RegisterWith(taxonset, 0);
-    is >> tmp;  // branchalpha
-    is >> tmp;  // branchbeta
     for (int k = 0; k < this->Nnucp; k++) {
       is >> nucp[k];
     }
@@ -1751,21 +1700,18 @@ int LocalParameters::readParametersMutSelC(int it) {
     nucrrnr[3][2] = nucrr[5];  // TG
     // nucrrnr[3][3]; //TT
 
-    is >> omega;
-    is >> tmp;
-    is >> tmp;
     for (int k = 0; k < this->Nstate_codon; k++) {
-      is >> tmp;
+      is >> codonprofile[k];
     }
 
-    for (int k = 0; k < this->N_profile; k++) {
-      for (int l = 0; l < Nstate_codon; l++) {
-        is >> sscodonprofiles[k][l];
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      for (int l = 0; l < this->Nstate_aa; l++) {
+        is >> ssaaprofiles[k][l];
       }
     }
 
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> alloc[k];
+      is >> site_omega[k];
     }
   }
   is.close();
@@ -1800,7 +1746,7 @@ int LocalParameters::readParametersCodemlM7M8(int it) {
       is >> tmp;  // nucrr
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // omega_site
+      is >> tmp;  // site_omega
     }
     j++;
   }
@@ -1854,7 +1800,7 @@ int LocalParameters::readParametersCodemlM7M8(int it) {
     }
 
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> omega_site[k];
+      is >> site_omega[k];
     }
   }
   is.close();
@@ -2143,7 +2089,7 @@ void LocalParameters::SetTreeStuff() {
   if (fixgtr1 == 1) {
     GetGTR1();
 
-    Link* a = refTree->GetLCA(this->taxa_gtr1_a, taxa_gtr1_b);
+    Link *a = refTree->GetLCA(this->taxa_gtr1_a, taxa_gtr1_b);
     int notNodeIndex =
         refTree->GetLCA(this->taxa_gtr1_a, taxa_gtr1_c)->GetNode()->GetIndex();
     std::cerr << "notNodeIndex\t" << notNodeIndex << " nodeIndex"
@@ -2154,7 +2100,7 @@ void LocalParameters::SetTreeStuff() {
   if (fixgtr2 == 1) {
     GetGTR2();
 
-    Link* a = refTree->GetLCA(this->taxa_gtr2_a, taxa_gtr2_b);
+    Link *a = refTree->GetLCA(this->taxa_gtr2_a, taxa_gtr2_b);
     int notNodeIndex =
         refTree->GetLCA(this->taxa_gtr2_a, taxa_gtr2_c)->GetNode()->GetIndex();
     std::cerr << "notNodeIndex\t" << notNodeIndex << " nodeIndex"
@@ -2163,7 +2109,7 @@ void LocalParameters::SetTreeStuff() {
   }
 }
 
-void LocalParameters::SetTreeStuffRecursively(Link* from, int notNodeIndex,
+void LocalParameters::SetTreeStuffRecursively(Link *from, int notNodeIndex,
                                               int gtrIndex) {
   gtrMap[from->GetNode()->GetIndex()] = gtrIndex;
 
@@ -2176,13 +2122,13 @@ void LocalParameters::SetTreeStuffRecursively(Link* from, int notNodeIndex,
     exit(0);
   }
   if (from->isRoot()) {
-    for (Link* link = from->Next(); link != from; link = link->Next()) {
+    for (Link *link = from->Next(); link != from; link = link->Next()) {
       if (link->Out()->GetNode()->GetIndex() != notNodeIndex) {
         SetTreeStuffRecursively(link->Out(), notNodeIndex, gtrIndex);
       }
     }
   } else if (!from->isLeaf()) {
-    for (Link* link = from->Next(); link != from; link = link->Next()) {
+    for (Link *link = from->Next(); link != from; link = link->Next()) {
       if (link->Out()->GetNode()->GetIndex() != notNodeIndex) {
         SetTreeStuffRecursively(link->Out(), notNodeIndex, gtrIndex);
       }
@@ -2191,8 +2137,8 @@ void LocalParameters::SetTreeStuffRecursively(Link* from, int notNodeIndex,
   }
 }
 
-void LocalParameters::toFasta(ofstream& os,
-                              int** curent_nodeleaf_sequence_codon) {
+void LocalParameters::toFasta(ofstream &os,
+                              int **curent_nodeleaf_sequence_codon) {
   for (int taxa = 0; taxa < Ntaxa; taxa++) {
     os << ">" << codondata->taxset->GetTaxon(taxa) << "\n";
     for (int site_codon = 0; site_codon < Nsite_codon; site_codon++) {
@@ -2203,8 +2149,8 @@ void LocalParameters::toFasta(ofstream& os,
   }
 }
 
-void LocalParameters::toAli(ofstream& os,
-                            int** curent_nodeleaf_sequence_codon) {
+void LocalParameters::toAli(ofstream &os,
+                            int **curent_nodeleaf_sequence_codon) {
   os << Ntaxa << "\t" << (3 * Nsite_codon) << "\n";
   for (int taxa = 0; taxa < Ntaxa; taxa++) {
     os << codondata->taxset->GetTaxon(taxa) << ' ';
@@ -2219,8 +2165,8 @@ void LocalParameters::toAli(ofstream& os,
 
 int LocalParameters::GetPointID() { return MCMCpointID; }
 
-void LocalParameters::writeRealDataSummaries(ofstream& os, bool headers) {
-  std::string* arrSummaries = new std::string[NusedSummaries];
+void LocalParameters::writeRealDataSummaries(ofstream &os, bool headers) {
+  std::string *arrSummaries = new std::string[NusedSummaries];
   for (int summary_i = 0; summary_i < NSummaries; summary_i++) {
     auto it = mapUsedSummaries.find(listSummaries[summary_i]);
     if (it != mapUsedSummaries.end()) {
@@ -2250,9 +2196,9 @@ void LocalParameters::writeRealDataSummaries(ofstream& os, bool headers) {
   delete[] arrSummaries;
 }
 
-void LocalParameters::writeAncestralDataSummaries(ofstream& os, bool headers) {
+void LocalParameters::writeAncestralDataSummaries(ofstream &os, bool headers) {
   // should be incorporated to populatio_t
-  std::string* arrSummaries = new std::string[NusedAncSummaries];
+  std::string *arrSummaries = new std::string[NusedAncSummaries];
   for (int summary_i = 0; summary_i < NSummaries; summary_i++) {
     auto it = mapUsedAncSummaries.find(listSummaries[summary_i]);
     if (it != mapUsedAncSummaries.end()) {

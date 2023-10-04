@@ -326,19 +326,19 @@ int main(int argc, char* argv[]) {
         double SubRateNonSyn = 0.0;
         double MutRateSyn = 0.0;
         double SubRateSyn = 0.0;
-        
+
         double MutRateNonSynTs = 0.0;
         double SubRateNonSynTs = 0.0;
         double MutRateNonSynTr = 0.0;
         double SubRateNonSynTr = 0.0;
-       
+
         double MutRateCpG = 0.0;
         double SubRateCpG = 0.0;
         double MutRateNonSynCpG = 0.0;
         double SubRateNonSynCpG = 0.0;
         double MutRateSynCpG = 0.0;
         double SubRateSynCpG = 0.0;
-        
+
         double MutRateWeakStrong = 0.0;
         double SubRateWeakStrong = 0.0;
         double MutRateStrongWeak = 0.0;
@@ -347,12 +347,12 @@ int main(int argc, char* argv[]) {
         double SubRateWeakWeak = 0.0;
         double MutRateStrongStrong = 0.0;
         double SubRateStrongStrong = 0.0;
-        
+
         double MutRateTransition = 0.0;
         double SubRateTransition = 0.0;
         double MutRateTransversion = 0.0;
         double SubRateTransversion = 0.0;
-        
+
         double MutRateConsPol = 0.0;
         double SubRateConsPol = 0.0;
         double MutRateRadPol = 0.0;
@@ -409,15 +409,17 @@ int main(int argc, char* argv[]) {
 
           double MutRateNonSynTs_ = 0.0;
           double SubRateNonSynTs_ = 0.0;
-          std::tie(MutRateNonSynTs_, SubRateNonSynTs_) = submatrix->GetRatesNonSynTs(
-              NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          std::tie(MutRateNonSynTs_, SubRateNonSynTs_) =
+              submatrix->GetRatesNonSynTs(NodeIndex, -1,
+                                          simulator->CurrentNodeNucSequence);
           MutRateNonSynTs += MutRateNonSynTs_;
           SubRateNonSynTs += SubRateNonSynTs_;
 
           double MutRateNonSynTr_ = 0.0;
           double SubRateNonSynTr_ = 0.0;
-          std::tie(MutRateNonSyn_, SubRateNonSyn_) = submatrix->GetRatesNonSynTr(
-              NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          std::tie(MutRateNonSyn_, SubRateNonSyn_) =
+              submatrix->GetRatesNonSynTr(NodeIndex, -1,
+                                          simulator->CurrentNodeNucSequence);
           MutRateNonSynTr += MutRateNonSynTr_;
           SubRateNonSynTr += SubRateNonSynTr_;
 
@@ -671,13 +673,12 @@ int main(int argc, char* argv[]) {
         rates_os << pointID << "\t"
                  << ((seqtype == "stationary") ? "NA"
                                                : lparam->taxonset->GetTaxon(
-                                                     ancestraseq->choosen_taxa)) << "\t" 
-                 << MutRate << "\t" << SubRate << "\t"
-                 << MutRateNonSyn << "\t" << SubRateNonSyn << "\t"
-                 << MutRateNonSynTs << "\t" << SubRateNonSynTs << "\t"
-                 << MutRateNonSynTr << "\t" << SubRateNonSynTr << "\t"
-                 << MutRateSyn << "\t" << SubRateSyn << "\t" 
-                 << MutRateCpG << "\t" << SubRateCpG << "\t"
+                                                     ancestraseq->choosen_taxa))
+                 << "\t" << MutRate << "\t" << SubRate << "\t" << MutRateNonSyn
+                 << "\t" << SubRateNonSyn << "\t" << MutRateNonSynTs << "\t"
+                 << SubRateNonSynTs << "\t" << MutRateNonSynTr << "\t"
+                 << SubRateNonSynTr << "\t" << MutRateSyn << "\t" << SubRateSyn
+                 << "\t" << MutRateCpG << "\t" << SubRateCpG << "\t"
                  << MutRateNonSynCpG << "\t" << SubRateNonSynCpG << "\t"
                  << MutRateSynCpG << "\t" << SubRateSynCpG << "\t"
                  << MutRateWeakStrong << "\t" << SubRateWeakStrong << "\t"
