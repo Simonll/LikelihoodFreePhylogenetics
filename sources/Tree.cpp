@@ -45,46 +45,33 @@ copy of the GNU General Public License along with PhyloBayes. If not, see
 
 bool NewickTree::simplify = false;
 
-void NewickTree::ToStream(ostream &os) const
-{
-  if (simplify)
-  {
+void NewickTree::ToStream(ostream &os) const {
+  if (simplify) {
     ToStreamSimplified(os, GetRoot());
-  }
-  else
-  {
+  } else {
     ToStream(os, GetRoot());
   }
   os << ";\n";
 }
 
-double NewickTree::ToStreamSimplified(ostream &os, const Link *from) const
-{
-  if (!from->isLeaf())
-  {
-    if (from->Next()->Next() == from)
-    {
+double NewickTree::ToStreamSimplified(ostream &os, const Link *from) const {
+  if (!from->isLeaf()) {
+    if (from->Next()->Next() == from) {
       double tot = ToStreamSimplified(os, from->Next()->Out());
       tot += atof(GetBranchName(from).c_str());
       return tot;
-    }
-    else
-    {
+    } else {
       os << '(';
-      for (const Link *link = from->Next(); link != from; link = link->Next())
-      {
+      for (const Link *link = from->Next(); link != from; link = link->Next()) {
         double tmp = ToStreamSimplified(os, link->Out());
         os << ':' << tmp;
-        if (link->Next() != from)
-        {
+        if (link->Next() != from) {
           os << ',';
         }
       }
       os << ')';
     }
-  }
-  else
-  {
+  } else {
   }
   os << GetNodeName(from);
   /*
@@ -95,47 +82,38 @@ double NewickTree::ToStreamSimplified(ostream &os, const Link *from) const
       }
   }
   */
-  if (from->isRoot())
-  {
+  if (from->isRoot()) {
     return 0;
   }
   return atof(GetBranchName(from).c_str());
 }
 
-void NewickTree::ToStream(ostream &os, const Link *from) const
-{
-  if (!from->isLeaf())
-  {
+void NewickTree::ToStream(ostream &os, const Link *from) const {
+  if (!from->isLeaf()) {
     os << '(';
-    for (const Link *link = from->Next(); link != from; link = link->Next())
-    {
+    for (const Link *link = from->Next(); link != from; link = link->Next()) {
       ToStream(os, link->Out());
-      if (link->Next() != from)
-      {
+      if (link->Next() != from) {
         os << ',';
       }
     }
     os << ')';
   }
   os << GetNodeName(from);
-  if (!from->isRoot())
-  {
+  if (!from->isRoot()) {
     string brval = GetBranchName(from);
-    if (brval != "")
-    {
+    if (brval != "") {
       os << ':' << brval;
     }
   }
 }
 
-Tree::Tree()
-{
+Tree::Tree() {
   root = 0;
   taxset = 0;
 }
 
-Tree::Tree(const TaxonSet *intaxset)
-{
+Tree::Tree(const TaxonSet *intaxset) {
   taxset = intaxset;
   root = new Link();
   root->InsertOut(root);
@@ -143,12 +121,10 @@ Tree::Tree(const TaxonSet *intaxset)
   root->SetNode(node);
 }
 
-void Tree::MakeRandomTree()
-{
+void Tree::MakeRandomTree() {
   int Ntaxa = taxset->GetNtaxa();
   int *included = new int[Ntaxa];
-  for (int i = 0; i < Ntaxa; i++)
-  {
+  for (int i = 0; i < Ntaxa; i++) {
     included[i] = 0;
   }
 
@@ -208,21 +184,17 @@ void Tree::MakeRandomTree()
   linko2->SetNode(n2);
   linko3->SetNode(n3);
 
-  for (int i = 3; i < Ntaxa; i++)
-  {
+  for (int i = 3; i < Ntaxa; i++) {
     // ToStream(std::cerr);
 
     int choose = static_cast<int>((Ntaxa - i) * rnd::GetRandom().Uniform());
 
-    for (int j = 0; j <= choose; j++)
-    {
-      if (included[j])
-      {
+    for (int j = 0; j <= choose; j++) {
+      if (included[j]) {
         choose++;
       }
     }
-    if (included[choose])
-    {
+    if (included[choose]) {
       std::cerr << "error in random tree\n";
       exit(1);
     }
@@ -270,28 +242,25 @@ void Tree::MakeRandomTree()
   delete[] triplet;
 }
 
-Tree::Tree(const Tree *from)
-{
+Tree::Tree(const Tree *from) {
   taxset = from->GetTaxonSet();
   root = new Link(from->root);
   root->InsertOut(root);
   RecursiveClone(from->root, root);
 }
 
-void Tree::RecursiveClone(const Link *from, Link *to)
-{
+void Tree::RecursiveClone(const Link *from, Link *to) {
   Node *node = new Node(from->GetNode());
   to->SetNode(node);
   const Link *linkfrom = from->Next();
   Link *linkto = to;
-  while (linkfrom != from)
-  {
+  while (linkfrom != from) {
     Link *newnext = new Link(
-        linkfrom); // newnext points to same node and branch as linkfrom
+        linkfrom);  // newnext points to same node and branch as linkfrom
     newnext->SetNode(node);
     linkto->Insert(newnext);
     Link *newout = new Link(
-        linkfrom->Out()); // idem, same node and branch as linkfrom->Out()
+        linkfrom->Out());  // idem, same node and branch as linkfrom->Out()
     newout->InsertOut(newnext);
     Branch *branch = new Branch(linkfrom->GetBranch());
     newnext->SetBranch(branch);
@@ -302,13 +271,10 @@ void Tree::RecursiveClone(const Link *from, Link *to)
   }
 }
 
-void Tree::RecursiveDelete(Link *from)
-{
-  if (from)
-  {
+void Tree::RecursiveDelete(Link *from) {
+  if (from) {
     Link *link = from->Next();
-    while (link != from)
-    {
+    while (link != from) {
       delete link->Out()->GetNode();
       delete link->GetBranch();
       RecursiveDelete(link->Out());
@@ -320,20 +286,16 @@ void Tree::RecursiveDelete(Link *from)
   }
 }
 
-Tree::~Tree()
-{
-  if (root)
-  {
+Tree::~Tree() {
+  if (root) {
     RecursiveDelete(root);
     root = 0;
   }
 }
 
-void Tree::DeleteNextLeaf(Link *previous)
-{
+void Tree::DeleteNextLeaf(Link *previous) {
   Link *link = previous->Next();
-  if (!link->Out()->isLeaf())
-  {
+  if (!link->Out()->isLeaf()) {
     cout << "Bad call of DeleteNextLeaf, it must be call on a link pointing on "
             "a leaf\n";
     exit(1);
@@ -345,15 +307,12 @@ void Tree::DeleteNextLeaf(Link *previous)
   delete link;
 }
 
-void Tree::DeleteUnaryNode(Link *from)
-{
-  if (!from->isUnary())
-  {
+void Tree::DeleteUnaryNode(Link *from) {
+  if (!from->isUnary()) {
     cout << "Bad call of DeleteUnaryNode, node is not unary\n";
     exit(1);
   }
-  if (from->isRoot())
-  {
+  if (from->isRoot()) {
     Link *newroot = from->Next()->Out();
     newroot->SetBranch(from->GetBranch());
     delete from->Next()->GetBranch();
@@ -362,9 +321,7 @@ void Tree::DeleteUnaryNode(Link *from)
     delete from;
     root = newroot;
     root->InsertOut(root);
-  }
-  else
-  {
+  } else {
     ostringstream sum;
     sum << atof((from->GetBranch()->GetName()).c_str()) +
                atof((from->Next()->GetBranch()->GetName()).c_str());
@@ -380,32 +337,26 @@ void Tree::DeleteUnaryNode(Link *from)
 
 void Tree::EraseInternalNodeName() { EraseInternalNodeName(GetRoot()); }
 
-void Tree::EraseInternalNodeName(Link *from)
-{
-  if (!from->isLeaf())
-  {
+void Tree::EraseInternalNodeName(Link *from) {
+  if (!from->isLeaf()) {
     from->GetNode()->SetName("");
   }
-  for (Link *link = from->Next(); link != from; link = link->Next())
-  {
+  for (Link *link = from->Next(); link != from; link = link->Next()) {
     EraseInternalNodeName(link->Out());
   }
 }
 
-void Tree::RegisterWith(const TaxonSet *intaxset, int myid)
-{
+void Tree::RegisterWith(const TaxonSet *intaxset, int myid) {
   taxset = intaxset;
   int tot = 0;
-  if (!RegisterWith(taxset, GetRoot(), tot))
-  {
+  if (!RegisterWith(taxset, GetRoot(), tot)) {
     // if (myid == 0)
     cout << "There is no match between the tree and the sequences.\n";
     std::cerr << "problem with : " << taxset->GetNtaxa() << '\n';
     ToStream(std::cerr);
     exit(1);
   }
-  if (tot != taxset->GetNtaxa())
-  {
+  if (tot != taxset->GetNtaxa()) {
     // if (myid == 0) {
     std::cerr << "error : non matching number of taxa : " << tot << '\t'
               << taxset->GetNtaxa() << '\n';
@@ -417,35 +368,25 @@ void Tree::RegisterWith(const TaxonSet *intaxset, int myid)
   CheckIndices(GetRoot());
 }
 
-bool Tree::RegisterWith(const TaxonSet *taxset, Link *from, int &tot)
-{
-  if (from->isLeaf())
-  {
+bool Tree::RegisterWith(const TaxonSet *taxset, Link *from, int &tot) {
+  if (from->isLeaf()) {
     int i = taxset->GetTaxonIndex(from->GetNode()->GetName());
-    if (i != -1)
-    {
+    if (i != -1) {
       from->GetNode()->SetIndex(i);
       tot++;
     }
     return (i != -1);
-  }
-  else
-  {
+  } else {
     Link *previous = from;
-    while (previous->Next() != from)
-    {
-      if (RegisterWith(taxset, previous->Next()->Out(), tot))
-      {
+    while (previous->Next() != from) {
+      if (RegisterWith(taxset, previous->Next()->Out(), tot)) {
         previous = previous->Next();
-      }
-      else
-      {
+      } else {
         // cout << "delete !!\n";
         DeleteNextLeaf(previous);
       }
     }
-    if (from->isUnary())
-    {
+    if (from->isUnary()) {
       // std::cerr << "DELETE UNARY NODE\n";
       DeleteUnaryNode(from);
     }
@@ -501,13 +442,11 @@ link=link->Next())	{ ToStreamwithIndices(os,link->Out()); if (link->Next()
 
 typedef list<string>::const_iterator csit;
 
-Tree::Tree(string filename)
-{
+Tree::Tree(string filename) {
   root = 0;
   taxset = 0;
   ifstream is(filename.c_str());
-  if (!is)
-  {
+  if (!is) {
     cout << "cannot find file : " << filename << '\n';
   }
   ReadFromStream(is);
@@ -525,8 +464,7 @@ Tree::Tree(string filename)
   // }
 }
 
-Tree::Tree(istream &is)
-{
+Tree::Tree(istream &is) {
   root = 0;
   taxset = 0;
   ReadFromStream(is);
@@ -546,64 +484,51 @@ Tree::Tree(istream &is)
   // }
 }
 
-void Tree::ReadFromStream(istream &is)
-{
+void Tree::ReadFromStream(istream &is) {
   RecursiveDelete(GetRoot());
   string expr = "";
   int cont = 1;
-  while (cont)
-  {
+  while (cont) {
     string s;
     is >> s;
-    if (s.length() == 0)
-    {
+    if (s.length() == 0) {
       std::cerr << "in tree: null string\n";
       exit(1);
     }
-    if (s.substr(0, 1) != "(")
-    {
+    if (s.substr(0, 1) != "(") {
       std::cerr << "in tree: not a tree\n";
       std::cerr << s << "\n";
       exit(1);
     }
     unsigned int k = 0;
-    while ((k < s.length()) && (s[k] != ';'))
-      k++;
+    while ((k < s.length()) && (s[k] != ';')) k++;
     expr += s.substr(0, k);
     cont = (!is.eof()) && (k == s.length());
   }
   SetRoot(ParseGroup(expr, 0));
-  if (taxset)
-  {
+  if (taxset) {
     RegisterWith(taxset);
   }
 }
 
-Link *Tree::ParseList(string input, Node *node)
-{
-  try
-  {
+Link *Tree::ParseList(string input, Node *node) {
+  try {
     // parse input as a list of strings separated by ','
     list<string> lst;
     int n = input.size();
     int k = 0;
     int brack = 0;
     int b = 0;
-    while (k < n)
-    {
+    while (k < n) {
       char c = input[k];
-      if (c == '(')
-        brack++;
-      if (c == ')')
-        brack--;
-      if ((!brack) && (c == ','))
-      {
+      if (c == '(') brack++;
+      if (c == ')') brack--;
+      if ((!brack) && (c == ',')) {
         lst.push_back((string)(input.substr(b, k - b)));
         b = k + 1;
       }
 
-      if (brack < 0)
-      {
+      if (brack < 0) {
         cout << "in parse list : too many )\n";
         cout << input.substr(0, k) << '\n';
         cout << input << '\n';
@@ -611,8 +536,7 @@ Link *Tree::ParseList(string input, Node *node)
       }
       k++;
     }
-    if (brack)
-    {
+    if (brack) {
       cout << "in parse list : too many (\n";
       cout << input << '\n';
       throw;
@@ -625,8 +549,7 @@ Link *Tree::ParseList(string input, Node *node)
     Link *firstlink = new Link;
     Link *prevlink = firstlink;
     firstlink->SetNode(node);
-    for (csit i = lst.begin(); i != lst.end(); i++)
-    {
+    for (csit i = lst.begin(); i != lst.end(); i++) {
       Link *link = new Link;
       link->SetNode(node);
       link->AppendTo(prevlink);
@@ -635,37 +558,28 @@ Link *Tree::ParseList(string input, Node *node)
     }
     firstlink->AppendTo(prevlink);
     return firstlink;
-  }
-  catch (...)
-  {
+  } catch (...) {
     cout << "exit in parse list\n";
     exit(1);
   }
 }
 
-Link *Tree::ParseGroup(string input, Link *from)
-{
-  try
-  {
+Link *Tree::ParseGroup(string input, Link *from) {
+  try {
     // parse input as (body)nodeval:branchval
 
     string body = "";
     unsigned int k = 0;
-    if (input[0] == '(')
-    {
+    if (input[0] == '(') {
       int brack = 1;
       k = 1;
-      while ((k < input.length()) && brack)
-      {
+      while ((k < input.length()) && brack) {
         char c = input[k];
-        if (c == '(')
-          brack++;
-        if (c == ')')
-          brack--;
+        if (c == '(') brack++;
+        if (c == ')') brack--;
         k++;
       }
-      if (brack)
-      {
+      if (brack) {
         cout << "in parse group: too many (\n";
         cout << input << '\n';
         throw;
@@ -674,13 +588,11 @@ Link *Tree::ParseGroup(string input, Link *from)
     }
 
     int b = k;
-    while ((k < input.length()) && (input[k] != ':'))
-      k++;
+    while ((k < input.length()) && (input[k] != ':')) k++;
     string nodeval = input.substr(b, k - b);
 
     string branchval = "";
-    if (k < input.length())
-    {
+    if (k < input.length()) {
       branchval = input.substr(k + 1, input.length() - k);
     }
 
@@ -689,43 +601,33 @@ Link *Tree::ParseGroup(string input, Link *from)
 
     // call parse body
     Link *link = 0;
-    if (body != "")
-    {
+    if (body != "") {
       link = ParseList(body, node);
-    }
-    else
-    {
+    } else {
       link = new Link;
       link->SetNode(node);
     }
-    if (from)
-    {
+    if (from) {
       Branch *branch = new Branch(branchval);
       link->SetBranch(branch);
       from->SetBranch(branch);
       link->InsertOut(from);
     }
     return link;
-  }
-  catch (...)
-  {
+  } catch (...) {
     cout << "exit in parse group\n";
     exit(1);
   }
 }
 
-void Tree::Subdivide(Link *from, int Ninterpol)
-{
-  for (Link *link = from->Next(); link != from; link = link->Next())
-  {
+void Tree::Subdivide(Link *from, int Ninterpol) {
+  for (Link *link = from->Next(); link != from; link = link->Next()) {
     Subdivide(link->Out(), Ninterpol);
   }
   // if ((! from->isLeaf()) && (! from->isRoot()))	{
-  if (!from->isRoot())
-  {
+  if (!from->isRoot()) {
     double l = atof(from->GetBranch()->GetName().c_str());
-    if (l <= 0)
-    {
+    if (l <= 0) {
       std::cerr << "warning : non strictly positive branch length : " << l
                 << '\n';
       std::cerr << "correcting and setting to 0.001\n";
@@ -740,8 +642,7 @@ void Tree::Subdivide(Link *from, int Ninterpol)
     Link *current = from;
     Link *final = from->Out();
     int i = 0;
-    while (i < Ninterpol - 1)
-    {
+    while (i < Ninterpol - 1) {
       Link *link1 = new Link;
       Link *link2 = new Link;
       Branch *newbranch = new Branch(s.str());
@@ -792,87 +693,69 @@ void Tree::Print(ostream& os)	const {
 }
 */
 
-bool Tree::CheckRootDegree(int testdegree)
-{
+bool Tree::CheckRootDegree(int testdegree) {
   // std::cerr << "CheckRootDegree\n";
   bool ret = true;
   int degree = 0;
   const Link *from = GetRoot();
-  for (const Link *link = from->Next(); link != from; link = link->Next())
-  {
+  for (const Link *link = from->Next(); link != from; link = link->Next()) {
     degree++;
   }
-  if (degree != testdegree)
-  {
+  if (degree != testdegree) {
     ret = false;
   }
   // std::cerr << ret << " " << degree <<"\n";
   return ret;
 }
 
-bool Tree::RecursiveCheckDegree(const Link *from, int testdegree)
-{
+bool Tree::RecursiveCheckDegree(const Link *from, int testdegree) {
   // std::cerr << "RecursiveCheckDegree\n";
   bool ret = true;
   int degree = 0;
-  if (!from->isRoot())
-  {
+  if (!from->isRoot()) {
     degree++;
   }
-  for (const Link *link = from->Next(); link != from; link = link->Next())
-  {
+  for (const Link *link = from->Next(); link != from; link = link->Next()) {
     degree++;
   }
-  if (degree != testdegree)
-  {
+  if (degree != testdegree) {
     ret = false;
   }
-  for (const Link *link = from->Next(); link != from; link = link->Next())
-  {
-    if (!link->Out()->isLeaf())
-    {
+  for (const Link *link = from->Next(); link != from; link = link->Next()) {
+    if (!link->Out()->isLeaf()) {
       ret &= RecursiveCheckDegree(link->Out(), testdegree);
     }
   }
   return ret;
 }
 
-Link *Tree::Detach(Link *down, Link *up)
-{
+Link *Tree::Detach(Link *down, Link *up) {
   bool foundup = false;
   Link *fromdown = 0;
   Link *downout = down->Out();
   int degree = 0;
-  for (Link *link = downout->Next(); link != downout; link = link->Next())
-  {
+  for (Link *link = downout->Next(); link != downout; link = link->Next()) {
     degree++;
-    if (link == up)
-    {
+    if (link == up) {
       foundup = true;
-    }
-    else if (!link->isRoot())
-    {
+    } else if (!link->isRoot()) {
       fromdown = link->Out();
     }
-    if (link->isRoot())
-    {
+    if (link->isRoot()) {
       std::cerr << "link is root!\n";
     }
   }
-  if (degree != 2)
-  {
+  if (degree != 2) {
     std::cerr << "error in detach: node not of degree 2\n";
     std::cerr << degree << '\n';
     // std::cerr << down->GetIndex() << '\t' << up->GetIndex() << '\n';
     exit(1);
   }
-  if (!fromdown)
-  {
+  if (!fromdown) {
     std::cerr << "error in Detach: fromdown not found\n";
     exit(1);
   }
-  if (!foundup)
-  {
+  if (!foundup) {
     std::cerr << "error in Detach: dit not find up\n";
     exit(1);
   }
@@ -880,10 +763,8 @@ Link *Tree::Detach(Link *down, Link *up)
   Link *fromout = fromdown->Out();
   Link *upout = up->Out();
   Link *linkprev = 0;
-  for (Link *link = upout->Next(); link != upout; link = link->Next())
-  {
-    if (link->Next() == upout)
-    {
+  for (Link *link = upout->Next(); link != upout; link = link->Next()) {
+    if (link->Next() == upout) {
       linkprev = link;
     }
   }
@@ -897,30 +778,25 @@ Link *Tree::Detach(Link *down, Link *up)
   return fromdown;
 }
 
-void Tree::Attach(Link *down, Link *up, Link *todown, Link *toup)
-{
+void Tree::Attach(Link *down, Link *up, Link *todown, Link *toup) {
   bool found = false;
   Link *linkprev = toup;
   Link *upout = up->Out();
   Link *downout = down->Out();
   for (Link *link = toup->Next(); ((!found) && (link != toup));
-       link = link->Next())
-  {
-    if (link == todown->Out())
-    {
+       link = link->Next()) {
+    if (link == todown->Out()) {
       linkprev->SetNext(upout);
       upout->SetNext(link->Next());
       found = true;
     }
     linkprev = link;
   }
-  if (!found)
-  {
+  if (!found) {
     std::cerr << "error in attach: not found\n";
     exit(1);
   }
-  if (downout->Next() != up)
-  {
+  if (downout->Next() != up) {
     std::cerr << "error in attach: downoutnext != up\n";
     exit(1);
   }
@@ -930,8 +806,7 @@ void Tree::Attach(Link *down, Link *up, Link *todown, Link *toup)
   up->Out()->SetNode(toup->GetNode());
 }
 
-void Tree::NNIturn(Link *from)
-{
+void Tree::NNIturn(Link *from) {
   Link *up = from->Next()->Out();
   Link *down = up->Next()->Out();
   Detach(down, up);
@@ -940,93 +815,71 @@ void Tree::NNIturn(Link *from)
   Attach(down, up, todown, from);
 }
 
-int Tree::CountInternalNodes(const Link *from)
-{
+int Tree::CountInternalNodes(const Link *from) {
   int total = 0;
-  if (!from->isLeaf())
-  {
+  if (!from->isLeaf()) {
     // if ((! from->isLeaf()) && (! from->isRoot()))	{
     total = 1;
-    for (const Link *link = from->Next(); link != from; link = link->Next())
-    {
+    for (const Link *link = from->Next(); link != from; link = link->Next()) {
       total += CountInternalNodes(link->Out());
     }
   }
   return total;
 }
 
-Link *Tree::ChooseInternalNode(Link *from, Link *&fromup, int &n)
-{
-  if (from->isLeaf())
-  {
+Link *Tree::ChooseInternalNode(Link *from, Link *&fromup, int &n) {
+  if (from->isLeaf()) {
     return 0;
   }
   Link *ret = 0;
-  if (!n)
-  {
+  if (!n) {
     ret = from;
-  }
-  else
-  {
+  } else {
     n--;
-    for (Link *link = from->Next(); link != from; link = link->Next())
-    {
-      if (!ret)
-      {
+    for (Link *link = from->Next(); link != from; link = link->Next()) {
+      if (!ret) {
         Link *tmp = ChooseInternalNode(link->Out(), fromup, n);
-        if (tmp)
-        {
+        if (tmp) {
           ret = tmp;
         }
       }
     }
-    if (ret && (!fromup))
-    {
+    if (ret && (!fromup)) {
       fromup = from;
     }
   }
   return ret;
 }
 
-int Tree::CountNodes(const Link *from)
-{
+int Tree::CountNodes(const Link *from) {
   int total = 1;
-  for (const Link *link = from->Next(); link != from; link = link->Next())
-  {
+  for (const Link *link = from->Next(); link != from; link = link->Next()) {
     total += CountNodes(link->Out());
   }
   return total;
 }
 
-Link *Tree::ChooseNode(Link *from, Link *&fromup, int &n)
-{
+Link *Tree::ChooseNode(Link *from, Link *&fromup, int &n) {
   Link *ret = 0;
-  if (!n)
-  {
+  if (!n) {
     ret = from;
-  }
-  else
-  {
+  } else {
     n--;
     for (Link *link = from->Next(); (!ret && (link != from));
-         link = link->Next())
-    {
+         link = link->Next()) {
       Link *tmp = ChooseNode(link->Out(), fromup, n);
-      if (tmp)
-      {
+      if (tmp) {
         ret = tmp;
       }
     }
-    if (ret && (!fromup))
-    {
+    if (ret && (!fromup)) {
       fromup = from;
     }
   }
   return ret;
 }
 
-Link *Tree::ChooseLinkAtRandom()
-{
+Link *Tree::ChooseLinkAtRandom() {
   int n = CountInternalNodes(GetRoot());
   int choose = static_cast<int>(n * rnd::GetRandom().Uniform());
   Link *tmp = 0;
@@ -1034,25 +887,19 @@ Link *Tree::ChooseLinkAtRandom()
   return newrootnext;
 }
 
-void Tree::RootAt(Link *newrootnext)
-{
-  if (newrootnext->GetNode() != GetRoot()->GetNode())
-  {
+void Tree::RootAt(Link *newrootnext) {
+  if (newrootnext->GetNode() != GetRoot()->GetNode()) {
     Link *prev = 0;
-    for (Link *link = root->Next(); link != root; link = link->Next())
-    {
-      if (link->Next() == root)
-      {
+    for (Link *link = root->Next(); link != root; link = link->Next()) {
+      if (link->Next() == root) {
         prev = link;
       }
     }
     prev->SetNext(root->Next());
     Link *newprev = 0;
     for (Link *link = newrootnext->Next(); link != newrootnext;
-         link = link->Next())
-    {
-      if (link->Next() == newrootnext)
-      {
+         link = link->Next()) {
+      if (link->Next() == newrootnext) {
         newprev = link;
       }
     }
@@ -1062,65 +909,53 @@ void Tree::RootAt(Link *newrootnext)
   }
 }
 
-void Tree::RootAtRandom()
-{
+void Tree::RootAtRandom() {
   Link *newrootnext = ChooseLinkAtRandom();
   RootAt(newrootnext);
 }
 
-int Tree::DrawSubTree(Link *&down, Link *&up)
-{
+int Tree::DrawSubTree(Link *&down, Link *&up) {
   int nodestatus[Nnode];
-  for (int i = 0; i < Nnode; i++)
-  {
+  for (int i = 0; i < Nnode; i++) {
     nodestatus[i] = 1;
   }
   int m = Nnode;
   nodestatus[root->GetNode()->GetIndex()] = 0;
   m--;
-  for (const Link *link = root->Next(); link != root; link = link->Next())
-  {
+  for (const Link *link = root->Next(); link != root; link = link->Next()) {
     nodestatus[link->Out()->GetNode()->GetIndex()] = 0;
     m--;
   }
   int choose = static_cast<int>(m * rnd::GetRandom().Uniform());
   int k = 0;
-  while ((choose < Nnode) && (k < choose))
-  {
-    if (!nodestatus[k])
-    {
+  while ((choose < Nnode) && (k < choose)) {
+    if (!nodestatus[k]) {
       choose++;
     }
     k++;
   }
-  while ((choose < Nnode) && (!nodestatus[choose]))
-  {
+  while ((choose < Nnode) && (!nodestatus[choose])) {
     choose++;
   }
-  if (choose == Nnode)
-  {
+  if (choose == Nnode) {
     std::cerr << "error in draw sub tree: overflow\n";
     exit(1);
   }
 
   down = 0;
   up = 0;
-  for (Link *link = root->Next(); link != root; link = link->Next())
-  {
-    if (!up)
-    {
+  for (Link *link = root->Next(); link != root; link = link->Next()) {
+    if (!up) {
       GrepNode(link, down, up, choose);
     }
   }
 
-  if ((!down) || (down->isRoot()))
-  {
+  if ((!down) || (down->isRoot())) {
     std::cerr << "error in tree::drawsubtree: down\n";
     std::cerr << down << '\n';
     exit(1);
   }
-  if ((!up) || (up->isLeaf()))
-  {
+  if ((!up) || (up->isLeaf())) {
     std::cerr << "error in tree::drawsubtree: up\n";
     std::cerr << up << '\n';
     exit(1);
@@ -1128,14 +963,10 @@ int Tree::DrawSubTree(Link *&down, Link *&up)
   return 0;
 }
 
-void Tree::GrepNode(Link *from, Link *&down, Link *&up, int choose)
-{
-  for (Link *link = from->Next(); link != from; link = link->Next())
-  {
-    if (!up)
-    {
-      if (link->Out()->GetNode()->GetIndex() == choose)
-      {
+void Tree::GrepNode(Link *from, Link *&down, Link *&up, int choose) {
+  for (Link *link = from->Next(); link != from; link = link->Next()) {
+    if (!up) {
+      if (link->Out()->GetNode()->GetIndex() == choose) {
         up = from;
         down = link->Out();
       }
