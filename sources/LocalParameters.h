@@ -153,7 +153,7 @@ class LocalParameters {
   // Constructor
   explicit LocalParameters(GlobalParameters *gparam);
   virtual ~LocalParameters();
-
+  void init_containers();
   // Writers
   void writeRealDataSummaries(ofstream &os, bool headers = true);
   void writeAncestralDataSummaries(ofstream &os, bool headers);
