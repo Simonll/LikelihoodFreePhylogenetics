@@ -35,7 +35,7 @@ class GlobalParameters {
   static constexpr double TOOLARGENEGATIVE = -500;
 
   static const int NSummaries = 890;
-  static const int NParam = 50;
+  static const int NParam = 51;
   static const int NEvoStats = 1358;
   static const int NSiteSpecificEvoStats = 2;
   static const int NTransformations = 3;
@@ -70,7 +70,8 @@ class GlobalParameters {
                                          "Padj",         "Qadj",
                                          "Radj",         "Sadj",
                                          "Tadj",         "Vadj",
-                                         "Wadj",         "Yadj"};
+                                         "Wadj",         "Yadj",
+                                         "lambda_dS"};
 
   const std::string listSummaries[NSummaries] = {"pwAC",
                                                  "pwAG",
