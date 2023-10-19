@@ -123,7 +123,7 @@ class LocalParameters {
   // param value
   double lambda_TBL, lambda_omega, lambda_CpG, lambda_TpA, MutationNormFactor,
       MutationNormFactor1, MutationNormFactor2, fitCpG, fitTpA, lambda_tvCpG,
-      lambda_tvTpA, lambda_tstvCpG, lambda_tstvTpA, fitGC, lambda_R;
+      lambda_tvTpA, lambda_tstvCpG, lambda_tstvTpA, fitGC, lambda_R, lambda_dS;
   double *muBranch;
   double *AAadj;
   double Aadj, Cadj, Dadj, Eadj, Fadj, Gadj, Hadj, Iadj, Kadj, Ladj, Madj, Nadj,
@@ -135,7 +135,7 @@ class LocalParameters {
       fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss,
       fixfitCpG, fixlambda_tvCpG, fixlambda_tvTpA, fixlambda_tstvCpG,
       fixlambda_tstvTpA, fixfitTpA, fixfitGC, fixlambda_R, fixAAadj,
-      fixCODONadj;
+      fixCODONadj, fixlambda_dS;
   int MCMCpointID;
 
   string lambda_TBL_prior, lambda_CpG_prior, lambda_TpA_prior,

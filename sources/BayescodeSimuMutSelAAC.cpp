@@ -30,40 +30,32 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "SummaryStatistics.h"
 #include "TreeSimulator.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   // Comments
 
   // program options
   std::string model = "";
   std::string controlfile = "";
 
-  try
-  {
-    if (argc < 2)
-    {
+  try {
+    if (argc < 2) {
       throw(0);
     }
     int i = 1;
-    while (i < argc)
-    {
+    while (i < argc) {
       std::string s = argv[i];
-      if (s == "-v" || s == "--version")
-      {
+      if (s == "-v" || s == "--version") {
         throw(0);
-      }
-      else if (s == "-m")
-      {
+      } else if (s == "-m") {
         i++;
         model = argv[i];
         i++;
         controlfile = argv[i];
       }
       i++;
-    } // end while
-  }   // end try
-  catch (...)
-  {
+    }  // end while
+  }    // end try
+  catch (...) {
     std::cerr << "\n";
     std::cerr << "version 1.0\n";
     std::cerr << "###########################\n";
@@ -86,8 +78,7 @@ int main(int argc, char *argv[])
     std::cerr << "###########################\n";
     exit(1);
   }
-  if (model == "MUTSELAAC")
-  {
+  if (model == "MUTSELAAC") {
     cerr << "simulating under " << model << "\n";
 
     GlobalParameters *gparam = new GlobalParameters(model, controlfile);
@@ -113,12 +104,10 @@ int main(int argc, char *argv[])
     std::cerr << "Nsimu to be generated: " << gparam->Nsimu << " with Nrep "
               << gparam->Nrep << "\n";
 
-    while (post->Niter < gparam->Nsimu)
-    {
+    while (post->Niter < gparam->Nsimu) {
       int k = static_cast<int>(lparam->rnd->Uniform() * size - 1);
       lparam->readBayescodeParametersMutSelAAC(k);
-      for (int i = 0; i < gparam->Nrep; i++)
-      {
+      for (int i = 0; i < gparam->Nrep; i++) {
         prior->sample();
         simulator->run_jump_chain_over_tree();
         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
@@ -127,8 +116,7 @@ int main(int argc, char *argv[])
             lparam->GetCurrentAccessorySummaries(),
             lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
             lparam->GetCurrentSiteSpecificEvoStats());
-        if (lparam->tofasta)
-        {
+        if (lparam->tofasta) {
           ostringstream oss;
           oss << gparam->output << "-" << post->Niter << "_" << i << ".fasta";
           std::string output = oss.str();

@@ -19,8 +19,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 std::tuple<double, double, double>
 SiteInterSubMatrixBayescodeMUTSELAAC::ComputeCore(
     int *nucposFrom, int *nucposTo, int codonPos, int NodeIndex, int site_nuc,
-    int site_codon_i, int **CurrentNodeNucSequence)
-{
+    int site_codon_i, int **CurrentNodeNucSequence) {
   double MutRate = 0.0;
   double SubRate = 0.0;
   double S = 0.0;
@@ -28,26 +27,22 @@ SiteInterSubMatrixBayescodeMUTSELAAC::ComputeCore(
       nucposFrom[0], nucposFrom[1], nucposFrom[2]);
   int codonTo = lparam->codonstatespace->GetCodonFromDNA(
       nucposTo[0], nucposTo[1], nucposTo[2]);
-  if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1], nucposTo[2]))
-  {
+  if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1], nucposTo[2])) {
     MutRate = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
     int CpGcont = testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
                                  nucposTo[codonPos], CurrentNodeNucSequence);
 
-    if (CpGcont == 1 || CpGcont == 2)
-    {
+    if (CpGcont == 1 || CpGcont == 2) {
       // tsCpG
       MutRate *= lparam->lambda_CpG;
       // CpG>TpG
     }
 
-    if (MutRate < lparam->TOOSMALL)
-    {
+    if (MutRate < lparam->TOOSMALL) {
       MutRate = lparam->TOOSMALL;
     }
     MutRate *= lparam->lambda_TBL;
-    if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo))
-    {
+    if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
       int aaTo = lparam->codonstatespace->Translation(codonTo);
       int aaFrom = lparam->codonstatespace->Translation(codonFrom);
       S = log(
@@ -56,11 +51,9 @@ SiteInterSubMatrixBayescodeMUTSELAAC::ComputeCore(
           (lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]));
       SubRate =
           MutRate * lparam->lambda_omega * lparam->site_omega[site_codon_i];
-    }
-    else
-    {
+    } else {
       S = log(lparam->codonprofile[codonTo] / lparam->codonprofile[codonFrom]);
-      SubRate = MutRate;
+      SubRate = MutRate * lparam->lambda_dS;
     }
     SubRate = ComputeFixationFactor(S, SubRate);
   }
