@@ -626,12 +626,12 @@ void LocalParameters::readLocalInstructions() {
       this->lambda_R = atof(s.c_str());
       this->fixlambda_R = 1;
       std::cerr << "fix lambda_R " << this->lambda_R << "\n";
-    } else if (s == "-lambdaOmega") {
+    } else if (s == "-lambdaOmega" || s == "-fixlambdaOmega") {
       iss >> s;
       this->lambda_omega = atof(s.c_str());
       this->fixlambda_omega = 1;
       std::cerr << "fix lambdaomega " << this->lambda_omega << "\n";
-    } else if (s == "-omega") {
+    } else if (s == "-omega" || s == "-fixomega") {
       iss >> s;
       this->omega = atof(s.c_str());
       this->fixomega = 1;
@@ -1678,7 +1678,7 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
   }
 
   while (j < it) {
-    for (int k = 0; k < 3; k++) {
+    for (int k = 0; k < 2; k++) {
       is >> tmp;  // tbl, relative ds, relative dn
     }
     is >> tmp;  // tree
@@ -1708,7 +1708,7 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
   }
 
   if (j == it) {
-    for (int k = 0; k < 3; k++) {
+    for (int k = 0; k < 2; k++) {
       is >> tmp;  // tbl, relative ds, relative dn
     }
     refTree = new Tree(is);
