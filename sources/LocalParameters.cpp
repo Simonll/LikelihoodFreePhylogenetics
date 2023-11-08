@@ -1661,6 +1661,7 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
   int j = 0;
   std::string tmp;
   int Ncat;
+  // reading first line
   for (int i = 0; i < 15; i++) {
     if (i == 9) {
       is >> Ncat;
@@ -1677,6 +1678,9 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
   }
 
   while (j < it) {
+    for (int k = 0; k < 3; k++) {
+      is >> tmp;  // tbl, relative ds, relative dn
+    }
     is >> tmp;  // tree
     for (int k = 0; k < this->Nnucp; k++) {
       is >> tmp;  // nucp
@@ -1684,11 +1688,9 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
     for (int k = 0; k < this->Nnucrr; k++) {
       is >> tmp;  // nucrr
     }
-
     for (int k = 0; k < this->Nstate_codon; k++) {
       is >> tmp;
     }
-
     for (int k = 0; k < Ncat; k++) {
       // site profiles
       for (int l = 0; l < this->Nstate_aa; l++) {
@@ -1706,6 +1708,9 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
   }
 
   if (j == it) {
+    for (int k = 0; k < 3; k++) {
+      is >> tmp;  // tbl, relative ds, relative dn
+    }
     refTree = new Tree(is);
     refTree->RegisterWith(taxonset, 0);
     for (int k = 0; k < this->Nnucp; k++) {
