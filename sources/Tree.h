@@ -481,6 +481,8 @@ class Tree : public NewickTree {
 
   Link* GetLink(int index) { return linkmap[index]; }
 
+  double GetTotalLength() { return RecursiveTotalLength(GetRoot()); }
+
  protected:
   std::map<int, const Node*> nodemap;
   std::map<int, const Branch*> branchmap;
@@ -618,6 +620,32 @@ class Tree : public NewickTree {
 
   void SetRoot(Link* link) { root = link; }
 
+
+double GetLength(const Branch* branch){
+  if (!branch) {
+    return 0;
+  }
+  return atof(branch->GetName().c_str());
+}
+
+double RecursiveTotalLength(const Link* from)	{
+	double total = 0;
+	if (! from->isRoot())	{
+		total += GetLength(from->GetBranch());
+	}
+	else	{
+		if (GetLength(from->GetBranch()))	{
+			std::cerr << "error: non null branch length for root\n";
+			std::cerr << GetLength(from->GetBranch()) << '\n';
+			exit(1);
+		}
+	}
+	for (const Link* link=from->Next(); link!=from; link=link->Next())	{
+		total += RecursiveTotalLength(link->Out());
+	}
+	return total;
+}
+
   // data fields
   // just 2 pointers, to the root and to a list of taxa
   Link* root;
@@ -626,5 +654,7 @@ class Tree : public NewickTree {
   int Nnode;
   int Nbranch;
 };
+
+
 
 #endif  // SOURCES_TREE_H_

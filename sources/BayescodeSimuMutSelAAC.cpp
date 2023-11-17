@@ -104,6 +104,8 @@ int main(int argc, char *argv[]) {
     std::cerr << "Nsimu to be generated: " << gparam->Nsimu << " with Nrep "
               << gparam->Nrep << "\n";
 
+    std::vector<std::vector<double>> Rates;
+
     while (post->Niter < gparam->Nsimu) {
       int k = static_cast<int>(lparam->rnd->Uniform() * size - 1);
       lparam->readBayescodeParametersMutSelAAC(k);
@@ -116,6 +118,18 @@ int main(int argc, char *argv[]) {
             lparam->GetCurrentAccessorySummaries(),
             lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
             lparam->GetCurrentSiteSpecificEvoStats());
+        double MutRateNonSyn{0};
+        double SubRateNonSyn{0};
+        double MutRateSyn{0};
+        double SubRateSyn{0};
+        int NodeIndex = lparam->refTree->GetRoot()->GetNode()->GetIndex();
+        std::tie(MutRateNonSyn, SubRateNonSyn) = submatrix->GetRatesNonSyn(
+            NodeIndex, -1, simulator->CurrentNodeNucSequence);
+        std::tie(MutRateSyn, SubRateSyn) = submatrix->GetRatesSyn(
+            NodeIndex, -1, simulator->CurrentNodeNucSequence);
+        
+        std::vector<double> Rates_ = {lparam->refTree->GetTotalLength(), SubRateSyn / MutRateSyn, SubRateNonSyn / MutRateNonSyn };
+        Rates.push_back(Rates_);
 
         if (lparam->tofasta) {
           // For generating the .fasta file
@@ -132,8 +146,7 @@ int main(int argc, char *argv[]) {
           oss_tre << gparam->output << "-" << post->Niter << "_" << i << ".tre";
           std::string output_tre = oss_tre.str();
           std::ofstream tre_os(output_tre.c_str(), std::ios_base::out);
-          lparam->refTree->ToStream(
-              tre_os);
+          lparam->refTree->ToStream(tre_os);
           tre_os.close();  // Close the tree output stream
         }
         std::cerr << ".";
@@ -153,6 +166,15 @@ int main(int argc, char *argv[]) {
     post->writePosteriorPredictiveStatistics(ppp_os, lparam->summariesRealData);
     ppp_os.close();
 
+    ofstream rates_os((gparam->output + ".rates").c_str(), std::ios_base::out);
+    rates_os << "length\tds\tdn\n";
+    for (int i = 0; i < Rates.size(); i++) {
+      for (int j = 0; j < Rates[i].size(); j++) {
+        rates_os << Rates[i][j] << "\t";
+      }
+      rates_os << "\n";
+    }
+    rates_os.close();
     exit(0);
   }
 }

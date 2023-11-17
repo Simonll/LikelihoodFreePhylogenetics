@@ -41,6 +41,15 @@ class SiteInterSubMatrixBayescodeMUTSELAAC : public SiteInterSubMatrix {
                                                  int codonPos, int NodeIndex,
                                                  int site_nuc, int site_codon_i,
                                                  int **CurrentNodeNucSequence);
+
+std::tuple<double, double> GetRatesNonSyn(int NodeIndex, int site_codon,
+                                          int **CurrentNodeNucSequence);
+
+std::tuple<double, double> GetRatesSyn(int NodeIndex, int site_codon,
+                                       int **CurrentNodeNucSequence);
+
 };
+
+
 
 #endif  // SOURCES_SITEINTERSUBMATRIXBAYESCODEMUTSELAAC_H_
