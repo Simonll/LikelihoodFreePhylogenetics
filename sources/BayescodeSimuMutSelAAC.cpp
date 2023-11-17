@@ -116,13 +116,25 @@ int main(int argc, char *argv[]) {
             lparam->GetCurrentAccessorySummaries(),
             lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
             lparam->GetCurrentSiteSpecificEvoStats());
+
         if (lparam->tofasta) {
-          ostringstream oss;
-          oss << gparam->output << "-" << post->Niter << "_" << i << ".fasta";
-          std::string output = oss.str();
-          ofstream fasta_os((output).c_str(), std::ios_base::out);
+          // For generating the .fasta file
+          std::ostringstream oss_fasta;
+          oss_fasta << gparam->output << "-" << post->Niter << "_" << i
+                    << ".fasta";
+          std::string output_fasta = oss_fasta.str();
+          std::ofstream fasta_os(output_fasta.c_str(), std::ios_base::out);
           lparam->toFasta(fasta_os, simulator->CurrentLeafNodeCodonSequences);
           fasta_os.close();
+
+          // For generating the .tre file
+          std::ostringstream oss_tre;
+          oss_tre << gparam->output << "-" << post->Niter << "_" << i << ".tre";
+          std::string output_tre = oss_tre.str();
+          std::ofstream tre_os(output_tre.c_str(), std::ios_base::out);
+          lparam->refTree->ToStream(
+              tre_os);
+          tre_os.close();  // Close the tree output stream
         }
         std::cerr << ".";
       }
