@@ -52,7 +52,7 @@ std::tuple<double, double, double> SiteInterSubMatrixCodeMLM7M8TpA::ComputeCore(
 
     if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
       SubRate =
-          MutRate * lparam->lambda_omega * lparam->omega_site[site_codon_i];
+          MutRate * lparam->lambda_omega * lparam->site_omega[site_codon_i];
     } else {
       SubRate = MutRate;
     }

@@ -15,6 +15,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #define SOURCES_SITEINTERSUBMATRIX_H_
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <cstdlib>
 #include <fstream>

@@ -15,6 +15,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #define SOURCES_LOCALPARAMETERS_H_
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
@@ -109,7 +110,7 @@ class LocalParameters {
   bool getrate1;
   bool getrate2;
 
-  double *omega_site;
+  double *site_omega;
   double omega;
   double *nucp, *nucrr, *nucp1, *nucrr1, *nucp2, *nucrr2;  // 6 param
   double **nucrrnr, **nucrrnr1, **nucrrnr2;                // 12 param
@@ -122,7 +123,7 @@ class LocalParameters {
   // param value
   double lambda_TBL, lambda_omega, lambda_CpG, lambda_TpA, MutationNormFactor,
       MutationNormFactor1, MutationNormFactor2, fitCpG, fitTpA, lambda_tvCpG,
-      lambda_tvTpA, lambda_tstvCpG, lambda_tstvTpA, fitGC, lambda_R;
+      lambda_tvTpA, lambda_tstvCpG, lambda_tstvTpA, fitGC, lambda_R, lambda_dS;
   double *muBranch;
   double *AAadj;
   double Aadj, Cadj, Dadj, Eadj, Fadj, Gadj, Hadj, Iadj, Kadj, Ladj, Madj, Nadj,
@@ -134,7 +135,7 @@ class LocalParameters {
       fixrr, fixkappa, fixhky, randomseed, verbose, rooted, fixroot, fixss,
       fixfitCpG, fixlambda_tvCpG, fixlambda_tvTpA, fixlambda_tstvCpG,
       fixlambda_tstvTpA, fixfitTpA, fixfitGC, fixlambda_R, fixAAadj,
-      fixCODONadj;
+      fixCODONadj, fixlambda_dS;
   int MCMCpointID;
 
   string lambda_TBL_prior, lambda_CpG_prior, lambda_TpA_prior,
@@ -152,7 +153,7 @@ class LocalParameters {
   // Constructor
   explicit LocalParameters(GlobalParameters *gparam);
   virtual ~LocalParameters();
-
+  void init_containers();
   // Writers
   void writeRealDataSummaries(ofstream &os, bool headers = true);
   void writeAncestralDataSummaries(ofstream &os, bool headers);
@@ -167,6 +168,8 @@ class LocalParameters {
   void readChainCodonMutSelSBDP();
   void readChainCodonMutSelSBDP(int pt_i);
   int readParametersMutSelC(int pt_i);
+  int readBayescodeParametersMutSelAAC(int pt_i);
+  int readBayescodeParametersMutSelC(int pt_i);
 
   void readChainCodonMutSelFinite();
   void readChainCodonMutSelFinite(int pt_i);
@@ -197,6 +200,32 @@ class LocalParameters {
   void GetGTR1();
   void GetGTR2();
   void incrementStartPoint() { this->startPoint++; }
+
+  int get_number_of_samplesCodemlM7M8(std::ifstream &is) {
+    std::string line = "";
+    int k = 0;
+    while (std::getline(is, line)) {
+      std::getline(is, line);
+      std::getline(is, line);
+      std::getline(is, line);
+      k++;
+    }
+    return k;
+  }
+
+  int get_number_of_samples(std::ifstream &is) {
+    std::string line;
+    int k = 0;
+    std::getline(is, line);
+    while (getline(is, line)) {
+      while (getline(is, line)) {
+        if (line.empty()) continue;
+        if (line[0] == '(') break;
+      }
+      k++;
+    }
+    return k;
+  }
 
   int GetNsiteCodon() { return Nsite_codon; }
 

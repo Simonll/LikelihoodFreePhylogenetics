@@ -4,7 +4,7 @@ LDFLAGS=-fopenmp
 SRCS=GlobalParameters.cpp TaxonSet.cpp Tree.cpp  Random.cpp  SequenceAlignment.cpp CodonSequenceAlignment.cpp\
   StateSpace.cpp CodonStateSpace.cpp  LocalParameters.cpp SummaryStatistics.cpp SiteInterSubMatrix.cpp\
   SiteInterSubMatrixCodeMLM7M8.cpp SiteInterSubMatrixCodeMLM7M8TpA.cpp SiteInterSubMatrixCABC2018.cpp\
-  SiteInterSubMatrixCodeMLFMUTSEL.cpp EvolHistStatistics.cpp\
+  SiteInterSubMatrixCodeMLFMUTSEL.cpp SiteInterSubMatrixBayescodeMUTSELAAC.cpp EvolHistStatistics.cpp\
   PriorSampler.cpp AncestralSequence.cpp TreeSimulator.cpp BranchSpecificParameters.cpp  LocalData.cpp\
   Posterior.cpp
 
@@ -15,7 +15,7 @@ ALL_OBJS=$(patsubst %.cpp,%.o,$(ALL_SRCS))
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=../data/LFP
 PROGSDIR=../data
-ALL= LFP codemlM7M8 codemlM7M8TpA codemlFMutSel ratesFromLeaves
+ALL= LFP codemlM7M8 codemlM7M8TpA codemlFMutSel ratesFromLeaves BayescodeSimuMutSelAAC
 #all: $(SOURCES) $(EXECUTABLE)
 PROGS=$(addprefix $(PROGSDIR)/, $(ALL))
 
@@ -61,10 +61,13 @@ ratesFromLeaves$(EXEEXT): $(PROGSDIR)/ratesFromLeaves$(EXEEXT)
 $(PROGSDIR)/ratesFromLeaves$(EXEEXT): ratesFromLeaves.o $(OBJS)
 	$(CC) ratesFromLeaves.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 
-
 MutSelC$(EXEEXT): $(PROGSDIR)/MutSelC$(EXEEXT)
 $(PROGSDIR)/MutSelC$(EXEEXT): MutSelC.o $(OBJS)
 	$(CC) MutSelC.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
+
+BayescodeSimuMutSelAAC$(EXEEXT): $(PROGSDIR)/BayescodeSimuMutSelAAC$(EXEEXT)
+$(PROGSDIR)/BayescodeSimuMutSelAAC$(EXEEXT): BayescodeSimuMutSelAAC.o $(OBJS)
+	$(CC) BayescodeSimuMutSelAAC.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 
 #$(EXECUTABLE): $(OBJECTS)
 #	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
