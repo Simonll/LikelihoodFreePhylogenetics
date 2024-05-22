@@ -145,6 +145,9 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
   std::tuple<double, double> GetRatesRadVolCpG(int NodeIndex, int site_codon,
                                                int** CurrentNodeNucSequence);
 
+  std::tuple<double, double> GetRatesCGNTs(int NodeIndex, int site_codon,
+                                           int** CurrentNodeNucSequence);
+
   bool isWeakStrong(int nucFrom, int nucTo);
   bool isTransition(int nucFrom, int nucTo);
   bool isStrongWeak(int nucFrom, int nucTo);

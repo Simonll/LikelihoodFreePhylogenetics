@@ -128,6 +128,7 @@ class CodonStateSpace : public StateSpace {
   bool ConsPol(int codon1, int codon2) {
     return (PolTable[CodonCode[codon1]] == PolTable[CodonCode[codon2]]);
   }
+  bool isCGN(int pos1, int pos2) { return (pos1 == 1 && pos2 == 2); }
 
   // returns -1 if stop codon
   // otherwise returns integer in [0,19] standing for an amino-acid (one letter

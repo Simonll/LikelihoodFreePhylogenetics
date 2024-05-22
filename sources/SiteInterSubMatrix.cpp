@@ -147,10 +147,11 @@ int SiteInterSubMatrix::testCpGcontext(int inNnodeIndex, int insite,
       // <<"\n";
       return 9;
     }
+    // from XpY to XpN
   } else if (insite > 0 &&
              (CurrentNodeNucSequence[inNnodeIndex][insite - 1] == X_ &&
               CurrentNodeNucSequence[inNnodeIndex][insite] == Y_)) {
-    if (((innucFrom + innucTo) % 2) == 0) {  // from XpY to XpN
+    if (((innucFrom + innucTo) % 2) == 0) {
       // we are leaving XY, coordinate -1,0
       // trought ts
       // std::cerr << "-1,0" << CurrentNodeNucSequence[inNnodeIndex][insite - 1]
