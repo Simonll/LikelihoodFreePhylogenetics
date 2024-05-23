@@ -1757,7 +1757,8 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
     }
   }
   is.close();
-  Setgtr2gtnr();
+
+  Setgtrbayescode2gtnr();
   SetTreeStuff();
   return j;
 }
@@ -1982,6 +1983,26 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
   SetTreeStuff();
 
   // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
+}
+
+void LocalParameters::Setgtrbayescode2gtnr() {
+  this->getrate = false;
+  this->gtnr[0][0] = 0.0;                    // aa
+  this->gtnr[0][1] = GetGTRBayesCode(0, 1);  // ac
+  this->gtnr[0][2] = GetGTRBayesCode(0, 2);  // ag
+  this->gtnr[0][3] = GetGTRBayesCode(0, 3);  // at
+  this->gtnr[1][0] = GetGTRBayesCode(1, 0);  // ca
+  this->gtnr[1][1] = 0.0;                    // cc
+  this->gtnr[1][2] = GetGTRBayesCode(1, 2);  // cg
+  this->gtnr[1][3] = GetGTRBayesCode(1, 3);  // ct
+  this->gtnr[2][0] = GetGTRBayesCode(2, 0);  // ga
+  this->gtnr[2][1] = GetGTRBayesCode(2, 1);  // gc
+  this->gtnr[2][2] = 0.0;                    // gg
+  this->gtnr[2][3] = GetGTRBayesCode(2, 3);  // gt
+  this->gtnr[3][0] = GetGTRBayesCode(3, 0);  // ta
+  this->gtnr[3][1] = GetGTRBayesCode(3, 1);  // tc
+  this->gtnr[3][2] = GetGTRBayesCode(3, 2);  // tg
+  this->gtnr[3][3] = 0.0;                    // tt
 }
 
 void LocalParameters::Setgtr2gtnr() {

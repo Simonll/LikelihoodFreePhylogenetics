@@ -188,6 +188,7 @@ class LocalParameters {
   void SetTreeStuff();
   void SetTreeStuffRecursively(Link *from, int notNodeIndex, int gtrIndex);
   void Setgtr2gtnr();
+  void Setgtrbayescode2gtnr();
 
   // Getters
   int GetPointID();
@@ -237,6 +238,10 @@ class LocalParameters {
     return ((this->nucp[j] * this->nucrrnr[i][j]) / GetRate());
   }
 
+  double GetGTRBayesCode(int i, int j) {
+    return ((this->nucp[j] * this->nucrrnr[i][j]) / GetRateBayesCode());
+  }
+
   double GetGTRCodeML(int i, int j) {
     return (this->nucp[j] * this->nucrrnr[i][j]);
   }
@@ -276,6 +281,20 @@ class LocalParameters {
     // 2 for the symetry of the matrix??, and 3 for the number of codon positons
     getrate = true;
     MutationNormFactor = 2 * (norm * 3);
+    return MutationNormFactor;
+  }
+  double GetRateBayesCode() {
+    if (getrate) {
+      return MutationNormFactor;
+    }
+    double norm = 0.0;
+    for (int i = 0; i < 4 - 1; i++) {
+      for (int j = i + 1; j < 4; j++) {
+        norm += this->nucp[i] * this->nucp[j] * this->nucrrnr[i][j];
+      }
+    }
+    getrate = true;
+    MutationNormFactor = 2 * (norm);
     return MutationNormFactor;
   }
 };
