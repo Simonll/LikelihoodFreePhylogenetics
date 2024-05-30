@@ -58,14 +58,14 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
                                                  int site_nuc, int site_codon_i,
                                                  int** CurrentNodeNucSequence);
 
-  std::tuple<double, double> GetRatesCpG(int NodeIndex, int site_codon,
-                                         int** CurrentNodeNucSequence);
+  std::tuple<double, double> GetRatesCpGTs(int NodeIndex, int site_codon,
+                                           int** CurrentNodeNucSequence);
 
-  std::tuple<double, double> GetRatesNonSynCpG(int NodeIndex, int site_codon,
-                                               int** CurrentNodeNucSequence);
+  std::tuple<double, double> GetRatesNonSynCpGTs(int NodeIndex, int site_codon,
+                                                 int** CurrentNodeNucSequence);
 
-  std::tuple<double, double> GetRatesSynCpG(int NodeIndex, int site_codon,
-                                            int** CurrentNodeNucSequence);
+  std::tuple<double, double> GetRatesSynCpGTs(int NodeIndex, int site_codon,
+                                              int** CurrentNodeNucSequence);
 
   std::tuple<double, double> GetRatesNonSyn(int NodeIndex, int site_codon,
                                             int** CurrentNodeNucSequence);
@@ -133,17 +133,17 @@ class SiteInterSubMatrixCABC2018 : public SiteInterSubMatrix {
   std::tuple<double, double> GetRatesRadVolTr(int NodeIndex, int site_codon,
                                               int** CurrentNodeNucSequence);
 
-  std::tuple<double, double> GetRatesConsPolCpG(int NodeIndex, int site_codon,
-                                                int** CurrentNodeNucSequence);
+  std::tuple<double, double> GetRatesConsPolCpGTs(int NodeIndex, int site_codon,
+                                                  int** CurrentNodeNucSequence);
 
-  std::tuple<double, double> GetRatesRadPolCpG(int NodeIndex, int site_codon,
-                                               int** CurrentNodeNucSequence);
+  std::tuple<double, double> GetRatesRadPolCpGTs(int NodeIndex, int site_codon,
+                                                 int** CurrentNodeNucSequence);
 
-  std::tuple<double, double> GetRatesConsVolCpG(int NodeIndex, int site_codon,
-                                                int** CurrentNodeNucSequence);
+  std::tuple<double, double> GetRatesConsVolCpGTs(int NodeIndex, int site_codon,
+                                                  int** CurrentNodeNucSequence);
 
-  std::tuple<double, double> GetRatesRadVolCpG(int NodeIndex, int site_codon,
-                                               int** CurrentNodeNucSequence);
+  std::tuple<double, double> GetRatesRadVolCpGTs(int NodeIndex, int site_codon,
+                                                 int** CurrentNodeNucSequence);
 
   std::tuple<double, double> GetRatesCGNTs(int NodeIndex, int site_codon,
                                            int** CurrentNodeNucSequence);

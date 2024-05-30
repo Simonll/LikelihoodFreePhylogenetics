@@ -55,17 +55,17 @@ void writeHeaderFromLeaves(ofstream& os) {
      << "\t"
      << "SubRateSyn"
      << "\t"
-     << "MutRateCpG"
+     << "MutRateCpGTs"
      << "\t"
-     << "SubRateCpG"
+     << "SubRateCpGTs"
      << "\t"
-     << "MutRateNonSynCpG"
+     << "MutRateNonSynCpGTs"
      << "\t"
-     << "SubRateNonSynCpG"
+     << "SubRateNonSynCpGTs"
      << "\t"
-     << "MutRateSynCpG"
+     << "MutRateSynCpGTs"
      << "\t"
-     << "SubRateSynCpG"
+     << "SubRateSynCpGTs"
      << "\t"
      << "MutRateWeakStrong"
      << "\t"
@@ -83,13 +83,13 @@ void writeHeaderFromLeaves(ofstream& os) {
      << "\t"
      << "SubRateWeakWeak"
      << "\t"
-     << "MutRateTransition"
+     << "MutRateTs"
      << "\t"
-     << "SubRateTransition"
+     << "SubRateTs"
      << "\t"
-     << "MutRateTransversion"
+     << "MutRateTr"
      << "\t"
-     << "SubRateTransversion"
+     << "SubRateTr"
      << "\t"
      << "MutRateConsPol"
      << "\t"
@@ -139,25 +139,25 @@ void writeHeaderFromLeaves(ofstream& os) {
      << "\t"
      << "SubRateRadVolTr"
      << "\t"
-     << "MutRateConsPolCpG"
+     << "MutRateConsPolCpGTs"
      << "\t"
-     << "SubRateConsPolCpG"
+     << "SubRateConsPolCpGTs"
      << "\t"
-     << "MutRateRadPolCpG"
+     << "MutRateRadPolCpGTs"
      << "\t"
-     << "SubRateRadPolCpG"
+     << "SubRateRadPolCpGTs"
      << "\t"
-     << "MutRateConsVolCpG"
+     << "MutRateConsVolCpGTs"
      << "\t"
-     << "SubRateConsVolCpG"
+     << "SubRateConsVolCpGTs"
      << "\t"
-     << "MutRateRadVolCpG"
+     << "MutRateRadVolCpGTs"
      << "\t"
-     << "SubRateRadVolCpG"
+     << "SubRateRadVolCpGTs"
      << "\t"
-     << "MutRateCGN"
+     << "MutRateCGNTs"
      << "\t"
-     << "SubRateCGN"
+     << "SubRateCGNTs"
      << "\n";
 }
 
@@ -336,12 +336,12 @@ int main(int argc, char* argv[]) {
         double MutRateNonSynTr = 0.0;
         double SubRateNonSynTr = 0.0;
 
-        double MutRateCpG = 0.0;
-        double SubRateCpG = 0.0;
-        double MutRateNonSynCpG = 0.0;
-        double SubRateNonSynCpG = 0.0;
-        double MutRateSynCpG = 0.0;
-        double SubRateSynCpG = 0.0;
+        double MutRateCpGTs = 0.0;
+        double SubRateCpGTs = 0.0;
+        double MutRateNonSynCpGTs = 0.0;
+        double SubRateNonSynCpGTs = 0.0;
+        double MutRateSynCpGTs = 0.0;
+        double SubRateSynCpGTs = 0.0;
 
         double MutRateWeakStrong = 0.0;
         double SubRateWeakStrong = 0.0;
@@ -352,15 +352,16 @@ int main(int argc, char* argv[]) {
         double MutRateStrongStrong = 0.0;
         double SubRateStrongStrong = 0.0;
 
-        double MutRateTransition = 0.0;
-        double SubRateTransition = 0.0;
-        double MutRateTransversion = 0.0;
-        double SubRateTransversion = 0.0;
+        double MutRateTs = 0.0;
+        double SubRateTs = 0.0;
+        double MutRateTr = 0.0;
+        double SubRateTr = 0.0;
 
         double MutRateConsPol = 0.0;
         double SubRateConsPol = 0.0;
         double MutRateRadPol = 0.0;
         double SubRateRadPol = 0.0;
+
         double MutRateConsVol = 0.0;
         double SubRateConsVol = 0.0;
         double MutRateRadVol = 0.0;
@@ -370,6 +371,7 @@ int main(int argc, char* argv[]) {
         double SubRateConsPolTs = 0.0;
         double MutRateRadPolTs = 0.0;
         double SubRateRadPolTs = 0.0;
+
         double MutRateConsVolTs = 0.0;
         double SubRateConsVolTs = 0.0;
         double MutRateRadVolTs = 0.0;
@@ -379,19 +381,21 @@ int main(int argc, char* argv[]) {
         double SubRateConsPolTr = 0.0;
         double MutRateRadPolTr = 0.0;
         double SubRateRadPolTr = 0.0;
+
         double MutRateConsVolTr = 0.0;
         double SubRateConsVolTr = 0.0;
         double MutRateRadVolTr = 0.0;
         double SubRateRadVolTr = 0.0;
 
-        double MutRateConsPolCpG = 0.0;
-        double SubRateConsPolCpG = 0.0;
-        double MutRateRadPolCpG = 0.0;
-        double SubRateRadPolCpG = 0.0;
-        double MutRateConsVolCpG = 0.0;
-        double SubRateConsVolCpG = 0.0;
-        double MutRateRadVolCpG = 0.0;
-        double SubRateRadVolCpG = 0.0;
+        double MutRateConsPolCpGTs = 0.0;
+        double SubRateConsPolCpGTs = 0.0;
+        double MutRateRadPolCpGTs = 0.0;
+        double SubRateRadPolCpGTs = 0.0;
+
+        double MutRateConsVolCpGTs = 0.0;
+        double SubRateConsVolCpGTs = 0.0;
+        double MutRateRadVolCpGTs = 0.0;
+        double SubRateRadVolCpGTs = 0.0;
 
         double MutRateCGNTs = 0.0;
         double SubRateCGNTs = 0.0;
@@ -437,27 +441,28 @@ int main(int argc, char* argv[]) {
           MutRateSyn += MutRateSyn_;
           SubRateSyn += SubRateSyn_;
 
-          double MutRateCpG_ = 0.0;
-          double SubRateCpG_ = 0.0;
-          std::tie(MutRateCpG_, SubRateCpG_) = submatrix->GetRatesCpG(
+          double MutRateCpGTs_ = 0.0;
+          double SubRateCpGTs_ = 0.0;
+          std::tie(MutRateCpGTs_, SubRateCpGTs_) = submatrix->GetRatesCpGTs(
               NodeIndex, -1, simulator->CurrentNodeNucSequence);
-          MutRateCpG += MutRateCpG_;
-          SubRateCpG += SubRateCpG_;
+          MutRateCpGTs += MutRateCpGTs_;
+          SubRateCpGTs += SubRateCpGTs_;
 
-          double MutRateSynCpG_ = 0.0;
-          double SubRateSynCpG_ = 0.0;
-          std::tie(MutRateSynCpG_, SubRateSynCpG_) = submatrix->GetRatesSynCpG(
-              NodeIndex, -1, simulator->CurrentNodeNucSequence);
-          MutRateSynCpG += MutRateSynCpG_;
-          SubRateSynCpG += SubRateSynCpG_;
+          double MutRateSynCpGTs_ = 0.0;
+          double SubRateSynCpGTs_ = 0.0;
+          std::tie(MutRateSynCpGTs_, SubRateSynCpGTs_) =
+              submatrix->GetRatesSynCpGTs(NodeIndex, -1,
+                                          simulator->CurrentNodeNucSequence);
+          MutRateSynCpGTs += MutRateSynCpGTs_;
+          SubRateSynCpGTs += SubRateSynCpGTs_;
 
-          double MutRateNonSynCpG_ = 0.0;
-          double SubRateNonSynCpG_ = 0.0;
-          std::tie(MutRateNonSynCpG_, SubRateNonSynCpG_) =
-              submatrix->GetRatesNonSynCpG(NodeIndex, -1,
-                                           simulator->CurrentNodeNucSequence);
-          MutRateNonSynCpG += MutRateNonSynCpG_;
-          SubRateNonSynCpG += SubRateNonSynCpG_;
+          double MutRateNonSynCpGTs_ = 0.0;
+          double SubRateNonSynCpGTs_ = 0.0;
+          std::tie(MutRateNonSynCpGTs_, SubRateNonSynCpGTs_) =
+              submatrix->GetRatesNonSynCpGTs(NodeIndex, -1,
+                                             simulator->CurrentNodeNucSequence);
+          MutRateNonSynCpGTs += MutRateNonSynCpGTs_;
+          SubRateNonSynCpGTs += SubRateNonSynCpGTs_;
 
           double MutRateWeakStrong_ = 0.0;
           double SubRateWeakStrong_ = 0.0;
@@ -475,21 +480,19 @@ int main(int argc, char* argv[]) {
           MutRateStrongWeak += MutRateStrongWeak_;
           SubRateStrongWeak += SubRateStrongWeak_;
 
-          double MutRateTransition_ = 0.0;
-          double SubRateTransition_ = 0.0;
-          std::tie(MutRateTransition_, SubRateTransition_) =
-              submatrix->GetRatesTransition(NodeIndex, -1,
-                                            simulator->CurrentNodeNucSequence);
-          MutRateTransition += MutRateTransition_;
-          SubRateTransition += SubRateTransition_;
+          double MutRateTs_ = 0.0;
+          double SubRateTs_ = 0.0;
+          std::tie(MutRateTs_, SubRateTs_) = submatrix->GetRatesTransition(
+              NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          MutRateTs += MutRateTs_;
+          SubRateTs += SubRateTs_;
 
-          double MutRateTransversion_ = 0.0;
-          double SubRateTransversion_ = 0.0;
-          std::tie(MutRateTransversion_, SubRateTransversion_) =
-              submatrix->GetRatesTransversion(
-                  NodeIndex, -1, simulator->CurrentNodeNucSequence);
-          MutRateTransversion += MutRateTransversion_;
-          SubRateTransversion += SubRateTransversion_;
+          double MutRateTr_ = 0.0;
+          double SubRateTr_ = 0.0;
+          std::tie(MutRateTr_, SubRateTr_) = submatrix->GetRatesTransversion(
+              NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          MutRateTr += MutRateTr_;
+          SubRateTr += SubRateTr_;
 
           double MutRateConsPol_ = 0.0;
           double SubRateConsPol_ = 0.0;
@@ -585,29 +588,29 @@ int main(int argc, char* argv[]) {
           MutRateRadVolTr += MutRateRadVolTr_;
           SubRateRadVolTr += SubRateRadVolTr_;
 
-          double MutRateConsPolCpG_ = 0.0;
-          double SubRateConsPolCpG_ = 0.0;
-          std::tie(MutRateConsPolCpG_, SubRateConsPolCpG_) =
-              submatrix->GetRatesConsPolCpG(NodeIndex, -1,
-                                            simulator->CurrentNodeNucSequence);
-          MutRateConsPolCpG += MutRateConsPolCpG_;
-          SubRateConsPolCpG += SubRateConsPolCpG_;
+          double MutRateConsPolCpGTs_ = 0.0;
+          double SubRateConsPolCpGTs_ = 0.0;
+          std::tie(MutRateConsPolCpGTs_, SubRateConsPolCpGTs_) =
+              submatrix->GetRatesConsPolCpGTs(
+                  NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          MutRateConsPolCpGTs += MutRateConsPolCpGTs_;
+          SubRateConsPolCpGTs += SubRateConsPolCpGTs_;
 
-          double MutRateRadPolCpG_ = 0.0;
-          double SubRateRadPolCpG_ = 0.0;
-          std::tie(MutRateRadPolCpG_, SubRateRadPolCpG_) =
-              submatrix->GetRatesRadPolCpG(NodeIndex, -1,
-                                           simulator->CurrentNodeNucSequence);
-          MutRateRadPolCpG += MutRateRadPolCpG_;
-          SubRateRadPolCpG += SubRateRadPolCpG_;
+          double MutRateRadPolCpGTs_ = 0.0;
+          double SubRateRadPolCpGTs_ = 0.0;
+          std::tie(MutRateRadPolCpGTs_, SubRateRadPolCpGTs_) =
+              submatrix->GetRatesRadPolCpGTs(NodeIndex, -1,
+                                             simulator->CurrentNodeNucSequence);
+          MutRateRadPolCpGTs += MutRateRadPolCpGTs_;
+          SubRateRadPolCpGTs += SubRateRadPolCpGTs_;
 
-          double MutRateConsVolCpG_ = 0.0;
-          double SubRateConsVolCpG_ = 0.0;
-          std::tie(MutRateConsVolCpG_, SubRateConsVolCpG_) =
-              submatrix->GetRatesConsVolCpG(NodeIndex, -1,
-                                            simulator->CurrentNodeNucSequence);
-          MutRateConsVolCpG += MutRateConsVolCpG_;
-          SubRateConsVolCpG += SubRateConsVolCpG_;
+          double MutRateConsVolCpGTs_ = 0.0;
+          double SubRateConsVolCpGTs_ = 0.0;
+          std::tie(MutRateConsVolCpGTs_, SubRateConsVolCpGTs_) =
+              submatrix->GetRatesConsVolCpGTs(
+                  NodeIndex, -1, simulator->CurrentNodeNucSequence);
+          MutRateConsVolCpGTs += MutRateConsVolCpGTs_;
+          SubRateConsVolCpGTs += SubRateConsVolCpGTs_;
 
           double MutRateCGNTs_ = 0.0;
           double SubRateCGNTs_ = 0.0;
@@ -640,40 +643,75 @@ int main(int argc, char* argv[]) {
         SubRate /= rep;
         MutRateNonSyn /= rep;
         SubRateNonSyn /= rep;
+        MutRateSyn /= rep;
+        SubRateSyn /= rep;
+
         MutRateNonSynTs /= rep;
         SubRateNonSynTs /= rep;
         MutRateNonSynTr /= rep;
         SubRateNonSynTr /= rep;
-        MutRateSyn /= rep;
-        SubRateSyn /= rep;
-        MutRateSyn /= rep;
-        SubRateSyn /= rep;
-        MutRateCpG /= rep;
-        SubRateCpG /= rep;
-        MutRateNonSynCpG /= rep;
-        SubRateNonSynCpG /= rep;
-        MutRateSynCpG /= rep;
-        SubRateSynCpG /= rep;
+
+        MutRateCpGTs /= rep;
+        SubRateCpGTs /= rep;
+        MutRateNonSynCpGTs /= rep;
+        SubRateNonSynCpGTs /= rep;
+        MutRateSynCpGTs /= rep;
+        SubRateSynCpGTs /= rep;
+
         MutRateWeakStrong /= rep;
         SubRateWeakStrong /= rep;
         MutRateStrongWeak /= rep;
         SubRateStrongWeak /= rep;
-        MutRateStrongStrong /= rep;
-        SubRateStrongStrong /= rep;
         MutRateWeakWeak /= rep;
         SubRateWeakWeak /= rep;
-        MutRateTransition /= rep;
-        SubRateTransition /= rep;
-        MutRateTransversion /= rep;
-        SubRateTransversion /= rep;
+        MutRateStrongStrong /= rep;
+        SubRateStrongStrong /= rep;
+
+        MutRateTs /= rep;
+        SubRateTs /= rep;
+        MutRateTr /= rep;
+        SubRateTr /= rep;
+
         MutRateConsPol /= rep;
         SubRateConsPol /= rep;
         MutRateRadPol /= rep;
         SubRateRadPol /= rep;
+
         MutRateConsVol /= rep;
         SubRateConsVol /= rep;
         MutRateRadVol /= rep;
         SubRateRadVol /= rep;
+
+        MutRateConsPolTs /= rep;
+        SubRateConsPolTs /= rep;
+        MutRateRadPolTs /= rep;
+        SubRateRadPolTs /= rep;
+
+        MutRateConsVolTs /= rep;
+        SubRateConsVolTs /= rep;
+        MutRateRadVolTs /= rep;
+        SubRateRadVolTs /= rep;
+
+        MutRateConsPolTr /= rep;
+        SubRateConsPolTr /= rep;
+        MutRateRadPolTr /= rep;
+        SubRateRadPolTr /= rep;
+
+        MutRateConsVolTr /= rep;
+        SubRateConsVolTr /= rep;
+        MutRateRadVolTr /= rep;
+        SubRateRadVolTr /= rep;
+
+        MutRateConsPolCpGTs /= rep;
+        SubRateConsPolCpGTs /= rep;
+        MutRateRadPolCpGTs /= rep;
+        SubRateRadPolCpGTs /= rep;
+
+        MutRateConsVolCpGTs /= rep;
+        SubRateConsVolCpGTs /= rep;
+        MutRateRadVolCpGTs /= rep;
+        SubRateRadVolCpGTs /= rep;
+
         MutRateCGNTs /= rep;
         SubRateCGNTs /= rep;
         ofstream rates_os((gparam->output + ".rates").c_str(),
@@ -686,32 +724,32 @@ int main(int argc, char* argv[]) {
                  << "\t" << SubRateNonSyn << "\t" << MutRateNonSynTs << "\t"
                  << SubRateNonSynTs << "\t" << MutRateNonSynTr << "\t"
                  << SubRateNonSynTr << "\t" << MutRateSyn << "\t" << SubRateSyn
-                 << "\t" << MutRateCpG << "\t" << SubRateCpG << "\t"
-                 << MutRateNonSynCpG << "\t" << SubRateNonSynCpG << "\t"
-                 << MutRateSynCpG << "\t" << SubRateSynCpG << "\t"
+                 << "\t" << MutRateCpGTs << "\t" << SubRateCpGTs << "\t"
+                 << MutRateNonSynCpGTs << "\t" << SubRateNonSynCpGTs << "\t"
+                 << MutRateSynCpGTs << "\t" << SubRateSynCpGTs << "\t"
                  << MutRateWeakStrong << "\t" << SubRateWeakStrong << "\t"
                  << MutRateStrongWeak << "\t" << SubRateStrongWeak << "\t"
                  << MutRateStrongStrong << "\t" << SubRateStrongStrong << "\t"
                  << MutRateWeakWeak << "\t" << SubRateWeakWeak << "\t"
-                 << MutRateTransition << "\t" << SubRateTransition << "\t"
-                 << MutRateTransversion << "\t" << SubRateTransversion << "\t"
-                 << MutRateConsPol << "\t" << SubRateConsPol << "\t"
-                 << MutRateRadPol << "\t" << SubRateRadPol << "\t"
-                 << MutRateConsVol << "\t" << SubRateConsVol << "\t"
-                 << MutRateRadVol << "\t" << SubRateRadVol << "\t"
-                 << MutRateConsPolTs << "\t" << SubRateConsPolTs << "\t"
-                 << MutRateRadPolTs << "\t" << SubRateRadPolTs << "\t"
-                 << MutRateConsVolTs << "\t" << SubRateConsVolTs << "\t"
-                 << MutRateRadVolTs << "\t" << SubRateRadVolTs << "\t"
-                 << MutRateConsPolTr << "\t" << SubRateConsPolTr << "\t"
-                 << MutRateRadPolTr << "\t" << SubRateRadPolTr << "\t"
-                 << MutRateConsVolTr << "\t" << SubRateConsVolTr << "\t"
-                 << MutRateRadVolTr << "\t" << SubRateRadVolTr << "\t"
-                 << MutRateConsPolCpG << "\t" << SubRateConsPolCpG << "\t"
-                 << MutRateRadPolCpG << "\t" << SubRateRadPolCpG << "\t"
-                 << MutRateConsVolCpG << "\t" << SubRateConsVolCpG << "\t"
-                 << MutRateRadVolCpG << "\t" << SubRateRadVolCpG << "\t"
-                 << MutRateCGNTs << "\t" << SubRateCGNTs << "\n";
+                 << MutRateTs << "\t" << SubRateTs << "\t" << MutRateTr << "\t"
+                 << SubRateTr << "\t" << MutRateConsPol << "\t"
+                 << SubRateConsPol << "\t" << MutRateRadPol << "\t"
+                 << SubRateRadPol << "\t" << MutRateConsVol << "\t"
+                 << SubRateConsVol << "\t" << MutRateRadVol << "\t"
+                 << SubRateRadVol << "\t" << MutRateConsPolTs << "\t"
+                 << SubRateConsPolTs << "\t" << MutRateRadPolTs << "\t"
+                 << SubRateRadPolTs << "\t" << MutRateConsVolTs << "\t"
+                 << SubRateConsVolTs << "\t" << MutRateRadVolTs << "\t"
+                 << SubRateRadVolTs << "\t" << MutRateConsPolTr << "\t"
+                 << SubRateConsPolTr << "\t" << MutRateRadPolTr << "\t"
+                 << SubRateRadPolTr << "\t" << MutRateConsVolTr << "\t"
+                 << SubRateConsVolTr << "\t" << MutRateRadVolTr << "\t"
+                 << SubRateRadVolTr << "\t" << MutRateConsPolCpGTs << "\t"
+                 << SubRateConsPolCpGTs << "\t" << MutRateRadPolCpGTs << "\t"
+                 << SubRateRadPolCpGTs << "\t" << MutRateConsVolCpGTs << "\t"
+                 << SubRateConsVolCpGTs << "\t" << MutRateRadVolCpGTs << "\t"
+                 << SubRateRadVolCpGTs << "\t" << MutRateCGNTs << "\t"
+                 << SubRateCGNTs << "\n";
         rates_os.close();
       }
     }

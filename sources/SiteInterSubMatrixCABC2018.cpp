@@ -119,7 +119,7 @@ void SiteInterSubMatrixCABC2018::resetSubMatrix() {
   }
 }
 
-std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesNonSynCpG(
+std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesNonSynCpGTs(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
   double MutRate = 0.0;
   double SubRate = 0.0;
@@ -170,7 +170,7 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesNonSynCpG(
   return std::make_tuple(MutRate, SubRate);
 }
 
-std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesSynCpG(
+std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesSynCpGTs(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
   double MutRate = 0.0;
   double SubRate = 0.0;
@@ -221,7 +221,7 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesSynCpG(
   return std::make_tuple(MutRate, SubRate);
 }
 
-std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesCpG(
+std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesCpGTs(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
   double MutRate = 0.0;
   double SubRate = 0.0;
@@ -533,7 +533,7 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesRadPolTr(
   return std::make_tuple(MutRate, SubRate);
 }
 
-std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesRadPolCpG(
+std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesRadPolCpGTs(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
   double MutRate = 0.0;
   double SubRate = 0.0;
@@ -717,7 +717,7 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesRadVolTr(
   return std::make_tuple(MutRate, SubRate);
 }
 
-std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesRadVolCpG(
+std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesRadVolCpGTs(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
   double MutRate = 0.0;
   double SubRate = 0.0;
@@ -857,7 +857,7 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesConsPolTr(
   return std::make_tuple(MutRate, SubRate);
 }
 
-std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesConsPolCpG(
+std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesConsPolCpGTs(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
   double MutRate = 0.0;
   double SubRate = 0.0;
@@ -997,7 +997,7 @@ std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesConsVolTr(
   return std::make_tuple(MutRate, SubRate);
 }
 
-std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesConsVolCpG(
+std::tuple<double, double> SiteInterSubMatrixCABC2018::GetRatesConsVolCpGTs(
     int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
   double MutRate = 0.0;
   double SubRate = 0.0;
