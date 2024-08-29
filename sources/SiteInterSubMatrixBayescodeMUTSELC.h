@@ -11,8 +11,8 @@ Public License for more details. You should have received a copy of the GNU
 General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
-#ifndef SOURCES_SITEINTERSUBMATRIXBAYESCODEMUTSELAAC_H_
-#define SOURCES_SITEINTERSUBMATRIXBAYESCODEMUTSELAAC_H_
+#ifndef SOURCES_SITEINTERSUBMATRIXBAYESCODEMUTSELC_H_
+#define SOURCES_SITEINTERSUBMATRIXBAYESCODEMUTSELC_H_
 
 #include <algorithm>
 #include <cmath>
@@ -34,7 +34,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "SiteInterSubMatrix.h"
 #include "Tree.h"
 
-class SiteInterSubMatrixBayescodeMUTSELAAC : public SiteInterSubMatrix {
+class SiteInterSubMatrixBayescodeMUTSELC : public SiteInterSubMatrix {
  public:
   using SiteInterSubMatrix::SiteInterSubMatrix;
   std::tuple<double, double, double> ComputeCore(int *nucposFrom, int *nucposTo,
@@ -49,4 +49,4 @@ class SiteInterSubMatrixBayescodeMUTSELAAC : public SiteInterSubMatrix {
                                          int **CurrentNodeNucSequence);
 };
 
-#endif  // SOURCES_SITEINTERSUBMATRIXBAYESCODEMUTSELAAC_H_
+#endif  // SOURCES_SITEINTERSUBMATRIXBAYESCODEMUTSELC_H_

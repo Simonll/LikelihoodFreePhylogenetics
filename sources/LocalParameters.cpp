@@ -1763,6 +1763,112 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
   return j;
 }
 
+int LocalParameters::readBayescodeParametersMutSelC(int it) {
+  this->MCMCpointID = it;
+  // set parameters : posterior specific
+  std::ifstream is((this->chain + ".pvalues").c_str());
+  if (!is) {
+    std::cerr << "error: did not find " << this->chain << ".pvalues\n";
+    exit(1);
+  }
+  int j = 0;
+  std::string tmp;
+  int Ncat;
+  // reading first line
+  for (int i = 0; i < 15; i++) {
+    if (i == 9) {
+      is >> Ncat;
+    } else {
+      is >> tmp;
+    }
+  }
+
+  if (it == -1) {
+    std::cerr << "counting number of samples available\n";
+    j = get_number_of_samples(is);
+    std::cerr << "number of samples available: " << j << "\n";
+    return j;
+  }
+
+  while (j < it) {
+    for (int k = 0; k < 2; k++) {
+      is >> tmp;  // tbl, relative ds, relative dn
+    }
+    is >> tmp;  // tree
+    for (int k = 0; k < this->Nnucp; k++) {
+      is >> tmp;  // nucp
+    }
+    for (int k = 0; k < this->Nnucrr; k++) {
+      is >> tmp;  // nucrr
+    }
+    for (int k = 0; k < Ncat; k++) {
+      // site profiles
+      for (int l = 0; l < this->Nstate_codon; l++) {
+        is >> tmp;  // codon fitness
+      }
+    }
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      is >> tmp;  // alloc codon fitness
+    }
+    is >> tmp;  // omega
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      is >> tmp;  // omega alloc
+    }
+    j++;
+  }
+
+  if (j == it) {
+    for (int k = 0; k < 2; k++) {
+      is >> tmp;  // tbl, relative ds, relative dn
+    }
+    refTree = new Tree(is);
+    refTree->RegisterWith(taxonset, 0);
+    for (int k = 0; k < this->Nnucp; k++) {
+      is >> nucp[k];
+    }
+    for (int k = 0; k < this->Nnucrr; k++) {
+      is >> nucrr[k];
+    }
+
+    // nucrrnr[0][0]; //AA
+    nucrrnr[0][1] = nucrr[0];  // AC
+    nucrrnr[0][2] = nucrr[1];  // AG
+    nucrrnr[0][3] = nucrr[2];  // AT
+    nucrrnr[1][0] = nucrr[0];  // CA
+    // nucrrnr[1][1]; //CG
+    nucrrnr[1][2] = nucrr[3];  // CG
+    nucrrnr[1][3] = nucrr[4];  // CT
+    nucrrnr[2][0] = nucrr[1];  // GA
+    nucrrnr[2][1] = nucrr[3];  // GC
+    // nucrrnr[2][2]; //GG
+    nucrrnr[2][3] = nucrr[5];  // GT
+    nucrrnr[3][0] = nucrr[2];  // TA
+    nucrrnr[3][1] = nucrr[4];  // TC
+    nucrrnr[3][2] = nucrr[5];  // TG
+    // nucrrnr[3][3]; //TT
+
+    for (int k = 0; k < Ncat; k++) {
+      for (int l = 0; l < this->Nstate_codon; l++) {
+        is >> sscodonprofiles[k][l];
+      }
+    }
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      is >> alloc[k];
+    }
+
+    double omega;
+    is >> omega;
+    for (int k = 0; k < this->Nsite_codon; k++) {
+      site_omega[k] = omega;
+    }
+  }
+  is.close();
+
+  Setgtrbayescode2gtnr();
+  SetTreeStuff();
+  return j;
+}
+
 int LocalParameters::readParametersCodemlM7M8(int it) {
   this->MCMCpointID = it;
   // set parameters
