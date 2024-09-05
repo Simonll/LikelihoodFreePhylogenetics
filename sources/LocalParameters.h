@@ -169,6 +169,7 @@ class LocalParameters {
   void readChainCodonMutSelSBDP(int pt_i);
   int readParametersMutSelC(int pt_i);
   int readBayescodeParametersMutSelAAC(int pt_i);
+  int readBayescodeParametersMutSelAA(int pt_i);
   int readBayescodeParametersMutSelC(int pt_i);
 
   void readChainCodonMutSelFinite();

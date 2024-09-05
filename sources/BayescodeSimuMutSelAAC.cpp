@@ -59,8 +59,8 @@ int main(int argc, char *argv[]) {
     std::cerr << "\n";
     std::cerr << "version 1.0\n";
     std::cerr << "###########################\n";
-    std::cerr << "-m < MG | FMUTSEL0 | FMUTSELW | MUTSELAA | MUTSELAAW | "
-                 "MUTSELAAC | MUTSELC > < controlfile >\n";
+    std::cerr << "-m < MG | FMUTSEL0 | FMUTSEL | MUTSELAAwoW | MUTSELAAW | "; 
+    std::cerr << "MUTSELAACwoW | MUTSELAACW | MUTSELCwoW | MUTSELCW> < controlfile >\n";
     std::cerr << "###########################\n";
     std::cerr << "#SUMMARIES\n";
     std::cerr << "#ANCSUMMARIES\n";
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     std::cerr << "###########################\n";
     exit(1);
   }
-  if (model == "MUTSELAAC") {
+  if (model == "MUTSELAACwoW" || model == "MUTSELAACW") {
     cerr << "simulating under " << model << "\n";
 
     GlobalParameters *gparam = new GlobalParameters(model, controlfile);
@@ -170,8 +170,8 @@ int main(int argc, char *argv[]) {
 
     ofstream rates_os((gparam->output + ".rates").c_str(), std::ios_base::out);
     rates_os << "length\tds\tdn\n";
-    for (int i = 0; i < Rates.size(); i++) {
-      for (int j = 0; j < Rates[i].size(); j++) {
+    for (std::vector<double>::size_type i = 0; i < Rates.size(); i++) {
+      for (std::vector<double>::size_type j = 0; j < Rates[i].size(); j++) {
         rates_os << Rates[i][j] << "\t";
       }
       rates_os << "\n";

@@ -26,7 +26,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "LocalParameters.h"
 #include "Posterior.h"
 #include "PriorSampler.h"
-#include "SiteInterSubMatrixBayescodeMUTSELC.h"
+#include "SiteInterSubMatrixBayescodeMUTSELAA.h"
 #include "SummaryStatistics.h"
 #include "TreeSimulator.h"
 
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     std::cerr << "###########################\n";
     exit(1);
   }
-  if (model == "MUTSELCwoW" || model == "MUTSELCW") {
+  if (model == "MUTSELAAwoW" || model == "MUTSELAAW") {
     cerr << "simulating under " << model << "\n";
 
     GlobalParameters *gparam = new GlobalParameters(model, controlfile);
@@ -87,12 +87,12 @@ int main(int argc, char *argv[]) {
     post->SetNsite(lparam->Nsite_codon);
     SummaryStatistics *ss = new SummaryStatistics(lparam);
 
-    int size = lparam->readBayescodeParametersMutSelC(-1);
-    lparam->readBayescodeParametersMutSelC(0);
+    int size = lparam->readBayescodeParametersMutSelAA(-1);
+    lparam->readBayescodeParametersMutSelAA(0);
     ss->computeSummaries();
     PriorSampler *prior = new PriorSampler(lparam);
-    SiteInterSubMatrixBayescodeMUTSELC *submatrix =
-        new SiteInterSubMatrixBayescodeMUTSELC(lparam);
+    SiteInterSubMatrixBayescodeMUTSELAA *submatrix =
+        new SiteInterSubMatrixBayescodeMUTSELAA(lparam);
     submatrix->init();
     AncestralSequence *ancestraseq = new AncestralSequence(lparam);
     TreeSimulator *simulator =
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
 
     while (post->Niter < gparam->Nsimu) {
       int k = static_cast<int>(lparam->rnd->Uniform() * size - 1);
-      lparam->readBayescodeParametersMutSelC(k);
+      lparam->readBayescodeParametersMutSelAA(k);
       for (int i = 0; i < gparam->Nrep; i++) {
         prior->sample();
         simulator->run_jump_chain_over_tree();
