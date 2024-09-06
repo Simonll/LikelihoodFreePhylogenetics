@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     std::cerr << "###########################\n";
     exit(1);
   }
-  if (model == "MUTSELCwoW" || model == "MUTSELCW") {
+  if (model == "MUTSELCwoW" || model == "MUTSELCW" || model == "FMUTSEL") {
     cerr << "simulating under " << model << "\n";
 
     GlobalParameters *gparam = new GlobalParameters(model, controlfile);
@@ -178,5 +178,7 @@ int main(int argc, char *argv[]) {
     }
     rates_os.close();
     exit(0);
+  } else {
+    std::cerr << "This model {" << model << "} is not available yet.\n";
   }
 }
