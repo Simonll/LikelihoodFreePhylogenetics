@@ -30,37 +30,45 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "SummaryStatistics.h"
 #include "TreeSimulator.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   // Comments
 
   // program options
   std::string model = "";
   std::string controlfile = "";
 
-  try {
-    if (argc < 2) {
+  try
+  {
+    if (argc < 2)
+    {
       throw(0);
     }
     int i = 1;
-    while (i < argc) {
+    while (i < argc)
+    {
       std::string s = argv[i];
-      if (s == "-v" || s == "--version") {
+      if (s == "-v" || s == "--version")
+      {
         throw(0);
-      } else if (s == "-m") {
+      }
+      else if (s == "-m")
+      {
         i++;
         model = argv[i];
         i++;
         controlfile = argv[i];
       }
       i++;
-    }  // end while
-  }    // end try
-  catch (...) {
+    } // end while
+  } // end try
+  catch (...)
+  {
     std::cerr << "\n";
     std::cerr << "version 1.0\n";
     std::cerr << "###########################\n";
-    std::cerr << "-m < MG | FMUTSEL0 | FMUTSEL | MUTSELAAwoW | MUTSELAAW | "; 
-    std::cerr << "MUTSELAACwoW | MUTSELAACW | MUTSELCwoW | MUTSELCW> < controlfile >\n";
+    std::cerr << "-m < MG | FMUTSEL0 | MUTSELAAwoW | MUTSELAAW | ";
+    std::cerr << "> < controlfile >\n";
     std::cerr << "###########################\n";
     std::cerr << "#SUMMARIES\n";
     std::cerr << "#ANCSUMMARIES\n";
@@ -78,7 +86,8 @@ int main(int argc, char *argv[]) {
     std::cerr << "###########################\n";
     exit(1);
   }
-  if (model == "MUTSELAAwoW" || model == "MUTSELAAW" || model == "FMUTSEL0") {
+  if (model == "MUTSELAAwoW" || model == "MUTSELAAW" || model == "FMUTSEL0")
+  {
     cerr << "simulating under " << model << "\n";
 
     GlobalParameters *gparam = new GlobalParameters(model, controlfile);
@@ -106,10 +115,12 @@ int main(int argc, char *argv[]) {
 
     std::vector<std::vector<double>> Rates;
 
-    while (post->Niter < gparam->Nsimu) {
+    while (post->Niter < gparam->Nsimu)
+    {
       int k = static_cast<int>(lparam->rnd->Uniform() * size - 1);
       lparam->readBayescodeParametersMutSelAA(k);
-      for (int i = 0; i < gparam->Nrep; i++) {
+      for (int i = 0; i < gparam->Nrep; i++)
+      {
         prior->sample();
         simulator->run_jump_chain_over_tree();
         ss->computeSummaries(simulator->CurrentLeafNodeCodonSequences);
@@ -133,7 +144,8 @@ int main(int argc, char *argv[]) {
                                       SubRateNonSyn / MutRateNonSyn};
         Rates.push_back(Rates_);
 
-        if (lparam->tofasta) {
+        if (lparam->tofasta)
+        {
           // For generating the .fasta file
           std::ostringstream oss_fasta;
           oss_fasta << gparam->output << "-" << post->Niter << "_" << i
@@ -149,7 +161,7 @@ int main(int argc, char *argv[]) {
           std::string output_tre = oss_tre.str();
           std::ofstream tre_os(output_tre.c_str(), std::ios_base::out);
           lparam->refTree->ToStream(tre_os);
-          tre_os.close();  // Close the tree output stream
+          tre_os.close(); // Close the tree output stream
         }
         std::cerr << ".";
       }
@@ -170,16 +182,19 @@ int main(int argc, char *argv[]) {
 
     ofstream rates_os((gparam->output + ".rates").c_str(), std::ios_base::out);
     rates_os << "length\tds\tdn\n";
-    for (std::vector<double>::size_type i = 0; i < Rates.size(); i++) {
-      for (std::vector<double>::size_type j = 0; j < Rates[i].size(); j++) {
+    for (std::vector<double>::size_type i = 0; i < Rates.size(); i++)
+    {
+      for (std::vector<double>::size_type j = 0; j < Rates[i].size(); j++)
+      {
         rates_os << Rates[i][j] << "\t";
       }
       rates_os << "\n";
     }
     rates_os.close();
     exit(0);
-  } else {
+  }
+  else
+  {
     std::cerr << "This model {" << model << "} is not available yet.\n";
   }
-  
 }

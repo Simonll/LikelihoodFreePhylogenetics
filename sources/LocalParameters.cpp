@@ -108,6 +108,7 @@ LocalParameters::LocalParameters(GlobalParameters *gparam)
   this->omega = 1.0;
   this->lambda_TBL = 1.0;
   this->lambda_omega = 1.0;
+  this->lambda_dS = 1.0;
   this->lambda_CpG = 1.0;
   this->lambda_tvCpG = 1.0;
   this->lambda_tvTpA = 1.0;
@@ -2360,7 +2361,7 @@ int LocalParameters::readBayescodeParametersMutSelAA(int it)
   {
     for (int k = 0; k < 2; k++)
     {
-      is >> tmp; // tbl, relative ds, relative dn
+      is >> tmp; // relative ds, relative dn
     }
     is >> tmp; // tree
     for (int k = 0; k < this->Nnucp; k++)
@@ -2524,7 +2525,7 @@ int LocalParameters::readBayescodeParametersMutSelC(int it)
   {
     for (int k = 0; k < 2; k++)
     {
-      is >> tmp; // tbl, relative ds, relative dn
+      is >> tmp; // relative ds, relative dn
     }
     refTree = new Tree(is);
     refTree->RegisterWith(taxonset, 0);

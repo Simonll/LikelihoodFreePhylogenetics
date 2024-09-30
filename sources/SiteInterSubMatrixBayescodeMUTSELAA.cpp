@@ -18,8 +18,9 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 
 std::tuple<double, double, double>
 SiteInterSubMatrixBayescodeMUTSELAA::ComputeCore(
-    int* nucposFrom, int* nucposTo, int codonPos, int NodeIndex, int site_nuc,
-    int site_codon_i, int** CurrentNodeNucSequence) {
+    int *nucposFrom, int *nucposTo, int codonPos, int NodeIndex, int site_nuc,
+    int site_codon_i, int **CurrentNodeNucSequence)
+{
   double MutRate = 0.0;
   double SubRate = 0.0;
   double S = 0.0;
@@ -27,30 +28,36 @@ SiteInterSubMatrixBayescodeMUTSELAA::ComputeCore(
       nucposFrom[0], nucposFrom[1], nucposFrom[2]);
   int codonTo = lparam->codonstatespace->GetCodonFromDNA(
       nucposTo[0], nucposTo[1], nucposTo[2]);
-  if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1], nucposTo[2])) {
+  if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1], nucposTo[2]))
+  {
     MutRate = lparam->gtnr[nucposFrom[codonPos]][nucposTo[codonPos]];
     int CpGcont = testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
                                  nucposTo[codonPos], CurrentNodeNucSequence);
 
-    if (CpGcont == 1 || CpGcont == 2) {
+    if (CpGcont == 1 || CpGcont == 2)
+    {
       // tsCpG
       MutRate *= lparam->lambda_CpG;
       // CpG>TpG
     }
 
-    if (MutRate < lparam->TOOSMALL) {
+    if (MutRate < lparam->TOOSMALL)
+    {
       MutRate = lparam->TOOSMALL;
     }
     MutRate *= lparam->lambda_TBL;
-    if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
+    if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo))
+    {
       int aaTo = lparam->codonstatespace->Translation(codonTo);
       int aaFrom = lparam->codonstatespace->Translation(codonFrom);
       S = log(lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaTo] /
-           lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom]);
+              lparam->ssaaprofiles[lparam->alloc[site_codon_i]][aaFrom]);
       SubRate =
           MutRate * lparam->lambda_omega * lparam->site_omega[site_codon_i];
-    } else {
-      SubRate = MutRate * lparam->lambda_dS;
+    }
+    else
+    {
+      SubRate = MutRate;
     }
     SubRate = ComputeFixationFactor(S, SubRate);
   }
@@ -58,35 +65,43 @@ SiteInterSubMatrixBayescodeMUTSELAA::ComputeCore(
 }
 
 std::tuple<double, double> SiteInterSubMatrixBayescodeMUTSELAA::GetRatesNonSyn(
-    int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
+    int NodeIndex, int site_codon, int **CurrentNodeNucSequence)
+{
   double MutRate = 0.0;
   double SubRate = 0.0;
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
   std::tie(site_codon_start, site_codon_end) = getStartEndCodons(site_codon);
-  int* nucposFrom = new int[3];
-  int* nucposTo = new int[3];
+  int *nucposFrom = new int[3];
+  int *nucposTo = new int[3];
   for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end;
-       site_codon_i++) {
-    int site_nuc_start = (site_codon_i * 3);  // site_codon to site_nuc
-    for (int codonPos = 0; codonPos < 3; codonPos++) {
+       site_codon_i++)
+  {
+    int site_nuc_start = (site_codon_i * 3); // site_codon to site_nuc
+    for (int codonPos = 0; codonPos < 3; codonPos++)
+    {
       nucposFrom[codonPos] =
           CurrentNodeNucSequence[NodeIndex][site_nuc_start + codonPos];
       nucposTo[codonPos] =
           CurrentNodeNucSequence[NodeIndex][site_nuc_start + codonPos];
     }
-    for (int codonPos = 0; codonPos < 3; codonPos++) {
+    for (int codonPos = 0; codonPos < 3; codonPos++)
+    {
       int site_nuc = site_nuc_start + codonPos;
-      for (int nucTo = 0; nucTo < 4; nucTo++) {
-        if (nucposFrom[codonPos] != nucTo) {
+      for (int nucTo = 0; nucTo < 4; nucTo++)
+      {
+        if (nucposFrom[codonPos] != nucTo)
+        {
           nucposTo[codonPos] = nucTo;
           if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
-                                               nucposTo[2])) {
+                                               nucposTo[2]))
+          {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
                 nucposTo[0], nucposTo[1], nucposTo[2]);
-            if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
+            if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo))
+            {
               SubRate += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
               MutRate += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
             }
@@ -102,35 +117,43 @@ std::tuple<double, double> SiteInterSubMatrixBayescodeMUTSELAA::GetRatesNonSyn(
 }
 
 std::tuple<double, double> SiteInterSubMatrixBayescodeMUTSELAA::GetRatesSyn(
-    int NodeIndex, int site_codon, int** CurrentNodeNucSequence) {
+    int NodeIndex, int site_codon, int **CurrentNodeNucSequence)
+{
   double MutRate = 0.0;
   double SubRate = 0.0;
   int site_codon_start = 0;
   int site_codon_end = lparam->Nsite_codon;
   std::tie(site_codon_start, site_codon_end) = getStartEndCodons(site_codon);
-  int* nucposFrom = new int[3];
-  int* nucposTo = new int[3];
+  int *nucposFrom = new int[3];
+  int *nucposTo = new int[3];
   for (int site_codon_i = site_codon_start; site_codon_i < site_codon_end;
-       site_codon_i++) {
-    int site_nuc_start = (site_codon_i * 3);  // site_codon to site_nuc
-    for (int codonPos = 0; codonPos < 3; codonPos++) {
+       site_codon_i++)
+  {
+    int site_nuc_start = (site_codon_i * 3); // site_codon to site_nuc
+    for (int codonPos = 0; codonPos < 3; codonPos++)
+    {
       nucposFrom[codonPos] =
           CurrentNodeNucSequence[NodeIndex][site_nuc_start + codonPos];
       nucposTo[codonPos] =
           CurrentNodeNucSequence[NodeIndex][site_nuc_start + codonPos];
     }
-    for (int codonPos = 0; codonPos < 3; codonPos++) {
+    for (int codonPos = 0; codonPos < 3; codonPos++)
+    {
       int site_nuc = site_nuc_start + codonPos;
-      for (int nucTo = 0; nucTo < 4; nucTo++) {
-        if (nucposFrom[codonPos] != nucTo) {
+      for (int nucTo = 0; nucTo < 4; nucTo++)
+      {
+        if (nucposFrom[codonPos] != nucTo)
+        {
           nucposTo[codonPos] = nucTo;
           if (!lparam->codonstatespace->isStop(nucposTo[0], nucposTo[1],
-                                               nucposTo[2])) {
+                                               nucposTo[2]))
+          {
             int codonFrom = lparam->codonstatespace->GetCodonFromDNA(
                 nucposFrom[0], nucposFrom[1], nucposFrom[2]);
             int codonTo = lparam->codonstatespace->GetCodonFromDNA(
                 nucposTo[0], nucposTo[1], nucposTo[2]);
-            if (lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
+            if (lparam->codonstatespace->Synonymous(codonFrom, codonTo))
+            {
               SubRate += submatrixTreeSim[NodeIndex][site_nuc][nucTo];
               MutRate += mutmatrixTreeSim[NodeIndex][site_nuc][nucTo];
             }
