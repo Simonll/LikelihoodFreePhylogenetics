@@ -295,7 +295,7 @@ class LocalParameters {
       }
     }
     getrate = true;
-    MutationNormFactor = 2 * (norm);
+    MutationNormFactor = 2 * (norm * 3);
     return MutationNormFactor;
   }
 };
