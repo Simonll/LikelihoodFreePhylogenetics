@@ -20,7 +20,7 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include <sstream>
 #include <string>
 
-#include "AncestralSequence.h"
+#include "AncestralSequenceBayescodeMUTSELC.h"
 #include "BiologicalSequences.h"
 #include "GlobalParameters.h"
 #include "LocalParameters.h"
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
     SiteInterSubMatrixBayescodeMUTSELC *submatrix =
         new SiteInterSubMatrixBayescodeMUTSELC(lparam);
     submatrix->init();
-    AncestralSequence *ancestraseq = new AncestralSequence(lparam);
+    AncestralSequenceBayescodeMUTSELC *ancestraseq = new AncestralSequenceBayescodeMUTSELC(lparam);
     TreeSimulator *simulator =
         new TreeSimulator(lparam, submatrix, ancestraseq);
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());

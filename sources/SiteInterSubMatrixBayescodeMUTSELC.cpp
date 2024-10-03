@@ -47,20 +47,16 @@ SiteInterSubMatrixBayescodeMUTSELC::ComputeCore(int *nucposFrom, int *nucposTo,
       MutRate = lparam->TOOSMALL;
     }
     MutRate *= lparam->lambda_TBL;
-    if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo))
-    {
-      S = log(
+    S = log(
           (lparam->sscodonprofiles[lparam->alloc[site_codon_i]][codonTo] /
            lparam->sscodonprofiles[lparam->alloc[site_codon_i]][codonFrom]));
-      SubRate =
-          MutRate * lparam->lambda_omega * lparam->site_omega[site_codon_i];
-    }
-    else
+    SubRate = MutRate;
+    
+    if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo))
     {
-      S = log(lparam->sscodonprofiles[lparam->alloc[site_codon_i]][codonTo] /
-              lparam->sscodonprofiles[lparam->alloc[site_codon_i]][codonFrom]);
-      SubRate = MutRate;
+       SubRate *= lparam->lambda_omega * lparam->site_omega[site_codon_i];
     }
+    
     SubRate = ComputeFixationFactor(S, SubRate);
   }
   return {MutRate, S, SubRate};

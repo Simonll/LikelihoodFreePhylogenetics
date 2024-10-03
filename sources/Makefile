@@ -1,12 +1,13 @@
 CC=g++
 CPPFLAGS=-c -g -std=c++11 -O2 -Wall -pedantic -fopenmp -fno-var-tracking -Wfatal-errors
 LDFLAGS=-fopenmp
-SRCS=GlobalParameters.cpp TaxonSet.cpp Tree.cpp  Random.cpp  SequenceAlignment.cpp CodonSequenceAlignment.cpp\
-  StateSpace.cpp CodonStateSpace.cpp  LocalParameters.cpp SummaryStatistics.cpp SiteInterSubMatrix.cpp\
-  SiteInterSubMatrixCodeMLM7M8.cpp SiteInterSubMatrixCodeMLM7M8TpA.cpp SiteInterSubMatrixCABC2018.cpp\
-  SiteInterSubMatrixCodeMLFMUTSEL.cpp SiteInterSubMatrixBayescodeMUTSELAAC.cpp SiteInterSubMatrixBayescodeMUTSELAA.cpp\
+SRCS=GlobalParameters.cpp TaxonSet.cpp Tree.cpp Random.cpp SequenceAlignment.cpp CodonSequenceAlignment.cpp \
+  StateSpace.cpp CodonStateSpace.cpp  LocalParameters.cpp SummaryStatistics.cpp SiteInterSubMatrix.cpp \
+  SiteInterSubMatrixCodeMLM7M8.cpp SiteInterSubMatrixCodeMLM7M8TpA.cpp SiteInterSubMatrixCABC2018.cpp \
+  SiteInterSubMatrixCodeMLFMUTSEL.cpp SiteInterSubMatrixBayescodeMUTSELAAC.cpp SiteInterSubMatrixBayescodeMUTSELAA.cpp \
   SiteInterSubMatrixBayescodeMUTSELC.cpp EvolHistStatistics.cpp \
-  PriorSampler.cpp AncestralSequence.cpp TreeSimulator.cpp BranchSpecificParameters.cpp  LocalData.cpp\
+  PriorSampler.cpp AncestralSequence.cpp AncestralSequenceBayescodeMUTSELC.cpp \
+  TreeSimulator.cpp BranchSpecificParameters.cpp  LocalData.cpp \
   Posterior.cpp
 
 OBJS=$(patsubst %.cpp,%.o,$(SRCS))
