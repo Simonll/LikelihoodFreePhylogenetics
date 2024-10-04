@@ -397,20 +397,20 @@ void LocalParameters::GetGTR1() {
   }
 
   // nucrrnr1[0][0]; //AA
-  nucrrnr1[0][1] = nucrr1[0];  // AC
-  nucrrnr1[0][2] = nucrr1[1];  // AG
-  nucrrnr1[0][3] = nucrr1[2];  // AT
-  nucrrnr1[1][0] = nucrr1[0];  // CA
+  nucrrnr1[0][1] = nucrr1[0]; // AC
+  nucrrnr1[0][2] = nucrr1[1]; // AG
+  nucrrnr1[0][3] = nucrr1[2]; // AT
+  nucrrnr1[1][0] = nucrr1[0]; // CA
   // nucrrnr1[1][1]; //CG
-  nucrrnr1[1][2] = nucrr1[3];  // CG
-  nucrrnr1[1][3] = nucrr1[4];  // CT
-  nucrrnr1[2][0] = nucrr1[1];  // GA
-  nucrrnr1[2][1] = nucrr1[3];  // GC
+  nucrrnr1[1][2] = nucrr1[3]; // CG
+  nucrrnr1[1][3] = nucrr1[4]; // CT
+  nucrrnr1[2][0] = nucrr1[1]; // GA
+  nucrrnr1[2][1] = nucrr1[3]; // GC
   // nucrrnr1[2][2]; //GG
-  nucrrnr1[2][3] = nucrr1[5];  // GT
-  nucrrnr1[3][0] = nucrr1[2];  // TA
-  nucrrnr1[3][1] = nucrr1[4];  // TC
-  nucrrnr1[3][2] = nucrr1[5];  // TG
+  nucrrnr1[2][3] = nucrr1[5]; // GT
+  nucrrnr1[3][0] = nucrr1[2]; // TA
+  nucrrnr1[3][1] = nucrr1[4]; // TC
+  nucrrnr1[3][2] = nucrr1[5]; // TG
   // nucrrnr1[3][3]; //TT
 
   sum = 0.0;
@@ -457,20 +457,20 @@ void LocalParameters::GetGTR2() {
     this->nucp2[nuc1] /= sum;
   }
   // nucrrnr2[0][0]; //AA
-  nucrrnr2[0][1] = nucrr2[0];  // AC
-  nucrrnr2[0][2] = nucrr2[1];  // AG
-  nucrrnr2[0][3] = nucrr2[2];  // AT
-  nucrrnr2[1][0] = nucrr2[0];  // CA
+  nucrrnr2[0][1] = nucrr2[0]; // AC
+  nucrrnr2[0][2] = nucrr2[1]; // AG
+  nucrrnr2[0][3] = nucrr2[2]; // AT
+  nucrrnr2[1][0] = nucrr2[0]; // CA
   // nucrrnr2[1][1]; //CG
-  nucrrnr2[1][2] = nucrr2[3];  // CG
-  nucrrnr2[1][3] = nucrr2[4];  // CT
-  nucrrnr2[2][0] = nucrr2[1];  // GA
-  nucrrnr2[2][1] = nucrr2[3];  // GC
+  nucrrnr2[1][2] = nucrr2[3]; // CG
+  nucrrnr2[1][3] = nucrr2[4]; // CT
+  nucrrnr2[2][0] = nucrr2[1]; // GA
+  nucrrnr2[2][1] = nucrr2[3]; // GC
   // nucrrnr2[2][2]; //GG
-  nucrrnr2[2][3] = nucrr2[5];  // GT
-  nucrrnr2[3][0] = nucrr2[2];  // TA
-  nucrrnr2[3][1] = nucrr2[4];  // TC
-  nucrrnr2[3][2] = nucrr2[5];  // TG
+  nucrrnr2[2][3] = nucrr2[5]; // GT
+  nucrrnr2[3][0] = nucrr2[2]; // TA
+  nucrrnr2[3][1] = nucrr2[4]; // TC
+  nucrrnr2[3][2] = nucrr2[5]; // TG
   // nucrrnr2[3][3]; //TT
 
   sum = 0.0;
@@ -833,9 +833,9 @@ void LocalParameters::readLocalInstructions() {
 }
 
 void LocalParameters::SetRootLCA() {
-  outgroupLink = refTree->GetLCA(taxa_a, taxa_b);
-  refTree->RootAt(outgroupLink);
-  refTree->SetIndices();
+  this->outgroupLink = refTree->GetLCA(taxa_a, taxa_b);
+  this->refTree->RootAt(outgroupLink);
+  this->refTree->SetIndices();
 }
 
 void LocalParameters::SetTree() {
@@ -1387,7 +1387,10 @@ void LocalParameters::readFMutSelCodeML() {
     exit(1);
   }
 
-  this->refTree = new Tree(is);
+  if (refTree != nullptr) {
+    delete refTree; // Free the memory for the old object
+  }
+  refTree = new Tree(is); // Assign the new object
   this->refTree->RegisterWith(taxonset, 0);
 
   for (int k = 0; k < this->Nnucp; k++) {
@@ -1399,20 +1402,20 @@ void LocalParameters::readFMutSelCodeML() {
   }
 
   // nucrrnr[0][0]; //AA
-  this->nucrrnr[0][1] = nucrr[0];  // AC
-  this->nucrrnr[0][2] = nucrr[1];  // AG
-  this->nucrrnr[0][3] = nucrr[2];  // AT
-  this->nucrrnr[1][0] = nucrr[0];  // CA
+  this->nucrrnr[0][1] = nucrr[0]; // AC
+  this->nucrrnr[0][2] = nucrr[1]; // AG
+  this->nucrrnr[0][3] = nucrr[2]; // AT
+  this->nucrrnr[1][0] = nucrr[0]; // CA
   // nucrrnr[1][1]; //CG
-  this->nucrrnr[1][2] = nucrr[3];  // CG
-  this->nucrrnr[1][3] = nucrr[4];  // CT
-  this->nucrrnr[2][0] = nucrr[1];  // GA
-  this->nucrrnr[2][1] = nucrr[3];  // GC
+  this->nucrrnr[1][2] = nucrr[3]; // CG
+  this->nucrrnr[1][3] = nucrr[4]; // CT
+  this->nucrrnr[2][0] = nucrr[1]; // GA
+  this->nucrrnr[2][1] = nucrr[3]; // GC
   // nucrrnr[2][2]; //GG
-  this->nucrrnr[2][3] = nucrr[5];  // GT
-  this->nucrrnr[3][0] = nucrr[2];  // TA
-  this->nucrrnr[3][1] = nucrr[4];  // TC
-  this->nucrrnr[3][2] = nucrr[5];  // TG
+  this->nucrrnr[2][3] = nucrr[5]; // GT
+  this->nucrrnr[3][0] = nucrr[2]; // TA
+  this->nucrrnr[3][1] = nucrr[4]; // TC
+  this->nucrrnr[3][2] = nucrr[5]; // TG
   // nucrrnr[3][3]; //TT
 
   double sum = 0.0;
@@ -1466,41 +1469,44 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
   int Ncat;
   std::string tmp = "";
   while (j < pt_i) {
-    is >> tmp;  // tree
-    is >> tmp;  // branchalpha
-    is >> tmp;  // branchbeta
+    is >> tmp; // tree
+    is >> tmp; // branchalpha
+    is >> tmp; // branchbeta
     for (int k = 0; k < this->Nnucp; k++) {
-      is >> tmp;  // nucp
+      is >> tmp; // nucp
     }
     for (int k = 0; k < this->Nnucrr; k++) {
-      is >> tmp;  // nucrr
+      is >> tmp; // nucrr
     }
 
     for (int k = 0; k < this->Nstate_codon; k++) {
-      is >> tmp;  // codon
+      is >> tmp; // codon
     }
-    is >> tmp;   // omega
-    is >> tmp;   // kappa
-    is >> Ncat;  // Ncomponents
+    is >> tmp;  // omega
+    is >> tmp;  // kappa
+    is >> Ncat; // Ncomponents
     for (int k = 0; k < this->Nstate_aa; k++) {
       is >> tmp;
     }
     for (int k = 0; k < Ncat; k++) {
       for (int l = 0; l < this->Nstate_aa; l++) {
-        is >> tmp;  // ssprofiles
+        is >> tmp; // ssprofiles
       }
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // alloc
+      is >> tmp; // alloc
     }
     j++;
   }
 
   if (j == pt_i) {
-    refTree = new Tree(is);
+    if (refTree != nullptr) {
+      delete refTree; // Free the memory for the old object
+    }
+    refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
-    is >> tmp;  // branchalpha
-    is >> tmp;  // branchbeta
+    is >> tmp; // branchalpha
+    is >> tmp; // branchbeta
     for (int k = 0; k < this->Nnucp; k++) {
       is >> nucp[k];
     }
@@ -1509,20 +1515,20 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
     }
 
     // nucrrnr[0][0]; //AA
-    nucrrnr[0][1] = nucrr[0];  // AC
-    nucrrnr[0][2] = nucrr[1];  // AG
-    nucrrnr[0][3] = nucrr[2];  // AT
-    nucrrnr[1][0] = nucrr[0];  // CA
+    nucrrnr[0][1] = nucrr[0]; // AC
+    nucrrnr[0][2] = nucrr[1]; // AG
+    nucrrnr[0][3] = nucrr[2]; // AT
+    nucrrnr[1][0] = nucrr[0]; // CA
     // nucrrnr[1][1]; //CG
-    nucrrnr[1][2] = nucrr[3];  // CG
-    nucrrnr[1][3] = nucrr[4];  // CT
-    nucrrnr[2][0] = nucrr[1];  // GA
-    nucrrnr[2][1] = nucrr[3];  // GC
+    nucrrnr[1][2] = nucrr[3]; // CG
+    nucrrnr[1][3] = nucrr[4]; // CT
+    nucrrnr[2][0] = nucrr[1]; // GA
+    nucrrnr[2][1] = nucrr[3]; // GC
     // nucrrnr[2][2]; //GG
-    nucrrnr[2][3] = nucrr[5];  // GT
-    nucrrnr[3][0] = nucrr[2];  // TA
-    nucrrnr[3][1] = nucrr[4];  // TC
-    nucrrnr[3][2] = nucrr[5];  // TG
+    nucrrnr[2][3] = nucrr[5]; // GT
+    nucrrnr[3][0] = nucrr[2]; // TA
+    nucrrnr[3][1] = nucrr[4]; // TC
+    nucrrnr[3][2] = nucrr[5]; // TG
     // nucrrnr[3][3]; //TT
 
     for (int k = 0; k < this->Nstate_codon; k++) {
@@ -1562,43 +1568,46 @@ void LocalParameters::readChainCodonMutSelSBDP() {
   int Ncat;
   std::string tmp = "";
   while (j < this->startPoint) {
-    is >> tmp;  // tree
-    is >> tmp;  // branchalpha
-    is >> tmp;  // branchbeta
+    is >> tmp; // tree
+    is >> tmp; // branchalpha
+    is >> tmp; // branchbeta
     for (int k = 0; k < this->Nnucp; k++) {
-      is >> tmp;  // nucp
+      is >> tmp; // nucp
     }
     for (int k = 0; k < this->Nnucrr; k++) {
-      is >> tmp;  // nucrr
+      is >> tmp; // nucrr
     }
 
     for (int k = 0; k < this->Nstate_codon; k++) {
-      is >> tmp;  // codon
+      is >> tmp; // codon
     }
-    is >> tmp;   // omega
-    is >> tmp;   // kappa
-    is >> Ncat;  // Ncomponents
+    is >> tmp;  // omega
+    is >> tmp;  // kappa
+    is >> Ncat; // Ncomponents
     for (int k = 0; k < this->Nstate_aa; k++) {
       is >> tmp;
     }
     for (int k = 0; k < Ncat; k++) {
       for (int l = 0; l < this->Nstate_aa; l++) {
-        is >> tmp;  // ssprofiles
+        is >> tmp; // ssprofiles
       }
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // alloc
+      is >> tmp; // alloc
     }
     j++;
   }
 
   if (j == this->startPoint) {
-    refTree = new Tree(is);
+    if (refTree != nullptr) {
+      delete refTree; // Free the memory for the old object
+    }
+    refTree = new Tree(is); // Assign the new object
 
     refTree->RegisterWith(taxonset, 0);
 
-    is >> tmp;  // branchalpha
-    is >> tmp;  // branchbeta
+    is >> tmp; // branchalpha
+    is >> tmp; // branchbeta
     for (int k = 0; k < this->Nnucp; k++) {
       is >> nucp[k];
     }
@@ -1607,20 +1616,20 @@ void LocalParameters::readChainCodonMutSelSBDP() {
     }
 
     // nucrrnr[0][0]; //AA
-    nucrrnr[0][1] = nucrr[0];  // AC
-    nucrrnr[0][2] = nucrr[1];  // AG
-    nucrrnr[0][3] = nucrr[2];  // AT
-    nucrrnr[1][0] = nucrr[0];  // CA
+    nucrrnr[0][1] = nucrr[0]; // AC
+    nucrrnr[0][2] = nucrr[1]; // AG
+    nucrrnr[0][3] = nucrr[2]; // AT
+    nucrrnr[1][0] = nucrr[0]; // CA
     // nucrrnr[1][1]; //CG
-    nucrrnr[1][2] = nucrr[3];  // CG
-    nucrrnr[1][3] = nucrr[4];  // CT
-    nucrrnr[2][0] = nucrr[1];  // GA
-    nucrrnr[2][1] = nucrr[3];  // GC
+    nucrrnr[1][2] = nucrr[3]; // CG
+    nucrrnr[1][3] = nucrr[4]; // CT
+    nucrrnr[2][0] = nucrr[1]; // GA
+    nucrrnr[2][1] = nucrr[3]; // GC
     // nucrrnr[2][2]; //GG
-    nucrrnr[2][3] = nucrr[5];  // GT
-    nucrrnr[3][0] = nucrr[2];  // TA
-    nucrrnr[3][1] = nucrr[4];  // TC
-    nucrrnr[3][2] = nucrr[5];  // TG
+    nucrrnr[2][3] = nucrr[5]; // GT
+    nucrrnr[3][0] = nucrr[2]; // TA
+    nucrrnr[3][1] = nucrr[4]; // TC
+    nucrrnr[3][2] = nucrr[5]; // TG
     // nucrrnr[3][3]; //TT
 
     for (int k = 0; k < this->Nstate_codon; k++) {
@@ -1680,14 +1689,14 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
 
   while (j < it) {
     for (int k = 0; k < 2; k++) {
-      is >> tmp;  // tbl, relative ds, relative dn
+      is >> tmp; // tbl, relative ds, relative dn
     }
-    is >> tmp;  // tree
+    is >> tmp; // tree
     for (int k = 0; k < this->Nnucp; k++) {
-      is >> tmp;  // nucp
+      is >> tmp; // nucp
     }
     for (int k = 0; k < this->Nnucrr; k++) {
-      is >> tmp;  // nucrr
+      is >> tmp; // nucrr
     }
     for (int k = 0; k < this->Nstate_codon; k++) {
       is >> tmp;
@@ -1695,24 +1704,27 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
     for (int k = 0; k < Ncat; k++) {
       // site profiles
       for (int l = 0; l < this->Nstate_aa; l++) {
-        is >> tmp;  // aa fitness
+        is >> tmp; // aa fitness
       }
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // alloc aa fitness
+      is >> tmp; // alloc aa fitness
     }
-    is >> tmp;  // omega
+    is >> tmp; // omega
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // omega alloc
+      is >> tmp; // omega alloc
     }
     j++;
   }
 
   if (j == it) {
     for (int k = 0; k < 2; k++) {
-      is >> tmp;  // tbl, relative ds, relative dn
+      is >> tmp; // tbl, relative ds, relative dn
     }
-    refTree = new Tree(is);
+    if (refTree != nullptr) {
+      delete refTree; // Free the memory for the old object
+    }
+    refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
     for (int k = 0; k < this->Nnucp; k++) {
       is >> nucp[k];
@@ -1722,20 +1734,20 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
     }
 
     // nucrrnr[0][0]; //AA
-    nucrrnr[0][1] = nucrr[0];  // AC
-    nucrrnr[0][2] = nucrr[1];  // AG
-    nucrrnr[0][3] = nucrr[2];  // AT
-    nucrrnr[1][0] = nucrr[0];  // CA
+    nucrrnr[0][1] = nucrr[0]; // AC
+    nucrrnr[0][2] = nucrr[1]; // AG
+    nucrrnr[0][3] = nucrr[2]; // AT
+    nucrrnr[1][0] = nucrr[0]; // CA
     // nucrrnr[1][1]; //CG
-    nucrrnr[1][2] = nucrr[3];  // CG
-    nucrrnr[1][3] = nucrr[4];  // CT
-    nucrrnr[2][0] = nucrr[1];  // GA
-    nucrrnr[2][1] = nucrr[3];  // GC
+    nucrrnr[1][2] = nucrr[3]; // CG
+    nucrrnr[1][3] = nucrr[4]; // CT
+    nucrrnr[2][0] = nucrr[1]; // GA
+    nucrrnr[2][1] = nucrr[3]; // GC
     // nucrrnr[2][2]; //GG
-    nucrrnr[2][3] = nucrr[5];  // GT
-    nucrrnr[3][0] = nucrr[2];  // TA
-    nucrrnr[3][1] = nucrr[4];  // TC
-    nucrrnr[3][2] = nucrr[5];  // TG
+    nucrrnr[2][3] = nucrr[5]; // GT
+    nucrrnr[3][0] = nucrr[2]; // TA
+    nucrrnr[3][1] = nucrr[4]; // TC
+    nucrrnr[3][2] = nucrr[5]; // TG
     // nucrrnr[3][3]; //TT
 
     for (int k = 0; k < this->Nstate_codon; k++) {
@@ -1793,36 +1805,39 @@ int LocalParameters::readBayescodeParametersMutSelAA(int it) {
 
   while (j < it) {
     for (int k = 0; k < 2; k++) {
-      is >> tmp;  // relative ds, relative dn
+      is >> tmp; // relative ds, relative dn
     }
-    is >> tmp;  // tree
+    is >> tmp; // tree
     for (int k = 0; k < this->Nnucp; k++) {
-      is >> tmp;  // nucp
+      is >> tmp; // nucp
     }
     for (int k = 0; k < this->Nnucrr; k++) {
-      is >> tmp;  // nucrr
+      is >> tmp; // nucrr
     }
     for (int k = 0; k < Ncat; k++) {
       // site profiles
       for (int l = 0; l < this->Nstate_aa; l++) {
-        is >> tmp;  // aa fitness
+        is >> tmp; // aa fitness
       }
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // alloc aa fitness
+      is >> tmp; // alloc aa fitness
     }
-    is >> tmp;  // omega
+    is >> tmp; // omega
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // omega alloc
+      is >> tmp; // omega alloc
     }
     j++;
   }
 
   if (j == it) {
     for (int k = 0; k < 2; k++) {
-      is >> tmp;  // tbl, relative ds, relative dn
+      is >> tmp; // tbl, relative ds, relative dn
     }
-    refTree = new Tree(is);
+    if (refTree != nullptr) {
+      delete refTree; // Free the memory for the old object
+    }
+    refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
     for (int k = 0; k < this->Nnucp; k++) {
       is >> nucp[k];
@@ -1832,20 +1847,20 @@ int LocalParameters::readBayescodeParametersMutSelAA(int it) {
     }
 
     // nucrrnr[0][0]; //AA
-    nucrrnr[0][1] = nucrr[0];  // AC
-    nucrrnr[0][2] = nucrr[1];  // AG
-    nucrrnr[0][3] = nucrr[2];  // AT
-    nucrrnr[1][0] = nucrr[0];  // CA
+    nucrrnr[0][1] = nucrr[0]; // AC
+    nucrrnr[0][2] = nucrr[1]; // AG
+    nucrrnr[0][3] = nucrr[2]; // AT
+    nucrrnr[1][0] = nucrr[0]; // CA
     // nucrrnr[1][1]; //CG
-    nucrrnr[1][2] = nucrr[3];  // CG
-    nucrrnr[1][3] = nucrr[4];  // CT
-    nucrrnr[2][0] = nucrr[1];  // GA
-    nucrrnr[2][1] = nucrr[3];  // GC
+    nucrrnr[1][2] = nucrr[3]; // CG
+    nucrrnr[1][3] = nucrr[4]; // CT
+    nucrrnr[2][0] = nucrr[1]; // GA
+    nucrrnr[2][1] = nucrr[3]; // GC
     // nucrrnr[2][2]; //GG
-    nucrrnr[2][3] = nucrr[5];  // GT
-    nucrrnr[3][0] = nucrr[2];  // TA
-    nucrrnr[3][1] = nucrr[4];  // TC
-    nucrrnr[3][2] = nucrr[5];  // TG
+    nucrrnr[2][3] = nucrr[5]; // GT
+    nucrrnr[3][0] = nucrr[2]; // TA
+    nucrrnr[3][1] = nucrr[4]; // TC
+    nucrrnr[3][2] = nucrr[5]; // TG
     // nucrrnr[3][3]; //TT
 
     for (int k = 0; k < Ncat; k++) {
@@ -1899,36 +1914,39 @@ int LocalParameters::readBayescodeParametersMutSelC(int it) {
 
   while (j < it) {
     for (int k = 0; k < 2; k++) {
-      is >> tmp;  // tbl, relative ds, relative dn
+      is >> tmp; // tbl, relative ds, relative dn
     }
-    is >> tmp;  // tree
+    is >> tmp; // tree
     for (int k = 0; k < this->Nnucp; k++) {
-      is >> tmp;  // nucp
+      is >> tmp; // nucp
     }
     for (int k = 0; k < this->Nnucrr; k++) {
-      is >> tmp;  // nucrr
+      is >> tmp; // nucrr
     }
     for (int k = 0; k < Ncat; k++) {
       // site profiles
       for (int l = 0; l < this->Nstate_codon; l++) {
-        is >> tmp;  // codon fitness
+        is >> tmp; // codon fitness
       }
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // alloc codon fitness
+      is >> tmp; // alloc codon fitness
     }
-    is >> tmp;  // omega
+    is >> tmp; // omega
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // omega alloc
+      is >> tmp; // omega alloc
     }
     j++;
   }
 
   if (j == it) {
     for (int k = 0; k < 2; k++) {
-      is >> tmp;  // relative ds, relative dn
+      is >> tmp; // relative ds, relative dn
     }
-    refTree = new Tree(is);
+    if (refTree != nullptr) {
+      delete refTree; // Free the memory for the old object
+    }
+    refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
     for (int k = 0; k < this->Nnucp; k++) {
       is >> nucp[k];
@@ -1938,20 +1956,20 @@ int LocalParameters::readBayescodeParametersMutSelC(int it) {
     }
 
     // nucrrnr[0][0]; //AA
-    nucrrnr[0][1] = nucrr[0];  // AC
-    nucrrnr[0][2] = nucrr[1];  // AG
-    nucrrnr[0][3] = nucrr[2];  // AT
-    nucrrnr[1][0] = nucrr[0];  // CA
+    nucrrnr[0][1] = nucrr[0]; // AC
+    nucrrnr[0][2] = nucrr[1]; // AG
+    nucrrnr[0][3] = nucrr[2]; // AT
+    nucrrnr[1][0] = nucrr[0]; // CA
     // nucrrnr[1][1]; //CG
-    nucrrnr[1][2] = nucrr[3];  // CG
-    nucrrnr[1][3] = nucrr[4];  // CT
-    nucrrnr[2][0] = nucrr[1];  // GA
-    nucrrnr[2][1] = nucrr[3];  // GC
+    nucrrnr[1][2] = nucrr[3]; // CG
+    nucrrnr[1][3] = nucrr[4]; // CT
+    nucrrnr[2][0] = nucrr[1]; // GA
+    nucrrnr[2][1] = nucrr[3]; // GC
     // nucrrnr[2][2]; //GG
-    nucrrnr[2][3] = nucrr[5];  // GT
-    nucrrnr[3][0] = nucrr[2];  // TA
-    nucrrnr[3][1] = nucrr[4];  // TC
-    nucrrnr[3][2] = nucrr[5];  // TG
+    nucrrnr[2][3] = nucrr[5]; // GT
+    nucrrnr[3][0] = nucrr[2]; // TA
+    nucrrnr[3][1] = nucrr[4]; // TC
+    nucrrnr[3][2] = nucrr[5]; // TG
     // nucrrnr[3][3]; //TT
 
     for (int k = 0; k < Ncat; k++) {
@@ -1995,21 +2013,24 @@ int LocalParameters::readParametersCodemlM7M8(int it) {
   }
 
   while (j < it) {
-    is >> tmp;  // tree
+    is >> tmp; // tree
     for (int k = 0; k < this->Nnucp; k++) {
-      is >> tmp;  // nucp
+      is >> tmp; // nucp
     }
     for (int k = 0; k < this->Nnucrr; k++) {
-      is >> tmp;  // nucrr
+      is >> tmp; // nucrr
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // site_omega
+      is >> tmp; // site_omega
     }
     j++;
   }
 
   if (j == it) {
-    refTree = new Tree(is);
+    if (refTree != nullptr) {
+      delete refTree; // Free the memory for the old object
+    }
+    refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
     for (int k = 0; k < this->Nnucp; k++) {
       is >> nucp[k];
@@ -2019,20 +2040,20 @@ int LocalParameters::readParametersCodemlM7M8(int it) {
     }
 
     // nucrrnr[0][0]; //AA
-    nucrrnr[0][1] = nucrr[0];  // AC
-    nucrrnr[0][2] = nucrr[1];  // AG
-    nucrrnr[0][3] = nucrr[2];  // AT
-    nucrrnr[1][0] = nucrr[0];  // CA
+    nucrrnr[0][1] = nucrr[0]; // AC
+    nucrrnr[0][2] = nucrr[1]; // AG
+    nucrrnr[0][3] = nucrr[2]; // AT
+    nucrrnr[1][0] = nucrr[0]; // CA
     // nucrrnr[1][1]; //CG
-    nucrrnr[1][2] = nucrr[3];  // CG
-    nucrrnr[1][3] = nucrr[4];  // CT
-    nucrrnr[2][0] = nucrr[1];  // GA
-    nucrrnr[2][1] = nucrr[3];  // GC
+    nucrrnr[1][2] = nucrr[3]; // CG
+    nucrrnr[1][3] = nucrr[4]; // CT
+    nucrrnr[2][0] = nucrr[1]; // GA
+    nucrrnr[2][1] = nucrr[3]; // GC
     // nucrrnr[2][2]; //GG
-    nucrrnr[2][3] = nucrr[5];  // GT
-    nucrrnr[3][0] = nucrr[2];  // TA
-    nucrrnr[3][1] = nucrr[4];  // TC
-    nucrrnr[3][2] = nucrr[5];  // TG
+    nucrrnr[2][3] = nucrr[5]; // GT
+    nucrrnr[3][0] = nucrr[2]; // TA
+    nucrrnr[3][1] = nucrr[4]; // TC
+    nucrrnr[3][2] = nucrr[5]; // TG
     // nucrrnr[3][3]; //TT
 
     double sum = 0.0;
@@ -2093,42 +2114,45 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
   int j = 0;
   std::string tmp = "";
   while (j < it) {
-    is >> tmp;  // tree
-    is >> tmp;  // branchalpha
-    is >> tmp;  // branchbeta
+    is >> tmp; // tree
+    is >> tmp; // branchalpha
+    is >> tmp; // branchbeta
     for (int k = 0; k < this->Nnucp; k++) {
-      is >> tmp;  // nucp
+      is >> tmp; // nucp
     }
     for (int k = 0; k < this->Nnucrr; k++) {
-      is >> tmp;  // nucrr
+      is >> tmp; // nucrr
     }
 
     for (int k = 0; k < this->Nstate_codon; k++) {
-      is >> tmp;  // codon
+      is >> tmp; // codon
     }
-    is >> tmp;  // omega
-    is >> tmp;  // kappa
+    is >> tmp; // omega
+    is >> tmp; // kappa
 
     for (int k = 0; k < this->Nstate_aa; k++) {
       is >> tmp;
     }
 
     for (int l = 0; l < this->Nstate_aa; l++) {
-      is >> tmp;  // ssprofiles
+      is >> tmp; // ssprofiles
     }
 
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // alloc
+      is >> tmp; // alloc
     }
     j++;
   }
 
   if (j == it) {
-    refTree = new Tree(is);
+    if (refTree != nullptr) {
+      delete refTree; // Free the memory for the old object
+    }
+    refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
 
-    is >> tmp;  // branchalpha
-    is >> tmp;  // branchbeta
+    is >> tmp; // branchalpha
+    is >> tmp; // branchbeta
 
     for (int k = 0; k < this->Nnucp; k++) {
       is >> nucp[k];
@@ -2139,20 +2163,20 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
     }
 
     // nucrrnr[0][0]; //AA
-    nucrrnr[0][1] = nucrr[0];  // AC
-    nucrrnr[0][2] = nucrr[1];  // AG
-    nucrrnr[0][3] = nucrr[2];  // AT
-    nucrrnr[1][0] = nucrr[0];  // CA
+    nucrrnr[0][1] = nucrr[0]; // AC
+    nucrrnr[0][2] = nucrr[1]; // AG
+    nucrrnr[0][3] = nucrr[2]; // AT
+    nucrrnr[1][0] = nucrr[0]; // CA
     // nucrrnr[1][1]; //CG
-    nucrrnr[1][2] = nucrr[3];  // CG
-    nucrrnr[1][3] = nucrr[4];  // CT
-    nucrrnr[2][0] = nucrr[1];  // GA
-    nucrrnr[2][1] = nucrr[3];  // GC
+    nucrrnr[1][2] = nucrr[3]; // CG
+    nucrrnr[1][3] = nucrr[4]; // CT
+    nucrrnr[2][0] = nucrr[1]; // GA
+    nucrrnr[2][1] = nucrr[3]; // GC
     // nucrrnr[2][2]; //GG
-    nucrrnr[2][3] = nucrr[5];  // GT
-    nucrrnr[3][0] = nucrr[2];  // TA
-    nucrrnr[3][1] = nucrr[4];  // TC
-    nucrrnr[3][2] = nucrr[5];  // TG
+    nucrrnr[2][3] = nucrr[5]; // GT
+    nucrrnr[3][0] = nucrr[2]; // TA
+    nucrrnr[3][1] = nucrr[4]; // TC
+    nucrrnr[3][2] = nucrr[5]; // TG
     // nucrrnr[3][3]; //TT
 
     double sum = 0.0;
@@ -2187,7 +2211,7 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
       is >> ssaaprofiles[0][k];
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> alloc[k];  // alloc
+      is >> alloc[k]; // alloc
     }
   }
   is.close();
@@ -2200,42 +2224,42 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
 
 void LocalParameters::Setgtrbayescode2gtnr() {
   this->getrate = false;
-  this->gtnr[0][0] = 0.0;                    // aa
-  this->gtnr[0][1] = GetGTRBayesCode(0, 1);  // ac
-  this->gtnr[0][2] = GetGTRBayesCode(0, 2);  // ag
-  this->gtnr[0][3] = GetGTRBayesCode(0, 3);  // at
-  this->gtnr[1][0] = GetGTRBayesCode(1, 0);  // ca
-  this->gtnr[1][1] = 0.0;                    // cc
-  this->gtnr[1][2] = GetGTRBayesCode(1, 2);  // cg
-  this->gtnr[1][3] = GetGTRBayesCode(1, 3);  // ct
-  this->gtnr[2][0] = GetGTRBayesCode(2, 0);  // ga
-  this->gtnr[2][1] = GetGTRBayesCode(2, 1);  // gc
-  this->gtnr[2][2] = 0.0;                    // gg
-  this->gtnr[2][3] = GetGTRBayesCode(2, 3);  // gt
-  this->gtnr[3][0] = GetGTRBayesCode(3, 0);  // ta
-  this->gtnr[3][1] = GetGTRBayesCode(3, 1);  // tc
-  this->gtnr[3][2] = GetGTRBayesCode(3, 2);  // tg
-  this->gtnr[3][3] = 0.0;                    // tt
+  this->gtnr[0][0] = 0.0;                   // aa
+  this->gtnr[0][1] = GetGTRBayesCode(0, 1); // ac
+  this->gtnr[0][2] = GetGTRBayesCode(0, 2); // ag
+  this->gtnr[0][3] = GetGTRBayesCode(0, 3); // at
+  this->gtnr[1][0] = GetGTRBayesCode(1, 0); // ca
+  this->gtnr[1][1] = 0.0;                   // cc
+  this->gtnr[1][2] = GetGTRBayesCode(1, 2); // cg
+  this->gtnr[1][3] = GetGTRBayesCode(1, 3); // ct
+  this->gtnr[2][0] = GetGTRBayesCode(2, 0); // ga
+  this->gtnr[2][1] = GetGTRBayesCode(2, 1); // gc
+  this->gtnr[2][2] = 0.0;                   // gg
+  this->gtnr[2][3] = GetGTRBayesCode(2, 3); // gt
+  this->gtnr[3][0] = GetGTRBayesCode(3, 0); // ta
+  this->gtnr[3][1] = GetGTRBayesCode(3, 1); // tc
+  this->gtnr[3][2] = GetGTRBayesCode(3, 2); // tg
+  this->gtnr[3][3] = 0.0;                   // tt
 }
 
 void LocalParameters::Setgtr2gtnr() {
   this->getrate = false;
-  this->gtnr[0][0] = 0.0;           // aa
-  this->gtnr[0][1] = GetGTR(0, 1);  // ac
-  this->gtnr[0][2] = GetGTR(0, 2);  // ag
-  this->gtnr[0][3] = GetGTR(0, 3);  // at
-  this->gtnr[1][0] = GetGTR(1, 0);  // ca
-  this->gtnr[1][1] = 0.0;           // cc
-  this->gtnr[1][2] = GetGTR(1, 2);  // cg
-  this->gtnr[1][3] = GetGTR(1, 3);  // ct
-  this->gtnr[2][0] = GetGTR(2, 0);  // ga
-  this->gtnr[2][1] = GetGTR(2, 1);  // gc
-  this->gtnr[2][2] = 0.0;           // gg
-  this->gtnr[2][3] = GetGTR(2, 3);  // gt
-  this->gtnr[3][0] = GetGTR(3, 0);  // ta
-  this->gtnr[3][1] = GetGTR(3, 1);  // tc
-  this->gtnr[3][2] = GetGTR(3, 2);  // tg
-  this->gtnr[3][3] = 0.0;           // tt
+  this->gtnr[0][0] = 0.0;          // aa
+  this->gtnr[0][1] = GetGTR(0, 1); // ac
+  this->gtnr[0][2] = GetGTR(0, 2); // ag
+  this->gtnr[0][3] = GetGTR(0, 3); // at
+  this->gtnr[1][0] = GetGTR(1, 0); // ca
+  this->gtnr[1][1] = 0.0;          // cc
+  this->gtnr[1][2] = GetGTR(1, 2); // cg
+  this->gtnr[1][3] = GetGTR(1, 3); // ct
+  this->gtnr[2][0] = GetGTR(2, 0); // ga
+  this->gtnr[2][1] = GetGTR(2, 1); // gc
+  this->gtnr[2][2] = 0.0;          // gg
+  this->gtnr[2][3] = GetGTR(2, 3); // gt
+  this->gtnr[3][0] = GetGTR(3, 0); // ta
+  this->gtnr[3][1] = GetGTR(3, 1); // tc
+  this->gtnr[3][2] = GetGTR(3, 2); // tg
+  this->gtnr[3][3] = 0.0;          // tt
 }
 
 void LocalParameters::readChainCodonMutSelFinite() {
@@ -2251,43 +2275,46 @@ void LocalParameters::readChainCodonMutSelFinite() {
   int j = 0;
   std::string tmp = "";
   while (j < this->startPoint) {
-    is >> tmp;  // tree
-    is >> tmp;  // branchalpha
-    is >> tmp;  // branchbeta
+    is >> tmp; // tree
+    is >> tmp; // branchalpha
+    is >> tmp; // branchbeta
     for (int k = 0; k < this->Nnucp; k++) {
-      is >> tmp;  // nucp
+      is >> tmp; // nucp
     }
     for (int k = 0; k < this->Nnucrr; k++) {
-      is >> tmp;  // nucrr
+      is >> tmp; // nucrr
     }
 
     for (int k = 0; k < this->Nstate_codon; k++) {
-      is >> tmp;  // codon
+      is >> tmp; // codon
     }
-    is >> tmp;  // omega
-    is >> tmp;  // kappa
+    is >> tmp; // omega
+    is >> tmp; // kappa
     // is >> tmp; // Ncomponents
     for (int k = 0; k < this->Nstate_aa; k++) {
       is >> tmp;
     }
     // for (int k=0; k<this->Nsite_codon; k++){
     for (int l = 0; l < this->Nstate_aa; l++) {
-      is >> tmp;  // ssprofiles
+      is >> tmp; // ssprofiles
     }
     //}
     for (int k = 0; k < this->Nsite_codon; k++) {
-      is >> tmp;  // alloc
+      is >> tmp; // alloc
     }
     j++;
   }
 
   if (j == this->startPoint) {
-    refTree = new Tree(is);
+    if (refTree != nullptr) {
+      delete refTree; // Free the memory for the old object
+    }
+    refTree = new Tree(is); // Assign the new object
 
     refTree->RegisterWith(taxonset, 0);
 
-    is >> tmp;  // branchalpha
-    is >> tmp;  // branchbeta
+    is >> tmp; // branchalpha
+    is >> tmp; // branchbeta
     for (int k = 0; k < this->Nnucp; k++) {
       is >> nucp[k];
     }
@@ -2296,20 +2323,20 @@ void LocalParameters::readChainCodonMutSelFinite() {
     }
 
     // nucrrnr[0][0]; //AA
-    nucrrnr[0][1] = nucrr[0];  // AC
-    nucrrnr[0][2] = nucrr[1];  // AG
-    nucrrnr[0][3] = nucrr[2];  // AT
-    nucrrnr[1][0] = nucrr[0];  // CA
+    nucrrnr[0][1] = nucrr[0]; // AC
+    nucrrnr[0][2] = nucrr[1]; // AG
+    nucrrnr[0][3] = nucrr[2]; // AT
+    nucrrnr[1][0] = nucrr[0]; // CA
     // nucrrnr[1][1]; //CG
-    nucrrnr[1][2] = nucrr[3];  // CG
-    nucrrnr[1][3] = nucrr[4];  // CT
-    nucrrnr[2][0] = nucrr[1];  // GA
-    nucrrnr[2][1] = nucrr[3];  // GC
+    nucrrnr[1][2] = nucrr[3]; // CG
+    nucrrnr[1][3] = nucrr[4]; // CT
+    nucrrnr[2][0] = nucrr[1]; // GA
+    nucrrnr[2][1] = nucrr[3]; // GC
     // nucrrnr[2][2]; //GG
-    nucrrnr[2][3] = nucrr[5];  // GT
-    nucrrnr[3][0] = nucrr[2];  // TA
-    nucrrnr[3][1] = nucrr[4];  // TC
-    nucrrnr[3][2] = nucrr[5];  // TG
+    nucrrnr[2][3] = nucrr[5]; // GT
+    nucrrnr[3][0] = nucrr[2]; // TA
+    nucrrnr[3][1] = nucrr[4]; // TC
+    nucrrnr[3][2] = nucrr[5]; // TG
     // nucrrnr[3][3]; //TT
 
     double sum = 0.0;
@@ -2425,18 +2452,17 @@ void LocalParameters::toFasta(ofstream &os,
   }
 }
 
-void LocalParameters::toFastaWithMissingData(ofstream &os,
-                              int **curent_nodeleaf_sequence_codon) {
+void LocalParameters::toFastaWithMissingData(
+    ofstream &os, int **curent_nodeleaf_sequence_codon) {
   for (int taxa = 0; taxa < Ntaxa; taxa++) {
     os << ">" << codondata->taxset->GetTaxon(taxa) << "\n";
     for (int site_codon = 0; site_codon < Nsite_codon; site_codon++) {
-      if (codondata->GetState(taxa,site_codon)!= -1){
+      if (codondata->GetState(taxa, site_codon) != -1) {
         os << codonstatespace->GetState(
             curent_nodeleaf_sequence_codon[taxa][site_codon]);
       } else {
         os << "---";
       }
-        
     }
     os << "\n";
   }
