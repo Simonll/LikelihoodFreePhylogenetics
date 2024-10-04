@@ -162,6 +162,7 @@ class LocalParameters {
   void tobstats(ofstream &os, const Link *from);
   void toSsstats(ofstream &os);
   void toFasta(ofstream &os, int **currentNodeleafCodonSequence);
+  void toFastaWithMissingData(ofstream &os, int **currentNodeleafCodonSequence);
   void toAli(ofstream &os, int **currentNodeleafCodonSequence);
 
   // Readers

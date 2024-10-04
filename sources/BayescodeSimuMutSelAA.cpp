@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
                     << ".fasta";
           std::string output_fasta = oss_fasta.str();
           std::ofstream fasta_os(output_fasta.c_str(), std::ios_base::out);
-          lparam->toFasta(fasta_os, simulator->CurrentLeafNodeCodonSequences);
+          lparam->toFastaWithMissingData(fasta_os, simulator->CurrentLeafNodeCodonSequences);
           fasta_os.close();
 
           // For generating the .tre file
