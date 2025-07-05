@@ -192,6 +192,7 @@ LocalParameters::LocalParameters(GlobalParameters *gparam) {
   this->lambda_CpG_prior = "log10Unif";
   this->lambda_TpA_prior = "log10Unif";
   this->lambda_omega_prior = "log2Unif";
+  this->refTree = nullptr;
 
   this->nucrrnr = new double *[this->Nnucp];
   this->nucrrnr1 = new double *[this->Nnucp];
@@ -1389,6 +1390,7 @@ void LocalParameters::readFMutSelCodeML() {
 
   if (refTree != nullptr) {
     delete refTree; // Free the memory for the old object
+    refTree = nullptr; // Prevent dangling pointer
   }
   refTree = new Tree(is); // Assign the new object
   this->refTree->RegisterWith(taxonset, 0);
@@ -1502,6 +1504,7 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
   if (j == pt_i) {
     if (refTree != nullptr) {
       delete refTree; // Free the memory for the old object
+      refTree = nullptr; // Prevent dangling pointer
     }
     refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
@@ -1601,6 +1604,7 @@ void LocalParameters::readChainCodonMutSelSBDP() {
   if (j == this->startPoint) {
     if (refTree != nullptr) {
       delete refTree; // Free the memory for the old object
+      refTree = nullptr; // Prevent dangling pointer
     }
     refTree = new Tree(is); // Assign the new object
 
@@ -1723,6 +1727,7 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
     }
     if (refTree != nullptr) {
       delete refTree; // Free the memory for the old object
+      refTree = nullptr; // Prevent dangling pointer
     }
     refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
@@ -1836,6 +1841,7 @@ int LocalParameters::readBayescodeParametersMutSelAA(int it) {
     }
     if (refTree != nullptr) {
       delete refTree; // Free the memory for the old object
+      refTree = nullptr; // Prevent dangling pointer
     }
     refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
@@ -1945,6 +1951,7 @@ int LocalParameters::readBayescodeParametersMutSelC(int it) {
     }
     if (refTree != nullptr) {
       delete refTree; // Free the memory for the old object
+      refTree = nullptr; // Prevent dangling pointer
     }
     refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
@@ -2029,6 +2036,7 @@ int LocalParameters::readParametersCodemlM7M8(int it) {
   if (j == it) {
     if (refTree != nullptr) {
       delete refTree; // Free the memory for the old object
+      refTree = nullptr; // Prevent dangling pointer
     }
     refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
@@ -2147,6 +2155,7 @@ void LocalParameters::readChainCodonMutSelFinite(int it) {
   if (j == it) {
     if (refTree != nullptr) {
       delete refTree; // Free the memory for the old object
+      refTree = nullptr; // Prevent dangling pointer
     }
     refTree = new Tree(is); // Assign the new object
     refTree->RegisterWith(taxonset, 0);
@@ -2308,6 +2317,7 @@ void LocalParameters::readChainCodonMutSelFinite() {
   if (j == this->startPoint) {
     if (refTree != nullptr) {
       delete refTree; // Free the memory for the old object
+      refTree = nullptr; // Prevent dangling pointer
     }
     refTree = new Tree(is); // Assign the new object
 
