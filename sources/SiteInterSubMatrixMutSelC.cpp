@@ -42,13 +42,14 @@ std::tuple<double, double, double> SiteInterSubMatrixMutSelC::ComputeCore(
     }
 
     MutRate *= lparam->lambda_TBL;
-    SubRate = MutRate;
+    
+    S = log((lparam->sscodonprofiles[lparam->alloc[site_codon_i]][codonTo] /
+             lparam->sscodonprofiles[lparam->alloc[site_codon_i]][codonFrom]));
+    SubRate = ComputeFixationFactor(S, MutRate);
+
     if (!lparam->codonstatespace->Synonymous(codonFrom, codonTo)) {
       SubRate *= lparam->omega;
     }
-    S = log((lparam->sscodonprofiles[lparam->alloc[site_codon_i]][codonTo] /
-             lparam->sscodonprofiles[lparam->alloc[site_codon_i]][codonFrom]));
-    SubRate *= ComputeFixationFactor(S, SubRate);
   }
 
   return {MutRate, S, SubRate};
