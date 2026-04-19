@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     std::cerr << "###########################\n";
     exit(1);
   }
-  if (model == "MUTSELCwoW" || model == "MUTSELCW" || model == "FMUTSEL") {
+  if (model == "MG" || model == "MGW" || model == "MUTSELCwoW" || model == "MUTSELCW" || model == "FMUTSEL") {
     cerr << "simulating under " << model << "\n";
 
     GlobalParameters *gparam = new GlobalParameters(model, controlfile);
