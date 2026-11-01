@@ -1664,13 +1664,17 @@ void LocalParameters::readChainCodonMutSelSBDP() {
   // std::cerr << "Nnode : " << refTree->GetNnode() << "\n";
 }
 
-int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
+int LocalParameters::readBayescodeParametersMutSelAAC(int it, bool senca) {
   this->MCMCpointID = it;
   // set parameters : posterior specific
   std::ifstream is((this->chain + ".pvalues").c_str());
   if (!is) {
     std::cerr << "error: did not find " << this->chain << ".pvalues\n";
     exit(1);
+  }
+  std::vector<int> naa(this->Nstate_aa, 0);
+  for (int c = 0; c < this->Nstate_codon; c++) {
+    naa[codonstatespace->Translation(c)]++;
   }
   int j = 0;
   std::string tmp;
@@ -1757,6 +1761,12 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
 
     for (int k = 0; k < this->Nstate_codon; k++) {
       is >> codonprofile[k];
+      if (senca) {
+        // SENCA: file holds theta (sum-1 within each aa); BayesCode's matrix
+        // uses codonweight = n_aa * theta, n_aa = number of codons of the aa
+        // (genetic-code degeneracy, NOT CodonStateSpace::GetDegeneracy).
+        codonprofile[k] *= naa[codonstatespace->Translation(k)];
+      }
       codonprofile[k] += 1e-8;  // BayesCode's kFitnessFloor (log(0) guard, matches its matrix)
     }
 
