@@ -1757,11 +1757,13 @@ int LocalParameters::readBayescodeParametersMutSelAAC(int it) {
 
     for (int k = 0; k < this->Nstate_codon; k++) {
       is >> codonprofile[k];
+      codonprofile[k] += 1e-8;  // BayesCode's kFitnessFloor (log(0) guard, matches its matrix)
     }
 
     for (int k = 0; k < Ncat; k++) {
       for (int l = 0; l < this->Nstate_aa; l++) {
         is >> ssaaprofiles[k][l];
+        ssaaprofiles[k][l] += 1e-8;  // kFitnessFloor, matches BayesCode
       }
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
@@ -1982,6 +1984,7 @@ int LocalParameters::readBayescodeParametersMutSelC(int it) {
     for (int k = 0; k < Ncat; k++) {
       for (int l = 0; l < this->Nstate_codon; l++) {
         is >> sscodonprofiles[k][l];
+        sscodonprofiles[k][l] += 1e-8;  // BayesCode's kFitnessFloor (log(0) guard, matches its matrix)
       }
     }
     for (int k = 0; k < this->Nsite_codon; k++) {
