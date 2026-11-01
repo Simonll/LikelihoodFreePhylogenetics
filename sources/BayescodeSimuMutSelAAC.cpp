@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
     std::cerr << "version 1.0\n";
     std::cerr << "###########################\n";
     std::cerr << "-m < MG | FMUTSEL0 | FMUTSEL | MUTSELAAwoW | MUTSELAAW | "; 
-    std::cerr << "MUTSELAACwoW | MUTSELAACW | MUTSELCwoW | MUTSELCW> < controlfile >\n";
+    std::cerr << "MUTSELAACwoW | MUTSELAACW | MUTSELSENCAwoW | MUTSELSENCAW | MUTSELCwoW | MUTSELCW> < controlfile >\n";
     std::cerr << "###########################\n";
     std::cerr << "#SUMMARIES\n";
     std::cerr << "#ANCSUMMARIES\n";
@@ -78,7 +78,9 @@ int main(int argc, char *argv[]) {
     std::cerr << "###########################\n";
     exit(1);
   }
-  if (model == "MUTSELAACwoW" || model == "MUTSELAACW" || model == "FMUTSEL") {
+  if (model == "MUTSELAACwoW" || model == "MUTSELAACW" || model == "FMUTSEL" ||
+      model == "MUTSELSENCAwoW" || model == "MUTSELSENCAW") {
+    const bool senca = (model == "MUTSELSENCAwoW" || model == "MUTSELSENCAW");
     cerr << "simulating under " << model << "\n";
 
     GlobalParameters *gparam = new GlobalParameters(model, controlfile);
@@ -87,8 +89,8 @@ int main(int argc, char *argv[]) {
     post->SetNsite(lparam->Nsite_codon);
     SummaryStatistics *ss = new SummaryStatistics(lparam);
 
-    int size = lparam->readBayescodeParametersMutSelAAC(-1);
-    lparam->readBayescodeParametersMutSelAAC(0);
+    int size = lparam->readBayescodeParametersMutSelAAC(-1, senca);
+    lparam->readBayescodeParametersMutSelAAC(0, senca);
     ss->computeSummaries();
     PriorSampler *prior = new PriorSampler(lparam);
     SiteInterSubMatrixBayescodeMUTSELAAC *submatrix =
@@ -108,7 +110,7 @@ int main(int argc, char *argv[]) {
 
     while (post->Niter < gparam->Nsimu) {
       int k = static_cast<int>(lparam->rnd->Uniform() * size - 1);
-      lparam->readBayescodeParametersMutSelAAC(k);
+      lparam->readBayescodeParametersMutSelAAC(k, senca);
       for (int i = 0; i < gparam->Nrep; i++) {
         prior->sample();
         simulator->run_jump_chain_over_tree();
