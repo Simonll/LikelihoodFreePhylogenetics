@@ -348,7 +348,7 @@ void LocalParameters::init_containers() {
 
   this->codonprofile = new double[this->Nstate_codon];
   for (int i = 0; i < this->Nstate_codon; i++) {
-    this->codonprofile[i] = 1 / this->Nstate_codon;
+    this->codonprofile[i] = 1.0 / this->Nstate_codon;
   }
 
   this->ssaaprofiles = new double *[this->N_profile];
@@ -357,7 +357,7 @@ void LocalParameters::init_containers() {
   }
   for (int i = 0; i < this->N_profile; i++) {
     for (int j = 0; j < this->Nstate_aa; j++) {
-      this->ssaaprofiles[i][j] = 1 / this->Nstate_aa;
+      this->ssaaprofiles[i][j] = 1.0 / this->Nstate_aa;
     }
   }
 
@@ -372,7 +372,7 @@ void LocalParameters::init_containers() {
   }
   for (int i = 0; i < this->N_profile; i++) {
     for (int j = 0; j < this->Nstate_codon; j++) {
-      this->sscodonprofiles[i][j] = 1 / this->Nstate_codon;
+      this->sscodonprofiles[i][j] = 1.0 / this->Nstate_codon;
     }
   }
 
