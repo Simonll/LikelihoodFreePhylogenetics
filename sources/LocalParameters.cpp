@@ -193,6 +193,7 @@ LocalParameters::LocalParameters(GlobalParameters *gparam) {
   this->lambda_TpA_prior = "log10Unif";
   this->lambda_omega_prior = "log2Unif";
   this->refTree = nullptr;
+  this->codondata = nullptr;
 
   this->nucrrnr = new double *[this->Nnucp];
   this->nucrrnr1 = new double *[this->Nnucp];
@@ -291,6 +292,11 @@ LocalParameters::LocalParameters(GlobalParameters *gparam) {
     }
   }
 
+  if (this->codondata == nullptr) {
+    std::cerr << "error: no codon alignment available (check -d <alignment>, "
+                 "-iscodon and -code Universal|MtMam|MtInv in #LOCALPARAM)\n";
+    exit(1);
+  }
   this->Nsite_codon = this->codondata->GetNsite();
   this->Nsite_nuc = this->Nsite_codon * 3;
   this->Ntaxa = this->codondata->GetNtaxa();
@@ -514,56 +520,70 @@ void LocalParameters::readLocalInstructions() {
   std::string line = localcontrolfile;
   istringstream iss(line);
   std::string s;
+  std::string flag;
+
+  // Read the mandatory value of the current flag; abort if it is missing
+  // (end of line, or another flag such as "-freegtr" in its place) instead of
+  // silently reusing the previous word. Negative numbers ("-0.5") are allowed.
+  auto needValue = [&iss, &flag](std::string& v) {
+    if (!(iss >> v) ||
+        (v.size() > 1 && v[0] == '-' && std::isalpha(static_cast<unsigned char>(v[1])))) {
+      std::cerr << "error: missing value for " << flag
+                << " in #LOCALPARAM\n";
+      exit(1);
+    }
+  };
 
   while (iss >> s) {
+    flag = s;
     if (s == "-d") {
-      iss >> s;
+      needValue(s);
       this->data = s;
       std::cerr << "data " << data << "\n";
       this->isdata = true;
     } else if (s == "-chain") {
-      iss >> s;
+      needValue(s);
       this->chain = s;
       std::cerr << "chain " << this->chain << "\n";
     } else if (s == "-posterior") {
-      iss >> s;
+      needValue(s);
       this->posteriorfile = s;
       std::cerr << "posterior " << this->posteriorfile << "\n";
     } else if (s == "-start") {
-      iss >> s;
+      needValue(s);
       this->startPoint = atoi(s.c_str());
       std::cerr << "start " << this->startPoint << "\n";
     } else if (s == "-until") {
-      iss >> s;
+      needValue(s);
       this->endPoint = atoi(s.c_str());
       std::cerr << "until " << this->endPoint << "\n";
     } else if (s == "-every") {
-      iss >> s;
+      needValue(s);
       this->everyPoint = atoi(s.c_str());
       std::cerr << "every " << this->everyPoint << "\n";
     } else if (s == "-rep") {
-      iss >> s;
+      needValue(s);
       this->Nrep = atoi(s.c_str());
       std::cerr << "Nreplicate " << this->Nrep << "\n";
     } else if (s == "-iscodon") {
       this->iscodon = true;
     } else if (s == "-code") {
-      iss >> s;
+      needValue(s);
       this->code = s;
       std::cerr << "code " << this->code << "\n";
     } else if (s == "-root") {
       rooted = 1;
-      iss >> s;
+      needValue(s);
       this->taxa_a = s;
-      iss >> s;
+      needValue(s);
       this->taxa_b = s;
     } else if (s == "-fixroot") {
       fixroot = 1;
-      iss >> s;
+      needValue(s);
       this->taxa_a = s;
-      iss >> s;
+      needValue(s);
       this->taxa_b = s;
-      iss >> s;
+      needValue(s);
       this->percentFromOutGroup = atof(s.c_str());
       //                    for (unsigned int param_i = 0 ; param_i <
       //                    gparam->NParam; param_i++){
@@ -578,19 +598,19 @@ void LocalParameters::readLocalInstructions() {
                 << this->percentFromOutGroup << "\n";
     } else if (s == "-freeroot") {
       this->fixroot = 0;
-      iss >> s;
+      needValue(s);
       this->taxa_a = s;
-      iss >> s;
+      needValue(s);
       this->taxa_b = s;
       std::cerr << ((this->fixroot == 0) ? "freeroot " : "fixroot ")
                 << this->taxa_a << " " << this->taxa_b << "\n";
     } else if (s == "-fitCpG") {
-      iss >> s;
+      needValue(s);
       this->fitCpG = atof(s.c_str());
       this->fixfitCpG = 1;
       std::cerr << "fixfitCpG " << this->fitCpG << "\n";
     } else if (s == "-fitGC") {
-      iss >> s;
+      needValue(s);
       this->fitGC = atof(s.c_str());
       this->fixfitGC = 1;
       std::cerr << "fixfitGC " << this->fitGC << "\n";
@@ -604,12 +624,12 @@ void LocalParameters::readLocalInstructions() {
       this->fixfitTpA = 0;
       std::cerr << "free fitTpA\n";
     } else if (s == "-lambdaTBL" || s == "-fixlambdaTBL") {
-      iss >> s;
+      needValue(s);
       this->lambda_TBL = atof(s.c_str());
       this->fixlambda_TBL = 1;
       std::cerr << "fix TBL " << this->lambda_TBL << "\n";
     } else if (s == "-fixlambdadS") {
-      iss >> s;
+      needValue(s);
       this->lambda_dS = atof(s.c_str());
       this->fixlambda_dS = 1;
       std::cerr << "fix dS " << this->lambda_dS << "\n";
@@ -617,24 +637,24 @@ void LocalParameters::readLocalInstructions() {
       this->fixlambda_TBL = 0;
       std::cerr << "free TBL\n";
     } else if (s == "-priorlambdaTBL") {
-      iss >> s;
+      needValue(s);
       this->lambda_TBL_prior = s;
       std::cerr << "prior TBL " << this->lambda_TBL_prior << "\n";
     } else if (s == "-freelambdaR") {
       this->fixlambda_R = 0;
       std::cerr << "freelambda_R\n";
     } else if (s == "-lambdaR") {
-      iss >> s;
+      needValue(s);
       this->lambda_R = atof(s.c_str());
       this->fixlambda_R = 1;
       std::cerr << "fix lambda_R " << this->lambda_R << "\n";
     } else if (s == "-lambdaOmega" || s == "-fixlambdaOmega") {
-      iss >> s;
+      needValue(s);
       this->lambda_omega = atof(s.c_str());
       this->fixlambda_omega = 1;
       std::cerr << "fix lambdaomega " << this->lambda_omega << "\n";
     } else if (s == "-omega" || s == "-fixomega") {
-      iss >> s;
+      needValue(s);
       this->omega = atof(s.c_str());
       this->fixomega = 1;
       std::cerr << "fix omega " << this->omega << "\n";
@@ -642,36 +662,36 @@ void LocalParameters::readLocalInstructions() {
       this->fixlambda_omega = 0;
       std::cerr << "freelambdaomega\n";
     } else if (s == "-priorlambdaomega") {
-      iss >> s;
+      needValue(s);
       this->lambda_omega_prior = s;
       std::cerr << "prior omega " << this->lambda_omega_prior << "\n";
     } else if (s == "-fixgtr1") {
       this->fixgtr1 = 1;
-      iss >> s;
+      needValue(s);
       this->taxa_gtr1_a = s;
-      iss >> s;
+      needValue(s);
       this->taxa_gtr1_b = s;
-      iss >> s;
+      needValue(s);
       this->taxa_gtr1_c = s;
-      iss >> s;
+      needValue(s);
       this->nucp1[0] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucp1[1] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucp1[2] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucp1[3] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr1[0] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr1[1] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr1[2] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr1[3] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr1[4] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr1[5] = atof(s.c_str());
       std::cerr << " fixgtr1 " << this->fixgtr1 << "\n";
       std::cerr << this->taxa_gtr1_a << "\t" << this->taxa_gtr1_b << "\t"
@@ -686,31 +706,31 @@ void LocalParameters::readLocalInstructions() {
       std::cerr << "\n";
     } else if (s == "-fixgtr2") {
       this->fixgtr2 = 1;
-      iss >> s;
+      needValue(s);
       this->taxa_gtr2_a = s;
-      iss >> s;
+      needValue(s);
       this->taxa_gtr2_b = s;
-      iss >> s;
+      needValue(s);
       this->taxa_gtr2_c = s;
-      iss >> s;
+      needValue(s);
       this->nucp2[0] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucp2[1] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucp2[2] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucp2[3] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr2[0] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr2[1] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr2[2] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr2[3] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr2[4] = atof(s.c_str());
-      iss >> s;
+      needValue(s);
       this->nucrr2[5] = atof(s.c_str());
 
       std::cerr << " fixgtr2 " << this->fixgtr2 << "\n";
@@ -725,32 +745,32 @@ void LocalParameters::readLocalInstructions() {
       }
       std::cerr << "\n";
     } else if (s == "-lambdaTpA" || s == "-fixlambdaTpA") {
-      iss >> s;
+      needValue(s);
       this->lambda_TpA = atof(s.c_str());
       this->fixlambda_TpA = 1;
       std::cerr << "fix lambda TpA " << this->fixlambda_TpA << "\n";
     } else if (s == "-lambdaCpG" || s == "-fixlambdaCpG") {
-      iss >> s;
+      needValue(s);
       this->lambda_CpG = atof(s.c_str());
       this->fixlambda_CpG = 1;
       std::cerr << "fix lambda CpG " << this->lambda_CpG << "\n";
     } else if (s == "-lambdatstvCpG" || s == "-fixlambdatstvCpG") {
-      iss >> s;
+      needValue(s);
       this->lambda_tstvCpG = atof(s.c_str());
       this->fixlambda_tstvCpG = 1;
       std::cerr << "fix lambda tstvCpG " << this->lambda_tstvCpG << "\n";
     } else if (s == "-lambdatstvTpA" || s == "-fixlambdatstvTpA") {
-      iss >> s;
+      needValue(s);
       this->lambda_tstvTpA = atof(s.c_str());
       this->fixlambda_tstvTpA = 1;
       std::cerr << "fix lambda tstvTpA " << this->lambda_tstvTpA << "\n";
     } else if (s == "-lambdatvCpG" || s == "-fixlambdatvCpG") {
-      iss >> s;
+      needValue(s);
       this->lambda_tvCpG = atof(s.c_str());
       this->fixlambda_tvCpG = 1;
       std::cerr << "fix lambda tvCpG " << this->lambda_tvCpG << "\n";
     } else if (s == "-lambdatvTpA" || s == "-fixlambdatvTpA") {
-      iss >> s;
+      needValue(s);
       this->lambda_tvTpA = atof(s.c_str());
       this->fixlambda_tvTpA = 1;
       std::cerr << "fix lambda tvTpA " << this->lambda_tvTpA << "\n";
@@ -770,14 +790,14 @@ void LocalParameters::readLocalInstructions() {
       this->fixlambda_CpG = 0;
       std::cerr << "freelambdatsCpG\n";
     } else if (s == "-priorlambdaCpG") {
-      iss >> s;
+      needValue(s);
       this->lambda_CpG_prior = s;
       std::cerr << "prior CpG " << this->lambda_CpG_prior << "\n";
     } else if (s == "-freelambdaTpA" || s == "-freelambdatsTpA") {
       this->fixlambda_TpA = 0;
       std::cerr << "freelambdatsTpA\n";
     } else if (s == "-priorlambdaTpA") {
-      iss >> s;
+      needValue(s);
       this->lambda_TpA_prior = s;
       std::cerr << "prior TpA " << this->lambda_TpA_prior << "\n";
     } else if (s == "-freegtnr") {
@@ -808,7 +828,7 @@ void LocalParameters::readLocalInstructions() {
       this->fixrr = 0;
       std::cerr << "freerr\n";
     } else if (s == "-rootlength") {
-      iss >> s;
+      needValue(s);
       this->rootlength = atof(s.c_str());
       std::cerr << "rootlength " << this->rootlength << "\n";
     } else if (s == "-tofasta" || s == "-tophylip") {
@@ -818,13 +838,12 @@ void LocalParameters::readLocalInstructions() {
       //   this->randomseed = 12345;
       //   std::cerr << "randomseed " << this->randomseed << "\n";
     } else if (s == "-verbose") {
-      iss >> s;
       this->verbose = 1;
       std::cerr << "verbose " << this->verbose << "\n";
     } else if (s == "-fixNsite") {
-      iss >> s;
+      needValue(s);
       this->fixNsite = 1;
-      iss >> s;
+      needValue(s);
       this->Nsite_codon = atoi(s.c_str());
       this->Nsite_nuc = this->Nsite_codon * 3;
       std::cerr << "fixNsite " << this->Nsite_codon << " " << this->Nsite_nuc
@@ -1459,7 +1478,7 @@ void LocalParameters::readFMutSelCodeML() {
   SetTreeStuff();
 }
 
-void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
+void LocalParameters::readChainAACodonMutSelPhylobayesMPI(int pt_i) {
   this->MCMCpointID = pt_i;
   // set parameters : posterior specific
   ifstream is((this->chain + ".chain").c_str());
@@ -1468,7 +1487,7 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
     exit(1);
   }
   int j = 0;
-  int Ncat;
+  int Ncat = 0;
   std::string tmp = "";
   while (j < pt_i) {
     is >> tmp; // tree
@@ -1501,6 +1520,12 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
     j++;
   }
 
+  // after skipping the previous points the stream must still hold a point
+  if (!is || (is >> std::ws).eof()) {
+    std::cerr << "error: chain " << this->chain << ".chain has fewer than "
+              << (j + 1) << " points (requested point index " << j << ")\n";
+    exit(1);
+  }
   if (j == pt_i) {
     if (refTree != nullptr) {
       delete refTree; // Free the memory for the old object
@@ -1553,13 +1578,18 @@ void LocalParameters::readChainCodonMutSelSBDP(int pt_i) {
     for (int k = 0; k < this->Nsite_codon; k++) {
       is >> alloc[k];
     }
+    if (!is) {
+      std::cerr << "error: failed to read point " << j << " from chain "
+                << this->chain << ".chain (truncated or malformed)\n";
+      exit(1);
+    }
   }
   is.close();
   Setgtr2gtnr();
   SetTreeStuff();
 }
 
-void LocalParameters::readChainCodonMutSelSBDP() {
+void LocalParameters::readChainAACodonMutSelPhylobayesMPI() {
   // set parameters : posterior specific
   ifstream is((this->chain + ".chain").c_str());
   if (!is) {
@@ -1568,7 +1598,7 @@ void LocalParameters::readChainCodonMutSelSBDP() {
   }
 
   int j = 0;
-  int Ncat;
+  int Ncat = 0;
   std::string tmp = "";
   while (j < this->startPoint) {
     is >> tmp; // tree
@@ -1601,6 +1631,12 @@ void LocalParameters::readChainCodonMutSelSBDP() {
     j++;
   }
 
+  // after skipping the previous points the stream must still hold a point
+  if (!is || (is >> std::ws).eof()) {
+    std::cerr << "error: chain " << this->chain << ".chain has fewer than "
+              << (j + 1) << " points (requested point index " << j << ")\n";
+    exit(1);
+  }
   if (j == this->startPoint) {
     if (refTree != nullptr) {
       delete refTree; // Free the memory for the old object
@@ -1654,6 +1690,11 @@ void LocalParameters::readChainCodonMutSelSBDP() {
 
     for (int k = 0; k < this->Nsite_codon; k++) {
       is >> alloc[k];
+    }
+    if (!is) {
+      std::cerr << "error: failed to read point " << j << " from chain "
+                << this->chain << ".chain (truncated or malformed)\n";
+      exit(1);
     }
   }
   is.close();

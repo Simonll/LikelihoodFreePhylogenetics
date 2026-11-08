@@ -93,7 +93,21 @@ void GlobalParameters::readInstructions() {
   }
 
   string line = "";
+  // Read the mandatory value of a directive; abort if it is missing (a
+  // failed `iss >> w` would otherwise silently keep the previous word).
+  auto needValue = [](istringstream& iss, string& w, const string& directive) {
+    if (!(iss >> w)) {
+      std::cerr << "error: missing value(s) for directive " << directive
+                << " in control file\n";
+      exit(1);
+    }
+  };
+
   while (std::getline(is, line)) {
+    // strip trailing '\r' (CRLF control files)
+    if (!line.empty() && line.back() == '\r') {
+      line.pop_back();
+    }
     // std::cerr << line << "\n";
     if (!line.empty() && line.substr(0, 10) == "#SUMMARIES") {
       istringstream iss(line);
@@ -107,7 +121,7 @@ void GlobalParameters::readInstructions() {
 
         } else if (w != "#SUMMARIES") {
           std::cerr << "Undefined summary " << w << "\n";
-          exit(0);
+          exit(1);
         }
       }
       NusedSummaries = k;
@@ -125,7 +139,7 @@ void GlobalParameters::readInstructions() {
 
         } else if (w != "#ACCSUMMARIES") {
           std::cerr << "Undefined summary " << w << "\n";
-          exit(0);
+          exit(1);
         }
       }
       NusedAccessorySummaries = k;
@@ -143,7 +157,7 @@ void GlobalParameters::readInstructions() {
 
         } else if (w != "#ANCSUMMARIES") {
           std::cerr << "Undefined ancestral summary " << w << "\n";
-          exit(0);
+          exit(1);
         }
       }
       NusedAncSummaries = k;
@@ -162,7 +176,7 @@ void GlobalParameters::readInstructions() {
 
         } else if (w != "#PARAM") {
           std::cerr << "Undefined parameter " << w << "\n";
-          exit(0);
+          exit(1);
         }
       }
       NusedParam = k;
@@ -180,7 +194,7 @@ void GlobalParameters::readInstructions() {
 
         } else if (w != "#SSMAP") {
           std::cerr << "Undefined SiteSpecificEvoStats " << w << "\n";
-          exit(0);
+          exit(1);
         }
       }
       NusedSiteSpecificEvoStats = k;
@@ -198,7 +212,7 @@ void GlobalParameters::readInstructions() {
 
         } else if (w != "#MAP") {
           std::cerr << "Undefined EvoStats parameter " << w << "\n";
-          exit(0);
+          exit(1);
         }
       }
       NusedEvoStats = k;
@@ -216,7 +230,7 @@ void GlobalParameters::readInstructions() {
 
         } else if (w != "#ANCESTRALMAP") {
           std::cerr << "Undefined EvoAncStats parameter" << w << "\n";
-          exit(0);
+          exit(1);
         }
       }
       this->NusedEvoAncStats = k;
@@ -257,7 +271,7 @@ void GlobalParameters::readInstructions() {
       if (this->Ntaxa != static_cast<int>(this->listSpecies.size())) {
         std::cerr << "Error the number of taxa does not match the list species "
                      "size\n";
-        exit(0);
+        exit(1);
       }
 
       std::cerr << "#SPEUDODATA " << this->Ntaxa << " " << this->Nsite_codon
@@ -271,9 +285,9 @@ void GlobalParameters::readInstructions() {
       istringstream iss(line);
       string w;
       iss >> w;
-      iss >> w;
+      needValue(iss, w, "#RUN");
       this->Nrep = atoi(w.c_str());
-      iss >> w;
+      needValue(iss, w, "#RUN");
       this->Nsimu = atoi(w.c_str());
       std::cerr << "#Nrep " << this->Nrep << " #Nsimu " << this->Nsimu << "\n";
 
@@ -281,9 +295,9 @@ void GlobalParameters::readInstructions() {
       istringstream iss(line);
       string w;
       iss >> w;
-      iss >> w;
+      needValue(iss, w, "#NRUN");
       this->Nrun = atoi(w.c_str());
-      iss >> w;
+      needValue(iss, w, "#NRUN");
       this->threshold = atoi(w.c_str());
       std::cerr << "#Nrun " << this->Nrun << " threshold " << this->threshold
                 << "\n";
@@ -308,7 +322,7 @@ void GlobalParameters::readInstructions() {
       istringstream iss(line);
       string w;
       iss >> w;
-      iss >> w;
+      needValue(iss, w, "#OUTPUT");
       this->output = w;
       std::cerr << "#OUTPUT " << this->output << "\n";
 
@@ -320,11 +334,11 @@ void GlobalParameters::readInstructions() {
       istringstream iss(line);
       string w;
       iss >> w;
-      iss >> w;
+      needValue(iss, w, "#SAMPLING");
       this->chainPointStart = atoi(w.c_str());
-      iss >> w;
+      needValue(iss, w, "#SAMPLING");
       this->chainPointEvery = atoi(w.c_str());
-      iss >> w;
+      needValue(iss, w, "#SAMPLING");
       this->chainPointEnd = atoi(w.c_str());
       std::cerr << "#SAMPLING " << this->chainPointStart << " "
                 << this->chainPointEvery << " " << this->chainPointEnd << "\n";
@@ -337,4 +351,18 @@ void GlobalParameters::readInstructions() {
     }
   }
   is.close();
+
+  // Posterior::writePosterior always writes chainID as the first field of each
+  // .simu row, while writeHeader only names it if chainID is a used parameter.
+  // For the chain-driven simulators, force the chainID column so header and
+  // data stay aligned (no-op when #PARAM already lists chainID).
+  if (this->model == "AACodonMutSelPhylobayesMPI") {
+    auto it = mapUsedParam.find("chainID");
+    if (it != mapUsedParam.end() && it->second == -1) {
+      std::cerr << "warning: chainID missing from #PARAM; adding it so the "
+                   ".simu header matches the data columns\n";
+      it->second = NusedParam;
+      NusedParam++;
+    }
+  }
 }
