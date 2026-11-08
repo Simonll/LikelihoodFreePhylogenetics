@@ -12,10 +12,10 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 <http://www.gnu.org/licenses/>.
 */
 
-// SimuMutSelSBDP: posterior-predictive / ABC simulator driven by a PhyloBayes
+// SimuMutSelPhylobayesMPI: posterior-predictive / ABC simulator driven by a PhyloBayes
 // MSAAGTRW chain (AACODONMUTSELSBDP). Same layout as BayescodeSimuMutSelAA, but
 // each parameter point is read directly from <chain>.chain through
-// LocalParameters::readChainCodonMutSelSBDP(k) instead of a BayesCode .pvalues.
+// LocalParameters::readChainAACodonMutSelPhylobayesMPI(k) instead of a BayesCode .pvalues.
 //
 // Chain points visited: start, start+every, ... < until, taken from
 // -start/-every/-until in #LOCALPARAM, or from #SAMPLING when that local range
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     std::cerr << "\n";
     std::cerr << "version 1.0\n";
     std::cerr << "###########################\n";
-    std::cerr << "-m < CodonMutSelSBDP > < controlfile >\n";
+    std::cerr << "-m < AACodonMutSelPhylobayesMPI > < controlfile >\n";
     std::cerr << "###########################\n";
     std::cerr << "#SUMMARIES\n";
     std::cerr << "#ANCSUMMARIES\n";
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     std::cerr << "###########################\n";
     exit(1);
   }
-  if (model == "CodonMutSelSBDP")
+  if (model == "AACodonMutSelPhylobayesMPI")
   {
     cerr << "simulating under " << model << "\n";
 
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
     std::cerr << "chain range: start " << start << " every " << every
               << " until " << until << "\n";
 
-    lparam->readChainCodonMutSelSBDP(start);
+    lparam->readChainAACodonMutSelPhylobayesMPI(start);
     SummaryStatistics *ss = new SummaryStatistics(lparam);
     ss->computeSummaries();
     PriorSampler *prior = new PriorSampler(lparam);
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     for (int k = start; k < until && post->Niter < gparam->threshold;
          k += every)
     {
-      lparam->readChainCodonMutSelSBDP(k);
+      lparam->readChainAACodonMutSelPhylobayesMPI(k);
       for (int i = 0; i < gparam->Nrun && post->Niter < gparam->threshold;
            i++)
       {

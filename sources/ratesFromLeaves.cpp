@@ -241,10 +241,10 @@ int main(int argc, char* argv[]) {
     std::cerr << "\n";
     std::cerr << "version 1.0\n";
     std::cerr << "###########################\n";
-    std::cerr << "-m < show | CodonMutSelFinite | CodonMutSelSBDP \n";
+    std::cerr << "-m < show | CodonMutSelFinite | AACodonMutSelPhylobayesMPI \n";
     std::cerr << "###########################\n";
     std::cerr << "--version\n"
-              << "-model <CodonMutSelFinite|CodonMutSelSBDP>\n"
+              << "-model <CodonMutSelFinite|AACodonMutSelPhylobayesMPI>\n"
               << "-x <start> <every> <until>\n"
               << "-output <>\n"
               << "-code <>\n"
@@ -258,7 +258,7 @@ int main(int argc, char* argv[]) {
               << "-conf <configfile>";
     exit(1);
   }
-  if (model == "CodonMutSelFinite" || model == "CodonMutSelSBDP") {
+  if (model == "CodonMutSelFinite" || model == "AACodonMutSelPhylobayesMPI") {
     // the chain pointS are extract from the posterior file according to chainID
     std::cerr << model << "\n";
 
@@ -282,8 +282,8 @@ int main(int argc, char* argv[]) {
     std::cerr << "local parameters registred"
               << "\n";
 
-    if (model == "CodonMutSelSBDP") {
-      lparam->readChainCodonMutSelSBDP();
+    if (model == "AACodonMutSelPhylobayesMPI") {
+      lparam->readChainAACodonMutSelPhylobayesMPI();
     } else if (model == "CodonMutSelFinite") {
       lparam->readChainCodonMutSelFinite();
     }
@@ -316,8 +316,8 @@ int main(int argc, char* argv[]) {
         int pointID = static_cast<int>(
             lparam->rnd->Uniform() * post->posterior.size() - 1);
         lparam->SetCurrentParametersFromPosterior(post->posterior, pointID);
-        if (model == "CodonMutSelSBDP") {
-          lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
+        if (model == "AACodonMutSelPhylobayesMPI") {
+          lparam->readChainAACodonMutSelPhylobayesMPI(lparam->GetPointID());
 
         } else if (model == "CodonMutSelFinite") {
           lparam->readChainCodonMutSelFinite(lparam->GetPointID());

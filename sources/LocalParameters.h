@@ -166,8 +166,8 @@ class LocalParameters {
   void toAli(ofstream &os, int **currentNodeleafCodonSequence);
 
   // Readers
-  void readChainCodonMutSelSBDP();
-  void readChainCodonMutSelSBDP(int pt_i);
+  void readChainAACodonMutSelPhylobayesMPI();
+  void readChainAACodonMutSelPhylobayesMPI(int pt_i);
   int readParametersMutSelC(int pt_i);
   int readBayescodeParametersMutSelAAC(int pt_i, bool senca = false);
   int readBayescodeParametersMutSelAA(int pt_i);
