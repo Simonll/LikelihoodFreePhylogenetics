@@ -3,7 +3,7 @@
 ./LFP <br>
 version 1.0 <br>
 \########################### <br>
--m < stats | show | CodonMutSelFiniteABC | CodonMutSelSBDPABC | CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | CodonMutSelFinite | CodonMutSelSBDP | CodonMutSelFinitePPred | CodonMutSelSBDPPPred > <controlfile> <br>
+-m < stats | show | CodonMutSelFiniteABC | AACodonMutSelPhylobayesMPIABC | CodonMutSelFinite | AACodonMutSelPhylobayesMPI | CodonMutSelFinitePPred | AACodonMutSelPhylobayesMPIPPred > <controlfile> <br>
 \###########################<br>
 \#SUMMARIES<br>
 \#ANCSUMMARIES<br>
@@ -22,7 +22,7 @@ version 1.0 <br>
 
 
 ## Running rejection sampling<br>
-./LFP -m CodonMutSelSBDPABC ACO1-2673-MSAAGTRW-A-GTRWCpG.conf<br>
+./LFP -m AACodonMutSelPhylobayesMPIABC ACO1-2673-MSAAGTRW-A-GTRWCpG.conf<br>
 
 ### Configuration file:<br>
 \#SUMMARIES	pwAC	pwAG	pwAT	pwCG	pwCT	pwGT	dinuc31CG	dinuc31TG	dinuc31CA	nuc3A	nuc3C	nuc3G	nuc3T	pwAA<br>

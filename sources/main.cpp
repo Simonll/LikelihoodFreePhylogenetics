@@ -62,10 +62,9 @@ int main(int argc, char* argv[]) {
     std::cerr << "version 1.0\n";
     std::cerr << "###########################\n";
     std::cerr
-        << "-m < stats | show | CodonMutSelFiniteABC | CodonMutSelSBDPABC | "
-           "CodonDegMutSelFiniteABC | CodonDegMutSelSBDPABC | "
-           "CodonMutSelFinite | CodonMutSelSBDP | CodonMutSelFinitePPred | "
-           "CodonMutSelSBDPPPred | CodonMutSelSBDPSeq > <controlfile>\n";
+        << "-m < stats | show | CodonMutSelFiniteABC | AACodonMutSelPhylobayesMPIABC | "
+           "CodonMutSelFinite | AACodonMutSelPhylobayesMPI | CodonMutSelFinitePPred | "
+           "AACodonMutSelPhylobayesMPIPPred | AACodonMutSelPhylobayesMPISeq > <controlfile>\n";
     std::cerr << "###########################\n";
     std::cerr << "#SUMMARIES\n";
     std::cerr << "#ANCSUMMARIES\n";
@@ -120,8 +119,8 @@ int main(int argc, char* argv[]) {
     std::cerr << "#EVOLSTATS\n";
     for (auto i : gparam->listEvoStats) std::cerr << i << "\t";
     std::cerr << "\n";
-  } else if (model == "CodonMutSelSBDP") {
-    std::cerr << "CodonMutSelSBDP"
+  } else if (model == "AACodonMutSelPhylobayesMPI") {
+    std::cerr << "AACodonMutSelPhylobayesMPI"
               << "\n";
     GlobalParameters* gparam = new GlobalParameters(model, controlfile);
     Posterior* post = new Posterior(gparam);
@@ -138,7 +137,7 @@ int main(int argc, char* argv[]) {
                 << " every " << lparam->everyPoint << " until "
                 << lparam->endPoint << "\n";
     }
-    lparam->readChainCodonMutSelSBDP();
+    lparam->readChainAACodonMutSelPhylobayesMPI();
 
     SummaryStatistics* ss = new SummaryStatistics(lparam);
     ss->computeSummaries();
@@ -156,7 +155,7 @@ int main(int argc, char* argv[]) {
 
     std::cerr << "Start simulating \n";
     while (lparam->startPoint < lparam->endPoint) {
-      lparam->readChainCodonMutSelSBDP();
+      lparam->readChainAACodonMutSelPhylobayesMPI();
 
       int iter = 0;
       while (iter < post->Nrun) {
@@ -295,7 +294,7 @@ int main(int argc, char* argv[]) {
     exit(0);
 
   } else if (model == "CodonMutSelFinitePPPred" ||
-             model == "CodonMutSelSBDPPPred") {
+             model == "AACodonMutSelPhylobayesMPIPPred") {
     // the chain points are extract from the posterior file according to chainID
     std::cerr << model << "\n";
 
@@ -303,8 +302,8 @@ int main(int argc, char* argv[]) {
     Posterior* post = new Posterior(gparam);
     LocalParameters* lparam = new LocalParameters(gparam);
 
-    if (model == "CodonMutSelSBDPPPred") {
-      lparam->readChainCodonMutSelSBDP();
+    if (model == "AACodonMutSelPhylobayesMPIPPred") {
+      lparam->readChainAACodonMutSelPhylobayesMPI();
 
     } else if (model == "CodonMutSelFinitePPred") {
       lparam->readChainCodonMutSelFinite();
@@ -329,8 +328,8 @@ int main(int argc, char* argv[]) {
             lparam->rnd->Uniform() * post->posterior.size() - 1);
         lparam->SetCurrentParametersFromPosterior(post->posterior, point);
 
-        if (model == "CodonMutSelSBDPPPred") {
-          lparam->readChainCodonMutSelSBDP(lparam->GetPointID());
+        if (model == "AACodonMutSelPhylobayesMPIPPred") {
+          lparam->readChainAACodonMutSelPhylobayesMPI(lparam->GetPointID());
 
         } else if (model == "CodonMutSelFinitePPred") {
           lparam->readChainCodonMutSelFinite(lparam->GetPointID());
