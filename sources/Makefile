@@ -17,7 +17,7 @@ ALL_OBJS=$(patsubst %.cpp,%.o,$(ALL_SRCS))
 #OBJECTS=$(SOURCES:.cpp=.o)
 #EXECUTABLE=../data/LFP
 PROGSDIR=../data
-ALL= LFP codemlM7M8 codemlM7M8TpA codemlFMutSel ratesFromLeaves BayescodeSimuMutSelAAC BayescodeSimuMutSelC BayescodeSimuMutSelAA
+ALL= LFP codemlM7M8 codemlM7M8TpA codemlFMutSel ratesFromLeaves BayescodeSimuMutSelAAC BayescodeSimuMutSelC BayescodeSimuMutSelAA SimuMutSelSBDP
 #all: $(SOURCES) $(EXECUTABLE)
 PROGS=$(addprefix $(PROGSDIR)/, $(ALL))
 
@@ -70,6 +70,10 @@ $(PROGSDIR)/MutSelC$(EXEEXT): MutSelC.o $(OBJS)
 BayescodeSimuMutSelAA$(EXEEXT): $(PROGSDIR)/BayescodeSimuMutSelAA$(EXEEXT)
 $(PROGSDIR)/BayescodeSimuMutSelAA$(EXEEXT): BayescodeSimuMutSelAA.o $(OBJS)
 	$(CC) BayescodeSimuMutSelAA.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
+
+SimuMutSelSBDP$(EXEEXT): $(PROGSDIR)/SimuMutSelSBDP$(EXEEXT)
+$(PROGSDIR)/SimuMutSelSBDP$(EXEEXT): SimuMutSelSBDP.o $(OBJS)
+	$(CC) SimuMutSelSBDP.o $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 
 BayescodeSimuMutSelAAC$(EXEEXT): $(PROGSDIR)/BayescodeSimuMutSelAAC$(EXEEXT)
 $(PROGSDIR)/BayescodeSimuMutSelAAC$(EXEEXT): BayescodeSimuMutSelAAC.o $(OBJS)

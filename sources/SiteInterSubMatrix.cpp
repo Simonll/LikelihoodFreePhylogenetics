@@ -345,8 +345,6 @@ std::tuple<double, double, double> SiteInterSubMatrix::ComputeCore(
     int CpGcont = testCpGcontext(NodeIndex, site_nuc, nucposFrom[codonPos],
                                  nucposTo[codonPos], CurrentNodeNucSequence);
 
-    std::cerr << CpGcont << "AAA\n";
-
     if (CpGcont == 1 || CpGcont == 2) {
       // tsCpG
       MutRate *= lparam->lambda_CpG;

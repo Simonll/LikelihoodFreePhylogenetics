@@ -127,6 +127,17 @@ int main(int argc, char* argv[]) {
     Posterior* post = new Posterior(gparam);
 
     LocalParameters* lparam = new LocalParameters(gparam);
+    // The chain range comes from -start/-until/-every in #LOCALPARAM. When
+    // those are absent the local range is empty (1..1) and nothing would be
+    // simulated, so fall back to the global #SAMPLING start every end.
+    if (lparam->startPoint >= lparam->endPoint) {
+      lparam->startPoint = gparam->chainPointStart;
+      lparam->everyPoint = gparam->chainPointEvery;
+      lparam->endPoint = gparam->chainPointEnd;
+      std::cerr << "chain range from #SAMPLING: start " << lparam->startPoint
+                << " every " << lparam->everyPoint << " until "
+                << lparam->endPoint << "\n";
+    }
     lparam->readChainCodonMutSelSBDP();
 
     SummaryStatistics* ss = new SummaryStatistics(lparam);

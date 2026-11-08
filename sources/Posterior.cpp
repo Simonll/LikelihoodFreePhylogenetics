@@ -196,7 +196,10 @@ void Posterior::writePosterior(ofstream& os, int Nsimu) {
 }
 
 void Posterior::writePosterior(ofstream& os) {
-  for (int simu_i = 0; simu_i < this->threshold; simu_i++) {
+  // Never read past the registered simulations: threshold (#NRUN) is only an
+  // upper bound and population_t may hold fewer (or zero) entries.
+  const int n = std::min(this->threshold, static_cast<int>(population_t.size()));
+  for (int simu_i = 0; simu_i < n; simu_i++) {
     // write chainID
     os << std::get<chainIDGetter>(population_t[simu_i]) << "\t";
 
@@ -646,6 +649,11 @@ void Posterior::writePosteriorPredictiveStatistics(
       }
     }
     os << "\n";
+  }
+
+  if (pop_size == 0) {
+    std::cerr << "warning: no simulation registered, .ppp left empty\n";
+    return;
   }
 
   double* ppp = new double[this->NusedSummaries];
