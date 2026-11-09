@@ -91,6 +91,9 @@ class Posterior {
   bool sorted;
   // writter
   void writePosterior(ofstream& os);
+  // One .simu data row (population_t[simu_i]), same format as writePosterior:
+  // chainID, params, summaries, ..., each followed by '\t', then '\n'.
+  void writeSimuRow(std::ostream& os, int simu_i);
   void writeSimu(ofstream& os);
   void writePosterior(ofstream& os, int Nsimu);
   void writePosteriorPredictiveStatistics(

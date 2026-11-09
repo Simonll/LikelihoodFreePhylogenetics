@@ -195,103 +195,107 @@ void Posterior::writePosterior(ofstream& os, int Nsimu) {
   }
 }
 
+void Posterior::writeSimuRow(std::ostream& os, int simu_i) {
+  // write chainID
+  os << std::get<chainIDGetter>(population_t[simu_i]) << "\t";
+
+  // write parameters
+  if (this->NusedParam > 0) {
+    for (int param_i = 0;
+         param_i <
+         static_cast<int>(std::get<paramGetter>(population_t[simu_i]).size());
+         param_i++) {
+      os << std::get<paramGetter>(population_t[simu_i])[param_i] << "\t";
+    }
+  }
+  // write summaries
+  if (this->NusedSummaries > 0) {
+    for (int summary_i = 0;
+         summary_i <
+         static_cast<int>(
+             std::get<summariesGetter>(population_t[simu_i]).size());
+         summary_i++) {
+      os << std::get<summariesGetter>(population_t[simu_i])[summary_i]
+         << "\t";
+    }
+  }
+  // write accessory summaries
+  if (this->NusedAccessorySummaries > 0) {
+    for (int summary_i = 0;
+         summary_i <
+         static_cast<int>(
+             std::get<accsummariesGetter>(population_t[simu_i]).size());
+         summary_i++) {
+      os << std::get<accsummariesGetter>(population_t[simu_i])[summary_i]
+         << "\t";
+    }
+  }
+  // write mappingstats
+  if (this->NusedEvoAncStats > 0) {
+    for (int mapping_i = 0;
+         mapping_i <
+         static_cast<int>(
+             std::get<evoancstatsGetter>(population_t[simu_i]).size());
+         mapping_i++) {
+      if (mapping_i <
+          static_cast<int>(
+              std::get<evoancstatsGetter>(population_t[simu_i]).size()) -
+              1) {
+        os << std::get<evoancstatsGetter>(population_t[simu_i])[mapping_i]
+           << "\t";
+      } else {
+        os << std::get<evoancstatsGetter>(population_t[simu_i])[mapping_i]
+           << "\t";
+      }
+    }
+  }
+  // write mappingstats
+  if (this->NusedEvoStats > 0) {
+    for (int mapping_i = 0;
+         mapping_i <
+         static_cast<int>(
+             std::get<evostatsGetter>(population_t[simu_i]).size());
+         mapping_i++) {
+      if (mapping_i <
+          static_cast<int>(
+              std::get<evostatsGetter>(population_t[simu_i]).size()) -
+              1) {
+        os << std::get<evostatsGetter>(population_t[simu_i])[mapping_i]
+           << "\t";
+      } else {
+        os << std::get<evostatsGetter>(population_t[simu_i])[mapping_i]
+           << "\t";
+      }
+    }
+  }
+  // write mappingstats
+  if (this->NusedSiteSpecificEvoStats > 0) {
+    for (int mapping_i = 0;
+         mapping_i <
+         static_cast<int>(
+             std::get<ssevostatsGetter>(population_t[simu_i]).size());
+         mapping_i++) {
+      if (mapping_i <
+          static_cast<int>(
+              std::get<ssevostatsGetter>(population_t[simu_i]).size()) -
+              1) {
+        os << std::get<ssevostatsGetter>(population_t[simu_i])[mapping_i]
+           << "\t";
+      } else {
+        os << std::get<ssevostatsGetter>(population_t[simu_i])[mapping_i]
+           << "\t";
+      }
+    }
+  }
+  os << "\n";
+}
+
 void Posterior::writePosterior(ofstream& os) {
   // Never read past the registered simulations: threshold (#NRUN) is only an
   // upper bound and population_t may hold fewer (or zero) entries.
   const int n = std::min(this->threshold, static_cast<int>(population_t.size()));
   for (int simu_i = 0; simu_i < n; simu_i++) {
-    // write chainID
-    os << std::get<chainIDGetter>(population_t[simu_i]) << "\t";
-
-    // write parameters
-    if (this->NusedParam > 0) {
-      for (int param_i = 0;
-           param_i <
-           static_cast<int>(std::get<paramGetter>(population_t[simu_i]).size());
-           param_i++) {
-        os << std::get<paramGetter>(population_t[simu_i])[param_i] << "\t";
-      }
-    }
-    // write summaries
-    if (this->NusedSummaries > 0) {
-      for (int summary_i = 0;
-           summary_i <
-           static_cast<int>(
-               std::get<summariesGetter>(population_t[simu_i]).size());
-           summary_i++) {
-        os << std::get<summariesGetter>(population_t[simu_i])[summary_i]
-           << "\t";
-      }
-    }
-    // write accessory summaries
-    if (this->NusedAccessorySummaries > 0) {
-      for (int summary_i = 0;
-           summary_i <
-           static_cast<int>(
-               std::get<accsummariesGetter>(population_t[simu_i]).size());
-           summary_i++) {
-        os << std::get<accsummariesGetter>(population_t[simu_i])[summary_i]
-           << "\t";
-      }
-    }
-    // write mappingstats
-    if (this->NusedEvoAncStats > 0) {
-      for (int mapping_i = 0;
-           mapping_i <
-           static_cast<int>(
-               std::get<evoancstatsGetter>(population_t[simu_i]).size());
-           mapping_i++) {
-        if (mapping_i <
-            static_cast<int>(
-                std::get<evoancstatsGetter>(population_t[simu_i]).size()) -
-                1) {
-          os << std::get<evoancstatsGetter>(population_t[simu_i])[mapping_i]
-             << "\t";
-        } else {
-          os << std::get<evoancstatsGetter>(population_t[simu_i])[mapping_i]
-             << "\t";
-        }
-      }
-    }
-    // write mappingstats
-    if (this->NusedEvoStats > 0) {
-      for (int mapping_i = 0;
-           mapping_i <
-           static_cast<int>(
-               std::get<evostatsGetter>(population_t[simu_i]).size());
-           mapping_i++) {
-        if (mapping_i <
-            static_cast<int>(
-                std::get<evostatsGetter>(population_t[simu_i]).size()) -
-                1) {
-          os << std::get<evostatsGetter>(population_t[simu_i])[mapping_i]
-             << "\t";
-        } else {
-          os << std::get<evostatsGetter>(population_t[simu_i])[mapping_i]
-             << "\t";
-        }
-      }
-    }
-    // write mappingstats
-    if (this->NusedSiteSpecificEvoStats > 0) {
-      for (int mapping_i = 0;
-           mapping_i <
-           static_cast<int>(
-               std::get<ssevostatsGetter>(population_t[simu_i]).size());
-           mapping_i++) {
-        if (mapping_i <
-            static_cast<int>(
-                std::get<ssevostatsGetter>(population_t[simu_i]).size()) -
-                1) {
-          os << std::get<ssevostatsGetter>(population_t[simu_i])[mapping_i]
-             << "\t";
-        } else {
-          os << std::get<ssevostatsGetter>(population_t[simu_i])[mapping_i]
-             << "\t";
-        }
-      }
-    }
-    os << "\n";
+    writeSimuRow(os, simu_i);
   }
 }
 

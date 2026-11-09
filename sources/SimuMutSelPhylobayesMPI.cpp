@@ -21,7 +21,14 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 // -start/-every/-until in #LOCALPARAM, or from #SAMPLING when that local range
 // is empty. #NRUN <Nrun> <threshold>: Nrun replicates per point, at most
 // threshold simulations in total.
+//
+// The .simu file is written incrementally: header first, then one row per
+// simulation right after registerSimulation (same format as
+// Posterior::writePosterior), flushed every LFP_SIMU_FLUSH_EVERY rows
+// (environment variable, default 1). Progress goes to stderr every
+// LFP_PROGRESS_EVERY simulations (default 1000). .ppp is still written at the end.
 
+#include <chrono>
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
@@ -39,6 +46,35 @@ General Public License along with LikelihoodFreePhylogenetics. If not, see
 #include "SiteInterSubMatrix.h"
 #include "SummaryStatistics.h"
 #include "TreeSimulator.h"
+
+// Positive integer from the environment, or def if unset/invalid.
+static long envPositiveLong(const char *name, long def)
+{
+  const char *v = std::getenv(name);
+  if (v == nullptr || *v == '\0')
+  {
+    return def;
+  }
+  char *end = nullptr;
+  long x = std::strtol(v, &end, 10);
+  if (end == v || *end != '\0' || x < 1)
+  {
+    std::cerr << "warning: ignoring invalid " << name << "=" << v
+              << " (using " << def << ")\n";
+    return def;
+  }
+  return x;
+}
+
+static std::string formatElapsed(std::chrono::steady_clock::time_point t0)
+{
+  long s = static_cast<long>(std::chrono::duration_cast<std::chrono::seconds>(
+                                 std::chrono::steady_clock::now() - t0)
+                                 .count());
+  std::ostringstream oss;
+  oss << s / 3600 << "h " << (s / 60) % 60 << "m " << s % 60 << "s";
+  return oss.str();
+}
 
 int main(int argc, char *argv[])
 {
@@ -135,6 +171,23 @@ int main(int argc, char *argv[])
     ofstream realDataSummaries_os((gparam->output + ".realdata").c_str());
     lparam->writeRealDataSummaries(realDataSummaries_os);
     realDataSummaries_os.close();
+    // Incremental .simu: open + header before the loop, one row per simulation.
+    const std::string simu_path = gparam->output + ".simu";
+    ofstream dist_os(simu_path.c_str(), std::ios_base::out);
+    if (!dist_os)
+    {
+      std::cerr << "error: cannot open " << simu_path << " for writing\n";
+      exit(1);
+    }
+    post->writeHeader(dist_os);
+    dist_os.flush();
+    const long flush_every = envPositiveLong("LFP_SIMU_FLUSH_EVERY", 1);
+    const long progress_every = envPositiveLong("LFP_PROGRESS_EVERY", 1000);
+    long rows_written = 0;
+    const auto t0 = std::chrono::steady_clock::now();
+    std::cerr << "writing " << simu_path << " incrementally (flush every "
+              << flush_every << " rows)\n";
+
     std::cerr << "starting to simulate\n";
     std::cerr << "Nrun per point: " << gparam->Nrun << " threshold "
               << gparam->threshold << "\n";
@@ -154,6 +207,19 @@ int main(int argc, char *argv[])
             lparam->GetCurrentAccessorySummaries(),
             lparam->GetCurrentAncEvoStats(), lparam->GetCurrentEvoStats(),
             lparam->GetCurrentSiteSpecificEvoStats());
+
+        // Emit the row just registered, exactly as writePosterior would.
+        post->writeSimuRow(dist_os, post->GetSize() - 1);
+        rows_written++;
+        if (rows_written % flush_every == 0)
+        {
+          dist_os.flush();
+        }
+        if (rows_written % progress_every == 0)
+        {
+          std::cerr << "sims so far: " << rows_written << "  (elapsed "
+                    << formatElapsed(t0) << ")\n";
+        }
 
         if (lparam->tofasta)
         {
@@ -176,12 +242,10 @@ int main(int argc, char *argv[])
     }
     std::cerr << "\nEnd of the simulation process\n";
     std::cerr << "Nsimu generated: " << post->Niter << "\n";
-    std::cerr << "writing files " << (gparam->output + ".simu") << " and "
-              << (gparam->output + ".ppp") << "\n";
-    ofstream dist_os((gparam->output + ".simu").c_str(), std::ios_base::out);
-    post->writeHeader(dist_os);
-    post->writePosterior(dist_os);
     dist_os.close();
+    std::cerr << "wrote " << simu_path << " (" << rows_written << " rows, elapsed "
+              << formatElapsed(t0) << ")\n";
+    std::cerr << "writing file " << (gparam->output + ".ppp") << "\n";
 
     ofstream ppp_os((gparam->output + ".ppp").c_str(), std::ios_base::out);
     post->writePosteriorPredictiveStatistics(ppp_os, lparam->summariesRealData);
