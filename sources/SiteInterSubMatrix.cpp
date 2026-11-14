@@ -60,14 +60,14 @@ void SiteInterSubMatrix::resetSubMatrix() {
 }
 
 double SiteInterSubMatrix::ComputeFixationFactor(double S, double SubRate) {
-  if (fabs(S) < lparam->TOOSMALL) {
+  if (fabs(S) < 1e-8) {
     SubRate /= (1.0 - (S / 2));
   } else if (S > lparam->TOOLARGE) {
     SubRate *= S;
   } else if (S < lparam->TOOLARGENEGATIVE) {
     SubRate = 0.0;
   } else {
-    SubRate *= (S / (1.0 - exp(-S)));
+    SubRate *= (S / -expm1(-S));
   }
   if (SubRate < 0) {
     std::cerr << "negative entry in matrix\n";
