@@ -127,6 +127,8 @@ void PriorSampler::sample() {
       lparam->lambda_CpG = logNUnif(10);
     } else if (lparam->lambda_CpG_prior == "log20Unif") {
       lparam->lambda_CpG = logNUnif(20);
+    } else if (lparam->lambda_CpG_prior == "log30Unif") {
+      lparam->lambda_CpG = logNUnif(30);
     } else if (lparam->lambda_CpG_prior == "log50Unif") {
       lparam->lambda_CpG = logNUnif(50);
     } else if (lparam->lambda_CpG_prior == "log100Unif") {
